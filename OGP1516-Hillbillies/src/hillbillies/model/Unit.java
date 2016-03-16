@@ -4,23 +4,63 @@ import be.kuleuven.cs.som.annotate.*;
 import ogp.framework.util.Util;
 
 /**
- * @invar  The location of each Unit must be a valid location for any
- *         Unit.
- *       | isValidlocation(getlocation())
+ * A class of a hillbilly Unit involving a name, an initial position, a weight,
+ * agility, strength, toughness and a facility to enable the default behaviour.
+ * 
+ * @version 1.0
+ * @author  Arthur Decloedt, Julie Allard
+ * Julie Allard - Handelsingenieur in de beleidsinformatica  
+ * Decloedt Arthur - Bachelor in de Informatica
+ * https://github.com/julieallard/hillbillies.git
  */
-
 public class Unit {
-
     /**
-     * Initialize this new Unit with given location.
-     *
-     * @param  initialPosition
-     *         The location for this new Unit.
-     * @effect The location of this new Unit is set to
-     *         the given initialPosition.
-     *       | this.setlocation(initialPosition)
+     * Initialize this new hillbilly Unit with given name, given initial position,
+     * given weight, given agility, given strength, given toughness
+     * and given default behaviour state.
+     * 
+     * @param  	name
+     * 		 	The name for this Unit.
+     * @param  	initialPosition
+     *         	The initial position for this Unit, as an Array with 3 integers {x, y, z}.
+     * @param  	weight
+     *         	The weight for this Unit.
+     * @param  	agility
+     *         	The agility for this Unit.
+     * @param  	strength
+     *         	The strength for this Unit.
+     * @param  	toughness
+     *         	The toughness for this Unit.
+     * @param  	enableDefaultBehavior
+     *         	The state of behaviour for this Unit.
+     * @post   	The new name of this new Unit is equal to the given name.
+     * 		  |	new.getName() == name
+     * @post   	The new initial position of this new Unit is set to the given initial
+     * 		   	position.
+     *        |	new.setlocation(initialPosition) == location
+     * @post   	If the given weight is not below 25 and not above 100, the initial
+     * 			weight of this new Unit is equal to the given weight. Otherwise, its
+     * 			initial weight is equal to 25, respectively 100.
+     * @post   	If the given agility is not below 25 and not above 100, the initial
+     * 			agility of this new Unit is equal to the given agility. Otherwise, its
+     * 			initial agility is equal to 25, respectively 100.
+     * @post   	If the given strength is not below 25 and not above 100, the initial
+     * 			strength of this new Unit is equal to the given strength. Otherwise, its
+     * 			initial strength is equal to 25, respectively 100.
+     * @post   	If the given toughness is not below 25 and not above 100, the initial
+     * 			toughness of this new Unit is equal to the given toughness. Otherwise, its
+     * 			initial toughness is equal to 25, respectively 100.
+     * @post	The initial state of behavior of this new Unit is equal to the given
+     * 			flag.
+     * @throws	IllegalArgumentException()
+     * 			The given initial name is not a valid name for any Unit.
+     * 		  | ! isValidName(name)
+     * @throws  UnitIllegalLocation()
+     * 			The given initial position is not a valid location for any Unit.
+     * 		  | ! isValidLocation(initialPosition)  
+     * @invar  	The location of each Unit must be a valid location for any Unit.
+     *        | isValidlocation(getlocation())
      */
-
 
     public Unit(String name, double[] initialPosition, int weight, int agility, int strength, int toughness,
                 boolean enableDefaultBehavior) throws UnitIllegalLocation  {
@@ -61,10 +101,17 @@ public class Unit {
     }
 
     /**
+     * Set the name of this Unit to the given name.
+     * 
      * @param	newName
      *       	The new name for this Unit.
+     * @post   	The new name of this new Unit is equal to the given name.
+     * 		  |	new.getName == name	
+     * @throws	IllegalArgumentException()
+     * 			The given initial name is not a valid name for any Unit.
+     * 		  | ! isValidName(name)
      */
-    //DEFENSIVE
+
     public void setName(String newName) throws IllegalArgumentException {
         if (! isValidName(newName)) {
             throw new IllegalArgumentException("This is an invalid name.");
@@ -73,7 +120,16 @@ public class Unit {
         }
     }
 
-    //DEFENSIVE
+
+    /**
+     * Check whether the given name is a valid name for all Units.
+     * @param	newName
+     * 			The name to check.
+     * @return	True if and only if the given name contains at least two characters, if
+     * 			the first character is an uppercase letter and if the all characters are
+     * 			uppercase or lowercase letters, single or double quotes or spaces.
+     */
+
     public boolean isValidName(String newName) {
         return (newName.length() >= 2) && Character.isUpperCase(newName.charAt(0)) && ("[A-Z|a-z|\"|\'|\\s]*".matches(newName));
     }
@@ -87,10 +143,14 @@ public class Unit {
     }
 
     /**
+     * Set the weight of this Unit to the given value.
+     * 
      * @param	newValue
      *       	The new weight for this Unit.
+     * @post	If the given weight is not below 1 and not above 200, the new
+     * 			weight of this Unit is equal to the given weight. Otherwise, its
+     * 			new weight is equal to 1, respectively 200.
      */
-    //TOTAL
     public void setWeight(int newValue) {
         if (newValue < 1) {this.setWeight(1);
         } else if (newValue > 200) {this.setWeight(200);
@@ -107,10 +167,14 @@ public class Unit {
     }
 
     /**
+     * Set the agility of this Unit to the given value.
+     * 
      * @param	newValue
-     *       	The new strength for this Unit.
+     *       	The new agility for this Unit.
+     * @post	If the given agility is not below 1 and not above 200, the new
+     * 			agility of this Unit is equal to the given agility. Otherwise, its
+     * 			new agility is equal to 1, respectively 200.
      */
-    //TOTAL
     public void setStrength(int newValue) {
         if (newValue < 1) {this.strength = 1;
         } else if (newValue > 200) {this.strength = 200;
@@ -125,10 +189,14 @@ public class Unit {
     }
 
     /**
+     * Set the strength of this Unit to the given value.
+     * 
      * @param	newValue
-     *       	The new agility for this Unit.
+     *       	The new strength for this Unit.
+     * @post	If the given strength is not below 1 and not above 200, the new
+     * 			strength of this Unit is equal to the given strength. Otherwise, its
+     * 			new strength is equal to 1, respectively 200.
      */
-    //TOTAL
     public void setAgility(int newValue) {
         if (newValue < 1) {this.agility = 1;
         } else if (newValue > 200) {this.agility = 200;
@@ -143,10 +211,14 @@ public class Unit {
     }
 
     /**
+     * Set the toughness of this Unit to the given value.
+     * 
      * @param	newValue
      *       	The new toughness for this Unit.
+     * @post	If the given toughness is not below 1 and not above 200, the new
+     * 			toughness of this Unit is equal to the given toughness. Otherwise, its
+     * 			new toughness is equal to 1, respectively 200.
      */
-    //TOTAL
     public void setToughness(int newValue) {
         if (newValue < 1) {this.toughness = 1;
         } else if (newValue > 200) {this.toughness = 200;
@@ -173,7 +245,16 @@ public class Unit {
     public int getMaxStaminaPoints() {
         return 200*(this.getWeight()/100)*(this.getToughness()/100);
     }
-
+    /**
+     * Set the number of stamina points of this Unit to the given stamina points.
+     * 
+     * @param 	stamPoints
+     * 			The number of stamina points for this Unit.
+     * @pre		The given number of stamina points must be a valid number for any Unit.
+     * @post	The new number of stamina points is equal to the given number of
+     * 			stamina points.
+     * 		  | new.getCurrentStaminaPoints() == balance
+     */
     public void setCurrentStaminaPoints(int stamPoints) {
         if (stamPoints<=getMaxStaminaPoints()&&stamPoints>=0){
             this.staminapoints=stamPoints;
@@ -187,25 +268,8 @@ public class Unit {
     public int getCurrentStaminaPoints() {
         return this.staminapoints;
     }
-    /** TO BE ADDED TO CLASS HEADING
-     * @invar  The location of each Unit must be a valid location for any
-     *         Unit.
-     *       | isValidlocation(getlocation())
-     */
     
-    
-    /**
-     * Initialize this new Unit with given location.
-     *
-     * @param  location
-     *         The location for this new Unit.
-     * @effect The location of this new Unit is set to
-     *         the given location.
-     *       | this.setlocation(location)
-     */
 
-    
-    
     /**
      * Return the location of this Unit.
      */
@@ -258,12 +322,6 @@ public class Unit {
      */
     private double[] location;
     
-    public Unit(float orientation) {
-        if (! isValidorientation(orientation))
-            orientation = 0;
-        setorientation(orientation);
-    }
-
     /**
      * Return the orientation of this Unit.
      */
@@ -315,9 +373,24 @@ public class Unit {
      */
 
     private float orientation;
+    /** 
+     * Variable registering the current movement of an object
+     */
     private Movement currentMovement;
     public double[] currentDestination;
     private boolean movementPaused;
+
+    /**
+     * Let the Unit move towards the given destination.
+     * 
+     * @param	destination
+     * 			The destination where the Unit will be heading to.
+     * @effect	If the Unit is not resting while there is still time left to rest until
+     * 			its first hitpoint, and if it is not attacking or defending, the
+     * 			Unit moves towards the given destination.
+     */
+
+    
     public void moveToAdjacent(double[] destination){
         if ((this.getactivity().equals("resting")&&this.getActivityTimeLeft()>0)||this.getactivity().equals("moving")||
                 this.getactivity().equals("defending")||this.getactivity().equals("attacking")){
@@ -328,6 +401,16 @@ public class Unit {
         this.activity="moving";
         this.movementPaused=false;
     }
+
+    /**
+     * Let the Unit move towards the given destination.
+     * 
+     * @param	destination
+     * 			The destination cube where the Unit will be heading to.
+     * @effect	If the Unit is not resting while there is still time left to rest until
+     * 			its first hitpoint, and if it is not attacking or defending, the
+     * 			Unit moves towards the given destination.
+     */
 
     public void moveTo(double[] destination){
         if ((this.getactivity().equals("resting")&&this.getActivityTimeLeft()>0)||
@@ -367,6 +450,15 @@ public class Unit {
                 break;
         }
     }
+
+    
+    /**
+     * Let the Unit continue the activity of moving for the given time.
+     * 
+     * @param	dt
+     * 			The time in seconds for which the Unit has to continue its movement.
+     * @effect	The Unit is dt seconds further in its movement.
+     */    
     protected void moveFor(double dt){
         this.currentMovement.advanceTime(this,dt);
         double sprintTime;
@@ -383,19 +475,31 @@ public class Unit {
 
     }
 
+    /**
+     * Return how many seconds the Unit has left for sprinting.
+     */
     protected double getTimeLeftSprinting() {
         return timeLeftSprinting;
     }
-
+    /**
+     * Calculate and set the time that the Unit has left for sprinting.
+     */
     protected void setTimeLeftSprinting (){
         double stampoints = (double) this.getCurrentStaminaPoints();
         this.timeLeftSprinting=(stampoints)/10;
 
 
     }
-
+    
     private double timeLeftSprinting;
 
+    /**
+     * Attack another Unit in the Game World.
+     * 
+     * @param	defender
+     * 			The other Unit that this Unit is attacking.
+     * @effect	The defender is currently defending, the attacker is currently attacking.
+     */
     public void attack(Unit defender) {
         String prevactdef = defender.getactivity();
         if ((this.getactivity().equals("resting") && this.getActivityTimeLeft()>0)||
@@ -424,6 +528,13 @@ public class Unit {
         defender.setorientation((float)(Math.atan2((defender.getlocationY() - this.getlocationY()), (defender.getlocationX() - this.getlocationX()))));
         this.setorientation((float)(Math.atan2((this.getlocationY() - defender.getlocationY()), (this.getlocationX() - defender.getlocationX()))));
     }
+    /**
+     * Continue the activity of attacking for the given time.
+     * 
+     * @param	dt
+     * 			The time for which the Unit has to continue its attack.
+     * @effect	The Unit is dt seconds further in its attack.
+     */  
     protected void attackFor(double dt){
         double timeleft =getActivityTimeLeft();
         if (timeleft>dt){setActivityTimeLeft(timeleft-dt);return;}
@@ -431,10 +542,24 @@ public class Unit {
         setActivityTimeLeft((double) 0);
 
     }
+    /**
+     * Return how many seconds the Unit has left to do the current activity.
+     */
     protected double getActivityTimeLeft() {
         return activityTimeLeft;
     }
 
+    /**
+     * Set the time that is left to do the current activity.
+     * 
+     * @param	activityTimeLeft
+     * 			The time that is left to do the current activity.
+     * @post	The time that is left to do the current activity is equal to the given
+     * 			time that is left to do the current activity.
+     * @throws 	IllegalTimeException()
+     * 			The given time that is left to do the current activity is not valid.
+     * 		  | ! isValidTime(activityTimeLeft)
+     */
     private void setActivityTimeLeft(double activityTimeLeft) throws IllegalTimeException {
         if (!AdjMovement.isValidTime(activityTimeLeft)){
             throw new IllegalTimeException();
@@ -443,31 +568,6 @@ public class Unit {
     }
 
     private double activityTimeLeft;
-
-    /**
-     * @invar  The activity of each unit must be a valid activity for any
-     *         unit.
-     *       | isValidactivity(getactivity())
-     */
-
-    /**
-     * Initialize this new unit with given activity.
-     *
-     * @param  activity
-     *         The activity for this new unit.
-     * @post   If the given activity is a valid activity for any unit,
-     *         the activity of this new unit is equal to the given
-     *         activity. Otherwise, the activity of this new unit is equal
-     *         to "none".
-     *       | if (isValidactivity(activity))
-     *       |   then new.getactivity() == activity
-     *       |   else new.getactivity() == "none"
-     */
-    public Unit(String activity) {
-      if (! isValidactivity(activity))
-        activity = "none";
-      setactivity(activity);
-    }
 
     /**
      * Return the activity of this unit.
@@ -484,7 +584,7 @@ public class Unit {
      * @param  activity
      *         The activity to check.
      * @return
-     *       | result == acivity=="none" or activity=="attacking" or activity=="resting" or activity=="work" or activity=="moving"
+     *       | result == activity=="none" or activity=="attacking" or activity=="resting" or activity=="work" or activity=="moving"
      */
     protected static boolean isValidactivity(String activity) {
         switch (activity){
@@ -516,20 +616,47 @@ public class Unit {
      * Variable registering the activity of this unit.
      */
     private String activity;
-
+    /**
+     * Check whether the movement of the Unit is paused.
+     */
     protected boolean isMovementPaused() {
         return movementPaused;
     }
 
+
+    /**
+     * Set the state of movement of the Unit to the given state of movement.
+     * 
+     * @param	movementPaused
+     * 			The state of movement of the Unit.
+     * @post	The state of movement is equal to the given flag.
+     */
     protected Unit setMovementPaused(boolean movementPaused) {
         this.movementPaused = movementPaused;
         return this;
     }
 
+    /**
+     * Return how many seconds the Unit has left to work.
+     */
+
     protected double getWorkTimeLeft() {
         return workTimeLeft;
     }
 
+    /**
+     * Set the time that the Unit has left to work to the given time that the Unit
+     * has left to work.
+     * 
+     * @param	workTimeLeft
+     * 			The time in seconds that the Unit has left to work.
+     * @post	The time that the Unit has left to work is equal to the given time that
+     * 			the Unit has left to work.
+     * 		  | new.getWorkTimeLeft == workTimeLeft
+     * @throws	IllegalTimeException()
+     * 			The given time that the Unit has left to work is not valid for any Unit.
+     * 		  | ! isValidTime(workTimeLeft)
+     */
     protected Unit setWorkTimeLeft(double workTimeLeft)throws IllegalTimeException {
         if (!AdjMovement.isValidTime(workTimeLeft)){
             throw new IllegalTimeException();
@@ -540,10 +667,21 @@ public class Unit {
 
     private double workTimeLeft;
 
+    /**
+     * Check whether the Unit was working before or not.
+     */
     protected boolean wasWorking() {
         return wasWorking;
     }
 
+    /**
+     * Set the state of having worked to the given state of having worked.
+     * 
+     * @param	wasWorking
+     * 			The state of having worked of the Unit.
+     * @post	The state of having worked of the Unit is equal to the given state
+     * 			of having worked.
+     */
     protected void setWasWorking(boolean wasWorking) {
         this.wasWorking = wasWorking;
 
@@ -554,6 +692,13 @@ public class Unit {
      */
     private boolean wasWorking;
 
+    /**
+     * Let the Unit continue the activity of defence for the given time.
+     * 
+     * @param	dt
+     * 			The time in seconds for which the Unit has to continue its defence.
+     * @effect	The Unit is dt seconds further in its defence.
+     */
     protected void defendFor(double dt){
         if(Util.fuzzyGreaterThanOrEqualTo(dt,getActivityTimeLeft())){
             this.defend();
@@ -570,15 +715,30 @@ public class Unit {
     }
     private int damageToBeDone;
 
+    /**
+     * Return how much damage has to be done to the Unit at the end of the defence.
+     */
     protected int getDamageToBeDone() {
         return damageToBeDone;
     }
-
+    /**
+     * Set the damage that has to be done to the unit equal to the given damage that
+     * has to be done to the unit.
+     * 
+     * @param	damageToBeDone
+     * 			The damage that has to be done to the unit.
+     * @post	The damage that has to be done to the unit is equal to the given damage
+     * 			that has to be done to the unit.
+     */
     protected void setDamageToBeDone(int damageToBeDone) {
         this.damageToBeDone = damageToBeDone;
 
     }
 
+    /**
+     * The defending Unit reacts to the attacker's attack. The Unit will either receive
+     * damage, dodge the attack and move to a random location, or block the attack. 
+     */
     protected void defend() {
 
         //generate two random numbers which are 0<=x<100
@@ -619,18 +779,28 @@ public class Unit {
     protected double getlocationZ(){
         return this.location[2];
     }
-
+    /**
+     * Return the attacker of the Unit.
+     */
     protected Unit getAttacker() {
         return attacker;
     }
-
+    /**
+     * Set the attacker of this Unit to the given attacker.
+     * 
+     * @param	attacker
+     * 			The other Unit that is attacking this Unit.
+     * @post	The Unit that is attacking this Unit is equal to the given attacker.
+     */
     protected Unit setAttacker(Unit attacker) {
         this.attacker = attacker;
         return this;
     }
 
     private Unit attacker;
-
+    /**
+     * Return the coordinate of the cube which the Unit is in.
+     */
     public int[] getCubeCoordinate(){
         int[] coordinate=new int[]{0,0,0};
         coordinate[0]=(int) Math.floor(getlocationX());
@@ -638,6 +808,14 @@ public class Unit {
         coordinate[2]=(int) Math.floor(getlocationZ());
         return coordinate;
     }
+
+    /**
+     * Let the Unit continue the activity of resting for the given time.
+     * 
+     * @param	dt
+     * 			The time in seconds for which the Unit has to continue its rest.
+     * @effect	The Unit is dt seconds further in its rest.
+     */  
     protected void restFor(double dt){
 
         if (getActivityTimeLeft()>0){
@@ -664,6 +842,9 @@ public class Unit {
 
 
     }
+    /**
+     * Let the unit rest.
+     */
     public void rest(){
         if ((this.getactivity().equals("resting") && this.getActivityTimeLeft()>0)||
                 this.getactivity().equals("defending")||this.getactivity().equals("attacking")){
@@ -676,6 +857,9 @@ public class Unit {
         this.setMovementPaused(false);
 
     }
+    /**
+     * Let the unit work.
+     */
     public void work(){
         if ((this.getactivity().equals("resting") && this.getActivityTimeLeft()>0)||
                 this.getactivity().equals("defending")||this.getactivity().equals("attacking")){
@@ -686,7 +870,13 @@ public class Unit {
         double worktime=((double) getStrength())/500;
         this.setActivityTimeLeft(worktime);
     }
-
+    /**
+     * Let the Unit continue the activity of working for the given time.
+     * 
+     * @param	dt
+     * 			The time in seconds for which the Unit has to continue its work.
+     * @effect	The Unit is dt seconds further in its work.
+     */  
     private void workFor(double dt){
         if(Util.fuzzyGreaterThanOrEqualTo(dt,getActivityTimeLeft())){
             this.setActivityTimeLeft(0);
@@ -695,6 +885,16 @@ public class Unit {
             this.setMovementPaused(false);
         }
     }
+    /**
+     * Let this Unit spend time when it is not doing any activity. If default behavior is
+     * enabled, the Unit will start doing random activities.
+     * 
+     * @param	dt
+     * 			The time for which the Unit has to spend time without doing any activity.
+     * @effect	The Unit is dt seconds further in its movement.
+     * 			If default behaviour is enabled, the Unit will be doing random activities.
+     * 			Otherwise, it will remain passive.
+     */  
     private void spendTimeFor(double dt){
         if (isDefaultBehaviorEnabled()){
             if (Math.random()<=0.333){
@@ -716,7 +916,9 @@ public class Unit {
 
     }
 
-
+    /**
+     * make this unit start sprinting if it is moving
+     */
     public void startSprinting(){
         if (!this.getactivity().equals("moving")){
             throw new IllegalArgumentException("must be moving to sprint");
@@ -724,6 +926,9 @@ public class Unit {
         else {this.currentMovement.setIsSprinting(true);
             this.isSprinting=true;}
     }
+    /**
+     * make this unit stop sprinting if it is moving
+     */
     public void stopSprinting(){
         if (!this.getactivity().equals("moving")){
             throw new IllegalArgumentException("must be moving to (stop) sprint");
@@ -732,11 +937,19 @@ public class Unit {
             this.isSprinting=false;}
     }
 
-
+    /**
+     * Check whether the default behavior is enabled.
+     */
     public boolean isDefaultBehaviorEnabled() {
         return defaultbehaviorenabled;
     }
+    
+    /**
+     * Set the state equal to the given flag.
+     * @param	enabled
+     * 			The default behavior state of the unit.
+     * @post	The default behavior state of the unit is equal to the given flag.
+     */
     public void setDefaultbehavior(boolean enabled){
-        this.defaultbehaviorenabled=enabled;
-    }
-}
+        this.defaultbehaviorenabled=enabled ;
+    }}
