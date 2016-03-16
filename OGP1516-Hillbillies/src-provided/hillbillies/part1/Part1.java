@@ -3,7 +3,7 @@ package hillbillies.part1;
 import hillbillies.common.internal.HillbilliesApplication;
 import hillbillies.common.internal.controller.GameController;
 import hillbillies.common.internal.ui.HillbilliesView;
-import hillbillies.part1.facade.Facade;
+import src.hillbillies.part1.facade.Facade;
 import hillbillies.part1.facade.IFacade;
 import hillbillies.part1.internal.Part1Options;
 import hillbillies.part1.internal.controller.GameControllerPart1;
