@@ -26,12 +26,12 @@ public class Defense implements IActivity {
 
     @Override
     public boolean hasSimpleTimeLeft() {
-        return false;
+        return true;
     }
 
     @Override
     public double returnSimpleTimeLeft() {
-        throw new IllegalArgumentException("Movement Has no simple TimeLeft attribute");
+
     }
 
     @Override

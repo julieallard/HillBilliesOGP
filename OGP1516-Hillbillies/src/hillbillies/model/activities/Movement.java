@@ -4,13 +4,10 @@ import hillbillies.model.IActivity;
 import hillbillies.model.Unit;
 
 public class Movement implements IActivity {
-    @Override
-    public void createNewActivity(Unit unit) {
 
-    }
 
     @Override
-    public void advanceActivityTime() {
+    public void advanceActivityTime(double dt) {
 
     }
 
@@ -20,12 +17,12 @@ public class Movement implements IActivity {
     }
 
     @Override
-    public double returnSimpleTimeLeft() {
-        return 0;
+    public double returnSimpleTimeLeft() throws IllegalArgumentException {
+        throw new IllegalArgumentException("Movement Has no simple TimeLeft attribute");
     }
 
     @Override
-    public boolean canBeInterruptedBy(Object activity) {
+    public boolean canBeInterruptedBy(String activity) {
         return true;
     }
 

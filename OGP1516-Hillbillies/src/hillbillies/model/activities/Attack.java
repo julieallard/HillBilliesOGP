@@ -10,13 +10,13 @@ import ogp.framework.util.Util;
 
 public class Attack implements IActivity{
 
-
+    // constructor
     public Attack(Unit attacker,Unit defender)throws IllegalTimeException {
         this.attacker=attacker;
         this.defender=defender;
         this.settimeLeft(timeLeft);
     }
-
+    //zet de tijd van de aanval vooruit
     @Override
     public void advanceActivityTime(double dt) {
         if (Util.fuzzyGreaterThanOrEqualTo(dt,this.gettimeLeft())){
@@ -28,22 +28,23 @@ public class Attack implements IActivity{
         }
 
     }
-
+    //de duur van een aanval is bekend bij het begin
     @Override
     public boolean hasSimpleTimeLeft() {
         return true;
     }
-
+    //geeft hoelang de activiteit nog duurt
     @Override
     public double returnSimpleTimeLeft() {
-        return 0;
+        return gettimeLeft();
     }
-
+    // geen enkele activiteit kan een aanval onderbreken
     @Override
-    public boolean canBeInterruptedBy(Object activity) {
+    public boolean canBeInterruptedBy(String activity) {
         return false;
     }
 
+    // een onderbreking is niet toegestaan
     @Override
     public void interrupt() throws IllegalArgumentException {
         throw new IllegalArgumentException("Attack cannot be Interrupted");
@@ -117,7 +118,7 @@ public class Attack implements IActivity{
      */
     private double timeLeft;
 
-
+    // hier zal er aan de Unit gezegd worden om de activiteit te beeindigen
     private void conductAttack(){
         Unit.activityFinished();
 
