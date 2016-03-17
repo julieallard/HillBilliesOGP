@@ -5,17 +5,16 @@ import hillbillies.model.Unit;
 
 public interface IActivity {
 
-    void createNewActivity(Unit unit);
 
-    void advanceActivityTime();
+    void advanceActivityTime(double dt);
 
     boolean hasSimpleTimeLeft();
 
-    double returnSimpleTimeLeft();
+    double returnSimpleTimeLeft() throws IllegalArgumentException;
 
-    boolean canBeInterruptedBy(Object activity);
+    boolean canBeInterruptedBy(String activity);
 
-    void interrupt();
+    void interrupt() throws IllegalArgumentException;
 
 
 
