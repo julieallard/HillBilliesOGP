@@ -3,7 +3,7 @@ package hillbillies.part1.facade;
 import hillbillies.model.Unit;
 import ogp.framework.util.ModelException;
 
-public class Facade implements hillbillies.part1.facade.IFacade {
+public class Facade implements IFacade {
 
 	/* Unit creation */
     /**
