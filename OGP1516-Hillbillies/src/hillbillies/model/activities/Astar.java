@@ -55,7 +55,7 @@ public class Astar {
                 if (closedSet.contains(current)){
                     continue;
                 }
-                double tentativeGScore=gScore.get(current)+VLocation.getDistanceBetween(current,buur);
+                double tentativeGScore=gScore.get(current)+VLocation.getStraightDist(current,buur);
                 if (!openSet.contains(buur)){
                     openSet.add(buur);
                 }
@@ -77,7 +77,7 @@ public class Astar {
     }
 
     private double costEstimatefrom(VLocation node,VLocation destination){
-        return VLocation.getDistancebetween(node,destination);
+        return VLocation.getStraightDist(node,destination);
     }
     private VLocation[] reconstructPath(Map<VLocation,VLocation> cameFrom,VLocation current){
         List<VLocation> path= new ArrayList<VLocation>();

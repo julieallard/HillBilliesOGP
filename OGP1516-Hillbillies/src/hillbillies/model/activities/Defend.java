@@ -22,7 +22,11 @@ public class Defend implements IActivity {
 
     @Override
     public void advanceActivityTime(double dt) {
-
+        if (Util.fuzzyGreaterThanOrEqualTo(dt,this.gettimeLeft())){
+            this.conductDefense();
+            return;
+        }
+        this.settimeLeft(gettimeLeft()-dt);
     }
 
     @Override
@@ -121,8 +125,12 @@ public class Defend implements IActivity {
     private Random random;
 
     private void conductDefense(){
-
-        boolean willDodge = (this.random.nextDouble();
+        int agilAttack=this.attacker.getAgility();
+        int agilDef=this.defender.getAgility();
+        int strAttack=this.attacker.getCurrentStaminaPoints();
+        int strDef=this.defender.getStrength();
+        boolean willDodge = (this.random.nextDouble()<=0.2*(((double) agilDef)/agilAttack));
+        boolean willBlock = (this.random.nextDouble())<
 
 
 

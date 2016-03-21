@@ -7,7 +7,7 @@ import ogp.framework.util.Util;
  * A class of a hillbilly Unit involving a name, an initial position, a weight,
  * agility, strength, toughness and a facility to enable the default behaviour.
  * 
- * @version 1.0
+ * @version 0.9 alpha
  * @author  Arthur Decloedt, Julie Allard
  * Julie Allard - Handelsingenieur in de beleidsinformatica  
  * Decloedt Arthur - Bachelor in de Informatica
