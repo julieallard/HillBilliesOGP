@@ -26,7 +26,7 @@ public class Attack implements IActivity{
         }
 
     }
-    //de duur van een aanval is bekend bij het begin
+    //de duur van een aanval is bekend bij het begin, dus kan er al gevraagd worden naar de tijd
     @Override
     public boolean hasSimpleTimeLeft() {
         return true;
