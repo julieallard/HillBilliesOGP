@@ -2,7 +2,7 @@ package hillbillies.model.activities;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.IActivity;
-import hillbillies.model.IllegalTimeException;
+import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.Unit;
 import ogp.framework.util.Util;
 
@@ -12,7 +12,7 @@ public class Attack implements IActivity{
     public Attack(Unit attacker,Unit defender)throws IllegalTimeException {
         this.attacker=attacker;
         this.defender=defender;
-        this.settimeLeft(timeLeft);
+        this.settimeLeft(1);
     }
     //zet de tijd van de aanval vooruit
     @Override

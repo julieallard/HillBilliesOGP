@@ -1,6 +1,8 @@
 
 package hillbillies.model;
 import be.kuleuven.cs.som.annotate.*;
+import hillbillies.model.exceptions.IllegalTimeException;
+import hillbillies.model.exceptions.UnitIllegalLocation;
 import ogp.framework.util.Util;
 
 /**
@@ -55,7 +57,7 @@ public class Unit {
      * @throws	IllegalArgumentException()
      * 			The given initial name is not a valid name for any Unit.
      * 		  | ! isValidName(name)
-     * @throws  UnitIllegalLocation()
+     * @throws UnitIllegalLocation()
      * 			The given initial position is not a valid location for any Unit.
      * 		  | ! isValidLocation(initialPosition)  
      * @invar  	The location of each Unit must be a valid location for any Unit.
@@ -556,7 +558,7 @@ public class Unit {
      * 			The time that is left to do the current activity.
      * @post	The time that is left to do the current activity is equal to the given
      * 			time that is left to do the current activity.
-     * @throws 	IllegalTimeException()
+     * @throws IllegalTimeException()
      * 			The given time that is left to do the current activity is not valid.
      * 		  | ! isValidTime(activityTimeLeft)
      */

@@ -2,7 +2,6 @@ package hillbillies.model.activities;
 
 
 import hillbillies.model.Unit;
-import hillbillies.model.UnitIllegalLocation;
 import hillbillies.model.VLocation;
 
 import java.util.*;

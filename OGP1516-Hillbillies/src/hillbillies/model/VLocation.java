@@ -3,6 +3,7 @@ package hillbillies.model;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.exceptions.UnitIllegalLocation;
 
 public class VLocation {
 
@@ -167,7 +168,6 @@ public class VLocation {
         array[3]=(int) getZLocation();
         return array;
     }
-
 
 
 

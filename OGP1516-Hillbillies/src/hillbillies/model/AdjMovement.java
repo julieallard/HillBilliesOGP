@@ -3,6 +3,8 @@ package hillbillies.model;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.exceptions.IllegalTimeException;
+import hillbillies.model.exceptions.UnitIllegalLocation;
 import ogp.framework.util.Util;
 
 /** @invar  Each movement can have its currentstart as currentstart.
