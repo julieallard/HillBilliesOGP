@@ -1,5 +1,5 @@
 package hillbillies.model;
 
-public class Vector {
+public class VLocation {
 
 }
