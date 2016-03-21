@@ -1,24 +1,20 @@
 package hillbillies.model;
 
-
-import java.util.Objects;
-
-/**
- * Interface for the different Activities
- */
-
 public interface IActivity {
 
-    void createNewActivity();
 
-    void getState(Object activity);
+    void advanceActivityTime(double dt);
 
-    boolean hasSimpleTimeLeft(Object activity);
+    boolean hasSimpleTimeLeft();
 
-    double getTimeLeft(Object activity);
+    double returnSimpleTimeLeft() throws IllegalArgumentException;
 
+    boolean canBeInterruptedBy(String activity);
+
+    void interrupt() throws IllegalArgumentException;
 
 
 
 
 }
+
