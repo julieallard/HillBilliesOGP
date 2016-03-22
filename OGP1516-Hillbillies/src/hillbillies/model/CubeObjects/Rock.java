@@ -1,7 +1,6 @@
 package hillbillies.model.CubeObjects;
 
 
-
 public class Rock  extends CubeWorldObject {
 
 

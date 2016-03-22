@@ -148,7 +148,7 @@ public class World {
             Rock rock=new Rock();
             if(cube.getClass()==rock.getClass()){
                 createNewRock(location);
-                
+
 
             }
             if(cube.getClass()==wood.getClass()){
