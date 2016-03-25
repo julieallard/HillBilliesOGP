@@ -56,9 +56,24 @@ public class VLocation {
         this.ZLocation = ZLocation;
         if (!canHaveAsOccupant(occupant)) throw new IllegalArgumentException("IllegalOccupantAssignedToLocation");
         this.occupant=occupant;
-
     }
-    public final Object occupant;
+    
+    public VLocation(double YLocation, double XLocation,double ZLocation) throws UnitIllegalLocation {
+        if (! canHaveAsYLocation(YLocation)){
+            throw new UnitIllegalLocation();
+          }
+          this.YLocation = YLocation;
+          if (! canHaveAsXLocation(XLocation)){
+              throw new UnitIllegalLocation();}
+          this.XLocation = XLocation;
+
+          if (! canHaveAsZLocation(ZLocation)){
+              throw new UnitIllegalLocation();
+          }
+          this.ZLocation = ZLocation;
+      }
+    
+    public Object occupant;
 
     public boolean canHaveAsOccupant(Object object){
         return (object instanceof MovableWorldObject||object instanceof CubeWorldObject);
