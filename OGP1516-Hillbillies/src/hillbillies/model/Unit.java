@@ -84,6 +84,7 @@ public class Unit extends MovableWorldObject {
         this.staminapoints = getMaxStaminaPoints();
         this.orientation = (float) (0.5*Math.PI);
         this.setName(name);
+        this.setActivity(null);
 
     }
     private String name;
@@ -383,7 +384,7 @@ public class Unit extends MovableWorldObject {
      * @param  activity
      *         The activity to check.
      * @return
-     *       | result ==
+     *       | result == true
      */
     public static boolean isValidActivity(IActivity activity) {
       return true;
@@ -459,6 +460,11 @@ public class Unit extends MovableWorldObject {
 
 
     public void advanceTime(double dt){
-        if (this.getActivity()==null)
+        if (this.getActivity()==null && isDefaultBehaviorEnabled()){
+            behaveDefault(dt);
+        }
+        this.getActivity().advanceActivityTime(dt);
     }
+
+    public void
 }

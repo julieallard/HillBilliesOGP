@@ -50,19 +50,18 @@ public class Work implements IActivity {
 	public void interrupt() throws IllegalArgumentException {
 
     }
-    private VLocation targetLocation;
+    private final VLocation targetLocation;
 
-    private Object targetObject;
-
-    private static boolean isValidTargetObject(Object target){
-        return ((target instanceof MovableWorldObject)||((target instanceof CubeWorldObject)&&!(target instanceof Air)));
-
-
-    }
 
     private void conductWork(){
-        if (this.targetObject instanceof MovableWorldObject &&!(this.targetObject instanceof Unit) ){
-            unit.carry(targetObject);}
+        if (unit.isCarrying()){
+            unit.drop();
+            return;
+        }
+        int[] targCube=targetLocation.getCubeLocation();
+        if
+
+
 
 
 
