@@ -21,7 +21,7 @@ public class Movement implements IActivity {
     }
 
     @Override
-    public boolean canBeInterruptedBy(String activity) {
+    public boolean canBeInterruptedBy(IActivity activity) {
         return true;
     }
 

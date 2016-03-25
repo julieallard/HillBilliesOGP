@@ -41,7 +41,7 @@ public class Defend implements IActivity {
     }
 
     @Override
-    public boolean canBeInterruptedBy(String activity) {
+    public boolean canBeInterruptedBy(IActivity activity) {
         return false;
     }
 

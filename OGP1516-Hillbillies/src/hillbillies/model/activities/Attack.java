@@ -38,7 +38,7 @@ public class Attack implements IActivity{
     }
     // geen enkele activiteit kan een aanval onderbreken
     @Override
-    public boolean canBeInterruptedBy(String activity) {
+    public boolean canBeInterruptedBy(IActivity activity) {
         return false;
     }
 
