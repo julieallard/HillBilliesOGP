@@ -3,6 +3,7 @@ package hillbillies.model;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.CubeObjects.CubeWorldObject;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
 public class VLocation {
@@ -40,7 +41,7 @@ public class VLocation {
      *         This new VLocation cannot have the given ZLocation as its ZLocation.
      *       | ! canHaveAsZLocation(this.getZLocation())
      */
-    public VLocation(double YLocation, double XLocation,double ZLocation,WorldObject occupant) throws UnitIllegalLocation {
+    public VLocation(double YLocation, double XLocation,double ZLocation,Object occupant) throws UnitIllegalLocation {
       if (! canHaveAsYLocation(YLocation)){
           throw new UnitIllegalLocation();
         }
@@ -53,12 +54,15 @@ public class VLocation {
             throw new UnitIllegalLocation();
         }
         this.ZLocation = ZLocation;
+        if (!canHaveAsOccupant(occupant)) throw new IllegalArgumentException("IllegalOccupantAssignedToLocation");
         this.occupant=occupant;
 
     }
-    public WorldObject occupant;
+    public final Object occupant;
 
-    
+    public boolean canHaveAsOccupant(Object object){
+        return (object instanceof MovableWorldObject||object instanceof CubeWorldObject);
+    }
     /**
      * Return the YLocation of this VLocation.
      */

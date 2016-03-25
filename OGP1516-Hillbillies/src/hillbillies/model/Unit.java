@@ -15,7 +15,7 @@ import ogp.framework.util.Util;
  * Decloedt Arthur - Bachelor in de Informatica
  * https://github.com/julieallard/hillbillies.git
  */
-public class Unit {
+public class Unit extends MovableWorldObject {
     /**
      * Initialize this new hillbilly Unit with given name, given initial position,
      * given weight, given agility, given strength, given toughness
@@ -445,4 +445,26 @@ public class Unit {
     public void setDefaultbehavior(boolean enabled){
         this.defaultbehaviorenabled=enabled ;
     }
+
+    private boolean isCarrying=false;
+
+    public boolean isCarrying() {
+        return isCarrying;
     }
+
+    private void setCarrying(boolean carrying) {
+        isCarrying = carrying;
+
+    }
+    private MovableWorldObject carriedObject;
+
+    public void carry(Object object){
+        MovableWorldObject carrObject=((MovableWorldObject) object);
+        if (canBeCarried())
+    }
+
+    private boolean canBeCarried(MovableWorldObject object){
+        if(this.isCarrying()) return false;
+        return(!(object instanceof Unit));
+    }
+}

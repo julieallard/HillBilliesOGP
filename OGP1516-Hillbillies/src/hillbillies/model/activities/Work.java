@@ -61,10 +61,10 @@ public class Work implements IActivity {
     }
 
     private void conductWork(){
-        if (this.targetObject instanceof MovableWorldObject){
-            unit.setIsCarrying(true);
-            unit.carrying(targetObject);
-            
+        if (this.targetObject instanceof MovableWorldObject &&!(this.targetObject instanceof Unit) ){
+            unit.carry(targetObject);}
+
+
 
     }
 
