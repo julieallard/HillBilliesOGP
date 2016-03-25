@@ -29,13 +29,8 @@ public class World {
      * the given CubeWorld.
      * | this.setCubeWorld(CubeWorld)
      * Initialize this new World with given movableWorldObjectsHashmap.
-     *
-     * @param  MovableWorldObjectHashmap
-     *         The movableWorldObjectsHashmap for this new World.
-     * @effect The movableWorldObjectsHashmap of this new World is set to
-     *         the given movableWorldObjectsHashmap.
-     *       | this.setMovableWorldObjectHashmap(MovableWorldObjectHashmap)
      */
+
     public World(int[][][] CubeWorld)
             throws UnitIllegalLocation, IllegalArgumentException {
         this.setCubeWorld(CubeWorld);

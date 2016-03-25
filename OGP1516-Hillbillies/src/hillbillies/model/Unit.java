@@ -84,7 +84,6 @@ public class Unit {
         this.staminapoints = getMaxStaminaPoints();
         this.orientation = (float) (0.5*Math.PI);
         this.setName(name);
-        this.setactivity("none");
 
     }
     private String name;
@@ -362,587 +361,78 @@ public class Unit {
             this.orientation = orientation;}
         else {this.orientation= ((float) Math.PI)/2;}
     }
-    private boolean isSprinting=false;
 
-    protected void setIsSprinting(boolean issprinting){
-        this.isSprinting = issprinting;
-    }
-    public boolean isSprinting(){
-        return this.isSprinting;
-    }
     /**
-     * Variable registering the orientation of this Unit.
+     * Float registering the orientation of this unit
      */
-
     private float orientation;
-    /** 
-     * Variable registering the current movement of an object
+
+    /**
+     * Initialize this new Unit with given activity.
+     *
+     * @param  Activity
+     *         The activity for this new Unit.
+     * @effect The activity of this new Unit is set to
+     *         the given activity.
+     *       | this.setActivity(Activity)
      */
-    private Movement currentMovement;
-    public double[] currentDestination;
-    private boolean movementPaused;
-
-    /**
-     * Let the Unit move towards the given destination.
-     * 
-     * @param	destination
-     * 			The destination where the Unit will be heading to.
-     * @effect	If the Unit is not resting while there is still time left to rest until
-     * 			its first hitpoint, and if it is not attacking or defending, the
-     * 			Unit moves towards the given destination.
-     */
-
-    
-    public void moveToAdjacent(double[] destination){
-        if ((this.getactivity().equals("resting")&&this.getActivityTimeLeft()>0)||this.getactivity().equals("moving")||
-                this.getactivity().equals("defending")||this.getactivity().equals("attacking")){
-            return;}
-        this.currentDestination=destination;
-        double[] startloc= (this.getlocation()).clone();
-        this.currentMovement=new Movement(this,startloc,destination,this.isSprinting);
-        this.activity="moving";
-        this.movementPaused=false;
+    public Unit(IActivity Activity)
+              throws IllegalArgumentException {
+      this.setActivity(Activity);
     }
 
-    /**
-     * Let the Unit move towards the given destination.
-     * 
-     * @param	destination
-     * 			The destination cube where the Unit will be heading to.
-     * @effect	If the Unit is not resting while there is still time left to rest until
-     * 			its first hitpoint, and if it is not attacking or defending, the
-     * 			Unit moves towards the given destination.
-     */
-
-    public void moveTo(double[] destination){
-        if ((this.getactivity().equals("resting")&&this.getActivityTimeLeft()>0)||
-                this.getactivity().equals("defending")||this.getactivity().equals("attacking")){
-            return;}
-        this.currentDestination=destination;
-        double[] startloc= (this.getlocation()).clone();
-        this.currentMovement=new Movement(this,startloc,destination,this.isSprinting);
-        this.activity="moving";
-        this.movementPaused=false;
-    }
-    public void advanceTime(double dt) {
-
-        //this makes sure the garbage collector can delete the movement if it is no longer used
-        if(!this.isMovementPaused()&&!(this.getactivity().equals("moving"))&&!(this.currentMovement==null)){
-            this.currentMovement=null;
-        }
-        setTimeLeftSprinting();
-        String activity = getactivity();
-        switch (activity) {
-            case "moving":
-                moveFor(dt);
-                break;
-            case "resting":
-                restFor(dt);
-                break;
-            case "working":
-                workFor(dt);
-                break;
-            case "defending":
-                defendFor(dt);
-                return;
-            case "attacking":
-                attackFor(dt);
-            default:
-                spendTimeFor(dt);
-                break;
-        }
-    }
-
-    
-    /**
-     * Let the Unit continue the activity of moving for the given time.
-     * 
-     * @param	dt
-     * 			The time in seconds for which the Unit has to continue its movement.
-     * @effect	The Unit is dt seconds further in its movement.
-     */    
-    protected void moveFor(double dt){
-        this.currentMovement.advanceTime(this,dt);
-        double sprintTime;
-        sprintTime=this.currentMovement.getTimeLastSprinted();
-        int stamPoints=(int) sprintTime*10;
-        this.setCurrentStaminaPoints(getCurrentStaminaPoints()-stamPoints);
-        if(this.currentMovement.getMovementFinished()) {
-            setactivity("none");
-            setMovementPaused(false);
-            setActivityTimeLeft(0);
-            setWasWorking(false);
-            this.currentMovement=null;
-        }
-
-    }
 
     /**
-     * Return how many seconds the Unit has left for sprinting.
-     */
-    protected double getTimeLeftSprinting() {
-        return timeLeftSprinting;
-    }
-    /**
-     * Calculate and set the time that the Unit has left for sprinting.
-     */
-    protected void setTimeLeftSprinting (){
-        double stampoints = (double) this.getCurrentStaminaPoints();
-        this.timeLeftSprinting=(stampoints)/10;
-
-
-    }
-    
-    private double timeLeftSprinting;
-
-    /**
-     * Attack another Unit in the Game World.
-     * 
-     * @param	defender
-     * 			The other Unit that this Unit is attacking.
-     * @effect	The defender is currently defending, the attacker is currently attacking.
-     */
-    public void attack(Unit defender) {
-        String prevactdef = defender.getactivity();
-        if ((this.getactivity().equals("resting") && this.getActivityTimeLeft()>0)||
-                this.getactivity().equals("defending")||this.getactivity().equals("attacking")){
-            return;}
-        setActivityTimeLeft(1);
-        setWasWorking(false);
-        setMovementPaused(false);
-
-        switch (prevactdef) {
-            case "resting":
-            case "working":
-                defender.setWasWorking(true);
-                defender.setWorkTimeLeft(this.getActivityTimeLeft());
-                break;
-            case "moving":
-                defender.setMovementPaused(true);
-                break;
-            default:
-                break;
-        }
-        defender.setDamageToBeDone((int) ((this.getStrength())/10));
-        this.setactivity("attacking");
-        defender.setactivity("defending");
-        defender.setAttacker(this);
-        defender.setorientation((float)(Math.atan2((defender.getlocationY() - this.getlocationY()), (defender.getlocationX() - this.getlocationX()))));
-        this.setorientation((float)(Math.atan2((this.getlocationY() - defender.getlocationY()), (this.getlocationX() - defender.getlocationX()))));
-    }
-    /**
-     * Continue the activity of attacking for the given time.
-     * 
-     * @param	dt
-     * 			The time for which the Unit has to continue its attack.
-     * @effect	The Unit is dt seconds further in its attack.
-     */  
-    protected void attackFor(double dt){
-        double timeleft =getActivityTimeLeft();
-        if (timeleft>dt){setActivityTimeLeft(timeleft-dt);return;}
-        setactivity("none");
-        setActivityTimeLeft((double) 0);
-
-    }
-    /**
-     * Return how many seconds the Unit has left to do the current activity.
-     */
-    protected double getActivityTimeLeft() {
-        return activityTimeLeft;
-    }
-
-    /**
-     * Set the time that is left to do the current activity.
-     * 
-     * @param	activityTimeLeft
-     * 			The time that is left to do the current activity.
-     * @post	The time that is left to do the current activity is equal to the given
-     * 			time that is left to do the current activity.
-     * @throws IllegalTimeException()
-     * 			The given time that is left to do the current activity is not valid.
-     * 		  | ! isValidTime(activityTimeLeft)
-     */
-    private void setActivityTimeLeft(double activityTimeLeft) throws IllegalTimeException {
-        if (!AdjMovement.isValidTime(activityTimeLeft)){
-            throw new IllegalTimeException();
-        }
-        this.activityTimeLeft = activityTimeLeft;
-    }
-
-    private double activityTimeLeft;
-
-    /**
-     * Return the activity of this unit.
+     * Return the activity of this Unit.
      */
     @Basic @Raw
-    public String getactivity() {
-      return this.activity;
+    public IActivity getActivity() {
+      return this.Activity;
     }
 
     /**
      * Check whether the given activity is a valid activity for
-     * any unit.
+     * any Unit.
      *
      * @param  activity
      *         The activity to check.
      * @return
-     *       | result == activity=="none" or activity=="attacking" or activity=="resting" or activity=="work" or activity=="moving"
+     *       | result ==
      */
-    protected static boolean isValidactivity(String activity) {
-        switch (activity){
-            case "none" :case "moving" :case "attacking" :case "defending":case "resting":case "working": return true;
-
-            default:return false;
-
-        }
+    public static boolean isValidActivity(IActivity activity) {
+      return true;
     }
 
     /**
-     * Set the activity of this unit to the given activity.
+     * Set the activity of this Unit to the given activity.
      *
-     * @param  activity
-     *         The new activity for this unit.
-     * @post   If the given activity is a valid activity for any unit,
-     *         the activity of this new unit is equal to the given
-     *         activity.
-     *       | if (isValidactivity(activity))
-     *       |   then new.getactivity() == activity
+     * @param  Activity
+     *         The new activity for this Unit.
+     * @post   The activity of this new Unit is equal to
+     *         the given activity.
+     *       | new.getActivity() == Activity
+     * @throws IllegalArgumentException
+     *         The given activity is not a valid activity for any
+     *         Unit.
+     *       | ! isValidActivity(getActivity())
      */
     @Raw
-    protected void setactivity(String activity) {
-      if (isValidactivity(activity))
-        this.activity = activity;
+    public void setActivity(IActivity Activity)
+          throws IllegalArgumentException {
+      if (! isValidActivity(Activity))
+        throw new IllegalArgumentException();
+      this.Activity = Activity;
     }
 
     /**
-     * Variable registering the activity of this unit.
+     * Variable registering the activity of this Unit.
      */
-    private String activity;
-    /**
-     * Check whether the movement of the Unit is paused.
-     */
-    protected boolean isMovementPaused() {
-        return movementPaused;
-    }
-
-
-    /**
-     * Set the state of movement of the Unit to the given state of movement.
-     * 
-     * @param	movementPaused
-     * 			The state of movement of the Unit.
-     * @post	The state of movement is equal to the given flag.
-     */
-    protected Unit setMovementPaused(boolean movementPaused) {
-        this.movementPaused = movementPaused;
-        return this;
-    }
-
-    /**
-     * Return how many seconds the Unit has left to work.
-     */
-
-    protected double getWorkTimeLeft() {
-        return workTimeLeft;
-    }
-
-    /**
-     * Set the time that the Unit has left to work to the given time that the Unit
-     * has left to work.
-     * 
-     * @param	workTimeLeft
-     * 			The time in seconds that the Unit has left to work.
-     * @post	The time that the Unit has left to work is equal to the given time that
-     * 			the Unit has left to work.
-     * 		  | new.getWorkTimeLeft == workTimeLeft
-     * @throws	IllegalTimeException()
-     * 			The given time that the Unit has left to work is not valid for any Unit.
-     * 		  | ! isValidTime(workTimeLeft)
-     */
-    protected Unit setWorkTimeLeft(double workTimeLeft)throws IllegalTimeException {
-        if (!AdjMovement.isValidTime(workTimeLeft)){
-            throw new IllegalTimeException();
-        }
-        this.workTimeLeft = workTimeLeft;
-        return this;
-    }
-
-    private double workTimeLeft;
-
-    /**
-     * Check whether the Unit was working before or not.
-     */
-    protected boolean wasWorking() {
-        return wasWorking;
-    }
-
-    /**
-     * Set the state of having worked to the given state of having worked.
-     * 
-     * @param	wasWorking
-     * 			The state of having worked of the Unit.
-     * @post	The state of having worked of the Unit is equal to the given state
-     * 			of having worked.
-     */
-    protected void setWasWorking(boolean wasWorking) {
-        this.wasWorking = wasWorking;
-
-    }
-
-    /**
-     * variable registering if the unit was previously at work
-     */
-    private boolean wasWorking;
-
-    /**
-     * Let the Unit continue the activity of defence for the given time.
-     * 
-     * @param	dt
-     * 			The time in seconds for which the Unit has to continue its defence.
-     * @effect	The Unit is dt seconds further in its defence.
-     */
-    protected void defendFor(double dt){
-        if(Util.fuzzyGreaterThanOrEqualTo(dt,getActivityTimeLeft())){
-            this.defend();
-            this.setActivityTimeLeft(0);
-            if(wasWorking()){setactivity("working");
-                setActivityTimeLeft(getWorkTimeLeft());
-                setWasWorking(false);
-                setWorkTimeLeft(0);}
-            else if(movementPaused){
-                setactivity("moving");
-                setMovementPaused(false);}
-        }
-        else setActivityTimeLeft(getActivityTimeLeft()-dt);
-    }
-    private int damageToBeDone;
-
-    /**
-     * Return how much damage has to be done to the Unit at the end of the defence.
-     */
-    protected int getDamageToBeDone() {
-        return damageToBeDone;
-    }
-    /**
-     * Set the damage that has to be done to the unit equal to the given damage that
-     * has to be done to the unit.
-     * 
-     * @param	damageToBeDone
-     * 			The damage that has to be done to the unit.
-     * @post	The damage that has to be done to the unit is equal to the given damage
-     * 			that has to be done to the unit.
-     */
-    protected void setDamageToBeDone(int damageToBeDone) {
-        this.damageToBeDone = damageToBeDone;
-
-    }
-
-    /**
-     * The defending Unit reacts to the attacker's attack. The Unit will either receive
-     * damage, dodge the attack and move to a random location, or block the attack. 
-     */
-    protected void defend() {
-
-        //generate two random numbers which are 0<=x<100
-        double d = (double) Math.random()*100;
-        double b = (double) Math.random()*100;
-        //probability for successfully dodging
-        if (d <= 0.2*(this.getAgility()/this.attacker.getAgility())) {
-            //move to a random position (with the same z-coordinate though)
-            //check whether the random position is within the boundaries of the Game World
-            double randomX = 0;
-            double randomY = 0;
-
-            boolean locIsValid=false;
-            while (!locIsValid) {
-                randomX =  Math.random();
-                double negX =  Math.random();
-                if (negX < 0.5) {randomX = randomX*(-1);}
-                randomY =  Math.random();
-                double negY =  Math.random();
-                if (negY < 0.5) {randomY = randomY*(-1);}
-                double [] newLoc =new double[]{getlocationX()+randomX,getlocationY()+randomY,getlocationZ()};
-                locIsValid = isValidlocation(newLoc);
-            }
-            this.setlocation(( new double[]{getlocationX()+randomX,getlocationY()+randomY,getlocationZ()}));
-            //probability for successfully blocking
-        } else if (! (b <= 0.25*((this.getStrength()+this.getAgility())/(this.attacker.getStrength()+this.attacker.getAgility())))) {
-            this.hitpoints = this.hitpoints - this.getDamageToBeDone();
-        }
-        this.attacker=null;
-        this.setDamageToBeDone(0);
-    }
-    protected double getlocationX(){
-        return this.location[0];
-    }
-    protected double getlocationY(){
-        return this.location[1];
-    }
-    protected double getlocationZ(){
-        return this.location[2];
-    }
-    /**
-     * Return the attacker of the Unit.
-     */
-    protected Unit getAttacker() {
-        return attacker;
-    }
-    /**
-     * Set the attacker of this Unit to the given attacker.
-     * 
-     * @param	attacker
-     * 			The other Unit that is attacking this Unit.
-     * @post	The Unit that is attacking this Unit is equal to the given attacker.
-     */
-    protected Unit setAttacker(Unit attacker) {
-        this.attacker = attacker;
-        return this;
-    }
-
-    private Unit attacker;
-    /**
-     * Return the coordinate of the cube which the Unit is in.
-     */
-    public int[] getCubeCoordinate(){
-        int[] coordinate=new int[]{0,0,0};
-        coordinate[0]=(int) Math.floor(getlocationX());
-        coordinate[1]=(int) Math.floor(getlocationY());
-        coordinate[2]=(int) Math.floor(getlocationZ());
-        return coordinate;
-    }
-
-    /**
-     * Let the Unit continue the activity of resting for the given time.
-     * 
-     * @param	dt
-     * 			The time in seconds for which the Unit has to continue its rest.
-     * @effect	The Unit is dt seconds further in its rest.
-     */  
-    protected void restFor(double dt){
-
-        if (getActivityTimeLeft()>0){
-            if (Util.fuzzyGreaterThanOrEqualTo(dt,getActivityTimeLeft())){
-                this.setActivityTimeLeft(0);
-            }
-            else{ this.setActivityTimeLeft(getActivityTimeLeft()-dt);}
-        }
-        if (this.getCurrentHitPoints()<this.getMaxHitPoints()){
-            double hitpoints=dt*this.getToughness()/(200*0.2);
-            int newhitpoints=(int) Math.round(hitpoints);
-            this.hitpoints=(getCurrentHitPoints()+newhitpoints);
-            return;
-        }
-
-        else if (this.getCurrentStaminaPoints()<this.getMaxStaminaPoints()){
-            double stampoints=dt*this.getToughness()/(100*0.2);
-            int newStampoints=(int) Math.round(stampoints);
-            this.setCurrentStaminaPoints(getCurrentStaminaPoints()+newStampoints);
-            return;
-        }
-        else{this.setactivity("none");
-        }
-
-
-    }
-    /**
-     * Let the unit rest.
-     */
-    public void rest(){
-        if ((this.getactivity().equals("resting") && this.getActivityTimeLeft()>0)||
-                this.getactivity().equals("defending")||this.getactivity().equals("attacking")){
-            return;}
-        double setTimeleft= (double) 1/(this.getToughness()/(100*0.2));
-        this.setActivityTimeLeft(setTimeleft);
-        this.setactivity("resting");
-        this.setWasWorking(false);
-        this.setWorkTimeLeft(0);
-        this.setMovementPaused(false);
-
-    }
-    /**
-     * Let the unit work.
-     */
-    public void work(){
-        if ((this.getactivity().equals("resting") && this.getActivityTimeLeft()>0)||
-                this.getactivity().equals("defending")||this.getactivity().equals("attacking")){
-            return;}
-        this.setactivity("working");
-        this.setWasWorking(false);
-        this.setMovementPaused(false);
-        double worktime=((double) getStrength())/500;
-        this.setActivityTimeLeft(worktime);
-    }
-    /**
-     * Let the Unit continue the activity of working for the given time.
-     * 
-     * @param	dt
-     * 			The time in seconds for which the Unit has to continue its work.
-     * @effect	The Unit is dt seconds further in its work.
-     */  
-    private void workFor(double dt){
-        if(Util.fuzzyGreaterThanOrEqualTo(dt,getActivityTimeLeft())){
-            this.setActivityTimeLeft(0);
-            this.setactivity("none");
-            this.setWasWorking(false);
-            this.setMovementPaused(false);
-        }
-    }
-    /**
-     * Let this Unit spend time when it is not doing any activity. If default behavior is
-     * enabled, the Unit will start doing random activities.
-     * 
-     * @param	dt
-     * 			The time for which the Unit has to spend time without doing any activity.
-     * @effect	The Unit is dt seconds further in its movement.
-     * 			If default behaviour is enabled, the Unit will be doing random activities.
-     * 			Otherwise, it will remain passive.
-     */  
-    private void spendTimeFor(double dt){
-        if (isDefaultBehaviorEnabled()){
-            if (Math.random()<=0.333){
-                this.work();
-                return;
-            }
-            else if(Math.random()>=0.5){
-                double randX = Math.random()*50;
-                double randY = Math.random()*50;
-                double randZ = Math.random()*50;
-                if (isValidlocation(new double[]{randX,randY,randZ})){
-                    moveTo(new double[]{randX,randY,randZ});return;}
-                else {this.work();return;}}
-            else {rest();return;}
-
-
-
-        }
-
-    }
-
-    /**
-     * make this unit start sprinting if it is moving
-     */
-    public void startSprinting(){
-        if (!this.getactivity().equals("moving")){
-            throw new IllegalArgumentException("must be moving to sprint");
-        }
-        else {this.currentMovement.setIsSprinting(true);
-            this.isSprinting=true;}
-    }
-    /**
-     * make this unit stop sprinting if it is moving
-     */
-    public void stopSprinting(){
-        if (!this.getactivity().equals("moving")){
-            throw new IllegalArgumentException("must be moving to (stop) sprint");
-        }
-        else {this.currentMovement.setIsSprinting(false);
-            this.isSprinting=false;}
-    }
+    private IActivity Activity;
 
     /**
      * Check whether the default behavior is enabled.
      */
-    public boolean isDefaultBehaviorEnabled() {
+    public boolean isDefaultBehaviorEnabled(){
         return defaultbehaviorenabled;
     }
     
@@ -954,4 +444,5 @@ public class Unit {
      */
     public void setDefaultbehavior(boolean enabled){
         this.defaultbehaviorenabled=enabled ;
-    }}
+    }
+    }
