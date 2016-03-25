@@ -84,6 +84,7 @@ public class Unit extends MovableWorldObject {
         this.staminapoints = getMaxStaminaPoints();
         this.orientation = (float) (0.5*Math.PI);
         this.setName(name);
+        this.setActivity(null);
 
     }
     private String name;
@@ -289,9 +290,11 @@ public class Unit extends MovableWorldObject {
      *       | result == location.length==3 and location[n] in (0;50) voor n=1,2,3
      */
     public static boolean isValidlocation(double[] location) {
-      if (!(location.length==3)) {return false;}
-        for (double locationPart:location
-             ) {if (locationPart<0 || locationPart>50){return false;}
+        if (!(location.length==3)) {return false;}
+        for (double locationPart:location){
+            if (locationPart<0 || locationPart>50){
+                return false;
+            }
         }
         return true;
         
@@ -343,7 +346,6 @@ public class Unit extends MovableWorldObject {
     public static boolean isValidorientation(float orientation) {
         return (orientation>=0 && orientation<=2*Math.PI);
     }
-
     /**
      * Set the orientation of this Unit to the given orientation.
      *
@@ -368,21 +370,6 @@ public class Unit extends MovableWorldObject {
     private float orientation;
 
     /**
-     * Initialize this new Unit with given activity.
-     *
-     * @param  Activity
-     *         The activity for this new Unit.
-     * @effect The activity of this new Unit is set to
-     *         the given activity.
-     *       | this.setActivity(Activity)
-     */
-    public Unit(IActivity Activity)
-              throws IllegalArgumentException {
-      this.setActivity(Activity);
-    }
-
-
-    /**
      * Return the activity of this Unit.
      */
     @Basic @Raw
@@ -397,7 +384,7 @@ public class Unit extends MovableWorldObject {
      * @param  activity
      *         The activity to check.
      * @return
-     *       | result ==
+     *       | result == true
      */
     public static boolean isValidActivity(IActivity activity) {
       return true;
@@ -460,11 +447,24 @@ public class Unit extends MovableWorldObject {
 
     public void carry(Object object){
         MovableWorldObject carrObject=((MovableWorldObject) object);
-        if (canBeCarried())
+        if (canBeCarried(carrObject)) {
+            this.carriedObject = carrObject;
+            this.setCarrying(true);
+        }
+        else {throw new IllegalArgumentException("supplied Object cannot be carried, pls kill urself");}
     }
-
     private boolean canBeCarried(MovableWorldObject object){
         if(this.isCarrying()) return false;
         return(!(object instanceof Unit));
     }
+
+
+    public void advanceTime(double dt){
+        if (this.getActivity()==null && isDefaultBehaviorEnabled()){
+            behaveDefault(dt);
+        }
+        this.getActivity().advanceActivityTime(dt);
+    }
+
+    public void
 }
