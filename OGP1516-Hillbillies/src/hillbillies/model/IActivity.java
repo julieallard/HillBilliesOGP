@@ -9,7 +9,7 @@ public interface IActivity {
 
     double returnSimpleTimeLeft() throws IllegalArgumentException;
 
-    boolean canBeInterruptedBy(String activity);
+    boolean canBeInterruptedBy(IActivity activity);
 
     void interrupt() throws IllegalArgumentException;
 
