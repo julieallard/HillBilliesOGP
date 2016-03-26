@@ -26,8 +26,6 @@ public class Log {
  *       | ! canHaveAsLocation(this.getLocation())
  */
 public Log(double x, double y, double z) throws UnitIllegalLocation {
-	if (! canHaveAsLocation(x))
-		throw new UnitIllegalLocation();
 	this.setLocation(x, y, z);
 	this.setWeight();
 }

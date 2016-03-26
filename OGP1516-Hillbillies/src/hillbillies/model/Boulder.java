@@ -26,8 +26,6 @@ public class Boulder {
  *       | ! canHaveAsLocation(this.getLocation())
  */
 public Boulder(double x, double y, double z) throws UnitIllegalLocation {
-	if (! canHaveAsLocation(x))
-		throw new UnitIllegalLocation();
 	this.setLocation(x, y, z);
 	this.setWeight();
 }
