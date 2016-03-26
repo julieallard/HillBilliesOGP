@@ -16,6 +16,8 @@ import ogp.framework.util.Util;
  * https://github.com/julieallard/hillbillies.git
  */
 public class Unit extends MovableWorldObject {
+    private boolean isPausedActivity;
+
     /**
      * Initialize this new hillbilly Unit with given name, given initial position,
      * given weight, given agility, given strength, given toughness
@@ -85,6 +87,7 @@ public class Unit extends MovableWorldObject {
         this.orientation = (float) (0.5*Math.PI);
         this.setName(name);
         this.setActivity(null);
+        this.set
 
     }
     private String name;
@@ -466,5 +469,15 @@ public class Unit extends MovableWorldObject {
         this.getActivity().advanceActivityTime(dt);
     }
 
-    public void
+    public boolean interruptCurrentAct(IActivity newactivity){
+        if (!this.getActivity().canBeInterruptedBy(newactivity)) return false;
+        if (newactivity instanceof Movement){
+            this.isPausedActivity=true;
+            this.pusedActivity=this.getActivity();
+
+        }
+
+
+
+    }
 }
