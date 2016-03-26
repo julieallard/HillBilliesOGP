@@ -1,6 +1,7 @@
 
 package hillbillies.model;
 import be.kuleuven.cs.som.annotate.*;
+import hillbillies.model.activities.Work;
 import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 import ogp.framework.util.Util;
@@ -449,7 +450,7 @@ public class Unit extends MovableWorldObject {
     }
     private MovableWorldObject carriedObject;
 
-    public void carry(MovableWorldObject toBeCarriedObject){
+    protected void carry(MovableWorldObject toBeCarriedObject){
         if (canBeCarried(toBeCarriedObject)) {
             this.carriedObject = toBeCarriedObject;
             this.setCarrying(true);
@@ -470,16 +471,20 @@ public class Unit extends MovableWorldObject {
         this.getActivity().advanceActivityTime(dt);
     }
 
-    public boolean interruptCurrentAct(IActivity newactivity){
+    private boolean interruptCurrentAct(IActivity newactivity){
         if (!this.getActivity().canBeInterruptedBy(newactivity)) return false;
         if (newactivity.getId()==2 &&(this.getActivity().getId()==3||this.getActivity().getId()==6)) {
             this.isPausedActivity = true;
             this.pausedActivity = this.getActivity();
         }
+        return true;
+        //todo split in different functions coz this shit sux
+    }
 
-        this.setActivity(newactivity);
-
-
-
+    public void work(int[] targetCube){
+        VLocation targetLocation=new VLocation(targetCube[0],targetCube[1],targetCube[2],this);
+        Work work=new Work(this,targetLocation);
+        if(!interruptCurrentAct(work)) return;
+        this.setActivity(new Work(this,targetLocation));
     }
 }
