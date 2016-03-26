@@ -187,7 +187,9 @@ public class VLocation {
         array[3]=(int) getZLocation();
         return array;
     }
-
+    public static boolean isValidLocation(VLocation location){
+        return true; // TODO: 26/03/16 implement 
+    }
 
 
 }

@@ -1,6 +1,7 @@
 
 package hillbillies.model;
 import be.kuleuven.cs.som.annotate.*;
+import hillbillies.model.activities.NoActivity;
 import hillbillies.model.activities.Work;
 import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.exceptions.UnitIllegalLocation;
@@ -41,9 +42,6 @@ public class Unit extends MovableWorldObject {
      *         	The state of behaviour for this Unit.
      * @post   	The new name of this new Unit is equal to the given name.
      * 		  |	new.getName() == name
-     * @post   	The new initial position of this new Unit is set to the given initial
-     * 		   	position.
-     *        |	new.setlocation(initialPosition) == location
      * @post   	If the given weight is not below 25 and not above 100, the initial
      * 			weight of this new Unit is equal to the given weight. Otherwise, its
      * 			initial weight is equal to 25, respectively 100.
@@ -89,7 +87,6 @@ public class Unit extends MovableWorldObject {
         this.orientation = (float) (0.5*Math.PI);
         this.setName(name);
         this.setActivity(null);
-        this.set
 
     }
     private String name;
@@ -281,7 +278,7 @@ public class Unit extends MovableWorldObject {
      * Return the location of this Unit.
      */
     @Basic @Raw
-    public double[] getlocation() {
+    public VLocation getlocation() {
       return this.location;
     }
     
@@ -291,17 +288,12 @@ public class Unit extends MovableWorldObject {
      *  
      * @param  location
      *         The location to check.
-     * @return 
-     *       | result == location.length==3 and location[n] in (0;50) voor n=1,2,3
+     *         /
      */
-    public static boolean isValidlocation(double[] location) {
-        if (!(location.length==3)) {return false;}
-        for (double locationPart:location){
-            if (locationPart<0 || locationPart>50){
-                return false;
-            }
-        }
-        return true;
+    public static boolean isValidlocation(VLocation location) {
+
+
+        return VLocation.isValidLocation(location);
         
     }
     
@@ -319,7 +311,7 @@ public class Unit extends MovableWorldObject {
      *       | ! isValidlocation(getlocation())
      */
     @Raw
-    public void setlocation(double[] location) 
+    public void setlocation(VLocation location)
           throws UnitIllegalLocation {
       if (! isValidlocation(location))
         throw new UnitIllegalLocation();
@@ -329,7 +321,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Variable registering the location of this Unit.
      */
-    private double[] location;
+    private VLocation location;
     
     /**
      * Return the orientation of this Unit.
@@ -456,7 +448,7 @@ public class Unit extends MovableWorldObject {
             this.setCarrying(true);
             //Todo Make the shit disappear
         }
-        else {throw new IllegalArgumentException("supplied Object cannot be carried, pls kill urself");}
+        else {throw new IllegalArgumentException("supplied Object cannot be carried");}
     }
     private boolean canBeCarried(MovableWorldObject object){
         if(this.isCarrying()) return false;
@@ -478,7 +470,7 @@ public class Unit extends MovableWorldObject {
             this.pausedActivity = this.getActivity();
         }
         return true;
-        //todo split in different functions coz this shit sux
+        //todo split in different functions coz this shit sucks
     }
 
     public void work(int[] targetCube){
@@ -486,5 +478,14 @@ public class Unit extends MovableWorldObject {
         Work work=new Work(this,targetLocation);
         if(!interruptCurrentAct(work)) return;
         this.setActivity(new Work(this,targetLocation));
+    }
+    protected void activityFinished(){
+        if(!this.isPausedActivity){
+            this.setActivity(new NoActivity());
+            return;
+        }
+        this.setActivity(this.pausedActivity);
+        this.isPausedActivity=false;
+        this.pausedActivity=null;
     }
 }
