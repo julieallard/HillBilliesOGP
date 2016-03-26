@@ -42,7 +42,7 @@ public VLocation getLocation() {
 private VLocation location;
 private final int weight;
 
-private void setLocation(double x, double y, double z) {
+public void setLocation(double x, double y, double z) {
 	this.location = new VLocation(x, y, z, this);
 }
 

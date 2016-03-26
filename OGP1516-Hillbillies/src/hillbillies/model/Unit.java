@@ -1,11 +1,11 @@
 
 package hillbillies.model;
 import be.kuleuven.cs.som.annotate.*;
+import hillbillies.model.activities.Attack;
+import hillbillies.model.activities.Defend;
 import hillbillies.model.activities.NoActivity;
 import hillbillies.model.activities.Work;
-import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.exceptions.UnitIllegalLocation;
-import ogp.framework.util.Util;
 
 /**
  * A class of a hillbilly Unit involving a name, an initial position, a weight,
@@ -474,7 +474,7 @@ public class Unit extends MovableWorldObject {
     public void drop(MovableWorldObject CarriedObject) {
     	this.carriedObject = null;
     	this.isCarrying = false;
-    	CarriedObject.setLocation(this.getlocation().XLocation, this.getlocation().YLocation, this.getlocation().ZLocation);
+    	CarriedObject.setLocation(this.getlocation().getXLocation(), this.getlocation().getYLocation(), this.getlocation().getZLocation());
     }
 
     public void advanceTime(double dt){
@@ -498,9 +498,9 @@ public class Unit extends MovableWorldObject {
         VLocation targetLocation=new VLocation(targetCube[0],targetCube[1],targetCube[2],this);
         Work work=new Work(this,targetLocation);
         if(!interruptCurrentAct(work)) return;
-        this.setActivity(new Work(this,targetLocation));
+        this.setActivity(work);
     }
-    protected void activityFinished(){
+    public void activityFinished(){
         if(!this.isPausedActivity){
             this.setActivity(new NoActivity());
             return;
@@ -509,4 +509,12 @@ public class Unit extends MovableWorldObject {
         this.isPausedActivity=false;
         this.pausedActivity=null;
     }
+    public void attack(Unit defender){
+        //todo check if can attack and if defender is not falling
+        Attack attack=new Attack(this,defender);
+        if(!this.interruptCurrentAct(attack)) return;
+        this.setActivity(attack);
+        defender.setActivity(new Defend(defender,this));
+
+}
 }
