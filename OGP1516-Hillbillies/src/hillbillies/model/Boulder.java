@@ -63,18 +63,14 @@ public void setWeight() {
 	this.weight = w;
 }
 
-public void carry() {
-	
+public void unregister() {
+	//TODO remove from world hashmap when starting to carry the boulder
 }
 
-public void drop() {
-	
+public void register() {
+	//TODO add back to world hashmap after dropping the boulder
 }
 
-public advanceTime() {
+public void advanceTime() {
 	
-}
-
-public isOnPassableCube
-
 }

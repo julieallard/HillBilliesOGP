@@ -249,6 +249,22 @@ public class Unit extends MovableWorldObject {
     public int getMaxStaminaPoints() {
         return 200*(this.getWeight()/100)*(this.getToughness()/100);
     }
+
+    /**
+     * Set the number of hitpoints of this Unit to the given hitpoints.
+     * 
+     * @param 	hitPoints
+     * 			The number of hitpoints for this Unit.
+     * @pre		The given number of hitpoints must be a valid number for any Unit.
+     * @post	The new number of hitpoints is equal to the given number of
+     * 			hitpoints.
+     * 		  | new.getCurrentHitPoints() == balance
+     */
+    public void setCurrentHitPoints(int hitPoints) {
+        if (hitPoints<=getMaxHitPoints()&&hitPoints>=0){
+            this.hitpoints=hitPoints;
+        }    
+    
     /**
      * Set the number of stamina points of this Unit to the given stamina points.
      * 
@@ -455,6 +471,11 @@ public class Unit extends MovableWorldObject {
         return(!(object instanceof Unit));
     }
 
+    public void drop(MovableWorldObject CarriedObject) {
+    	this.carriedObject = null;
+    	this.isCarrying = false;
+    	CarriedObject.setLocation(this.getlocation().XLocation, this.getlocation().YLocation, this.getlocation().ZLocation);
+    }
 
     public void advanceTime(double dt){
         if (this.getActivity().getId()==0 && isDefaultBehaviorEnabled()){
