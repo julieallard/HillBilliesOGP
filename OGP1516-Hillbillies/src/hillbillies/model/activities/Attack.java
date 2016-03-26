@@ -6,6 +6,17 @@ import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.Unit;
 import ogp.framework.util.Util;
 
+/**
+ * the Id's of the activities are the following:
+ * 0: noActivity
+ * 1: attack
+ * 2: defend
+ * 3: movement
+ * 4: working
+ * 5: resting
+ * 6: falling
+ */
+
 public class Attack implements IActivity{
 
     // constructor
@@ -26,11 +37,6 @@ public class Attack implements IActivity{
         }
 
     }
-    //de duur van een aanval is bekend bij het begin, dus kan er al gevraagd worden naar de tijd
-    @Override
-    public boolean hasSimpleTimeLeft() {
-        return true;
-    }
     //geeft hoelang de activiteit nog duurt
     @Override
     public double returnSimpleTimeLeft() {
@@ -42,12 +48,11 @@ public class Attack implements IActivity{
         return false;
     }
 
-    // een onderbreking is niet toegestaan
     @Override
-    public void interrupt() throws IllegalArgumentException {
-        throw new IllegalArgumentException("Attack cannot be Interrupted");
-
+    public int getId() {
+        return 1;
     }
+
     private final Unit attacker;
     private final Unit defender;
     /** TO BE ADDED TO CLASS HEADING
@@ -118,6 +123,7 @@ public class Attack implements IActivity{
 
     // hier zal er aan de Unit gezegd worden om de activiteit te beeindigen
 	    private void conductAttack(){
+            //todo Implement attack on the attackers initiative
 	        Unit.activityFinished();
 
 	    }

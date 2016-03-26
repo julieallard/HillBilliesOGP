@@ -17,6 +17,7 @@ import ogp.framework.util.Util;
  */
 public class Unit extends MovableWorldObject {
     private boolean isPausedActivity;
+    private IActivity pausedActivity;
 
     /**
      * Initialize this new hillbilly Unit with given name, given initial position,
@@ -448,11 +449,11 @@ public class Unit extends MovableWorldObject {
     }
     private MovableWorldObject carriedObject;
 
-    public void carry(Object object){
-        MovableWorldObject carrObject=((MovableWorldObject) object);
-        if (canBeCarried(carrObject)) {
-            this.carriedObject = carrObject;
+    public void carry(MovableWorldObject toBeCarriedObject){
+        if (canBeCarried(toBeCarriedObject)) {
+            this.carriedObject = toBeCarriedObject;
             this.setCarrying(true);
+            //Todo Make the shit disappear
         }
         else {throw new IllegalArgumentException("supplied Object cannot be carried, pls kill urself");}
     }
@@ -463,7 +464,7 @@ public class Unit extends MovableWorldObject {
 
 
     public void advanceTime(double dt){
-        if (this.getActivity()==null && isDefaultBehaviorEnabled()){
+        if (this.getActivity().getId()==0 && isDefaultBehaviorEnabled()){
             behaveDefault(dt);
         }
         this.getActivity().advanceActivityTime(dt);
@@ -471,11 +472,12 @@ public class Unit extends MovableWorldObject {
 
     public boolean interruptCurrentAct(IActivity newactivity){
         if (!this.getActivity().canBeInterruptedBy(newactivity)) return false;
-        if (newactivity instanceof Movement){
-            this.isPausedActivity=true;
-            this.pusedActivity=this.getActivity();
-
+        if (newactivity.getId()==2 &&(this.getActivity().getId()==3||this.getActivity().getId()==6)) {
+            this.isPausedActivity = true;
+            this.pausedActivity = this.getActivity();
         }
+
+        this.setActivity(newactivity);
 
 
 

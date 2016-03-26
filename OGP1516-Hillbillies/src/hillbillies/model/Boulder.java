@@ -1,5 +1,7 @@
 package hillbillies.model;
 
+import hillbillies.model.exceptions.UnitIllegalLocation;
+
 public class Boulder {
 /**
  * Initialize this new Boulder with given x, y and z coordinates.

@@ -10,6 +10,17 @@ import ogp.framework.util.Util;
 
 import java.util.Random;
 
+/**
+ * the Id's of the activities are the following:
+ * 0: noActivity
+ * 1: attack
+ * 2: defend
+ * 3: movement
+ * 4: working
+ * 5: resting
+ * 6: falling
+ */
+
 
 public class Defend implements IActivity {
 
@@ -30,11 +41,6 @@ public class Defend implements IActivity {
     }
 
     @Override
-    public boolean hasSimpleTimeLeft() {
-        return true;
-    }
-
-    @Override
     public double returnSimpleTimeLeft() {
     	return this.timeLeft;
 
@@ -46,19 +52,13 @@ public class Defend implements IActivity {
     }
 
     @Override
-    public void interrupt()throws IllegalArgumentException {
-        throw new IllegalArgumentException("Defense cannot be interrupted");
-
+    public int getId() {
+        return 2;
     }
 
 
     private final Unit attacker;
     private final Unit defender;
-    /** TO BE ADDED TO CLASS HEADING
-     * @invar  The timeLeft of each Defense must be a valid timeLeft for any
-     *         Defense.
-     *       | isValidtimeLeft(gettimeLeft())
-     */
 
 
     /**
@@ -124,16 +124,8 @@ public class Defend implements IActivity {
      */
     private Random random;
 
-    private void conductDefense(){
-        int agilAttack=this.attacker.getAgility();
-        int agilDef=this.defender.getAgility();
-        int strAttack=this.attacker.getCurrentStaminaPoints();
-        int strDef=this.defender.getStrength();
-        boolean willDodge = (this.random.nextDouble()<=0.2*(((double) agilDef)/agilAttack));
-        boolean willBlock = (this.random.nextDouble())<
-
-
-
+    private void conductDefense() {
+        defender.activityFinished();
     }
 
 

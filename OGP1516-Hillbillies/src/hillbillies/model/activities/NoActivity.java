@@ -1,5 +1,6 @@
 package hillbillies.model.activities;
 
+
 import hillbillies.model.IActivity;
 
 /**
@@ -12,9 +13,7 @@ import hillbillies.model.IActivity;
  * 5: resting
  * 6: falling
  */
-
-public class Movement implements IActivity {
-
+public class NoActivity implements IActivity {
 
     @Override
     public void advanceActivityTime(double dt) {
@@ -24,7 +23,7 @@ public class Movement implements IActivity {
 
     @Override
     public double returnSimpleTimeLeft() throws IllegalArgumentException {
-        throw new IllegalArgumentException("Movement Has no simple TimeLeft attribute");
+        return 0;
     }
 
     @Override
@@ -35,10 +34,6 @@ public class Movement implements IActivity {
 
     @Override
     public int getId() {
-        return 3;
+        return 0;
     }
-
-
 }
-
-
