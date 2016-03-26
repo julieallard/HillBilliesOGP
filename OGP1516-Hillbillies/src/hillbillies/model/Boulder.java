@@ -1,14 +1,5 @@
 package hillbillies.model;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Immutable;
-import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.exceptions.UnitIllegalLocation;
-
-/**
- * @invar  Each Boulder can have its weight as weight.
- *       | canHaveAsPropertyName_Java(this.getWeight())
- */
 public class Boulder {
 /**
  * Initialize this new Boulder with given x, y and z coordinates.
@@ -44,22 +35,27 @@ public Boulder(double x, double y, double z) throws UnitIllegalLocation {
  */
 @Basic
 @Raw
-@Immutable
-public VLocation getLocation() {
+public int getLocation() {
 	return this.location;
 }
 
 /**
- * Check whether this Boulder can have the given location as its location.
- *  
- * @param  x
- *         The weight to check.
- * @return 
- *       | result == 
-*/
+ * Return the location of this Boulder.
+ */
+@Basic
 @Raw
-public boolean canHaveAsLocation(int x) {
-	return false;
+public int getLocation() {
+	return this.location;
+}
+
+/**
+ * Return the location of this Boulder.
+ */
+@Basic
+@Raw
+public int getLocation() {
+	return this.location;
+	
 }
 
 /**
