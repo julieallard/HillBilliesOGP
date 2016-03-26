@@ -1,6 +1,6 @@
 package hillbillies.model;
 
-import hillbillies.model.exceptions.UnitIllegalLocation;
+import java.util.Random;
 
 public class Boulder {
 /**
@@ -37,36 +37,44 @@ public Boulder(double x, double y, double z) throws UnitIllegalLocation {
  */
 @Basic
 @Raw
-public int getLocation() {
+public VLocation getLocation() {
 	return this.location;
 }
 
-/**
- * Return the location of this Boulder.
- */
-@Basic
-@Raw
-public int getLocation() {
-	return this.location;
-}
-
-/**
- * Return the location of this Boulder.
- */
-@Basic
-@Raw
-public int getLocation() {
-	return this.location;
-	
-}
-
-/**
- * Variable registering the weight of this Boulder.
- */
 private VLocation location;
-	private void setLocation(double x, double y, double z) {
-		this.location = new VLocation(x, y, z, this);
-	}
+private final int weight;
 
+private void setLocation(double x, double y, double z) {
+	this.location = new VLocation(x, y, z, this);
+}
+
+/**
+ * Return the weight of this Boulder.
+ */
+@Basic
+@Raw
+public int getWeight() {
+	return weight;
+}
+
+public void setWeight() {
+	Random random = new Random();
+	int w = 10 + random.nextInt(41);
+	this.weight = w;
+}
+
+public void carry() {
 	
+}
+
+public void drop() {
+	
+}
+
+public advanceTime() {
+	
+}
+
+public isOnPassableCube
+
 }
