@@ -124,10 +124,10 @@ public class Attack implements IActivity{
     // hier zal er aan de Unit gezegd worden om de activiteit te beeindigen
 	    private void conductAttack(){
             //todo Implement attack on the attackers initiative
-	        Unit.activityFinished();
+	        attacker.activityFinished();
 
 	    }
 	}
 
 
-}
+
