@@ -6,7 +6,7 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
 
 import java.util.Random;
 
-public class Log {
+public class Log extends MovableWorldObject {
 	/**
 	 * Initialize this new Log with given x, y and z coordinates.
 	 *

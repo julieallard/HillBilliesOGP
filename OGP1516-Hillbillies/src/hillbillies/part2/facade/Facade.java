@@ -1,6 +1,8 @@
 package hillbillies.part2.facade;
 
 
+import hillbillies.model.Boulder;
+import hillbillies.model.Log;
 import hillbillies.model.Unit;
 import hillbillies.model.World;
 import hillbillies.part2.listener.TerrainChangeListener;
@@ -111,8 +113,18 @@ public class Facade implements IFacade {
     }
 
     @Override
+    public double[] getPosition(Boulder boulder) throws ModelException {
+        return new double[0];
+    }
+
+    @Override
     public Set<Boulder> getBoulders(World world) throws ModelException {
         return null;
+    }
+
+    @Override
+    public double[] getPosition(Log log) throws ModelException {
+        return new double[0];
     }
 
     @Override

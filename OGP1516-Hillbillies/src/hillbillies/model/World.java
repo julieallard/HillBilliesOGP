@@ -10,6 +10,7 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
 import hillbillies.model.CubeObjects.Workshop;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class World {
 
@@ -34,8 +35,9 @@ public class World {
     public World(int[][][] CubeWorld)
             throws UnitIllegalLocation, IllegalArgumentException {
         this.setCubeWorld(CubeWorld);
-        HashMap<VLocation,MovableWorldObject> newWorld=new HashMap<VLocation,MovableWorldObject>();
-        this.MovableWorldObjectHashmap=newWorld;
+
+        this.WorldMap=new WorldMap<>();
+
 
     }
 
@@ -72,7 +74,6 @@ public class World {
                     return false;
                 }
             }
-
         }
         return true;
     }
@@ -117,13 +118,9 @@ public class World {
                         default:
                             throw new IllegalArgumentException("illegal terrain feature supplied");
                     }
-
                 }
             }
-
-
         }
-
     }
 
     /**
@@ -160,27 +157,64 @@ public class World {
         }
     }
 
+
+    /** TO BE ADDED TO CLASS HEADING
+     * @invar  The Worldmap of each World must be a valid Worldmap for any
+     *         World.
+     *       | isValidWorldMap(getWorldMap())
+     */
+
+
     /**
-     * Return the movableWorldObjectsHashmap of this World.
+     * Initialize this new World with given Worldmap.
+     *
+     * @param  WorldMap
+     *         The Worldmap for this new World.
+     * @effect The Worldmap of this new World is set to
+     *         the given Worldmap.
+     *       | this.setWorldMap(WorldMap)
+     */
+
+
+    /**
+     * Return the Worldmap of this World.
      */
     @Basic @Raw
-    public HashMap<VLocation,MovableWorldObject> getMovableWorldObjectHashmap() {
-      return this.MovableWorldObjectHashmap;
-    }
-
-    private HashMap<VLocation,MovableWorldObject> MovableWorldObjectHashmap;
-
-    public void addNewMovableWorldObject(MovableWorldObject object,VLocation location){
-        this.MovableWorldObjectHashmap.put(location,object);
-    }
-
-    public void changeMovableObjectLocation(MovableWorldObject object, VLocation newlocation){
-        VLocation oldLocation=object.getLocation();
-        this.MovableWorldObjectHashmap.remove(oldLocation,object);
-        this.addNewMovableWorldObject(object,newlocation);
+    public WorldMap getWorldMap() {
+      return this.WorldMap;
     }
 
 
+    /**
+     * Variable registering the Worldmap of this World.
+     */
+    private final WorldMap<VLocation,MovableWorldObject> WorldMap;
+
+    public List<Unit> getUnitsAt(int[] cubeLocation){
+        return this.WorldMap.getAllUnitsInCube(cubeLocation);
+    }
+    public List<Log> getLogsAt(int[] cubeLocation){
+        return this.WorldMap.getAllLogsInCube(cubeLocation);
+    }
+    public List<Boulder> getBouldersAt(int[] cubeLocation){
+        return this.WorldMap.getAllBouldersInCube(cubeLocation);
+    }
+
+    public boolean canHaveAsCubeLocation(int[] cubeLoc,MovableWorldObject object){
+        if(!CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].isPassable()) return false;
+        if (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].willSupport()) return true;
+        if (!(object instanceof Unit)) return false;
+
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                for (int z = -1; z < 2; z++) {
+                    if(x==0||y==0||z==0) continue;
+                    if (CubeWorld[x][y][z].willSupport()) return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
 }

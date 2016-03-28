@@ -47,7 +47,7 @@ public class Fall implements IActivity {
 
     private void advanceFallLocation(double dt){
         VLocation oldLoc=this.object.getLocation();
-        //todo Implementeren van op zijn bek gaan
+
 
     }
 }
