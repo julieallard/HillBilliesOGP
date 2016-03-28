@@ -46,26 +46,16 @@ public class Work implements IActivity {
 		return true;
 	}
 
-	@Override
-	public void interrupt() throws IllegalArgumentException {
 
-    }
+
     private final VLocation targetLocation;
 
 
-    private void conductWork(){
-        if (unit.isCarrying()){
-            unit.drop();
-            return;
-        }
-        int[] targCube=targetLocation.getCubeLocation();
-        if
 
 
 
 
 
-    }
 
 
 

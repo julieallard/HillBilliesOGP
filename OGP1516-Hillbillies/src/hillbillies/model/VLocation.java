@@ -41,7 +41,7 @@ public class VLocation {
      *         This new VLocation cannot have the given ZLocation as its ZLocation.
      *       | ! canHaveAsZLocation(this.getZLocation())
      */
-    public VLocation(double YLocation, double XLocation,double ZLocation,Object occupant) throws UnitIllegalLocation {
+    public VLocation(double XLocation,double YLocation,double ZLocation,Object occupant) throws UnitIllegalLocation {
       if (! canHaveAsYLocation(YLocation)){
           throw new UnitIllegalLocation();
         }
