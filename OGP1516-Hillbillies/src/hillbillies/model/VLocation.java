@@ -73,7 +73,7 @@ public class VLocation {
           this.ZLocation = ZLocation;
       }
     
-    public Object occupant;
+    private Object occupant;
 
     public boolean canHaveAsOccupant(Object object){
         return (object instanceof MovableWorldObject||object instanceof CubeWorldObject);

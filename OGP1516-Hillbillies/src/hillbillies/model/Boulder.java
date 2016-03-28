@@ -2,7 +2,7 @@ package hillbillies.model;
 
 import java.util.Random;
 
-public class Boulder {
+public class Boulder extends MovableWorldObject {
 /**
  * Initialize this new Boulder with given x, y and z coordinates.
  * 
