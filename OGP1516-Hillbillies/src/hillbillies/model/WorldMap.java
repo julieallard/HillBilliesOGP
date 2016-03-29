@@ -1,5 +1,7 @@
 package hillbillies.model;
 
+import hillbillies.model.exceptions.UnitIllegalLocation;
+
 import java.util.*;
 
 public class WorldMap<Key extends VLocation ,Value extends MovableWorldObject>extends HashMap<VLocation,MovableWorldObject> {
@@ -49,6 +51,13 @@ public class WorldMap<Key extends VLocation ,Value extends MovableWorldObject>ex
         }
         return unitList;
 
+    }
+
+    public void moveObject(MovableWorldObject object, VLocation newLoc) throws UnitIllegalLocation,IllegalArgumentException{
+        MovableWorldObject removed=this.remove(object.getLocation());
+        if (removed==null) throw new IllegalArgumentException("Object did not exist in the WorldMap");
+        if (!object.equals(removed)) throw new UnitIllegalLocation("Wrong Object was removed, assignment of Locations is wrong");
+        object.setLocation(newLoc);
     }
 
 }

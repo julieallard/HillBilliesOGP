@@ -184,7 +184,7 @@ public class VLocation {
         int[] array=new int[3];
         array[0]=(int) getXLocation();
         array[1]=(int) getYLocation();
-        array[3]=(int) getZLocation();
+        array[2]=(int) getZLocation();
         return array;
     }
     public static boolean isValidLocation(VLocation location){

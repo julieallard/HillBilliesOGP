@@ -35,7 +35,6 @@ public class World {
     public World(int[][][] CubeWorld)
             throws UnitIllegalLocation, IllegalArgumentException {
         this.setCubeWorld(CubeWorld);
-
         this.WorldMap=new WorldMap<>();
 
 
@@ -62,15 +61,16 @@ public class World {
     // TODO: 22/03/16 isvalidinitcubeworld
     public static boolean isValidCubeWorld(int[][][] CubeWorld) {
         //world must be cubical so its Array must not be jagged(all sub arrays must have the same size)
-        int lenght = CubeWorld.length;
+        int length = CubeWorld.length;
+        this.sideSize=length;
         for (int[][] yzVlak :
                 CubeWorld) {
-            if (yzVlak.length != lenght) {
+            if (yzVlak.length != length) {
                 return false;
             }
             for (int[] zLijn :
                     yzVlak) {
-                if (zLijn.length != lenght) {
+                if (zLijn.length != length) {
                     return false;
                 }
             }
@@ -149,10 +149,10 @@ public class World {
         if (Math.random() < 0.75) {
             Rock rock = new Rock();
             if (cube.getClass() == rock.getClass()) {
-                createNewBoulder(location);
+                new Boulder(location[0],location[1],location[2]);
 
             } else {
-                createNewLog(location);
+                new Log(location[0],location[1],location[2]);
             }
         }
     }
@@ -215,6 +215,11 @@ public class World {
         }
         return false;
     }
+
+
+    /**
+     * variable holding the size of the 
+     */
 
 
 }
