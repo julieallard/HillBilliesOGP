@@ -12,10 +12,9 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
  * agility, strength, toughness and a facility to enable the default behaviour.
  * 
  * @version 0.9 alpha
- * @author  Arthur Decloedt, Julie Allard
- * Julie Allard - Handelsingenieur in de beleidsinformatica  
- * Decloedt Arthur - Bachelor in de Informatica
- * https://github.com/julieallard/hillbillies.git
+ * @author  Decloedt Arthur - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/hillbillies.git
  */
 public class Unit extends MovableWorldObject {
     private boolean isPausedActivity;
@@ -94,7 +93,7 @@ public class Unit extends MovableWorldObject {
         this.orientation = (float) (0.5 * Math.PI);
         this.setName(name);
         this.setActivity(null);
-
+        this.setFaction;
     }
 
 
@@ -106,6 +105,7 @@ public class Unit extends MovableWorldObject {
     private boolean defaultbehaviorenabled;
     private int hitpoints;
     private int staminapoints;
+    private Faction faction;
 
     /**
      * Return the name of this Unit.
@@ -540,6 +540,44 @@ public class Unit extends MovableWorldObject {
 
     }
 
+	public void setFaction() throws RuntimeException {
+		if (World.getNumberOfFactions() < 5) {
+			Faction faction = new Faction(this);
+			this.faction = faction;
+		} else if (!canHaveAsFaction(getSmallestFaction())) {
+			throw new RuntimeException;
+		} else {
+			this.faction = getSmallestFaction();
+			getSmallestFaction().addUnit(this);
+		}
+	}
+	
+	public Faction getFaction() {
+		return this.faction;
+	}
+    
+	public boolean canHaveAsFaction(Faction faction) {
+		if (faction.getUnitSet.size() < 50) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public Faction getSmallestFaction() {
+		Faction smallestFaction;
+		for (Faction faction: FactionSet) {
+			smallestFaction = faction;
+			break;
+		}
+		for (Faction faction: FactionSet) {
+			if (faction.getUnitSet().size() < smallestFaction.getUnitSet().size()) {
+				smallestFaction = faction;
+			};
+		return smallestFaction;
+		}
+	}
+	
     @Override
     public void setLocation(double locationX, double locationY, double locationZ) throws UnitIllegalLocation {
         this.setLocation(new VLocation(locationX,locationY,locationZ,this));

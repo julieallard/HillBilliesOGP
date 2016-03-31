@@ -11,6 +11,7 @@ import hillbillies.model.CubeObjects.Workshop;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class World {
 
@@ -216,10 +217,19 @@ public class World {
         return false;
     }
 
-
-    /**
-     * variable holding the size of the
-     */
-
-
+	/**
+	 * Set collecting references to Factions belonging to this world.
+	 * 
+	 * @invar The set of Factions is effective.
+	 * 		| FactionSet != null
+	 * @invar Each Faction in the FactionSet references this world as the world to
+	 * 		  which it is attached.
+	 * 		| for each Faction in FactionSet:
+	 * 		|	(FactionSet.getWorld() == this) || 
+	 */
+	private static Set<Faction> FactionSet;
+	
+	public static int getNumberOfFactions() {
+		return FactionSet.size();
+	}
 }
