@@ -540,15 +540,15 @@ public class Unit extends MovableWorldObject {
 
     }
 
-	public void setFaction() throws RuntimeException {
+	public void setFaction() throws IllegalArgumentException {
 		if (World.getNumberOfFactions() < 5) {
 			Faction faction = new Faction(this);
 			this.faction = faction;
-		} else if (!canHaveAsFaction(getSmallestFaction())) {
-			throw new RuntimeException;
+		} else if (!canHaveAsFaction(World.getSmallestFaction())) {
+			throw new IllegalArgumentException("Error");
 		} else {
-			this.faction = getSmallestFaction();
-			getSmallestFaction().addUnit(this);
+			this.faction = World.getSmallestFaction();
+			World.getSmallestFaction().addUnit(this);
 		}
 	}
 	
@@ -557,24 +557,10 @@ public class Unit extends MovableWorldObject {
 	}
     
 	public boolean canHaveAsFaction(Faction faction) {
-		if (faction.getUnitSet.size() < 50) {
+		if (faction.getNumberOfUnits() < 50) {
 			return true;
 		} else {
 			return false;
-		}
-	}
-	
-	public Faction getSmallestFaction() {
-		Faction smallestFaction;
-		for (Faction faction: FactionSet) {
-			smallestFaction = faction;
-			break;
-		}
-		for (Faction faction: FactionSet) {
-			if (faction.getUnitSet().size() < smallestFaction.getUnitSet().size()) {
-				smallestFaction = faction;
-			};
-		return smallestFaction;
 		}
 	}
 	

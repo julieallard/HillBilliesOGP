@@ -7,7 +7,7 @@ import java.util.Set;
 public class Faction {
 	
 	public Faction(Unit unit) {
-		World.getFactionSet.addFaction(this);
+		World.addFaction(this);
 		this.addUnit(unit);
 	}
 	
@@ -32,7 +32,10 @@ public class Faction {
 	}
 	
 	public void removeUnit(Unit unit) {
-		UnitSet.remove(unit);	
+		UnitSet.remove(unit);
+		if (getNumberOfUnits() == 0) {
+			World.removeFaction(unit.getFaction());
+		}
 	}
 	
 	public int getNumberOfUnits() {
@@ -43,8 +46,8 @@ public class Faction {
 		return this.UnitSet;
 	}
 	
-	public boolean canHaveAsWorld(World world) {
-		if (world.getFactionSet.size() < 5) {
+	public boolean canHaveAsWorld() {
+		if (World.getNumberOfFactions() < 5) {
 			return true;
 		} else {
 			return false;

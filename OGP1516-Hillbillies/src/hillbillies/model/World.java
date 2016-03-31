@@ -226,20 +226,34 @@ public class World {
 	 */
 	private static Set<Faction> FactionSet;
 	
-	public void addFaction(Faction faction) throws IllegalArgumentException {
-		if (!faction.canHaveAsWorld(this)) {
-			throw new IllegalArgumentException("World already contains its max no of factions")
+	public static void addFaction(Faction faction) throws IllegalArgumentException {
+		if (!faction.canHaveAsWorld()) {
+			throw new IllegalArgumentException("World already contains its max no of factions");
 		} else {
-			FactionSet.add(faction);
+			World.FactionSet.add(faction);
 		}
+	}
+	
+	public static void removeFaction(Faction faction) {
+		FactionSet.remove(faction);
 	}
 	
 	public static int getNumberOfFactions() {
 		return FactionSet.size();
 	}
 	
-	public Set<Faction> getFactionSet() {
-		return World.FactionSet;
+	public static Faction getSmallestFaction() {
+		Faction smallestFaction;
+		for (Faction faction: FactionSet) {
+			smallestFaction = faction;
+			break;
+		}
+		for (Faction faction: FactionSet) {
+			if (faction.getUnitSet().size() < smallestFaction.getUnitSet().size()) {
+				smallestFaction = faction;
+			};
+		return smallestFaction;
+		}
 	}
 	
 }
