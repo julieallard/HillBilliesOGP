@@ -6,11 +6,8 @@ import java.util.Set;
 
 public class Faction {
 	
-	//Een nieuwe faction wordt altijd aangemaakt bij creatie van een Unit.
 	public Faction(Unit unit) {
-		//FactionSet is een set die in World gecreëerd moet worden,
-		//met max. 5 factions als elementen.
-		FactionSet.add(this);
+		World.getFactionSet.addFaction(this);
 		this.addUnit(unit);
 	}
 	
@@ -26,9 +23,9 @@ public class Faction {
 	 */
 	private Set<Unit> UnitSet;
 	
-	public void addUnit(Unit unit) throws RuntimeException {
-		if (!canHaveAsFaction(this)) {
-			throw new RuntimeException
+	public void addUnit(Unit unit) throws IllegalArgumentException {
+		if (!unit.canHaveAsFaction(this)) {
+			throw new IllegalArgumentException("Faction already contains its max no of Units.");
 		} else {
 			UnitSet.add(unit);
 		}
@@ -46,4 +43,12 @@ public class Faction {
 		return this.UnitSet;
 	}
 	
+	public boolean canHaveAsWorld(World world) {
+		if (world.getFactionSet.size() < 5) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

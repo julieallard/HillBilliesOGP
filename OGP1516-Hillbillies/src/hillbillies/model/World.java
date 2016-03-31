@@ -37,10 +37,7 @@ public class World {
             throws UnitIllegalLocation, IllegalArgumentException {
         this.setCubeWorld(CubeWorld);
         this.WorldMap=new WorldMap<>();
-
-
     }
-
 
     /**
      * Return the CubeWorld of this World.
@@ -229,7 +226,20 @@ public class World {
 	 */
 	private static Set<Faction> FactionSet;
 	
+	public void addFaction(Faction faction) throws IllegalArgumentException {
+		if (!faction.canHaveAsWorld(this)) {
+			throw new IllegalArgumentException("World already contains its max no of factions")
+		} else {
+			FactionSet.add(faction);
+		}
+	}
+	
 	public static int getNumberOfFactions() {
 		return FactionSet.size();
 	}
+	
+	public Set<Faction> getFactionSet() {
+		return World.FactionSet;
+	}
+	
 }
