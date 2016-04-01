@@ -57,7 +57,7 @@ public class World {
      */
 
     // TODO: 22/03/16 isvalidinitcubeworld
-    public static boolean isValidCubeWorld(int[][][] CubeWorld) {
+    public boolean isValidCubeWorld(int[][][] CubeWorld) {
         //world must be cubical so its Array must not be jagged(all sub arrays must have the same size)
         int length = CubeWorld.length;
         this.sideSize=length;
@@ -75,6 +75,7 @@ public class World {
         }
         return true;
     }
+    private int sideSize;
 
     /**
      * Set the CubeWorld of this World to the given CubeWorld.
@@ -214,7 +215,7 @@ public class World {
         return false;
     }
     public boolean willBreakFall(int[] cubeLoc){
-        return (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].willSupport())
+        return (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].willSupport());
 
     }
 
@@ -228,25 +229,25 @@ public class World {
 	 * 		| for each Faction in FactionSet:
 	 * 		|	(FactionSet.getWorld() == this) || 
 	 */
-	private static Set<Faction> FactionSet;
+	private  Set<Faction> FactionSet;
 	
-	public static void addFaction(Faction faction) throws IllegalArgumentException {
+	public void addFaction(Faction faction) throws IllegalArgumentException {
 		if (!faction.canHaveAsWorld()) {
-			throw new IllegalArgumentException("World already contains its max no of factions");
-		} else {
-			World.FactionSet.add(faction);
+			throw new IllegalArgumentException("World already contains its max no of factions");}
+        else {
+            this.FactionSet.add(faction);
 		}
 	}
 	
-	public static void removeFaction(Faction faction) {
+	public  void removeFaction(Faction faction) {
 		FactionSet.remove(faction);
 	}
 	
-	public static int getNumberOfFactions() {
+	public  int getNumberOfFactions() {
 		return FactionSet.size();
 	}
 	
-	public static Faction getSmallestFaction() {
+	public  Faction getSmallestFaction() {
 		Faction smallestFaction=(Faction) FactionSet.toArray()[0];
 		for (Faction faction: FactionSet) {
 			if (faction.getUnitSet().size() < smallestFaction.getUnitSet().size()) {
