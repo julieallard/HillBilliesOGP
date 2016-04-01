@@ -147,10 +147,10 @@ public class World {
         if (Math.random() < 0.75) {
             Rock rock = new Rock();
             if (cube.getClass() == rock.getClass()) {
-                new Boulder(location[0],location[1],location[2]);
+                new Boulder(location[0],location[1],location[2],this);
 
             } else {
-                new Log(location[0],location[1],location[2]);
+                new Log(location[0],location[1],location[2],this);
             }
         }
     }
@@ -213,6 +213,10 @@ public class World {
         }
         return false;
     }
+    public boolean willBreakFall(int[] cubeLoc){
+        return (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].willSupport())
+
+    }
 
 	/**
 	 * Set collecting references to Factions belonging to this world.
@@ -243,17 +247,13 @@ public class World {
 	}
 	
 	public static Faction getSmallestFaction() {
-		Faction smallestFaction;
-		for (Faction faction: FactionSet) {
-			smallestFaction = faction;
-			break;
-		}
+		Faction smallestFaction=(Faction) FactionSet.toArray()[0];
 		for (Faction faction: FactionSet) {
 			if (faction.getUnitSet().size() < smallestFaction.getUnitSet().size()) {
 				smallestFaction = faction;
-			};
+			}}
 		return smallestFaction;
 		}
-	}
+
 	
 }

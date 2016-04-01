@@ -1,7 +1,9 @@
 package hillbillies.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.activities.NoActivity;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
 import java.util.Random;
@@ -26,11 +28,12 @@ public class Log extends MovableWorldObject {
 	 * z coordinate.
 	 * | new.getZ() == z
 	 */
-	public Log(double x, double y, double z) throws UnitIllegalLocation {
+	public Log(double x, double y, double z,World world) throws UnitIllegalLocation {
 		this.setLocation(x, y, z);
         Random random = new Random();
         int w = 10 + random.nextInt(41);
         this.weight = w;
+		this.World=world;
 	}
 
 	/**
@@ -129,6 +132,47 @@ public class Log extends MovableWorldObject {
         return VLocation.isValidLocation(location);
 
     }
+
+
+
+	/**
+	 * Return the World of this Log.
+	 */
+	@Basic @Raw @Immutable @Override
+	public World getWorld() {
+		return this.World;
+	}
+
+	/**
+	 * Check whether this Log can have the given World as its World.
+	 *
+	 * @param  World
+	 *         The World to check.
+	 * @return
+	 *       | result ==true
+	 */
+	@Raw
+	public boolean canHaveAsWorld(World World) {
+		return true;
+	}
+
+	/**
+	 * Variable registering the World of this Log.
+	 */
+	private final World World;
+
+	@Override
+	public void activityFinished() {
+		this.setActivity(new NoActivity());
+		return;
+
+	}
+
+
+
+
+
+
 
 }
 

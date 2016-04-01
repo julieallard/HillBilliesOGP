@@ -57,7 +57,7 @@ public class Unit extends MovableWorldObject {
      */
 
     public Unit(String name, double[] initialPosition, int weight, int agility, int strength, int toughness,
-                boolean enableDefaultBehavior) throws UnitIllegalLocation {
+                boolean enableDefaultBehavior,World world) throws UnitIllegalLocation {
         this.setLocation(initialPosition[0],initialPosition[1],initialPosition[2]);
         if (weight < 25) {
             this.setWeight(25);
@@ -94,6 +94,8 @@ public class Unit extends MovableWorldObject {
         this.setName(name);
         this.setActivity(null);
         this.setFaction;
+        this.World = world;
+
     }
 
 
@@ -568,6 +570,34 @@ public class Unit extends MovableWorldObject {
     public void setLocation(double locationX, double locationY, double locationZ) throws UnitIllegalLocation {
         this.setLocation(new VLocation(locationX,locationY,locationZ,this));
     }
+
+
+
+    /**
+     * Return the World of this Unit.
+     */
+    @Basic @Raw @Immutable @Override
+    public World getWorld() {
+      return this.World;
+    }
+
+    /**
+     * Check whether this Unit can have the given World as its World.
+     *
+     * @param  World
+     *         The World to check.
+     * @return
+     *       | result ==
+     */
+    @Raw
+    public boolean canHaveAsWorld(World World) {
+      return true;
+    }
+
+    /**
+     * Variable registering the World of this Unit.
+     */
+    private final World World;
 
 }
 

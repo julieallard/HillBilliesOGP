@@ -1,7 +1,9 @@
 package hillbillies.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.activities.NoActivity;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
 import java.util.Random;
@@ -31,10 +33,11 @@ public class Boulder extends MovableWorldObject {
      *         This new Boulder cannot have the given location as its location.
      *       | ! canHaveAsLocation(this.getLocation())
      */
-    public Boulder(double x, double y, double z) throws UnitIllegalLocation {
+    public Boulder(double x, double y, double z,World world) throws UnitIllegalLocation {
         this.setLocation(x, y, z);
         Random random = new Random();
         this.weight = 10 + random.nextInt(41);
+        this.World=world;
     }
 
 
@@ -152,4 +155,44 @@ public class Boulder extends MovableWorldObject {
         return VLocation.isValidLocation(location);
 
     }
+
+
+
+    /**
+     * Return the World of this Boulder.
+     */
+    @Basic @Raw @Immutable @Override
+    public World getWorld() {
+        return this.World;
+    }
+
+    /**
+     * Check whether this Boulder can have the given World as its World.
+     *
+     * @param  World
+     *         The World to check.
+     * @return
+     *       | result ==true
+     */
+    @Raw
+    public boolean canHaveAsWorld(World World) {
+        return true;
+    }
+
+    /**
+     * Variable registering the World of this Boulder.
+     */
+    private final World World;
+
+    @Override
+    public void activityFinished() {
+        this.setActivity(new NoActivity());
+        return;
+
+    }
+
 }
+
+
+
+
