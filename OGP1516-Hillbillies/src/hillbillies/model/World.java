@@ -13,16 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class World {
-
-
-    /** TO BE ADDED TO CLASS HEADING
+    /**
      * @invar The CubeWorld of each World must be a valid CubeWorld for any
      *         World.
      *       | isValidCubeWorld(getCubeWorld())
      */
-
-
+public class World {
     /**
      * Initialize this new World with given CubeWorld.
      *
@@ -33,10 +29,9 @@ public class World {
      * Initialize this new World with given movableWorldObjectsHashmap.
      */
 
-    public World(int[][][] CubeWorld)
-            throws UnitIllegalLocation, IllegalArgumentException {
+    public World(int[][][] CubeWorld) throws UnitIllegalLocation, IllegalArgumentException {
         this.setCubeWorld(CubeWorld);
-        this.WorldMap=new WorldMap<>();
+        this.WorldMap = new WorldMap<>();
     }
 
     /**
@@ -256,5 +251,22 @@ public class World {
 		return smallestFaction;
 		}
 
+	private Set<Unit> TotalUnitSet;
+
+	public void addUnit(Unit unit) throws IllegalArgumentException {
+		if (!unit.canHaveAsWorld()) {
+			throw new IllegalArgumentException("World already contains its max no of units");}
+        else {
+            this.TotalUnitSet.add(unit);
+		}
+	}	
 	
+	public  void removeUnit(Unit unit) {
+		TotalUnitSet.remove(unit);
+	}	
+	
+	public int getNumberOfUnits() {
+		return TotalUnitSet.size();
+	}
+		
 }

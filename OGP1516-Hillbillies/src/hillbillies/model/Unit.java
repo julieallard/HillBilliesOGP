@@ -17,8 +17,6 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
  * 			https://github.com/julieallard/hillbillies.git
  */
 public class Unit extends MovableWorldObject {
-    private boolean isPausedActivity;
-    private IActivity pausedActivity;
 
     /**
      * Initialize this new hillbilly Unit with given name, given initial position,
@@ -55,10 +53,10 @@ public class Unit extends MovableWorldObject {
      * @invar The location of each Unit must be a valid location for any Unit.
      * | isValidlocation(getlocation())
      */
-
-    public Unit(String name, double[] initialPosition, int weight, int agility, int strength, int toughness,
+    public Unit(String name, double x, double y, double z, int weight, int agility, int strength, int toughness,
                 boolean enableDefaultBehavior,World world) throws UnitIllegalLocation {
-        this.setLocation(initialPosition[0],initialPosition[1],initialPosition[2]);
+        this.setWorld();
+    	this.setLocation(x, y, z);
         if (weight < 25) {
             this.setWeight(25);
         } else if (weight > 100) {
@@ -93,12 +91,13 @@ public class Unit extends MovableWorldObject {
         this.orientation = (float) (0.5 * Math.PI);
         this.setName(name);
         this.setActivity(null);
-        this.setFaction;
-        this.World = world;
-
+        this.setFaction();
+        this.setWorld();
     }
 
-
+    private boolean isPausedActivity;
+    private IActivity pausedActivity;    
+    
     private String name;
     private int weight;
     private int agility;
@@ -482,7 +481,7 @@ public class Unit extends MovableWorldObject {
         if (canBeCarried(toBeCarriedObject)) {
             this.carriedObject = toBeCarriedObject;
             this.setCarrying(true);
-            //Todo Make the shit disappear
+            toBeCarriedObject.unregister();
         } else {
             throw new IllegalArgumentException("supplied Object cannot be carried");
         }
@@ -496,7 +495,7 @@ public class Unit extends MovableWorldObject {
     public void drop(MovableWorldObject CarriedObject) {
         this.carriedObject = null;
         this.isCarrying = false;
-        CarriedObject.setLocation(this.getLocation().getXLocation(), this.getLocation().getYLocation(), this.getLocation().getZLocation());
+        CarriedObject.setLocation(this.getLocation());
     }
 
     public void advanceTime(double dt) {
@@ -567,12 +566,25 @@ public class Unit extends MovableWorldObject {
 	}
 	
     @Override
-    public void setLocation(double locationX, double locationY, double locationZ) throws UnitIllegalLocation {
-        this.setLocation(new VLocation(locationX,locationY,locationZ,this));
+    public void setLocation(double x, double y, double z) throws UnitIllegalLocation {
+        VLocation location = new VLocation(x, y, z, this);
+    	this.setLocation(location);
+        this.register(location);
     }
 
+    @Override
+    public void register(VLocation location) {
+    	WorldMap.put(location, this);
+    }
 
-
+	public void setWorld() throws IllegalArgumentException {
+		if (!canHaveAsWorld(World)) {throw new IllegalArgumentException("Error");
+		} else {
+			this.World = World;
+			World.addUnit(this);
+		}
+	}        
+    
     /**
      * Return the World of this Unit.
      */
@@ -590,15 +602,19 @@ public class Unit extends MovableWorldObject {
      *       | result ==
      */
     @Raw
-    public boolean canHaveAsWorld(World World) {
-      return true;
+    public boolean canHaveAsWorld(World world) {
+      if (World.getNumberOfUnits() < 100) {
+    	  return true;
+      } else {
+    	  return false;
+      }
     }
 
     /**
      * Variable registering the World of this Unit.
      */
     private final World World;
-
+    
 }
 
 

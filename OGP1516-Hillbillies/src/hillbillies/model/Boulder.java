@@ -20,27 +20,18 @@ public class Boulder extends MovableWorldObject {
      *         The y coordinate for this new Boulder.
      * @param  z
      *         The z coordinate for this new Boulder.
-     * @post   The x coordinate of this new Boulder is equal to the given
-     *         x coordinate.
-     *       | new.getX() == x
-     * @post   The y coordinate of this new Boulder is equal to the given
-     *         y coordinate.
-     *       | new.getY() == y
-     * @post   The z coordinate of this new Boulder is equal to the given
-     *         z coordinate.
-     *       | new.getZ() == z
+     * @post   The x coordinate of this new Boulder is equal to the given x coordinate.
+     * @post   The y coordinate of this new Boulder is equal to the given y coordinate.
+     * @post   The z coordinate of this new Boulder is equal to the given z coordinate.
      * @throws UnitIllegalLocation
      *         This new Boulder cannot have the given location as its location.
-     *       | ! canHaveAsLocation(this.getLocation())
      */
-    public Boulder(double x, double y, double z,World world) throws UnitIllegalLocation {
+    public Boulder(double x, double y, double z, World world) throws UnitIllegalLocation {
         this.setLocation(x, y, z);
         Random random = new Random();
         this.weight = 10 + random.nextInt(41);
-        this.World=world;
+        this.World = world;
     }
-
-
 
     /**
      * Return the location of this Boulder.
@@ -53,18 +44,20 @@ public class Boulder extends MovableWorldObject {
 
     private VLocation location;
     private final int weight;
+    
     @Override
     @Raw
     public void setLocation(double x, double y, double z) {
         this.location = new VLocation(x, y, z, this);
     }
+    
     @Override
     @Raw
     public void setLocation(VLocation location) throws UnitIllegalLocation {
         if (!isValidlocation(location)) throw new UnitIllegalLocation();
         this.location = location;
+        this.register(location);
     }
-
 
     /**
      * Return the weight of this Boulder.
@@ -75,39 +68,25 @@ public class Boulder extends MovableWorldObject {
         return weight;
     }
 
-
+    @Override
     public void unregister() {
-        //TODO remove from world hashmap when starting to carry the boulder
+    	WorldMap.remove(this.getLocation());
     }
 
-    public void register() {
-        //TODO add back to world hashmap after dropping the boulder
+    @Override
+    public void register(VLocation location) {
+    	WorldMap.put(location, this);
     }
 
-    public void advanceTime(double dt) {this.Activity.advanceActivityTime(dt);}
-
-
-    /** TO BE ADDED TO CLASS HEADING
-     * @invar  The Activity of each Boulder must be a valid Activity for any
-     *         Boulder.
-     *       | isValidActivity(getActivity())
-     */
-
-
-    /**
-     * Initialize this new Boulder with given Activity.
-     *
-     * @param  Activity
-     *         The Activity for this new Boulder.
-     * @effect The Activity of this new Boulder is set to
-     *         the given Activity.
-     *       | this.setActivity(Activity)
-     */
+    public void advanceTime(double dt) {
+    	this.Activity.advanceActivityTime(dt);
+    }
 
     /**
      * Return the Activity of this Boulder.
      */
-    @Basic @Raw
+    @Basic
+    @Raw
     public IActivity getActivity() {
         return this.Activity;
     }
@@ -153,15 +132,15 @@ public class Boulder extends MovableWorldObject {
 
     public static boolean isValidlocation(VLocation location) {
         return VLocation.isValidLocation(location);
-
     }
-
-
 
     /**
      * Return the World of this Boulder.
      */
-    @Basic @Raw @Immutable @Override
+    @Basic
+    @Raw
+    @Immutable
+    @Override
     public World getWorld() {
         return this.World;
     }
@@ -175,7 +154,7 @@ public class Boulder extends MovableWorldObject {
      *       | result ==true
      */
     @Raw
-    public boolean canHaveAsWorld(World World) {
+    public boolean canHaveAsWorld(World world) {
         return true;
     }
 
@@ -188,7 +167,6 @@ public class Boulder extends MovableWorldObject {
     public void activityFinished() {
         this.setActivity(new NoActivity());
         return;
-
     }
 
 }
