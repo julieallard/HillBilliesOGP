@@ -31,10 +31,6 @@ public class Work implements IActivity {
 
 	}
 
-	@Override
-	public boolean hasSimpleTimeLeft() {
-		return true;
-	}
 
 	@Override
 	public double returnSimpleTimeLeft() throws IllegalArgumentException {

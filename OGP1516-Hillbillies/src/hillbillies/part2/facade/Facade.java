@@ -1,13 +1,9 @@
 package hillbillies.part2.facade;
 
 
-import hillbillies.model.Boulder;
-import hillbillies.model.Log;
-import hillbillies.model.Unit;
-import hillbillies.model.World;
+import hillbillies.model.*;
 import hillbillies.part2.listener.TerrainChangeListener;
 import ogp.framework.util.ModelException;
-
 import java.util.Set;
 
 public class Facade implements IFacade {
@@ -54,7 +50,8 @@ public class Facade implements IFacade {
 
     @Override
     public Unit spawnUnit(World world, boolean enableDefaultBehavior) throws ModelException {
-        return null;
+        if(! world.canHaveExtraUnits()) return null;
+
     }
 
     @Override
@@ -112,10 +109,6 @@ public class Facade implements IFacade {
         return new double[0];
     }
 
-    @Override
-    public double[] getPosition(Boulder boulder) throws ModelException {
-        return new double[0];
-    }
 
     @Override
     public Set<Boulder> getBoulders(World world) throws ModelException {
@@ -127,10 +120,6 @@ public class Facade implements IFacade {
         return new double[0];
     }
 
-    @Override
-    public double[] getPosition(Log log) throws ModelException {
-        return new double[0];
-    }
 
     @Override
     public Set<Log> getLogs(World world) throws ModelException {

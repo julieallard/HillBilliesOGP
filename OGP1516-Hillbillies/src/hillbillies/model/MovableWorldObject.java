@@ -10,7 +10,7 @@ public abstract class MovableWorldObject {
 
     public abstract void register(VLocation location);
     
-    public abstract void unregister(VLocation location);
+    public abstract void unregister();
     
     public abstract World getWorld();
 

@@ -70,13 +70,13 @@ public class Boulder extends MovableWorldObject {
 
     @Override
     public void unregister() {
-    	WorldMap.remove(this.getLocation());
+    	this.getWorld().getWorldMap().remove(this.getLocation());
     }
 
     @Override
     public void register(VLocation location) {
-    	WorldMap.put(location, this);
-    }
+        this.getWorld().getWorldMap().put(location, this);
+    }//todo check java's bullshit
 
     public void advanceTime(double dt) {
     	this.Activity.advanceActivityTime(dt);
@@ -148,7 +148,7 @@ public class Boulder extends MovableWorldObject {
     /**
      * Check whether this Boulder can have the given World as its World.
      *
-     * @param  World
+     * @param  world
      *         The World to check.
      * @return
      *       | result ==true

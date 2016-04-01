@@ -68,12 +68,12 @@ public class Log extends MovableWorldObject {
 
 	@Override
     public void unregister() {
-    	WorldMap.remove(this.getLocation());
+		this.getWorld().getWorldMap().remove(this.getLocation());
     }
     
 	@Override
     public void register(VLocation location) {
-    	WorldMap.put(location, this);
+		this.getWorld().getWorldMap().put(location, this);
     }
 
     public void advanceTime(double dt) {
@@ -146,7 +146,7 @@ public class Log extends MovableWorldObject {
 	/**
 	 * Check whether this Log can have the given world as its World.
 	 *
-	 * @param  World
+	 * @param  world
 	 *         The World to check.
 	 * @return
 	 *       | result ==true

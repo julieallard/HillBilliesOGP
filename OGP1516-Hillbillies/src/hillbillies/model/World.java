@@ -254,11 +254,8 @@ public class World {
 	private Set<Unit> TotalUnitSet;
 
 	public void addUnit(Unit unit) throws IllegalArgumentException {
-		if (!unit.canHaveAsWorld()) {
-			throw new IllegalArgumentException("World already contains its max no of units");}
-        else {
-            this.TotalUnitSet.add(unit);
-		}
+
+        this.TotalUnitSet.add(unit);
 	}	
 	
 	public  void removeUnit(Unit unit) {
@@ -268,5 +265,10 @@ public class World {
 	public int getNumberOfUnits() {
 		return TotalUnitSet.size();
 	}
+
+    public boolean canHaveExtraUnits(){
+        return (TotalUnitSet.size()<100);
+    }
+
 		
 }
