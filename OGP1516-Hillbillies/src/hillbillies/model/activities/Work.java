@@ -42,17 +42,12 @@ public class Work implements IActivity {
 		return true;
 	}
 
+	@Override
+	public int getId() {
+		return 0;
+	}
 
 
-    private final VLocation targetLocation;
-
-
-
-
-
-
-
-
-
-
+	private final VLocation targetLocation;
+    
 }

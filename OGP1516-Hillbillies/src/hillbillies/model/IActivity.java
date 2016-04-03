@@ -11,6 +11,7 @@ package hillbillies.model;
  * 6: falling
  * 7: noActivity
  */
+
 public interface IActivity {
 
 

@@ -12,4 +12,6 @@ public class UnitIllegalLocation extends RuntimeException {
     public String getComment(){
         return this.str;
     }
+
 }
+
