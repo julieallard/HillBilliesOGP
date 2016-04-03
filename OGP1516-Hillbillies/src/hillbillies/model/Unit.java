@@ -5,57 +5,129 @@ import hillbillies.model.activities.Attack;
 import hillbillies.model.activities.Defend;
 import hillbillies.model.activities.NoActivity;
 import hillbillies.model.activities.Work;
+import hillbillies.model.exceptions.Raw;
 import hillbillies.model.exceptions.UnitIllegalLocation;
+import hillbillies.model.exceptions.property_type;
 
 /**
- * A class of a hillbilly Unit involving a name, an initial position, a weight,
+ * A class of hillbilly Units involving a name, an initial position, a weight,
  * agility, strength, toughness and a facility to enable the default behaviour.
  * 
+ * @invar  The name of each Unit must be a valid name for any
+ *         Unit.
+ *       | isValidName(getName())
+ * @invar  The x coordinate of each Unit must be a valid x coordinate for any
+ *         Unit.
+ *       | isValidLocation(getLocation)
+ * @invar  The y coordinate of each Unit must be a valid y coordinate for any
+ *         Unit.
+ *       | isValidLocation(getLocation)
+ * @invar  The z coordinate of each Unit must be a valid z coordinate for any
+ *         Unit.
+ *       | isValidLocation(getLocation)
+ * @invar  The weight of each Unit must be a valid weight for any
+ *         Unit.
+ *       | isValidWeight(getWeight())
+ * @invar  The strength of each Unit must be a valid strength for any
+ *         Unit.
+ *       | isValidStrength(getStrength())
+ * @invar  The agilily of each Unit must be a valid agility for any
+ *         Unit.
+ *       | isValidAgility(getAgility()) 
+ * @invar  The toughness of each Unit must be a valid toughness for any
+ *         Unit.
+ *       | isValidToughness(getToughness()) 
+ *        
  * @version 0.9 alpha
- * @author  Decloedt Arthur - Bachelor in de Informatica
+ * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/hillbillies.git
  */
 public class Unit extends MovableWorldObject {
-
     /**
      * Initialize this new hillbilly Unit with given name, given initial position,
      * given weight, given agility, given strength, given toughness
      * and given default behaviour state.
      *
-     * @param name                  The name for this Unit.
-     * @param initialPosition       The initial position for this Unit, as an Array with 3 integers {x, y, z}.
-     * @param weight                The weight for this Unit.
-     * @param agility               The agility for this Unit.
-     * @param strength              The strength for this Unit.
-     * @param toughness             The toughness for this Unit.
-     * @param enableDefaultBehavior The state of behaviour for this Unit.
-     * @throws UnitIllegalLocation() The given initial position is not a valid location for any Unit.
-     *                               | ! isValidLocation(initialPosition)
-     * @post The new name of this new Unit is equal to the given name.
-     * |	new.getName() == name
-     * @post If the given weight is not below 25 and not above 100, the initial
-     * weight of this new Unit is equal to the given weight. Otherwise, its
-     * initial weight is equal to 25, respectively 100.
-     * @post If the given agility is not below 25 and not above 100, the initial
-     * agility of this new Unit is equal to the given agility. Otherwise, its
-     * initial agility is equal to 25, respectively 100.
-     * @post If the given strength is not below 25 and not above 100, the initial
-     * strength of this new Unit is equal to the given strength. Otherwise, its
-     * initial strength is equal to 25, respectively 100.
-     * @post If the given toughness is not below 25 and not above 100, the initial
-     * toughness of this new Unit is equal to the given toughness. Otherwise, its
-     * initial toughness is equal to 25, respectively 100.
+     * @param  name                  
+     * 		   The name for this Unit.
+     * @param  x
+     * 		   The x coordinate for this Unit.
+     * @param  y
+     * 		   The y coordinate for this Unit.
+     * @param  z
+     * 		   The z coordinate for this Unit.
+     * @param  weight                
+     * 		   The weight for this Unit.
+     * @param  strength              
+     * 		   The strength for this Unit.
+     * @param  agility               
+     * 		   The agility for this Unit.
+     * @param  toughness             
+     * 		   The toughness for this Unit.
+     * @param  enableDefaultBehavior 
+     * 		   The state of behaviour for this Unit.
+     * @param  world
+     * 		   The world that this Unit is in.
+     * @throws UnitIllegalLocation() 
+     * 		   The given initial position is not a valid location for any Unit.
+     * 		 | !isValidLocation(initialPosition) 
+     * @effect The name of this new Unit is set to
+     *         the given name.
+     *       | this.setName(name)
+	 * @effect The x coordinate of this new Unit is set to
+	 *         the given x coordinate.
+	 *       | this.setX(x)
+	 * @effect The y coordinate of this new Unit is set to
+	 *         the given y coordinate.
+	 *       | this.setY(y)
+	 * @effect The z coordinate of this new Unit is set to
+	 *         the given z coordinate.
+	 *       | this.setZ(z)
+	 * @post   If the given weight is not below 25 and not above 100 for any Unit,
+	 *         the weight of this new Unit is equal to the given
+	 *         weight. Otherwise, the weight of this new Unit is equal
+	 *         to 25, respectively 100.
+	 *       | if (weight < 25)
+	 *       |   then new.getWeight == 25
+	 *       |   else if (weight > 100)
+	 *       |	 then new.getWeight == 100
+	 *       |   else new.getWeight == weight
+	 * @post   If the given strength is not below 25 and not above 100 for any Unit,
+	 *         the strength of this new Unit is equal to the given
+	 *         strength. Otherwise, the strength of this new Unit is equal
+	 *         to 25, respectively 100.
+	 *       | if (strength < 25)
+	 *       |   then new.getStrength == 25
+	 *       |   else if (strength > 100)
+	 *       |	 then new.getStrength == 100
+	 *       |   else new.getStrength == strength
+	 * @post   If the given agility is not below 25 and not above 100 for any Unit,
+	 *         the agility of this new Unit is equal to the given
+	 *         agility. Otherwise, the agility of this new Unit is equal
+	 *         to 25, respectively 100.
+	 *       | if (agility < 25)
+	 *       |   then new.getAgility == 25
+	 *       |   else if (agility > 100)
+	 *       |	 then new.getAgility == 100
+	 *       |   else new.getAgility == agility
+	 * @post   If the given toughness is not below 25 and not above 100 for any Unit,
+	 *         the toughness of this new Unit is equal to the given
+	 *         toughness. Otherwise, the toughness of this new Unit is equal
+	 *         to 25, respectively 100.
+	 *       | if (toughness < 25)
+	 *       |   then new.getToughness == 25
+	 *       |   else if (toughness > 100)
+	 *       |	 then new.getToughness == 100
+	 *       |   else new.getToughness == toughness
      * @post The initial state of behavior of this new Unit is equal to the given
      * flag.
-     * @throws IllegalArgumentException() The given initial name is not a valid name for any Unit.
-     * | ! isValidName(name)
-     * @invar The location of each Unit must be a valid location for any Unit.
-     * | isValidlocation(getlocation())
+
      */
-    public Unit(String name, double x, double y, double z, int weight, int agility, int strength, int toughness,
-                boolean enableDefaultBehavior,World world) throws UnitIllegalLocation {
-        this.setWorld();
+    public Unit(String name, double x, double y, double z, int weight, int strength,
+    		int agility, int toughness, boolean enableDefaultBehavior, World world)
+            throws UnitIllegalLocation, IllegalArgumentExpression {
+        this.setName(name);        
     	this.setLocation(x, y, z);
         if (weight < 25) {
             this.setWeight(25);
@@ -86,68 +158,129 @@ public class Unit extends MovableWorldObject {
             this.setToughness(toughness);
         }
         this.setDefaultbehavior(enableDefaultBehavior);
-        this.hitpoints = getMaxHitPoints();
-        this.staminapoints = getMaxStaminaPoints();
+        this.setWorld();
+        this.hitpoints = getMaxPoints();
+        this.staminapoints = getMaxPoints();
         this.orientation = (float) (0.5 * Math.PI);
-        this.setName(name);
         this.setActivity(null);
         this.setFaction();
-        this.setWorld();
     }
 
-    private boolean isPausedActivity;
-    private IActivity pausedActivity;    
-    
     private String name;
+    private VLocation location;
     private int weight;
     private int agility;
     private int strength;
     private int toughness;
     private boolean defaultbehaviorenabled;
+    private final World World;
+    
     private int hitpoints;
     private int staminapoints;
+    private float orientation;
     private Faction faction;
-
+    private boolean isPausedActivity;
+    private IActivity pausedActivity; 
+    
     /**
      * Return the name of this Unit.
      */
+    @Basic
+    @Raw
     public String getName() {
         return this.name;
     }
 
     /**
+     * Check whether the given name is a valid name for any Unit.
+     *
+     * @param  name
+     * 		   The name to check.
+     * @return True if and only if the given name contains at least two characters,
+     * 		   if the first character is an uppercase letter and if all characters
+     * 		   are uppercase or lowercase letters, single or double quotes or spaces.
+     *       | result == (name.length() >= 2)
+     *       		&& Character.isUpperCase(name.charAt(0))
+     *       		&& "[A-Z|a-z|\"|\'|\\s]*".matches(name)
+     */
+    public boolean isValidName(String name) {
+        return (name.length() >= 2) && Character.isUpperCase(name.charAt(0)) && "[A-Z|a-z|\"|\'|\\s]*".matches(name);
+    }    
+    
+    /**
      * Set the name of this Unit to the given name.
      *
-     * @param    newName The new name for this Unit.
-     * @post The new name of this new Unit is equal to the given name.
-     * |	new.getName == name
-     * @throws IllegalArgumentException() The given initial name is not a valid name for any Unit.
-     * | ! isValidName(name)
+     * @param  name
+     * 		   The new name for this Unit.
+     * @post   The name of this new Unit is equal to the given name.
+     * 		 | new.getName == name
+     * @throws IllegalArgumentException()
+     * 		   The given initial name is not a valid name for any Unit.
+     * 		 | ! isValidName(getName)
      */
-
+    @Raw
     public void setName(String newName) throws IllegalArgumentException {
-        if (!isValidName(newName)) {
+        if (! isValidName(newName)) 
             throw new IllegalArgumentException("This is an invalid name.");
-        } else {
-            this.name = newName;
-        }
+        this.name = newName;
     }
 
+    @Override
+    public void setLocation(double x, double y, double z) throws UnitIllegalLocation {
+        VLocation location = new VLocation(x, y, z, this);
+    	this.setLocation(location);
+    }
 
     /**
-     * Check whether the given name is a valid name for all Units.
-     *
-     * @param    newName The name to check.
-     * @return True if and only if the given name contains at least two characters, if
-     * the first character is an uppercase letter and if the all characters are
-     * uppercase or lowercase letters, single or double quotes or spaces.
+     * Return the location of this Unit.
      */
-
-    public boolean isValidName(String newName) {
-        return (newName.length() >= 2) && Character.isUpperCase(newName.charAt(0)) && ("[A-Z|a-z|\"|\'|\\s]*".matches(newName));
+    @Basic
+    @Raw
+    @Override
+    public VLocation getLocation() {
+        return this.location;
     }
 
+    /**
+     * Check whether the given location is a valid location for
+     * any Unit.
+     *
+     * @param  location
+     * 		   The location to check.
+     * @return 
+     *       | result == VLocation.isValidLocation(location)
+     */
+    public static boolean isValidLocation(VLocation location) {
+        return VLocation.isValidLocation(location);
+    }
 
+    /**
+     * Set the location of this Unit to the given location.
+     *
+     * @param  location
+     * 		   The new location for this Unit.
+     * @post   The location of this new Unit is equal to
+     * 		   the given location.
+     * 		 | new.getLocation() == location
+     * @throws UnitIllegalLocation
+     * 		   The given location is not a valid location for any
+     *         Unit.
+     *       | ! isValidLocation(getLocation())
+     */
+    @Raw
+    @Override
+    public void setLocation(VLocation location) throws UnitIllegalLocation {
+        if (!isValidLocation(location))
+            throw new UnitIllegalLocation();
+        this.location = location;
+        this.register(location);
+    }
+    
+    @Override
+    public void register(VLocation location) {
+    	this.getWorld().getWorldMap().put(location, this);
+    }
+    
     /**
      * Return the weight of this Unit.
      */
@@ -156,22 +289,32 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Set the weight of this Unit to the given value.
+     * Set the weight of this Unit to the given weight.
      *
-     * @param    newValue The new weight for this Unit.
-     * @post If the given weight is not below 1 and not above 200, the new
-     * weight of this Unit is equal to the given weight. Otherwise, its
-     * new weight is equal to 1, respectively 200.
+     * @param  weight
+     * 		   The new weight for this Unit.
+     * @post   If the given weight is not below 1, not above 200 nor above
+     * 		   the minimum weight for any Unit,
+     *         the weight of this new Unit is equal to the given
+     *         weight. Otherwise, its new weight is equal to 1, 200, respectively
+     *         the minimum weight.
+     *       | if (weight < 1)
+     *       |   then new.getWeight() == 1
+     *       |	 else if (weight > 200)
+     *       |	 then new.getWeight() == 200
+     *       |	 else if (weight < 0.5 * (this.getStrength() + this.getAgility()))
+     *       |	 then new.getWeight() == (0.5 * (this.getStrength() + this.getAgility()))
+     *       |	 else new.getWeight() == weight
      */
-    public void setWeight(int newValue) {
-        if (newValue < 1) {
+    public void setWeight(int weight) {
+        if (weight < 1) {
             this.setWeight(1);
-        } else if (newValue > 200) {
+        } else if (weight > 200) {
             this.setWeight(200);
-        } else if (newValue < 0.5 * (this.getStrength() + this.getAgility())) {
+        } else if (weight < 0.5 * (this.getStrength() + this.getAgility())) {
             this.weight = (int) (0.5 * (this.getStrength() + this.getAgility()));
         } else {
-            this.weight = newValue;
+            this.weight = weight;
         }
     }
 
@@ -183,20 +326,26 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Set the agility of this Unit to the given value.
+     * Set the strength of this Unit to the given strength.
      *
-     * @param    newValue The new agility for this Unit.
-     * @post If the given agility is not below 1 and not above 200, the new
-     * agility of this Unit is equal to the given agility. Otherwise, its
-     * new agility is equal to 1, respectively 200.
+     * @param  strength
+     * 		   The new strength for this Unit.
+     * @post   If the given strength is not below 1 and not above 200 for any Unit,
+     *         the strength of this new Unit is equal to the given
+     *         strength. Otherwise, its new strength is equal to 1, respectively 200.
+     *       | if (strength < 1)
+     *       |   then new.getStrength() == 1
+     *       |	 else if (strength > 200)
+     *       |	 then new.getStrength() == 200
+     *       |	 else new.getStrength() == strength
      */
-    public void setStrength(int newValue) {
-        if (newValue < 1) {
+    public void setStrength(int strength) {
+        if (strength < 1) {
             this.strength = 1;
-        } else if (newValue > 200) {
+        } else if (strength > 200) {
             this.strength = 200;
         } else {
-            this.strength = newValue;
+            this.strength = strength;
         }
     }
 
@@ -208,20 +357,26 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Set the strength of this Unit to the given value.
+     * Set the agility of this Unit to the given agility.
      *
-     * @param    newValue The new strength for this Unit.
-     * @post If the given strength is not below 1 and not above 200, the new
-     * strength of this Unit is equal to the given strength. Otherwise, its
-     * new strength is equal to 1, respectively 200.
+     * @param  agility
+     * 		   The new agility for this Unit.
+     * @post   If the given agility is not below 1 and not above 200 for any Unit,
+     *         the agility of this new Unit is equal to the given
+     *         agility. Otherwise, its new agility is equal to 1, respectively 200.
+     *       | if (agility < 1)
+     *       |   then new.getAgility() == 1
+     *       |	 else if (agility > 200)
+     *       |	 then new.getAgility() == 200
+     *       |	 else new.getAgility() == agility
      */
-    public void setAgility(int newValue) {
-        if (newValue < 1) {
+    public void setAgility(int agility) {
+        if (agility < 1) {
             this.agility = 1;
-        } else if (newValue > 200) {
+        } else if (agility > 200) {
             this.agility = 200;
         } else {
-            this.agility = newValue;
+            this.agility = agility;
         }
     }
 
@@ -233,131 +388,100 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Set the toughness of this Unit to the given value.
+     * Set the toughness of this Unit to the given toughness.
      *
-     * @param    newValue The new toughness for this Unit.
-     * @post If the given toughness is not below 1 and not above 200, the new
-     * toughness of this Unit is equal to the given toughness. Otherwise, its
-     * new toughness is equal to 1, respectively 200.
+     * @param  toughness
+     * 		   The new toughness for this Unit.
+     * @post   If the given toughness is not below 1 and not above 200 for any Unit,
+     *         the toughness of this new Unit is equal to the given
+     *         toughness. Otherwise, its new toughness is equal to 1, respectively 200.
+     *       | if (toughness < 1)
+     *       |   then new.getToughness() == 1
+     *       |	 else if (toughness > 200)
+     *       |	 then new.getToughness() == 200
+     *       |	 else new.getToughness() == toughness
      */
-    public void setToughness(int newValue) {
-        if (newValue < 1) {
+    public void setToughness(int toughness) {
+        if (toughness < 1) {
             this.toughness = 1;
-        } else if (newValue > 200) {
+        } else if (toughness > 200) {
             this.toughness = 200;
         } else {
-            this.toughness = newValue;
+            this.toughness = toughness;
         }
     }
 
     /**
-     * Return the maximum number of hitpoints of this Unit.
+     * Return the maximum number of hitpoints or stamina points of this Unit.
      */
-    public int getMaxHitPoints() {
+    public int getMaxPoints() {
         return 200 * (this.getWeight() / 100) * (this.getToughness() / 100);
     }
 
     /**
-     * Return the hitpoints of this Unit.
+     * Check whether the given number of points is a valid number of points for
+     * any Unit.
+     *  
+     * @param  points
+     *         The number of points to check.
+     * @return True if and only if the given number of points are below the maximum
+     * 		   number of points and above zero.
+     *       | result == (points <= getMaxPoints()
+     *       		&& points >= 0)
+    */
+    public static boolean isValidPoints(int points) {
+    	return (points <= getMaxPoints() && points >= 0);
+    }    
+    
+    /**
+     * Return the number of hitpoints of this Unit.
      */
     public int getCurrentHitPoints() {
         return this.hitpoints;
-    }
-
-    /**
-     * Return the maximum number of stamina points of this Unit.
-     */
-    public int getMaxStaminaPoints() {
-        return 200 * (this.getWeight() / 100) * (this.getToughness() / 100);
-    }
-
+    } 
+    
     /**
      * Set the number of hitpoints of this Unit to the given hitpoints.
      *
-     * @param hitPoints The number of hitpoints for this Unit.
-     * @pre The given number of hitpoints must be a valid number for any Unit.
-     * @post The new number of hitpoints is equal to the given number of
-     * hitpoints.
-     * | new.getCurrentHitPoints() == balance
+     * @param  hitPoints
+     * 		   The number of hitpoints for this Unit.
+     * @pre	   The given number of hitpoints must be a valid number of hitpoints
+     * 		   for any Unit.
+     * 		 | isValidPoints(hitPoints)
+     * @post   The number of hitpoints of this Unit is equal to the given number of
+     * 		   hitpoints.
+     * 		 | new.getCurrentHitPoints() == hitPoints
      */
+    @Raw
     public void setCurrentHitPoints(int hitPoints) {
-        if (hitPoints <= getMaxHitPoints() && hitPoints >= 0) {
-            this.hitpoints = hitPoints;
-        }
-    }
-
-        /**
-         * Set the number of stamina points of this Unit to the given stamina points.
-         *
-         * @param    stamPoints
-         * 			The number of stamina points for this Unit.
-         * @pre The given number of stamina points must be a valid number for any Unit.
-         * @post The new number of stamina points is equal to the given number of
-         * 			stamina points.
-         * 		  | new.getCurrentStaminaPoints() == balance
-         */
-
-    public void setCurrentStaminaPoints(int stamPoints) {
-        if (stamPoints <= getMaxStaminaPoints() && stamPoints >= 0) {
-            this.staminapoints = stamPoints;
-        }
-
+        assert isValidPoints(hitPoints);
+        this.hitpoints = hitPoints;
     }
 
     /**
-     * Return the stamina points of this Unit.
+     * Return the number of stamina points of this Unit.
      */
     public int getCurrentStaminaPoints() {
         return this.staminapoints;
-    }
-
-
+    }    
+    
     /**
-     * Return the location of this Unit.
-     */
-    @Basic
-    @Raw
-    public VLocation getLocation() {
-        return this.location;
-    }
-
-    /**
-     * Check whether the given location is a valid location for
-     * any Unit.
+     * Set the number of stamina points of this Unit to the given stamina points.
      *
-     * @param location The location to check.
-     *                 /
-     */
-    public static boolean isValidlocation(VLocation location) {
-
-
-        return VLocation.isValidLocation(location);
-
-    }
-
-    /**
-     * Set the location of this Unit to the given location.
-     *
-     * @param location The new location for this Unit.
-     * @throws UnitIllegalLocation The given location is not a valid location for any
-     *                             Unit.
-     *                             | ! isValidlocation(getlocation())
-     * @post The location of this new Unit is equal to
-     * the given location.
-     * | new.getlocation() == location
+     * @param  stamPoints
+     * 		   The number of stamina points for this Unit.
+     * @pre	   The given number of stamina points must be a valid number of stamina points
+     * 		   for any Unit.
+     * 		 | isValidPoints(stamPoints)
+     * @post   The number of stamina points of this Unit is equal to the given number of
+     * 		   stamina points.
+     * 		 | new.getCurrentStamPoints() == stamPoints
      */
     @Raw
-    public void setLocation(VLocation location)
-            throws UnitIllegalLocation {
-        if (!isValidlocation(location))
-            throw new UnitIllegalLocation();
-        this.location = location;
+    public void setCurrentStaminaPoints(int stamPoints) {
+        assert isValidPoints(stamPoints);
+        this.staminapoints = stamPoints;
     }
-
-    /**
-     * Variable registering the location of this Unit.
-     */
-    private VLocation location;
 
     /**
      * Return the orientation of this Unit.
@@ -375,7 +499,7 @@ public class Unit extends MovableWorldObject {
      * @param orientation The orientation to check.
      * @return | result == (orientation>=0 and orientation<=2*PI
      */
-    public static boolean isValidorientation(float orientation) {
+    public static boolean isValidOrientation(float orientation) {
         return (orientation >= 0 && orientation <= 2 * Math.PI);
     }
 
@@ -391,17 +515,12 @@ public class Unit extends MovableWorldObject {
      */
     @Raw
     public void setorientation(float orientation) {
-        if (isValidorientation(orientation)) {
+        if (isValidOrientation(orientation)) {
             this.orientation = orientation;
         } else {
             this.orientation = ((float) Math.PI) / 2;
         }
     }
-
-    /**
-     * Float registering the orientation of this unit
-     */
-    private float orientation;
 
     /**
      * Return the activity of this Unit.
@@ -565,17 +684,6 @@ public class Unit extends MovableWorldObject {
 		}
 	}
 	
-    @Override
-    public void setLocation(double x, double y, double z) throws UnitIllegalLocation {
-        VLocation location = new VLocation(x, y, z, this);
-    	this.setLocation(location);
-        this.register(location);
-    }
-
-    @Override
-    public void register(VLocation location) {
-    	WorldMap.put(location, this);
-    }
 
 	public void setWorld() throws IllegalArgumentException {
 		if (!canHaveAsWorld(World)) {throw new IllegalArgumentException("Error");
@@ -609,11 +717,6 @@ public class Unit extends MovableWorldObject {
     	  return false;
       }
     }
-
-    /**
-     * Variable registering the World of this Unit.
-     */
-    private final World World;
     
 }
 
