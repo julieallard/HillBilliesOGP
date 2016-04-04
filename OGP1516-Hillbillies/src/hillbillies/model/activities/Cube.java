@@ -3,6 +3,10 @@ package hillbillies.model.activities;
 import be.kuleuven.cs.som.annotate.Value;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 @Value
+
+/*
+Work in progress!!
+ */
 public class Cube {
 
     public Cube(int[] cube)throws UnitIllegalLocation{
@@ -23,5 +27,4 @@ public class Cube {
 
     public final int[] locArray;
 
-    public 
 }
