@@ -5,13 +5,14 @@ import hillbillies.model.activities.Attack;
 import hillbillies.model.activities.Defend;
 import hillbillies.model.activities.NoActivity;
 import hillbillies.model.activities.Work;
+import hillbillies.model.exceptions.ExceptionName_Java;
 import hillbillies.model.exceptions.Raw;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 import hillbillies.model.exceptions.property_type;
 
 /**
- * A class of hillbilly Units involving a name, an initial position, a weight,
- * agility, strength, toughness and a facility to enable the default behaviour.
+ * A class of hillbilly Units involving a name, an x, y and z coordinate, a weight,
+ * agility, strength, toughness, a facility to enable the default behaviour and a world.
  * 
  * @invar  The name of each Unit must be a valid name for any
  *         Unit.
@@ -31,23 +32,25 @@ import hillbillies.model.exceptions.property_type;
  * @invar  The strength of each Unit must be a valid strength for any
  *         Unit.
  *       | isValidStrength(getStrength())
- * @invar  The agilily of each Unit must be a valid agility for any
+ * @invar  The agility of each Unit must be a valid agility for any
  *         Unit.
  *       | isValidAgility(getAgility()) 
  * @invar  The toughness of each Unit must be a valid toughness for any
  *         Unit.
  *       | isValidToughness(getToughness()) 
+ 
+ 
  *        
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
- * 			https://github.com/julieallard/hillbillies.git
+ * 			https://github.com/julieallard/HillBilliesOGP.git
  */
 public class Unit extends MovableWorldObject {
     /**
-     * Initialize this new hillbilly Unit with given name, given initial position,
-     * given weight, given agility, given strength, given toughness
-     * and given default behaviour state.
+     * Initialize this new hillbilly Unit with given name, given initial x, y and z
+     * coordinate, given weight, given agility, given strength, given toughness,
+     * given default behaviour state and given world.
      *
      * @param  name                  
      * 		   The name for this Unit.
@@ -68,22 +71,19 @@ public class Unit extends MovableWorldObject {
      * @param  enableDefaultBehavior 
      * 		   The state of behaviour for this Unit.
      * @param  world
-     * 		   The world that this Unit is in.
-     * @throws UnitIllegalLocation() 
-     * 		   The given initial position is not a valid location for any Unit.
-     * 		 | !isValidLocation(initialPosition) 
+     * 		   The world for this Unit.
      * @effect The name of this new Unit is set to
      *         the given name.
      *       | this.setName(name)
 	 * @effect The x coordinate of this new Unit is set to
 	 *         the given x coordinate.
-	 *       | this.setX(x)
+	 *       | this.setLocation(x, y, z)
 	 * @effect The y coordinate of this new Unit is set to
 	 *         the given y coordinate.
-	 *       | this.setY(y)
+	 *       | this.setLocation(x, y, z)
 	 * @effect The z coordinate of this new Unit is set to
 	 *         the given z coordinate.
-	 *       | this.setZ(z)
+	 *       | this.setLocation(x, y, z)
 	 * @post   If the given weight is not below 25 and not above 100 for any Unit,
 	 *         the weight of this new Unit is equal to the given
 	 *         weight. Otherwise, the weight of this new Unit is equal
@@ -122,10 +122,12 @@ public class Unit extends MovableWorldObject {
 	 *       |   else new.getToughness == toughness
      * @post The initial state of behavior of this new Unit is equal to the given
      * flag.
-
+     * @throws UnitIllegalLocation() 
+     * 		   The given location is not a valid location for any Unit.
+     * 		 | ! isValidLocation(location)
      */
     public Unit(String name, double x, double y, double z, int weight, int strength,
-    		int agility, int toughness, boolean enableDefaultBehavior, World world)
+    		int agility, int toughness, boolean enableDefaultBehavior, world world)
             throws UnitIllegalLocation, IllegalArgumentExpression {
         this.setName(name);        
     	this.setLocation(x, y, z);
@@ -157,7 +159,7 @@ public class Unit extends MovableWorldObject {
         } else {
             this.setToughness(toughness);
         }
-        this.setDefaultbehavior(enableDefaultBehavior);
+        this.setDefaultBehavior(enableDefaultBehavior);
         this.setWorld();
         this.hitpoints = getMaxPoints();
         this.staminapoints = getMaxPoints();
@@ -173,7 +175,7 @@ public class Unit extends MovableWorldObject {
     private int strength;
     private int toughness;
     private boolean defaultbehaviorenabled;
-    private final World World;
+    private final world this.getWorld();
     
     private int hitpoints;
     private int staminapoints;
@@ -219,10 +221,10 @@ public class Unit extends MovableWorldObject {
      * 		 | ! isValidName(getName)
      */
     @Raw
-    public void setName(String newName) throws IllegalArgumentException {
-        if (! isValidName(newName)) 
+    public void setName(String name) throws IllegalArgumentException {
+        if (! isValidName(name)) 
             throw new IllegalArgumentException("This is an invalid name.");
-        this.name = newName;
+        this.name = name;
     }
 
     @Override
@@ -280,6 +282,8 @@ public class Unit extends MovableWorldObject {
     public void register(VLocation location) {
     	this.getWorld().getWorldMap().put(location, this);
     }
+    
+    public 
     
     /**
      * Return the weight of this Unit.
@@ -488,7 +492,7 @@ public class Unit extends MovableWorldObject {
      */
     @Basic
     @Raw
-    public float getorientation() {
+    public float getOrientation() {
         return this.orientation;
     }
 
@@ -496,8 +500,11 @@ public class Unit extends MovableWorldObject {
      * Check whether the given orientation is a valid orientation for
      * any Unit.
      *
-     * @param orientation The orientation to check.
-     * @return | result == (orientation>=0 and orientation<=2*PI
+     * @param  orientation
+     * 		   The orientation to check.
+     * @return
+     * 		 | result == (orientation >= 0
+     * 				&& orientation <= 2*PI)
      */
     public static boolean isValidOrientation(float orientation) {
         return (orientation >= 0 && orientation <= 2 * Math.PI);
@@ -506,12 +513,13 @@ public class Unit extends MovableWorldObject {
     /**
      * Set the orientation of this Unit to the given orientation.
      *
-     * @param orientation The new orientation for this Unit.
-     * @post If the given orientation is a valid orientation for any Unit,
-     * the orientation of this new Unit is equal to the given
-     * orientation.
-     * | if (isValidorientation(orientation))
-     * |   then new.getorientation() == orientation
+     * @param  orientation
+     * 		   The new orientation for this Unit.
+     * @post   If the given orientation is a valid orientation for any Unit,
+     * 		   the orientation of this new Unit is equal to the given
+     * 		   orientation.
+     * 		 | if (isValidorientation(orientation))
+     * 		 |	 then new.getOrientation() == orientation
      */
     @Raw
     public void setorientation(float orientation) {
@@ -535,8 +543,10 @@ public class Unit extends MovableWorldObject {
      * Check whether the given activity is a valid activity for
      * any Unit.
      *
-     * @param activity The activity to check.
-     * @return | result == true
+     * @param  activity
+     * 		   The activity to check.
+     * @return
+     * 		 | result == true
      */
     public static boolean isValidActivity(IActivity activity) {
         return true;
@@ -545,13 +555,15 @@ public class Unit extends MovableWorldObject {
     /**
      * Set the activity of this Unit to the given activity.
      *
-     * @param Activity The new activity for this Unit.
-     * @throws IllegalArgumentException The given activity is not a valid activity for any
-     *                                  Unit.
-     *                                  | ! isValidActivity(getActivity())
-     * @post The activity of this new Unit is equal to
-     * the given activity.
-     * | new.getActivity() == Activity
+     * @param  Activity
+     * 		   The new activity for this Unit.
+     * @throws IllegalArgumentException
+     * 		   The given activity is not a valid activity for any
+     *         Unit.
+     *       | ! isValidActivity(getActivity())
+     * @post   The activity of this new Unit is equal to
+     * 		   the given activity.
+     * 		 | new.getActivity() == Activity
      */
     @Raw
     public void setActivity(IActivity Activity)
@@ -576,25 +588,24 @@ public class Unit extends MovableWorldObject {
     /**
      * Set the state equal to the given flag.
      *
-     * @param    enabled The default behavior state of the unit.
-     * @post The default behavior state of the unit is equal to the given flag.
+     * @param  enabled
+     * 		   The default behavior state of the unit.
+     * @post   The default behavior state of the unit is equal to the given flag.
      */
-    public void setDefaultbehavior(boolean enabled) {
+    public void setDefaultBehavior(boolean enabled) {
         this.defaultbehaviorenabled = enabled;
     }
 
-    private boolean isCarrying = false;
-
+    private boolean iscarrying = false;
+    private MovableWorldObject carriedObject;
+    
     public boolean isCarrying() {
-        return isCarrying;
+        return iscarrying;
     }
 
     private void setCarrying(boolean carrying) {
-        isCarrying = carrying;
-
+        iscarrying = carrying;
     }
-
-    private MovableWorldObject carriedObject;
 
     protected void carry(MovableWorldObject toBeCarriedObject) {
         if (canBeCarried(toBeCarriedObject)) {
@@ -657,67 +668,101 @@ public class Unit extends MovableWorldObject {
         if (!this.interruptCurrentAct(attack)) return;
         this.setActivity(attack);
         defender.setActivity(new Defend(defender, this));
-
     }
 
-	public void setFaction() throws IllegalArgumentException {
-		if (World.getNumberOfFactions() < 5) {
-			Faction faction = new Faction(this);
-			this.faction = faction;
-		} else if (!canHaveAsFaction(World.getSmallestFaction())) {
-			throw new IllegalArgumentException("Error");
-		} else {
-			this.faction = World.getSmallestFaction();
-			World.getSmallestFaction().addUnit(this);
-		}
-	}
-	
+    /**
+     * Return the faction of this Unit.
+     */
+    @Basic
+    @Raw
 	public Faction getFaction() {
 		return this.faction;
 	}
-    
-	public boolean canHaveAsFaction(Faction faction) {
-		if (faction.getNumberOfUnits() < 50) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
 
-	public void setWorld() throws IllegalArgumentException {
-		if (!canHaveAsWorld(World)) {throw new IllegalArgumentException("Error");
+    /**
+     * Check whether the given faction is a valid faction for
+     * any Unit.
+     *  
+     * @param  faction
+     *         The faction to check.
+     * @return True if and only if the given faction contains less
+     * 		   than 50 Units.
+     *       | result == (faction.getNumberOfUnits() < 50)
+    */
+	public boolean canHaveAsFaction(Faction faction) {
+		return (faction.getNumberOfUnits() < 50);
+	}     
+
+	/**
+	 * Set the faction of this Unit.
+	 * 
+	 * @post   The faction of this new Unit is equal to
+	 *         a newly created faction if the maximum number of active
+	 *		   factions is not reached and is equal to the faction with the
+	 *		   smallest number of units if the maximum number of active
+	 *		   factions is already reached.
+	 * @throws IllegalArgumentException
+	 *         The given property_name_Eng is not a valid property_name_Eng for any
+	 *         object_name_Eng.
+	 *       | ! isValidPropertyName_Java(getPropertyName_Java())
+	 */
+	@Raw	
+	
+	public void setFaction() throws IllegalArgumentException {
+		if (this.getWorld().getNumberOfFactions() < 5) {
+			Faction faction = new Faction(this);
+			this.faction = faction;
+		} else if (! canHaveAsFaction(this.getWorld().getSmallestFaction())) {
+			throw new IllegalArgumentException("This faction already reached its max amount of Units.");
 		} else {
-			this.World = World;
-			World.addUnit(this);
+			this.faction = this.getWorld().getSmallestFaction();
+			this.getWorld().getSmallestFaction().addUnit(this);
 		}
-	}        
+	}	
     
     /**
-     * Return the World of this Unit.
+     * Return the world of this Unit.
      */
-    @Basic @Raw @Immutable @Override
+    @Basic
+    @Raw
+    @Immutable
+    @Override
     public World getWorld() {
-      return this.World;
+      return this.world;
     }
 
     /**
-     * Check whether this Unit can have the given World as its World.
+     * Check whether this Unit can have the given world as its world.
      *
-     * @param  World
-     *         The World to check.
+     * @param  world
+     *         The world to check.
      * @return
-     *       | result ==
+     *       | result == (world.getNumberOfUnits() < 100)
      */
     @Raw
     public boolean canHaveAsWorld(World world) {
-      if (World.getNumberOfUnits() < 100) {
-    	  return true;
-      } else {
-    	  return false;
-      }
+      return (world.getNumberOfUnits() < 100);
     }
     
+    /**
+     * Set the world of this Unit to the given world.
+     * 
+     * @param  world
+     *         The new world for this Unit.
+     * @post   The world of this new Unit is equal to
+     *         the given world.
+     *       | new.getWorld() == world
+     * @throws IllegalArgumentException
+     *         The given world is not a valid world for any
+     *         Unit.
+     *       | ! canHaveAsWorld(getWorld())
+     */
+    @Raw
+    public void setWorld(World world) throws IllegalArgumentException {
+		if (! canHaveAsWorld(world))
+			throw new IllegalArgumentException("This world already reached its max amount of Units.");
+		this.world = world;
+		this.getWorld().addUnit(this);	
+	}  
+    
 }
-
-
