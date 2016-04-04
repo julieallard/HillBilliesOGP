@@ -256,8 +256,7 @@ public class World {
 	public void addUnit(Unit unit) throws IllegalArgumentException {
 
         this.TotalUnitSet.add(unit);
-	}	
-	
+	}
 	public  void removeUnit(Unit unit) {
 		TotalUnitSet.remove(unit);
 	}	

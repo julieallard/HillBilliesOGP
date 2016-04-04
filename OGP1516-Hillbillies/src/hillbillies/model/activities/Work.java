@@ -9,7 +9,6 @@ import hillbillies.model.VLocation;
 import ogp.framework.util.Util;
 
 public class Work implements IActivity {
-
     public Work(Unit unit, VLocation targetLocation){
         this.simpleTimeLeft=((double) 500)/unit.getStrength();
         this.unit=unit;
@@ -49,5 +48,5 @@ public class Work implements IActivity {
 
 
 	private final VLocation targetLocation;
-    
+
 }
