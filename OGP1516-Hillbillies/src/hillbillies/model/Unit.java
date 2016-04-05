@@ -130,12 +130,6 @@ public class Unit extends MovableWorldObject {
      * @effect The world of this new Unit is set to
      * 		   the given world.
      * 		 | this.setWorld(world)
-     * @throws UnitIllegalLocation() 
-     * 		   The given location is not a valid location for any Unit.
-     * 		 | ! isValidLocation(location)
-     * @throws IllegalArgumentException() 
-     * 		   The given name is not a valid name for any Unit.
-     * 		 | ! isValidName(name)
      */
     public Unit(String name, double x, double y, double z, int weight, int strength,
     		int agility, int toughness, boolean enableDefaultBehavior, World world)
