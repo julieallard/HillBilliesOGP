@@ -57,7 +57,6 @@ public class Fall implements IActivity {
                 ((Unit) object).dealDamage(this.damagetobedone);
             this.object.activityFinished();
             return;
-            }
         }
         VLocation newPossibleLoc = new VLocation(oldLoc.getXLocation(), oldLoc.getYLocation(), oldLoc.getZLocation() - 3*dt, this.object);
         if (! this.object.getWorld().willBreakFall(newPossibleLoc.getCubeLocation())) {
@@ -72,6 +71,7 @@ public class Fall implements IActivity {
         }
         this.object.activityFinished();
         return;
-    }
-    
+    }}
+
 }
+
