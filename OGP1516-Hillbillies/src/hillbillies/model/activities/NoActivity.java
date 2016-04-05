@@ -1,10 +1,9 @@
 package hillbillies.model.activities;
 
-
 import hillbillies.model.IActivity;
 
 /**
- * the Id's of the activities are the following:
+ * The Id's of the activities are the following:
  * 0: noActivity
  * 1: attack
  * 2: defend
@@ -13,13 +12,13 @@ import hillbillies.model.IActivity;
  * 5: resting
  * 6: falling
  */
+
 public class NoActivity implements IActivity {
 
     @Override
     public void advanceActivityTime(double dt) {
 
     }
-
 
     @Override
     public double returnSimpleTimeLeft() throws IllegalArgumentException {
@@ -30,7 +29,6 @@ public class NoActivity implements IActivity {
     public boolean canBeInterruptedBy(IActivity activity) {
         return true;
     }
-
 
     @Override
     public int getId() {
