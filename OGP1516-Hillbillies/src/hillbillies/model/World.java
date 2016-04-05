@@ -218,19 +218,24 @@ public class World {
      * @return
      */
     public boolean canHaveAsCubeLocation(int[] cubeLoc, MovableWorldObject object) {
+        if (cubeLoc.length!=3) return false;
         if (! CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].isPassable())
         	return false;
         if (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].willSupport())
         	return true;
         if (! (object instanceof Unit))
         	return false;
-        for (int x = -1; x < 2; x++) {
-            for (int y = -1; y < 2; y++) {
-                for (int z = -1; z < 2; z++) {
-                    if (x == 0 || y == 0 || z == 0)
-                    	continue;
-                    if (x == sideSize-1 || y == sideSize-1 || z == sideSize-1)
-                    	continue;
+        int xLoc=cubeLoc[0];
+        int yLoc=cubeLoc[1];
+        int zLoc=cubeLoc[2];
+        if (zLoc==0){return true;}
+        for (int x = xLoc-1; x < xLoc+2; x++) {
+            for (int y = yLoc-1; y < yLoc+2; y++) {
+                for (int z = zLoc-1; z < zLoc+2; z++) {
+                    if (x < 0 || y < 0 || z < 0)
+                        return true;
+                    if (x == sideSize || y == sideSize || z == sideSize)
+                    	return true;
                     if (CubeWorld[x][y][z].willSupport())
                     	return true;
                 }
