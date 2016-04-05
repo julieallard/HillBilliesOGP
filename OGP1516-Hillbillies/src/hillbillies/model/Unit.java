@@ -127,6 +127,9 @@ public class Unit extends MovableWorldObject {
 	 *       |   else new.getToughness == toughness
      * @post   The initial state of behavior of this new Unit is set according
      * 		   to the given flag.
+     * @effect The world of this new Unit is set to
+     * 		   the given world.
+     * 		 | this.setWorld(world)
      * @throws UnitIllegalLocation() 
      * 		   The given location is not a valid location for any Unit.
      * 		 | ! isValidLocation(location)
@@ -238,12 +241,6 @@ public class Unit extends MovableWorldObject {
         this.name = name;
     }
 
-    @Override
-    public void setLocation(double x, double y, double z) throws UnitIllegalLocation {
-        VLocation location = new VLocation(x, y, z, this);
-    	this.setLocation(location);
-    }
-
     /**
      * Return the location of this Unit.
      */
@@ -267,6 +264,12 @@ public class Unit extends MovableWorldObject {
         return VLocation.isValidLocation(location);
     }
 
+    @Override
+    public void setLocation(double x, double y, double z) throws UnitIllegalLocation {
+        VLocation location = new VLocation(x, y, z, this);
+    	this.setLocation(location);
+    }
+    
     /**
      * Set the location of this Unit to the given location.
      *
@@ -476,7 +479,7 @@ public class Unit extends MovableWorldObject {
      */
     @Raw
     public boolean canHaveAsWorld(World world) {
-      return (world.getNumberOfUnits() < 100);
+    	return (world.getNumberOfUnits() < 100);
     }
     
     /**
@@ -838,7 +841,7 @@ public class Unit extends MovableWorldObject {
 	@Raw		
 	public void setFaction() throws IllegalArgumentException {
 		if (this.getWorld().getNumberOfFactions() < 5) {
-			Faction faction = new Faction(this);
+			Faction faction = new Faction(this, world);
 			this.faction = faction;
 		} else if (! canHaveAsFaction(this.getWorld().getSmallestFaction())) {
 			throw new IllegalArgumentException("This faction has already reached its max amount of Units.");

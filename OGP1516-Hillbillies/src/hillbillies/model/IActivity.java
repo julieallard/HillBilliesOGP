@@ -3,6 +3,7 @@ package hillbillies.model;
 
 /**
  * the Id's of the activities are the following:
+ * 0: noActivity
  * 1: attack
  * 2: defend
  * 3: movement

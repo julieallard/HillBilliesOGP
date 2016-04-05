@@ -1,8 +1,6 @@
 package hillbillies.model.CubeObjects;
 
-
-public class Rock  extends CubeWorldObject {
-
+public class Rock extends CubeWorldObject {
 
     @Override
     public boolean isPassable() {

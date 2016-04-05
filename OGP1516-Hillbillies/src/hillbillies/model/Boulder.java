@@ -12,7 +12,7 @@ import static hillbillies.model.Unit.isValidlocation;
 
 public class Boulder extends MovableWorldObject {
     /**
-     * Initialize this new Boulder with given x, y and z coordinates.
+     * Initialize this new Boulder with given x, y and z coordinate and given world.
      *
      * @param  x
      *         The x coordinate for this new Boulder.
@@ -20,19 +20,31 @@ public class Boulder extends MovableWorldObject {
      *         The y coordinate for this new Boulder.
      * @param  z
      *         The z coordinate for this new Boulder.
-     * @post   The x coordinate of this new Boulder is equal to the given x coordinate.
-     * @post   The y coordinate of this new Boulder is equal to the given y coordinate.
-     * @post   The z coordinate of this new Boulder is equal to the given z coordinate.
+     * @param  world
+     * 		   The world for this new Boulder.
+	 * @effect The x coordinate of this new Boulder is set to
+	 *         the given x coordinate.
+	 * @effect The y coordinate of this new Boulder is set to
+	 *         the given y coordinate.
+	 * @effect The z coordinate of this new Boulder is set to
+	 *         the given z coordinate.       
+     * @post   The world of this new Boulder is equal to the given world.
      * @throws UnitIllegalLocation
-     *         This new Boulder cannot have the given location as its location.
+     *         The given location is not a valid location for any Boulder.
      */
     public Boulder(double x, double y, double z, World world) throws UnitIllegalLocation {
         this.setLocation(x, y, z);
+        this.world = world;
         Random random = new Random();
         this.weight = 10 + random.nextInt(41);
-        this.World = world;
     }
 
+    private VLocation location;
+    private final World world;
+
+    private final int weight;    
+    private IActivity activity;    
+    
     /**
      * Return the location of this Boulder.
      */
@@ -41,24 +53,92 @@ public class Boulder extends MovableWorldObject {
     public VLocation getLocation() {
         return this.location;
     }
-
-    private VLocation location;
-    private final int weight;
+  
+    /**
+     * Check whether the given location is a valid location for
+     * any Boulder.
+     *
+     * @param  location
+     * 		   The location to check.
+     * @return 
+     */
+    public static boolean isValidLocation(VLocation location) {
+        return VLocation.isValidLocation(location);
+    }    
     
     @Override
     @Raw
-    public void setLocation(double x, double y, double z) {
-        this.location = new VLocation(x, y, z, this);
+    public void setLocation(double x, double y, double z) throws UnitIllegalLocation {
+        VLocation location = new VLocation(x, y, z, this);
+        this.setLocation(location);
     }
     
+    /**
+     * Set the location of this Boulder to the given location.
+     *
+     * @param  location
+     * 		   The new location for this Boulder.
+     * @post   The location of this new Boulder is equal to
+     * 		   the given location.
+     * @throws UnitIllegalLocation
+     * 		   The given location is not a valid location for any
+     *         Boulder.
+     */
+   
     @Override
     @Raw
     public void setLocation(VLocation location) throws UnitIllegalLocation {
-        if (!isValidlocation(location)) throw new UnitIllegalLocation();
+        if (! isValidLocation(location)) throw new UnitIllegalLocation();
         this.location = location;
         this.register(location);
     }
 
+    @Override
+    public void register(VLocation location) {
+    	this.getWorld().getWorldMap().put(location, this);
+    }
+ 
+    /**
+     * Return the world of this Boulder.
+     */
+    @Basic
+    @Raw
+    @Immutable
+    @Override
+    public World getWorld() {
+      return this.world;
+    }
+
+    /**
+     * Check whether this Boulder can have the given world as its world.
+     *
+     * @param  world
+     *         The world to check.
+     * @return Always true.
+     */
+    @Raw
+    public boolean canHaveAsWorld(World world) {
+      return true;
+    }
+    
+    /**
+     * Set the world of this Boulder to the given world.
+     * 
+     * @param  world
+     *         The new world for this Boulder.
+     * @post   The world of this new Boulder is equal to
+     *         the given world.
+     * @throws IllegalArgumentException
+     *         The given world is not a valid world for any
+     *         Boulder.
+     */
+    @Raw
+    public void setWorld(World world) throws IllegalArgumentException {
+		if (! canHaveAsWorld(world))
+			throw new IllegalArgumentException();
+		this.world = world;	
+	}    
+    
     /**
      * Return the weight of this Boulder.
      */
@@ -73,95 +153,52 @@ public class Boulder extends MovableWorldObject {
     	this.getWorld().getWorldMap().remove(this.getLocation());
     }
 
-    @Override
-    public void register(VLocation location) {
-        this.getWorld().getWorldMap().put(location, this);
-    }//todo check java's bullshit
-
+    /**
+     * No documentation needed.
+     */
     public void advanceTime(double dt) {
-    	this.Activity.advanceActivityTime(dt);
+    	this.getActivity().advanceActivityTime(dt);
     }
 
     /**
-     * Return the Activity of this Boulder.
+     * Return the activity of this Boulder.
      */
     @Basic
     @Raw
     public IActivity getActivity() {
-        return this.Activity;
+        return this.activity;
     }
 
     /**
-     * Check whether the given Activity is a valid Activity for
+     * Check whether the given activity is a valid activity for
      * any Boulder.
      *
-     * @param  Activity
-     *         The Activity to check.
-     * @return
-     *       | result == true if fall or no activity
+     * @param  activity
+     *         The activity to check.
+     * @return True if and only if the activity consists of not conducting
+     * 		   any activity or falling.
      */
-    public static boolean isValidActivity(IActivity Activity) {
-        return ((Activity.getId() == 0) || (Activity.getId() == 6));
+    public static boolean isValidActivity(IActivity activity) {
+        return ((activity.getId() == 0) || (activity.getId() == 6));
     }
 
     /**
-     * Set the Activity of this Boulder to the given Activity.
+     * Set the activity of this Boulder to the given activity.
      *
-     * @param  Activity
-     *         The new Activity for this Boulder.
-     * @post   The Activity of this new Boulder is equal to
-     *         the given Activity.
-     *       | new.getActivity() == Activity
+     * @param  activity
+     *         The new activity for this Boulder.
+     * @post   The activity of this new Boulder is equal to
+     *         the given activity.
      * @throws IllegalArgumentException
-     *         The given Activity is not a valid Activity for any
+     *         The given activity is not a valid activity for any
      *         Boulder.
-     *       | ! isValidActivity(getActivity())
      */
     @Raw
-    public void setActivity(IActivity Activity)
-            throws IllegalArgumentException {
-        if (! isValidActivity(Activity))
-            throw new IllegalArgumentException();
-        this.Activity = Activity;
+    public void setActivity(IActivity activity) throws IllegalArgumentException {
+        if (! isValidActivity(activity))
+            throw new IllegalArgumentException("This is not a valid activity.");
+        this.activity = activity;
     }
-
-    /**
-     * Variable registering the Activity of this Boulder.
-     */
-    private IActivity Activity;
-
-    public static boolean isValidlocation(VLocation location) {
-        return VLocation.isValidLocation(location);
-    }
-
-    /**
-     * Return the World of this Boulder.
-     */
-    @Basic
-    @Raw
-    @Immutable
-    @Override
-    public World getWorld() {
-        return this.World;
-    }
-
-    /**
-     * Check whether this Boulder can have the given World as its World.
-     *
-     * @param  world
-     *         The World to check.
-     * @return
-     *       | result ==true
-     */
-    @Raw
-    public boolean canHaveAsWorld(World world) {
-        return true;
-    }
-
-    /**
-     * Variable registering the World of this Boulder.
-     */
-    private final World World;
 
     @Override
     public void activityFinished() {
