@@ -35,6 +35,16 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
  * @invar  The toughness of each Unit must be a valid toughness for any
  *         Unit.
  *       | isValidProperty(getToughness()) 
+ * @invar  The number of hitpoints of each Unit must be a valid number of
+ * 		   hitpoints for any Unit.
+ * 		 | isValidPoints(getCurrentHitPoints())
+ * @invar  The number of stamina points of each Unit must be a valid number of
+ *		   stamina points for any Unit.
+ * 		 | isValidPoints(getCurrentStaminaPoints())
+ * @invar  The orientation of each Unit must be a valid orientation for any
+ * 		   Unit.
+ * 		 | isValidOrientation(getOrientation())
+
  *        
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica
@@ -115,11 +125,14 @@ public class Unit extends MovableWorldObject {
 	 *       |   else if (toughness > 100)
 	 *       |	 then new.getToughness == 100
 	 *       |   else new.getToughness == toughness
-     * @post   The initial state of behavior of this new Unit is equal to the given
-     * 		   flag.
+     * @post   The initial state of behavior of this new Unit is set according
+     * 		   to the given flag.
      * @throws UnitIllegalLocation() 
      * 		   The given location is not a valid location for any Unit.
      * 		 | ! isValidLocation(location)
+     * @throws IllegalArgumentException() 
+     * 		   The given name is not a valid name for any Unit.
+     * 		 | ! isValidName(name)
      */
     public Unit(String name, double x, double y, double z, int weight, int strength,
     		int agility, int toughness, boolean enableDefaultBehavior, World world)
@@ -156,9 +169,9 @@ public class Unit extends MovableWorldObject {
         }
         this.setDefaultBehavior(enableDefaultBehavior);
         this.setWorld(world);
-        this.hitpoints = getMaxPoints();
-        this.staminapoints = getMaxPoints();
-        this.orientation = (float) (0.5 * Math.PI);
+        this.setCurrentHitPoints(getMaxPoints());
+        this.setCurrentStaminaPoints(getMaxPoints());
+        this.setOrientation((float) (0.5 * Math.PI));
         this.setActivity(null);
         this.setFaction();
     }
@@ -175,12 +188,12 @@ public class Unit extends MovableWorldObject {
     private int hitpoints;
     private int staminapoints;
     private float orientation;
-    private Faction faction;
-    private boolean hasPausedActivity;
-    private IActivity pausedActivity; 
     private IActivity activity;
+    private IActivity pausedActivity;    
+    private boolean hasPausedActivity;
     private boolean iscarrying = false;
     private MovableWorldObject carriedObject;
+    private Faction faction;
     
     /**
      * Return the name of this Unit.
@@ -424,6 +437,70 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
+     * (GETTER) Return whether the default behavior is enabled.
+     */
+    public boolean isDefaultBehaviorEnabled() {
+        return defaultbehaviorenabled;
+    }
+
+    /**
+     * Set the state of default behavior according to the given flag.
+     *
+     * @param  flag
+     * 		   The default behavior state of the unit.
+     * @post   The default behavior state of the unit is equal to the given flag.
+     */
+    public void setDefaultBehavior(boolean flag) {
+        this.defaultbehaviorenabled = flag;
+    }    
+
+    /**
+     * Return the world of this Unit.
+     */
+    @Basic
+    @Raw
+    @Immutable
+    @Override
+    public World getWorld() {
+      return this.world;
+    }
+
+    /**
+     * Check whether this Unit can have the given world as its world.
+     *
+     * @param  world
+     *         The world to check.
+     * @return True if and only if the given world contains less
+     * 		   than 100 Units.
+     *       | result == (world.getNumberOfUnits() < 100)
+     */
+    @Raw
+    public boolean canHaveAsWorld(World world) {
+      return (world.getNumberOfUnits() < 100);
+    }
+    
+    /**
+     * Set the world of this Unit to the given world.
+     * 
+     * @param  world
+     *         The new world for this Unit.
+     * @post   The world of this new Unit is equal to
+     *         the given world.
+     *       | new.getWorld() == world
+     * @throws IllegalArgumentException
+     *         The given world is not a valid world for any
+     *         Unit.
+     *       | ! canHaveAsWorld(getWorld())
+     */
+    @Raw
+    public void setWorld(World world) throws IllegalArgumentException {
+		if (! canHaveAsWorld(world))
+			throw new IllegalArgumentException("This world has already reached its max amount of Units.");
+		this.world = world;
+		this.getWorld().addUnit(this);	
+	}    
+    
+    /**
      * Return the maximum number of hitpoints or stamina points of this Unit.
      */
     public int getMaxPoints() {
@@ -582,27 +659,9 @@ public class Unit extends MovableWorldObject {
             throw new IllegalArgumentException();
         this.activity = activity;
     }
-
-    /**
-     * (GETTER which) returns whether the default behavior is enabled.
-     */
-    public boolean isDefaultBehaviorEnabled() {
-        return defaultbehaviorenabled;
-    }
-
-    /**
-     * Set the state of default behavior according to the given flag.
-     *
-     * @param  flag
-     * 		   The default behavior state of the unit.
-     * @post   The default behavior state of the unit is equal to the given flag.
-     */
-    public void setDefaultBehavior(boolean flag) {
-        this.defaultbehaviorenabled = flag;
-    }
  
     /**
-     * (GETTER which) returns whether the Unit is carrying an object.
+     * (GETTER) Return whether the Unit is carrying an object.
      */    
     public boolean isCarrying() {
         return iscarrying;
@@ -782,62 +841,17 @@ public class Unit extends MovableWorldObject {
 			Faction faction = new Faction(this);
 			this.faction = faction;
 		} else if (! canHaveAsFaction(this.getWorld().getSmallestFaction())) {
-			throw new IllegalArgumentException("This faction already reached its max amount of Units.");
+			throw new IllegalArgumentException("This faction has already reached its max amount of Units.");
 		} else {
 			this.faction = this.getWorld().getSmallestFaction();
 			this.getWorld().getSmallestFaction().addUnit(this);
 		}
 	}	
-    
-    /**
-     * Return the world of this Unit.
-     */
-    @Basic
-    @Raw
-    @Immutable
-    @Override
-    public World getWorld() {
-      return this.world;
-    }
-
-    /**
-     * Check whether this Unit can have the given world as its world.
-     *
-     * @param  world
-     *         The world to check.
-     * @return True if and only if the given world contains less
-     * 		   than 100 Units.
-     *       | result == (world.getNumberOfUnits() < 100)
-     */
-    @Raw
-    public boolean canHaveAsWorld(World world) {
-      return (world.getNumberOfUnits() < 100);
-    }
-    
-    /**
-     * Set the world of this Unit to the given world.
-     * 
-     * @param  world
-     *         The new world for this Unit.
-     * @post   The world of this new Unit is equal to
-     *         the given world.
-     *       | new.getWorld() == world
-     * @throws IllegalArgumentException
-     *         The given world is not a valid world for any
-     *         Unit.
-     *       | ! canHaveAsWorld(getWorld())
-     */
-    @Raw
-    public void setWorld(World world) throws IllegalArgumentException {
-		if (! canHaveAsWorld(world))
-			throw new IllegalArgumentException("This world already reached its max amount of Units.");
-		this.world = world;
-		this.getWorld().addUnit(this);	
-	}
 
 	@Override
 	public void unregister() {
 		this.getWorld().getWorldMap().remove(this.getLocation());
+		//TODO death method
 	}
     
 }
