@@ -1,4 +1,5 @@
 package hillbillies.model.activities;
+
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.IActivity;
@@ -7,7 +8,7 @@ import hillbillies.model.Unit;
 import ogp.framework.util.Util;
 
 /**
- * the Id's of the activities are the following:
+ * The Id's of the activities are the following:
  * 0: noActivity
  * 1: attack
  * 2: defend
@@ -17,32 +18,38 @@ import ogp.framework.util.Util;
  * 6: falling
  */
 
-public class Attack implements IActivity{
+public class Attack implements IActivity {
 
-    // constructor
-    public Attack(Unit attacker,Unit defender)throws IllegalTimeException {
-        this.attacker=attacker;
-        this.defender=defender;
-        this.settimeLeft(1);
+    public Attack(Unit attacker, Unit defender) throws IllegalTimeException {
+        this.attacker = attacker;
+        this.defender = defender;
+        this.setTimeLeft(1);
     }
-    //zet de tijd van de aanval vooruit
+    
+    private final Unit attacker;
+    private final Unit defender;
+    private double timeLeft;
+    
     @Override
     public void advanceActivityTime(double dt) {
-        if (Util.fuzzyGreaterThanOrEqualTo(dt,this.gettimeLeft())){
-            conductAttack();
+        if (Util.fuzzyGreaterThanOrEqualTo(dt, this.returnSimpleTimeLeft())) {
+            this.conductAttack();
+        } else {
+            double time = returnSimpleTimeLeft() - dt;
+            this.setTimeLeft(time);
         }
-        else {
-            double time=gettimeLeft()-dt;
-            this.settimeLeft(time);
-        }
-
     }
-    //geeft hoelang de activiteit nog duurt
+    
+    /**
+     * Return the time left for this Attack.
+     */
+    @Basic
+    @Raw
     @Override
     public double returnSimpleTimeLeft() {
-        return gettimeLeft();
+        return this.timeLeft;
     }
-    // geen enkele activiteit kan een aanval onderbreken
+    
     @Override
     public boolean canBeInterruptedBy(IActivity activity) {
         return false;
@@ -53,81 +60,39 @@ public class Attack implements IActivity{
         return 1;
     }
 
-    private final Unit attacker;
-    private final Unit defender;
-    /** TO BE ADDED TO CLASS HEADING
-     * @invar  The timeLeft of each Attack must be a valid timeLeft for any
-     *         Attack.
-     *       | isValidtimeLeft(gettimeLeft())
-     */
-
-
     /**
-     * Initialize this new Attack with given timeLeft.
-     *
-     * @param  timeLeft
-     *         The timeLeft for this new Attack.
-     * @effect The timeLeft of this new Attack is set to
-     *         the given timeLeft.
-     *       | this.settimeLeft(timeLeft)
-     */
-
-
-    /**
-     * Return the timeLeft of this Attack.
-     */
-    @Basic
-    @Raw
-    public double gettimeLeft() {
-      return this.timeLeft;
-    }
-
-    /**
-     * Check whether the given timeLeft is a valid timeLeft for
+     * Check whether the given time left is a valid time left for
      * any Attack.
      *
      * @param  timeLeft
-     *         The timeLeft to check.
-     * @return
-     *       | result == (0<=timeleft<=1
+     *         The time left to check.
+     * @return True if and only if the time left is above 0 and below 1.
      */
-    public static boolean isValidtimeLeft(double timeLeft) {
-      return (Util.fuzzyGreaterThanOrEqualTo(timeLeft,0)&&Util.fuzzyLessThanOrEqualTo(timeLeft,1));
+    public static boolean isValidTimeLeft(double timeLeft) {
+    	return (Util.fuzzyGreaterThanOrEqualTo(timeLeft, 0) && Util.fuzzyLessThanOrEqualTo(timeLeft, 1));
     }
 
     /**
-     * Set the timeLeft of this Attack to the given timeLeft.
+     * Set the time left for this Attack to the given time left.
      *
      * @param  timeLeft
-     *         The new timeLeft for this Attack.
-     * @post   The timeLeft of this new Attack is equal to
-     *         the given timeLeft.
-     *       | new.gettimeLeft() == timeLeft
+     *         The new time left for this Attack.
+     * @post   The time left of this new Attack is equal to
+     *         the given time left.
      * @throws IllegalTimeException
-     *         The given timeLeft is not a valid timeLeft for any
+     *         The given time left is not a valid time left for any
      *         Attack.
-     *       | ! isValidtimeLeft(gettimeLeft())
      */
     @Raw
-    public void settimeLeft(double timeLeft)
-          throws IllegalTimeException {
-      if (! isValidtimeLeft(timeLeft))
+    public void setTimeLeft(double timeLeft) throws IllegalTimeException {
+      if (! isValidTimeLeft(timeLeft))
         throw new IllegalTimeException();
       this.timeLeft = timeLeft;
     }
 
-    /**
-     * Variable registering the timeLeft of this Attack.
-     */
-    private double timeLeft;
-
-    // hier zal er aan de Unit gezegd worden om de activiteit te beeindigen
-	    private void conductAttack(){
-            //todo Implement attack on the attackers initiative
-	        attacker.activityFinished();
-
-	    }
+	private void conductAttack() {
+        //TODO Implement attack on the attackers initiative
+	    attacker.activityFinished();
 	}
-
-
-
+	
+}
