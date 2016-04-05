@@ -440,7 +440,7 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * (GETTER) Return whether the default behavior is enabled.
+     * Return whether the default behavior is enabled.
      */
     public boolean isDefaultBehaviorEnabled() {
         return defaultbehaviorenabled;
@@ -664,7 +664,7 @@ public class Unit extends MovableWorldObject {
     }
  
     /**
-     * (GETTER) Return whether the Unit is carrying an object.
+     * Return whether the Unit is carrying an object.
      */    
     public boolean isCarrying() {
         return iscarrying;
