@@ -180,7 +180,7 @@ public class Unit extends MovableWorldObject {
     private int strength;
     private int toughness;
     private boolean defaultbehaviorenabled;
-    private final World world;
+    private World world;
     
     private int hitpoints;
     private int staminapoints;
@@ -515,7 +515,7 @@ public class Unit extends MovableWorldObject {
      *       | result == (points <= getMaxPoints()
      *       		&& points >= 0)
     */
-    public static boolean isValidPoints(int points) {
+    public boolean isValidPoints(int points) {
     	return (points <= getMaxPoints() && points >= 0);
     }    
     
