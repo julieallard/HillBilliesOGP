@@ -1,6 +1,11 @@
 package hillbillies.model.activities;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
+import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.IActivity;
+import hillbillies.model.Unit;
+import hillbillies.model.exceptions.UnitIllegalLocation;
 
 /**
  * the Id's of the activities are the following:
@@ -37,6 +42,45 @@ public class Movement implements IActivity {
     public int getId() {
         return 3;
     }
+
+    public Movement(Unit unit,int[] destination){
+        this.unit=unit;
+        if (! canHaveAsDestination(destination))
+            throw new UnitIllegalLocation();
+        this.destination = destination;
+
+    }
+
+    private Unit unit;
+
+
+    /**
+     * Return the Destination of this Movement.
+     */
+    @Basic
+    @Raw @Immutable
+    public int[] getDestination() {
+      return this.destination;
+    }
+
+    /**
+     * Check whether this Movement can have the given Destination as its Destination.
+     *
+     * @param  destination
+     *         The Destination to check.
+     * @return
+     *       | result ==
+     */
+    @Raw
+    public boolean canHaveAsDestination(int[] destination) {
+        if (destination.length!=3) return false;
+        return this.unit.getWorld().canHaveAsCubeLocation(destination,unit);
+    }
+
+    /**
+     * Variable registering the Destination of this Movement.
+     */
+    private final int[] destination;
 
 
 }
