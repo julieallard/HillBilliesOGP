@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @invar The CubeWorld of each World must be a valid CubeWorld for any
+ * @invar  The CubeWorld of each World must be a valid CubeWorld for any
  *         World.
  *       | isValidCubeWorld(getCubeWorld())
  */
@@ -30,7 +30,7 @@ public class World {
 
     public World(int[][][] CubeWorld) throws UnitIllegalLocation, IllegalArgumentException {
         this.setCubeWorld(CubeWorld);
-        this.WorldMap = new WorldMap<>();
+        this.setWorldMap(new WorldMap<>());
         this.sideSize = CubeWorld.length;
     }
 
@@ -76,7 +76,6 @@ public class World {
      * @return True if and only if the CubeWorld is cubical, in other words
      * 		   if all sub arrays have the same size.
      */
-    // TODO: 22/03/16 isvalidinitcubeworld
     public boolean isValidCubeWorld(int[][][] CubeWorld) {
         for (int[][] YZLevel: CubeWorld) {
             if (YZLevel.length != sideSize) {
@@ -124,55 +123,78 @@ public class World {
                 }
             }
         }
+        this.CubeWorld = CubeWorldFinal;
     }
 
+    /**
+     * Destroy the cube at given location in this world.
+     *
+     * @param  location
+     * 		   The location of the cube to destroy.
+     * @post   The cube at given location is destroyed and becomes air.
+     * @throws UnitIllegalLocation
+     * 		   The given location is not a valid location.
+     * @throws IllegalArgumentException
+     * 		   The cube at given location is not destructible.
+     */    
     public void destroyCube(int[] location) throws IllegalArgumentException, UnitIllegalLocation {
         if (location.length != 3)
             throw new UnitIllegalLocation();
         CubeWorldObject[][][] world = this.getCubeWorld();
-        CubeWorldObject object = world[location[0]][location[1]][location[2]];
-        if (! object.isDestructible())
+        CubeWorldObject cube = world[location[0]][location[1]][location[2]];
+        if (! cube.isDestructible())
         	throw new IllegalArgumentException("This cube is not destructible.");
         this.CubeWorld[location[0]][location[1]][location[2]] = new Air();
-        replace(object, location);
+        replace(cube, location);
     }
 
     private void replace(CubeWorldObject cube, int[] location) {
         if (Math.random() <= 0.25) {
             Rock rock = new Rock();
             if (cube.getClass() == rock.getClass()) {
-                new Boulder(location[0],location[1],location[2],this);
+                new Boulder(location[0], location[1], location[2], this);
             } else {
-                new Log(location[0],location[1],location[2],this);
+                new Log(location[0], location[1], location[2], this);
             }
         }
     }
 
-
-    /** TO BE ADDED TO CLASS HEADING
-     * @invar  The Worldmap of each World must be a valid Worldmap for any
-     *         World.
-     *       | isValidWorldMap(getWorldMap())
-     */
-
-
     /**
-     * Initialize this new World with given Worldmap.
-     *
-     * @param  WorldMap
-     *         The Worldmap for this new World.
-     * @effect The Worldmap of this new World is set to
-     *         the given Worldmap.
-     *       | this.setWorldMap(WorldMap)
-     */
-
-
-    /**
-     * Return the Worldmap of this World.
+     * Return the WorldMap of this World.
      */
     @Basic @Raw
-    public WorldMap getWorldMap() {
+    public WorldMap<VLocation, MovableWorldObject> getWorldMap() {
       return this.WorldMap;
+    }
+    
+    /**
+     * Check whether the given WorldMap is a valid WorldMap for
+     * any World.
+     *  
+     * @param  WorldMap
+     *         The WorldMap to check.
+     * @return Always true.
+    */
+    public static boolean isValidWorldMap(WorldMap<VLocation, MovableWorldObject> WorldMap) {
+    	return true;
+    }
+    
+    /**
+     * Set the WorldMap of this World to the given WorldMap.
+     * 
+     * @param  WorldMap
+     *         The new WorldMap for this World.
+     * @post   The WorldMap of this new World is equal to
+     *         the given WorldMap.
+     * @throws IllegalArgumentException
+     *         The given WorldMap is not a valid Worldmap for any
+     *         world.
+     */
+    @Raw
+    public void setWorldMap(WorldMap<VLocation, MovableWorldObject> WorldMap) throws IllegalArgumentException {
+    	if (! isValidWorldMap(WorldMap))
+    		throw new IllegalArgumentException();
+    	this.WorldMap = WorldMap;
     }
     
 	/**
@@ -225,10 +247,11 @@ public class World {
         	return true;
         if (! (object instanceof Unit))
         	return false;
-        int xLoc=cubeLoc[0];
-        int yLoc=cubeLoc[1];
-        int zLoc=cubeLoc[2];
-        if (zLoc==0){return true;}
+        int xLoc = cubeLoc[0];
+        int yLoc = cubeLoc[1];
+        int zLoc = cubeLoc[2];
+        if (zLoc == 0) 
+        	return true;
         for (int x = xLoc-1; x < xLoc+2; x++) {
             for (int y = yLoc-1; y < yLoc+2; y++) {
                 for (int z = zLoc-1; z < zLoc+2; z++) {
