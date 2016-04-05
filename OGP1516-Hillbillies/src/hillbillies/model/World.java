@@ -175,27 +175,61 @@ public class World {
       return this.WorldMap;
     }
     
-    public List<Unit> getUnitsAt(int[] cubeLocation){
-        return this.WorldMap.getAllUnitsInCube(cubeLocation);
+	/**
+	 * Return all the Units in the cube with given location.
+	 * 
+	 * @param  cubeLocation
+	 * 		   The location of the cube with the objects to check.
+	 * @return A list with all the Units in the cube with given location.
+	 */
+    public List<Unit> getUnitsAt(int[] cubeLocation) {
+        return this.getWorldMap().getAllUnitsInCube(cubeLocation);
     }
-    public List<Log> getLogsAt(int[] cubeLocation){
-        return this.WorldMap.getAllLogsInCube(cubeLocation);
+    
+	/**
+	 * Return all the Logs in the cube with given location.
+	 * 
+	 * @param  cubeLocation
+	 * 		   The location of the cube with the Logs to check.
+	 * @return A list with all the Logs in the cube with given location.
+	 */
+    public List<Log> getLogsAt(int[] cubeLocation) {
+        return this.getWorldMap().getAllLogsInCube(cubeLocation);
     }
-    public List<Boulder> getBouldersAt(int[] cubeLocation){
-        return this.WorldMap.getAllBouldersInCube(cubeLocation);
+    
+	/**
+	 * Return all the Boulders in the cube with given location.
+	 * 
+	 * @param  cubeLocation
+	 * 		   The location of the cube with the Boulders to check.
+	 * @return A list with all the Boulders in the cube with given location.
+	 */
+    public List<Boulder> getBouldersAt(int[] cubeLocation) {
+        return this.getWorldMap().getAllBouldersInCube(cubeLocation);
     }
 
+    /**
+     * Check whether 
+     * 
+     * @param  cubeLoc
+     * 		   The location of the cube to check.
+     * @param  object
+     * 		   The object
+     * @return
+     */
     public boolean canHaveAsCubeLocation(int[] cubeLoc, MovableWorldObject object) {
-        if(!CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].isPassable())
+        if (! CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].isPassable())
         	return false;
         if (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].willSupport())
         	return true;
-        if (!(object instanceof Unit))
+        if (! (object instanceof Unit))
         	return false;
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 for (int z = -1; z < 2; z++) {
-                    if (x==0||y==0||z==0)
+                    if (x == 0 || y == 0 || z == 0)
+                    	continue;
+                    if (x == sideSize-1 || y == sideSize-1 || z == sideSize-1)
                     	continue;
                     if (CubeWorld[x][y][z].willSupport())
                     	return true;
@@ -227,7 +261,7 @@ public class World {
 	 */
     public void addFaction(Faction faction) throws IllegalArgumentException {
 		if (! faction.canHaveAsWorld(this))
-			throw new IllegalArgumentException("World already contains its max no of factions");
+			throw new IllegalArgumentException("This world has already reached its max amount of factions.");
         this.FactionSet.add(faction);
 	}
 
@@ -243,7 +277,7 @@ public class World {
 	}
 
 	/**
-	 * Return the number of factions of this world.
+	 * Return the number of factions in this world.
 	 */
 	public int getNumberOfFactions() {
 		return FactionSet.size();
