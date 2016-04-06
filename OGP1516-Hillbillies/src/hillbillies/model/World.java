@@ -365,7 +365,7 @@ public class World {
 
 
     public static boolean isValidTimeDuration(double dt){
-        return (dt>0 && dt<0.2);
+        return (dt>0&&dt<0.2);
     }
 
     public void advanceTime(double dt)
