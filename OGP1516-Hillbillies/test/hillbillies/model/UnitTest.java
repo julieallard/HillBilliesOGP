@@ -4,10 +4,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by arthurdecloedt on 5/04/16.
- */
 public class UnitTest {
+
+
+
     @Test
     public void getName() throws Exception {
 

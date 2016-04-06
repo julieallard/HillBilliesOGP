@@ -35,7 +35,7 @@ public class World {
     }
 
     private CubeWorldObject[][][] CubeWorld;
-    private final WorldMap<VLocation,MovableWorldObject> WorldMap; 
+    private WorldMap<VLocation,MovableWorldObject> WorldMap;
     
 	/**
 	 * Set collecting references to factions belonging to this world.
@@ -111,14 +111,15 @@ public class World {
                 for (int z = 0; z < sideSize; z++) {
                     switch (CubeWorld[x][y][z]) {
                         case 0:		CubeWorldFinal[x][y][z] = new Air();
-                            		break;
+                                    break;
                         case 1:		CubeWorldFinal[x][y][z] = new Rock();
                             		break;
                         case 2:		CubeWorldFinal[x][y][z] = new Wood();
-                            		break;
+                                    break;
                         case 3:		CubeWorldFinal[x][y][z] = new Workshop();
-                            		break;
-                        default:	throw new IllegalArgumentException("The supplied terrain feature is illegal.");
+                                    break;
+                        default:	CubeWorldFinal[x][y][z] = new Air();
+                                    break;
                     }
                 }
             }
@@ -361,5 +362,15 @@ public class World {
     public boolean canHaveExtraUnits(){
         return (TotalUnitSet.size() < 100);
     }
-	
+
+
+    public static boolean isValidTimeDuration(double dt){
+        return (dt>0 && dt<0.2);
+    }
+
+    public void advanceTime(double dt)
+
+
+    //TODO cave in
+
 }
