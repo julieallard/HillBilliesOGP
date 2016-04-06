@@ -848,7 +848,18 @@ public class Unit extends MovableWorldObject {
 	@Override
 	public void unregister() {
 		this.getWorld().getWorldMap().remove(this.getLocation());
-		//TODO death method
 	}
+    public void dealDamage(double damage){
+        int intDamage = (int) Math.floor(damage);
+        if (intDamage >= this.getCurrentHitPoints()) die();
+        else {this.setCurrentHitPoints(this.getCurrentHitPoints()-intDamage);}
+
+    }
+
+    public void die(){
+        this.unregister();
+        //todo unregisteren uit factions en andere plaatsen waar hij bezig is
+
+    }
     
 }
