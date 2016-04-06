@@ -40,7 +40,7 @@ public class Log extends MovableWorldObject {
     private VLocation location;
     private final World world;
 
-    private final int weight;    
+    p final int weight;    
     private IActivity activity;    
     
     /**
@@ -142,6 +142,7 @@ public class Log extends MovableWorldObject {
      */
     @Basic
     @Raw
+    @Override
     public int getWeight() {
         return weight;
     }

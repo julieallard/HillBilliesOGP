@@ -20,6 +20,9 @@ import java.util.Random;
  * 6: falling
  */
 
+//TODO Units shall gain 20 experience points for
+//every successful attempt at dodging, blocking or attacking. No experience
+//points shall be awarded for unsuccessful attempts.
 public class Defend implements IActivity {
 
     public Defend(Unit defender, Unit attacker) {

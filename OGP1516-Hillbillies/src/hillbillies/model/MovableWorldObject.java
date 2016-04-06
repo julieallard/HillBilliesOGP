@@ -16,4 +16,6 @@ public abstract class MovableWorldObject {
 
     public abstract void activityFinished();
     
+    public abstract int getWeight();
+    
 }

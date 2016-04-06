@@ -55,7 +55,7 @@ public class World {
 	 */
 	private Set<Unit> TotalUnitSet; 
 	
-    private int sideSize;
+    public final int sideSize;
     
     /**
      * Return the CubeWorld of this World.

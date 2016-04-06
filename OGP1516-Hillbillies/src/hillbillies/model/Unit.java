@@ -173,6 +173,39 @@ public class Unit extends MovableWorldObject {
         this.setFaction();
     }
 
+    public Unit(World world, boolean enableDefaultBehavior) {
+    	Random random = new Random();
+    	//TODO randomName
+    	int randomLocX;
+    	int randomLocY;
+    	int randomLocZ;
+    	while (true) {
+    		randomLocX = random.nextInt(world.sideSize);
+    		randomLocY = random.nextInt(world.sideSize);
+    		randomLocZ = random.nextInt(world.sideSize);
+    		int[] randomLoc = new int[]{randomLocX, randomLocY, randomLocZ};
+    		if (world.canHaveAsCubeLocation(randomLoc, this))
+    			break;	
+    	}
+    	int randomWeight = random.nextInt(76) + 25;
+		int randomStrength = random.nextInt(76) + 25;
+		int randomAgility = random.nextInt(76) + 25;
+		int randomToughness = random.nextInt(76) + 25;
+		this.setName(name);        
+    	this.setLocation(randomLocX, randomLocY, randomLocZ);
+        this.setWeight(randomWeight);
+        this.setAgility(randomAgility);
+        this.setStrength(randomStrength);
+        this.setToughness(randomToughness);
+        this.setDefaultBehavior(enableDefaultBehavior);
+        this.setWorld(world);
+        this.setCurrentHitPoints(getMaxPoints());
+        this.setCurrentStaminaPoints(getMaxPoints());
+        this.setOrientation((float) (0.5 * Math.PI));
+        this.setActivity(null);
+        this.setFaction(); 
+    }
+    
     private String name;
     private VLocation location;
     private int weight;
@@ -184,6 +217,7 @@ public class Unit extends MovableWorldObject {
     
     private int hitpoints;
     private int staminapoints;
+    private int xp = 0;
     private float orientation;
     private IActivity activity;
     private IActivity pausedActivity;    
@@ -302,7 +336,12 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the weight of this Unit.
      */
+    @Basic
+    @Raw
+    @Override
     public int getWeight() {
+    	if (isCarrying())
+    		return this.weight + carriedObject.getWeight();
         return this.weight;
     }
 
@@ -448,8 +487,19 @@ public class Unit extends MovableWorldObject {
      * @post   The default behavior state of the unit is equal to the given flag.
      */
     public void setDefaultBehavior(boolean flag) {
-        this.defaultbehaviorenabled = flag;
+        if (flag)
+        	startDefaultBehavior();
+        else
+        	stopDefaultBehavior();
     }    
+    
+    private void startDefaultBehavior() {
+    	this.defaultbehaviorenabled = true;
+    }
+    
+    private void stopDefaultBehavior() {
+    	this.defaultbehaviorenabled = false;
+    }
 
     /**
      * Return the world of this Unit.
@@ -501,7 +551,7 @@ public class Unit extends MovableWorldObject {
      * Return the maximum number of hitpoints or stamina points of this Unit.
      */
     public int getMaxPoints() {
-        return 200 * (this.getWeight() / 100) * (this.getToughness() / 100);
+        return (int) Math.ceil(200 * ((double) this.getWeight() / 100) * ((double) this.getToughness() / 100));
     }
 
     /**
@@ -569,6 +619,45 @@ public class Unit extends MovableWorldObject {
         this.staminapoints = stamPoints;
     }
 
+    /**
+     * Return the number of experience points of this Unit.
+     */
+    public int getCurrentXP() {
+        return this.xp;
+    } 
+ 
+    /**
+     * Check whether the given number of experience points is a valid number of
+     * experience points for any Unit.
+     *  
+     * @param  xp
+     *         The number of experience points to check.
+     * @return True if and only if the given number of experience points are
+     * 		   above zero.
+     *       | result == (points >= 0)
+    */
+    public boolean isValidXP(int xp) {
+    	return xp >= 0;
+    }  
+    
+    /**
+     * Set the number of experience points of this Unit to the given experience points.
+     *
+     * @param  xp
+     * 		   The number of experience points for this Unit.
+     * @pre	   The given number of experience points must be a valid number of experience points
+     * 		   for any Unit.
+     * 		 | isValidXP(xp)
+     * @post   The number of experience points of this Unit is equal to the given number of
+     * 		   experience points.
+     * 		 | new.getCurrentXP() == xp
+     */
+    @Raw
+    public void setCurrentXP(int xp) {
+        assert isValidXP(xp);
+        this.xp = xp;
+    }
+    
     /**
      * Return the orientation of this Unit.
      */
@@ -849,17 +938,21 @@ public class Unit extends MovableWorldObject {
 	public void unregister() {
 		this.getWorld().getWorldMap().remove(this.getLocation());
 	}
-    public void dealDamage(double damage){
+	
+    public void dealDamage(double damage) {
+    	//TODO implement loss of HP when fighting
         int intDamage = (int) Math.floor(damage);
-        if (intDamage >= this.getCurrentHitPoints()) die();
-        else {this.setCurrentHitPoints(this.getCurrentHitPoints()-intDamage);}
-
+        if (intDamage >= this.getCurrentHitPoints())
+        	die();
+        else {
+        	this.setCurrentHitPoints(this.getCurrentHitPoints() - intDamage);
+        	}
     }
 
-    public void die(){
+    public void die() {
         this.unregister();
-        //todo unregisteren uit factions en andere plaatsen waar hij bezig is
-
+        this.getWorld().removeUnit(this);
+        this.getFaction().removeUnit(this);
     }
     
 }

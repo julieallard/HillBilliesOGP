@@ -18,6 +18,9 @@ import ogp.framework.util.Util;
  * 6: falling
  */
 
+//TODO Units shall gain 20 experience points for
+//every successful attempt at dodging, blocking or attacking. No experience
+//points shall be awarded for unsuccessful attempts.
 public class Attack implements IActivity {
 
     public Attack(Unit attacker, Unit defender) throws IllegalTimeException {

@@ -18,6 +18,8 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
  * 6: falling
  */
 
+//TODO Units shall gain 1 experience point for every completed movement step.
+//No experience points shall be awarded if the movement was interrupted.
 public class Movement implements IActivity {
 	
     public Movement(Unit unit, int[] destination) throws UnitIllegalLocation {

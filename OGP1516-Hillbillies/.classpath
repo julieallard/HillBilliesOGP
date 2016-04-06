@@ -10,5 +10,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/AnnotationsDoclets"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit-4.12"/>
+	<classpathentry kind="lib" path="/Users/JulieAllard/Google Drive/Eclipse/AnnotationsDoclets.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

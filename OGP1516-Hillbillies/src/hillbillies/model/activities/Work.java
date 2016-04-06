@@ -20,6 +20,8 @@ import ogp.framework.util.Util;
  * 6: falling
  */
 
+//TODO Units shall gain 10 experience points for every completed work order. No
+//experience points shall be awarded for interrupted activities.
 public class Work implements IActivity {
 	
     public Work(Unit unit, VLocation targetLocation){

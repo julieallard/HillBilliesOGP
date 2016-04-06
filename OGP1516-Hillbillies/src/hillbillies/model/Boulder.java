@@ -144,6 +144,7 @@ public class Boulder extends MovableWorldObject {
      */
     @Basic
     @Raw
+    @Override
     public int getWeight() {
         return weight;
     }
