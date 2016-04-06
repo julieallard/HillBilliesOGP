@@ -368,7 +368,10 @@ public class World {
         return (dt>0&&dt<0.2);
     }
 
-    public void advanceTime(double dt)
+    public void advanceTime(double dt){
+
+    }
+
 
 
     //TODO cave in
