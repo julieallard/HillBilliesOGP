@@ -298,6 +298,11 @@ public class Unit extends MovableWorldObject {
         VLocation location = new VLocation(x, y, z, this);
     	this.setLocation(location);
     }
+    public void setLocation(double[] array) throws UnitIllegalLocation {
+        VLocation location = new VLocation(array[0],array[1],array[2], this);
+        this.setLocation(location);
+    }
+
     
     /**
      * Set the location of this Unit to the given location.
