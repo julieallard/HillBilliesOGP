@@ -7,6 +7,8 @@ import hillbillies.model.activities.NoActivity;
 import hillbillies.model.activities.Work;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
+import java.util.Random;
+
 /**
  * A class of hillbilly Units involving a name, an x, y and z coordinate, a weight,
  * agility, strength, toughness, a facility to enable the default behaviour and a world.
