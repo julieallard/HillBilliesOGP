@@ -7,6 +7,8 @@ import hillbillies.model.IActivity;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
+import java.util.Arrays;
+
 /**
  * The Id's of the activities are the following:
  * 0: noActivity
@@ -26,14 +28,31 @@ public class Movement implements IActivity {
         this.unit = unit;
         if (! canHaveAsDestination(destination))
             throw new UnitIllegalLocation();
-        this.destination = destination;
+        Cube destincube=new Cube(destination);
+        this.destination = destincube;
+        this.pathing= new Astar(unit);
     }
-    
-    private Unit unit;
-    private final int[] destination;	
+    private final Astar pathing;
+    private final Unit unit;
+    private final Cube destination;
+    private Cube nextStop;
+
 	
     @Override
     public void advanceActivityTime(double dt) {
+        if (nextStop==null){
+            boolean foundpath=setNextStop();
+            if (!foundpath){
+                unit.activityFinished();
+                return;}
+        }
+        double[] destinfine=destination.
+        double[] speed=normalizeSpeed()
+
+
+
+
+
 
     }
 
@@ -58,7 +77,7 @@ public class Movement implements IActivity {
     @Basic
     @Raw @Immutable
     public int[] getDestination() {
-      return this.destination;
+      return this.destination.locArray;
     }
 
     /**
@@ -76,5 +95,39 @@ public class Movement implements IActivity {
         	return false;
         return this.unit.getWorld().canHaveAsCubeLocation(destination, unit);
     }
-    
+
+    public boolean setNextStop() {
+        Cube[] path = pathing.FindPath(new Cube(unit.getLocation().getCubeLocation()), destination);
+        if (Arrays.equals(path, new Cube[]{new Cube(new int[]{-1,-1,-1})})){
+            unit.activityFinished();
+            return false;
+        }
+        this.nextStop=path[0];
+        return true;
+
+    }
+    public double getSpeed(){
+        double basespeed=0.75*((double)unit.getStrength()+unit.getAgility())/((double)unit.getWeight());
+        double realSpeed;
+        double zDiff= (unit.getLocation().getZLocation()-(((double)nextStop.locArray[2])+0.5));
+        if (zDiff>0){realSpeed=basespeed*1.2;}
+        else if(zDiff<0) {realSpeed=basespeed*0.5;}
+        else {realSpeed=basespeed;}
+        if (unit.isSprinting()){
+            realSpeed=realSpeed*2;
+        }
+        return realSpeed;
+    }
+    public static double[] normalizeSpeed(double[] startArray,double[] startcube){
+        double dx=startcube[0]-startArray[0];
+        double dy=startcube[1]-startArray[1];
+        double dz=startcube[2]-startArray[2];
+        double norm=Math.sqrt(Math.pow(dx,2)+Math.pow(dy,2)+Math.pow(dz,2));
+        double newX=dx/norm;
+        double newY=dy/norm;
+        double newZ=dy/norm;
+        assert (Math.pow(dx,2)+Math.pow(dy,2)+Math.pow(dz,2)==1);
+        return new double[]{newX,newY,newZ};
+    }
+
 }

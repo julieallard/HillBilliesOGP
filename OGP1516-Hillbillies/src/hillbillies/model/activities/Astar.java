@@ -9,15 +9,13 @@ import java.util.*;
 public class Astar {
 
 
-    private Astar(int[] destination,Unit unit){
-        this.finaldestination=new Cube(destination);
+    public Astar(Unit unit){
         this.unit=unit;
     }
-    private final Cube finaldestination;
 
     private final Unit unit;
 
-    protected Cube[] FindPath(Unit unit, Cube startcube, Cube destination) throws RuntimeException {
+    protected Cube[] FindPath(Cube startcube, Cube destination) throws RuntimeException {
 
         //nodes already discovered and evaluated
         Set<Cube> closedSet= Collections.emptySet();
@@ -80,8 +78,7 @@ public class Astar {
 
             }
         }
-        throw new RuntimeException("A* has failed to find a shortest path");
-
+        return new Cube[]{new Cube(new int[]{-1,-1,-1})};
     }
 
     private double costEstimatefrom(Cube node,Cube destination){
@@ -100,7 +97,7 @@ public class Astar {
     }
 
     private Set<Cube> getAllNeighbours(Cube cube){
-        Iterable<Cube> intermediate=cube.generateNeighbours();
+        Set<Cube> intermediate=cube.generateNeighbours();
         Set<Cube> set=Collections.EMPTY_SET;
         for (Cube possibleCube:
                 intermediate) {
@@ -111,4 +108,6 @@ public class Astar {
         }
         return set;
     }
+
+
 }
