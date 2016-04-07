@@ -481,25 +481,35 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Set the state of default behavior according to the given flag.
+     * Set the state of default behavior of this Unit according to the given flag.
      *
      * @param  flag
-     * 		   The default behavior state of the unit.
-     * @post   The default behavior state of the unit is equal to the given flag.
+     * 		   The default behavior state to be registered.
+     * @post   The new default behavior state of this Unit is equal to the given flag.
+     * 		 | this.defaultbehaviorenabled == flag
      */
     public void setDefaultBehavior(boolean flag) {
-        if (flag)
-        	startDefaultBehavior();
-        else
-        	stopDefaultBehavior();
+        this.defaultbehaviorenabled = flag;
     }    
     
+    /**
+     * Enable the default behavior of this Unit.
+     * 
+     * @effect The default behavior state of this Unit is set to true.
+     * 		 | setDefaultBehavior(true)
+     */
     private void startDefaultBehavior() {
-    	this.defaultbehaviorenabled = true;
+    	setDefaultBehavior(true);
     }
-    
+   
+    /**
+     * Disable the default behavior of this Unit.
+     * 
+     * @effect The default behavior state of this Unit is set to false.
+     * 		 | setDefaultBehavior(false)
+     */
     private void stopDefaultBehavior() {
-    	this.defaultbehaviorenabled = false;
+    	setDefaultBehavior(false);
     }
 
     /**
@@ -755,16 +765,37 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Set the state of carrying according to the given flag.
+     * Set the state of carrying of this Unit according to the given flag.
      *
      * @param  flag
-     * 		   The carrying state of the unit.
-     * @post   The carrying state of the unit is equal to the given flag.
+     * 		   The carrying state to be registered.
+     * @post   The new carrying state of this Unit is equal to the given flag.
+     * 		 | this.iscarrying == flag
      */
-    private void setCarrying(boolean flag) {
+    public void setCarrying(boolean flag) {
         this.iscarrying = flag;
+    }    
+    
+    /**
+     * Let this Unit carry an object.
+     * 
+     * @effect The carrying state of this Unit is set to true.
+     * 		 | setCarrying(true)
+     */
+    private void startCarrying() {
+    	setCarrying(true);
     }
-
+   
+    /**
+     * Let this Unit stop carrying an object.
+     * 
+     * @effect The carrying state of this Unit is set to false.
+     * 		 | setCarrying(false)
+     */
+    private void stopCarrying() {
+    	setCarrying(false);
+    }
+    
     /**
      * Return the object carried by this Unit.
      */
@@ -824,25 +855,35 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Set the state of sprinting according to the given flag.
+     * Set the state of sprinting of this Unit according to the given flag.
      *
      * @param  flag
-     * 		   The sprinting state of the unit.
-     * @post   The sprinting state of the unit is equal to the given flag.
+     * 		   The sprinting state to be registered.
+     * @post   The new sprinting state of this Unit is equal to the given flag.
+     * 		 | this.issprinting == flag
      */
-    private void setSprinting(boolean flag) {
-        if (flag)
-        	startSprinting();
-        else
-        	stopSprinting();
+    public void setSprinting(boolean flag) {
+        this.issprinting = flag;
     }    
-
+    
+    /**
+     * Let this Unit sprint.
+     * 
+     * @effect The sprinting state of this Unit is set to true.
+     * 		 | setSprinting(true)
+     */
     private void startSprinting() {
-    	this.issprinting = true;
+    	setSprinting(true);
     }
-
+   
+    /**
+     * Let this Unit stop sprinting.
+     * 
+     * @effect The sprinting state of this Unit is set to false.
+     * 		 | setSprinting(false)
+     */
     private void stopSprinting() {
-    	this.issprinting = false;
+    	setSprinting(false);
     }
     
     /**
