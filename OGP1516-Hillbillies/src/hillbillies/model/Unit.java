@@ -224,6 +224,7 @@ public class Unit extends MovableWorldObject {
     private boolean hasPausedActivity;
     private boolean iscarrying = false;
     private MovableWorldObject carriedObject;
+    private boolean issprinting = false;
     private Faction faction;
     
     /**
@@ -815,6 +816,35 @@ public class Unit extends MovableWorldObject {
         carriedObject.setLocation(this.getLocation());
     }
 
+    /**
+     * Return whether the Unit is sprinting.
+     */    
+    public boolean isSprinting() {
+        return issprinting;
+    }
+
+    /**
+     * Set the state of sprinting according to the given flag.
+     *
+     * @param  flag
+     * 		   The sprinting state of the unit.
+     * @post   The sprinting state of the unit is equal to the given flag.
+     */
+    private void setSprinting(boolean flag) {
+        if (flag)
+        	startSprinting();
+        else
+        	stopSprinting();
+    }    
+
+    private void startSprinting() {
+    	this.issprinting = true;
+    }
+
+    private void stopSprinting() {
+    	this.issprinting = false;
+    }
+    
     /**
      * No documentation required.
      */
