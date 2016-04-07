@@ -940,8 +940,7 @@ public class Unit extends MovableWorldObject {
      * @post   The Unit conducts work at the target cube.
      */      
     public void work(int[] targetCube) {
-        VLocation targetLocation = new VLocation(targetCube[0], targetCube[1], targetCube[2], this);
-        Work work = new Work(this, targetLocation);
+        Work work = new Work(this, targetCube);
         if (! interruptCurrentAct(work))
         	return;
         this.setActivity(work);
