@@ -823,7 +823,7 @@ public class Unit extends MovableWorldObject {
      *         Unit.
      *       | ! canBeCarried(getCarriedObject())
      */    
-    protected void carry(MovableWorldObject toBeCarriedObject) throws IllegalArgumentException {
+    public void carry(MovableWorldObject toBeCarriedObject) throws IllegalArgumentException {
         if (canBeCarried(toBeCarriedObject)) {
             this.carriedObject = toBeCarriedObject;
             this.setCarrying(true);
@@ -847,7 +847,8 @@ public class Unit extends MovableWorldObject {
      * @post   The carried object of this Unit will be set to null,
      * 		   the carrying state of this Unit will be set on false
      * 		   and the object will not considered as present in the world.
-     */      
+     */
+    //Todo volgens mij is het bovenstaande verkeerd +moet het object nog geregisterd worden?
     public void drop(MovableWorldObject carriedObject) {
         this.carriedObject = null;
         this.iscarrying = false;
