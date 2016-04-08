@@ -176,8 +176,8 @@ public class Unit extends MovableWorldObject {
 
     public Unit(World world, boolean enableDefaultBehavior) {
     	Random random = new Random();
-    	//TODO randomName
-    	int randomLocX;
+        String name = getRandomName(random);
+        int randomLocX;
     	int randomLocY;
     	int randomLocZ;
     	while (true) {
@@ -204,7 +204,8 @@ public class Unit extends MovableWorldObject {
         this.setCurrentStaminaPoints(getMaxPoints());
         this.setOrientation((float) (0.5 * Math.PI));
         this.setActivity(null);
-        this.setFaction(); 
+        this.setFaction();
+        this.setName(name);
     }
     
     private String name;
