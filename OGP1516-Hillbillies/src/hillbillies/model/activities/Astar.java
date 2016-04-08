@@ -85,7 +85,7 @@ public class Astar {
 
     private Set<Cube> getAllNeighbours(Cube cube){
         Set<Cube> intermediate = cube.generateNeighbours();
-        Set<Cube> set = Collections.EMPTY_SET;
+        Set<Cube> set = new HashSet<Cube>();
         for (Cube possibleCube: intermediate) {
             if (unit.getWorld().canHaveAsCubeLocation(possibleCube.locArray, unit)) {
                 set.add(possibleCube);
