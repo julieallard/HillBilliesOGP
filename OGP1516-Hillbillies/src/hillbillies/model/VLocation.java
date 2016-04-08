@@ -50,19 +50,7 @@ public class VLocation {
         this.ZLocation = ZLocation;
     }
     
-    public VLocation(double YLocation, double XLocation,double ZLocation) throws UnitIllegalLocation {
-        if (! canHaveAsXLocation(XLocation))
-            throw new UnitIllegalLocation();
-        this.XLocation = XLocation;
-    	if (! canHaveAsYLocation(YLocation))
-    		throw new UnitIllegalLocation();
-        this.YLocation = YLocation;        
-        if (! canHaveAsZLocation(ZLocation))
-            throw new UnitIllegalLocation();
-        this.ZLocation = ZLocation;
-    }
-    
-    private MovableWorldObject occupant;
+    public final MovableWorldObject occupant;
     private final double XLocation;
     private final double YLocation;
     private final double ZLocation;
@@ -163,22 +151,6 @@ public class VLocation {
         array[2] = this.getZLocation();
         return array;
     }
-    
-    /**
-     * Return the straight distance between location 1 and location 2.
-     * 
-     * @param  loc1
-     * 		   The firstlocation.
-     * @param  loc2
-     * 		   The second location. 
-     * @return The straight distance between location 1 and location 2.
-     */
-    public static double getStraightDist(VLocation loc1, VLocation loc2) {
-        double deltX2 = Math.pow(loc2.getXLocation() - loc1.getXLocation(), 2);
-        double deltY2 = Math.pow(loc2.getYLocation() - loc1.getYLocation(), 2);
-        double deltZ2 = Math.pow(loc2.getZLocation() - loc1.getZLocation(), 2);
-        return Math.sqrt(deltX2 + deltY2 + deltZ2);
-    }
 
     /**
      * Return an array with the x, y and z coordinate of cube that VLocation is
@@ -193,7 +165,7 @@ public class VLocation {
     }
     
     public static boolean isValidLocation(VLocation location){
-        return true; // TODO: 26/03/16 implement 
+        return location.occupant.getWorld().canHaveAsCubeLocation(location.getCubeLocation(),location.occupant);
     }
 
 }

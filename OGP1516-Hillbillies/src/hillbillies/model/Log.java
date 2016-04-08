@@ -38,9 +38,9 @@ public class Log extends MovableWorldObject {
     }
 
     private VLocation location;
-    private final World world;
+    private World world;
 
-    p final int weight;    
+    final int weight;
     private IActivity activity;    
     
     /**
@@ -86,9 +86,15 @@ public class Log extends MovableWorldObject {
     @Override
     @Raw
     public void setLocation(VLocation location) throws UnitIllegalLocation {
-        if (! isValidLocation(location)) throw new UnitIllegalLocation();
+        if ((!isValidLocation(location))||location.occupant==this) throw new UnitIllegalLocation("Illegal location was set to Log");
         this.location = location;
         this.register(location);
+    }
+
+    @Override
+    public void setLocation(double[] array) {
+        VLocation location = new VLocation(array[0], array[1], array[2], this);
+        this.setLocation(location);
     }
 
     @Override

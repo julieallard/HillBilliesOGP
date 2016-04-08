@@ -7,9 +7,6 @@ import hillbillies.model.activities.NoActivity;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
 import java.util.Random;
-
-import static hillbillies.model.Unit.isValidlocation;
-
 public class Boulder extends MovableWorldObject {
     /**
      * Initialize this new Boulder with given x, y and z coordinate and given world.
@@ -40,7 +37,7 @@ public class Boulder extends MovableWorldObject {
     }
 
     private VLocation location;
-    private final World world;
+    private World world;
 
     private final int weight;    
     private IActivity activity;    
@@ -88,10 +85,17 @@ public class Boulder extends MovableWorldObject {
     @Override
     @Raw
     public void setLocation(VLocation location) throws UnitIllegalLocation {
-        if (! isValidLocation(location)) throw new UnitIllegalLocation();
+        if ((!isValidLocation(location))||location.occupant == this) throw new UnitIllegalLocation("Illegal location was set to Boulder");
         this.location = location;
         this.register(location);
     }
+
+    @Override
+    public void setLocation(double[] array) {
+        VLocation location = new VLocation(array[0], array[1], array[2], this);
+        this.setLocation(location);
+    }
+
 
     @Override
     public void register(VLocation location) {

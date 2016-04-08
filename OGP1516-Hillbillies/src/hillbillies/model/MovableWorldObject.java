@@ -6,6 +6,9 @@ public abstract class MovableWorldObject {
 
     public abstract void setLocation(VLocation location);
 
+    public abstract void setLocation(double[] location);
+
+
     public abstract VLocation getLocation();
 
     public abstract void register(VLocation location);
@@ -17,5 +20,6 @@ public abstract class MovableWorldObject {
     public abstract void activityFinished();
     
     public abstract int getWeight();
+
     
 }

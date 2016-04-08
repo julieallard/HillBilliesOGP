@@ -355,7 +355,8 @@ public class Unit extends MovableWorldObject {
     @Raw
     @Override
     public void setLocation(VLocation location) throws UnitIllegalLocation {
-        if (! isValidLocation(location))
+
+        if ((!isValidLocation(location))||location.occupant==this)
             throw new UnitIllegalLocation();
         this.location = location;
         this.register(location);
@@ -367,7 +368,7 @@ public class Unit extends MovableWorldObject {
     }
     
     /**
-     * Check whether the given propert is a valid property for
+     * Check whether the given property is a valid property for
      * any Unit.
      *  
      * @param  property
@@ -907,7 +908,8 @@ public class Unit extends MovableWorldObject {
     public void drop(MovableWorldObject carriedObject) {
         this.carriedObject = null;
         this.iscarrying = false;
-        carriedObject.setLocation(this.getLocation());
+        double[] locarray=this.getLocation().getArray();
+        carriedObject.setLocation(locarray);
     }
 
     /**
