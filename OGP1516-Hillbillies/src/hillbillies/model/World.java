@@ -15,7 +15,7 @@ import java.util.Set;
 
 /**
  * @invar  The CubeWorld of each World must be a valid CubeWorld for any
- *         World.
+ *         World. 
  *       | isValidCubeWorld(getCubeWorld())
  */
 public class World {
