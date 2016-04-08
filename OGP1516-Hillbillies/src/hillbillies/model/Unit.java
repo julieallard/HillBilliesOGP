@@ -193,7 +193,7 @@ public class Unit extends MovableWorldObject {
 		int randomStrength = random.nextInt(76) + 25;
 		int randomAgility = random.nextInt(76) + 25;
 		int randomToughness = random.nextInt(76) + 25;
-		this.setName(name);        
+		//this.setName(name);        
     	this.setLocation(randomLocX, randomLocY, randomLocZ);
         this.setWeight(randomWeight);
         this.setAgility(randomAgility);
@@ -295,16 +295,52 @@ public class Unit extends MovableWorldObject {
         return VLocation.isValidLocation(location);
     }
 
+    /**
+     * Set the location of this Unit to the given x, y and z coordinate.
+     *
+     * @param  x
+     * 		   The x coordinate for this Unit.
+     * @param  y
+     * 		   The y coordinate for this Unit.
+     * @param  z
+     * 		   The z coordinate for this Unit.
+     * @post   The x coordinate of the location of this new Unit is equal to
+     * 		   the given x coordinate.
+     * 		 | new.getLocation() == location
+     * @post   The y coordinate of the location of this new Unit is equal to
+     * 		   the given y coordinate.
+     * 		 | new.getLocation() == location
+     * @post   The z coordinate of the location of this new Unit is equal to
+     * 		   the given z coordinate.
+     * 		 | new.getLocation() == location
+     * @throws UnitIllegalLocation
+     * 		   The given location is not a valid location for any
+     *         Unit.
+     *       | ! isValidLocation(getLocation())
+     */
     @Override
     public void setLocation(double x, double y, double z) throws UnitIllegalLocation {
         VLocation location = new VLocation(x, y, z, this);
     	this.setLocation(location);
     }
+    
+    /**
+     * Set the location of this Unit to the given array of x, y and z coordinate.
+     *
+     * @param  array
+     * 		   The array of the new x, y and z coordinate for this Unit.
+     * @post   The x, y and z coordinate of the location of this new Unit is equal to
+     * 		   the given x, y and z coordinate.
+     * 		 | new.getLocation() == location
+     * @throws UnitIllegalLocation
+     * 		   The given location is not a valid location for any
+     *         Unit.
+     *       | ! isValidLocation(getLocation())
+     */
     public void setLocation(double[] array) throws UnitIllegalLocation {
-        VLocation location = new VLocation(array[0],array[1],array[2], this);
+        VLocation location = new VLocation(array[0], array[1], array[2], this);
         this.setLocation(location);
     }
-
     
     /**
      * Set the location of this Unit to the given location.
@@ -333,10 +369,33 @@ public class Unit extends MovableWorldObject {
     	this.getWorld().getWorldMap().put(location, this);
     }
     
+    /**
+     * Check whether the given propert is a valid property for
+     * any Unit.
+     *  
+     * @param  property
+     *         The property to check.
+     * @return True if and only if the property number is equal or higher than 1 and if
+     * 		   it is equal or lower than 200, inclusive.
+     *       | result == (property >= 1
+     *       		&& property <= 200)
+    */
     public boolean isValidProperty(int property) {
     	return (property >= 1 && property <= 200);
     }
     
+    /**
+     * Check whether the given weight is a valid weight for
+     * any Unit.
+     *  
+     * @param  weight
+     *         The weight to check.
+     * @return True if and only if the property number is equal or higher than 1, if
+     * 		   it is equal or lower than 200, inclusive, and if it is equal or higher
+     * 		   than the Unit's minimum weight.
+     *       | result == (weight >= 1 && weight <= 200
+     *       		&& weight >= 0.5 * (this.getStrength() + this.getAgility()))
+    */
     public boolean isValidWeight(int weight) {
     	return (weight >= 1 && weight <= 200 && weight >= 0.5 * (this.getStrength() + this.getAgility()));
     }
@@ -845,10 +904,9 @@ public class Unit extends MovableWorldObject {
      * @param  carriedObject
      * 		   The object which needs to be dropped by the unit.
      * @post   The carried object of this Unit will be set to null,
-     * 		   the carrying state of this Unit will be set on false
-     * 		   and the object will not considered as present in the world.
+     * 		   the carrying state of this Unit will be set to false
+     * 		   and the object will be considered as present in the world.
      */
-    //Todo volgens mij is het bovenstaande verkeerd +moet het object nog geregisterd worden?
     public void drop(MovableWorldObject carriedObject) {
         this.carriedObject = null;
         this.iscarrying = false;
@@ -913,6 +971,7 @@ public class Unit extends MovableWorldObject {
         }
         return true;
         //TODO split in different functions coz this shit sucks
+        //create isinterrupted boolean? + set + start~ + stop~?
     }
 
     /**
@@ -953,9 +1012,41 @@ public class Unit extends MovableWorldObject {
      * 		   The Unit this Unit is attacking.
      * @post   The Unit conducts an attack to the defender and the defender conducts
      * 		   a defence against this Unit.
+     * @throws IllegalArgumentException
+     * 		   The attack cannot be conducted
      */      
-    public void attack(Unit defender) {
+    public void attack(Unit defender) throws IllegalArgumentException {
         //TODO check if can attack and if defender is not falling
+    	if (this.getFaction() == defender.getFaction())
+    		throw new IllegalArgumentException("The Units cannot belong to"
+    				+ "the same faction.");
+    	int ACubeX = this.getLocation().getCubeLocation()[0];
+    	int ACubeY = this.getLocation().getCubeLocation()[1];
+    	int ACubeZ = this.getLocation().getCubeLocation()[2];
+    	int DCubeX = defender.getLocation().getCubeLocation()[0];
+    	int DCubeY = defender.getLocation().getCubeLocation()[1];
+    	int DCubeZ = defender.getLocation().getCubeLocation()[2];
+    	boolean hasneighboringX = false;
+    	boolean hasneighboringY = false;
+    	boolean hasneighboringZ = false;
+    	for (int x = ACubeX-1; x < ACubeX+2; x++) {
+    		if (x == DCubeX)
+    			hasneighboringX = true;
+    	}
+        for (int y = ACubeY-1; y < ACubeY+2; y++) {
+    		if (y == DCubeY)
+    			hasneighboringY = true;
+    	}
+        for (int z = ACubeZ-1; z < ACubeZ+2; z++) {
+    		if (z == DCubeZ)
+    			hasneighboringZ = true;
+    	}
+        if (! (hasneighboringX && hasneighboringY && hasneighboringZ))
+        	throw new IllegalArgumentException("Units can only attack other "
+        			+ "Units in the same or a neighboring cube of the game world");
+    	if (defender.getActivity().getId() == 6)
+    		throw new IllegalArgumentException("Units cannot attack other "
+    				+ "Units that are falling.");
         Attack attack = new Attack(this, defender);
         if (! this.interruptCurrentAct(attack))
         	return;

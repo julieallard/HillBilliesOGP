@@ -34,8 +34,6 @@ public class World {
         this.sideSize = CubeWorld.length;
     }
 
-
-
     private CubeWorldObject[][][] CubeWorld;
     private WorldMap<VLocation,MovableWorldObject> WorldMap;
     
@@ -243,7 +241,8 @@ public class World {
      * @return
      */
     public boolean canHaveAsCubeLocation(int[] cubeLoc, MovableWorldObject object) {
-        if (cubeLoc.length!=3) return false;
+        if (cubeLoc.length != 3)
+        	return false;
         if (! CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].isPassable())
         	return false;
         if (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].willSupport())
@@ -365,32 +364,50 @@ public class World {
         return (TotalUnitSet.size() < 100);
     }
 
-
-    public static boolean isValidTimeDuration(double dt){
-        return (dt>0&&dt<0.2);
+    /**Check whether the time duration is valid.
+     * 
+     * @param  dt
+     * 		   The time duration to check.
+     * @return True if and only if the time duration is greater or equal with zero
+     * 		   and lower than 0.2.
+     */
+    public static boolean isValidTimeDuration(double dt) {
+        return (dt >= 0 && dt < 0.2);
     }
 
+    /**
+     * Invoke the advanceTime methods of all game objects that are part of the World
+     * with parameter dt.
+     * 
+     * @param  dt
+     * 		   The time duration.
+     */
     public void advanceTime(double dt){
 
     }
 
-    public int getCubeAt(int[] loc){
+    public int getCubeAt(int[] loc) {
         CubeWorldObject cube;
-
-        try {cube=this.CubeWorld[loc[0]][loc[1]][loc[2]];}
-        catch (IndexOutOfBoundsException exception){
+        try {
+        	cube = this.CubeWorld[loc[0]][loc[1]][loc[2]];
+        } catch (IndexOutOfBoundsException exception) {
             throw new IllegalArgumentException("An illegal cubelocation was inspected getCubeAt");
         }
-
-        if (cube instanceof Air) return 0;
-        if (cube instanceof Rock) return 1;
-        if (cube instanceof Wood) return 2;
-        if (cube instanceof Workshop) return 3;
+        if (cube instanceof Air)
+        	return 0;
+        if (cube instanceof Rock)
+        	return 1;
+        if (cube instanceof Wood)
+        	return 2;
+        if (cube instanceof Workshop)
+        	return 3;
         throw new IllegalArgumentException();
     }
 
-
-
-    //TODO cave in
-
+    public void caveIn(VLocation location, CubeWorldObject object) {
+    	//TODO cave in
+    	if (! object.isDestructible())
+    		return;
+    }
+    
 }
