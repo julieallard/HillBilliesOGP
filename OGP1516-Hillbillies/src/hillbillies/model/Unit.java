@@ -697,46 +697,6 @@ public class Unit extends MovableWorldObject {
         assert isValidPoints(stamPoints);
         this.staminapoints = stamPoints;
     }
-
-    /**
-     * Return the number of experience points of this Unit.
-     */
-    public int getCurrentXP() {
-        return this.xp;
-    } 
- 
-    /**
-     * Check whether the given number of experience points is a valid number of
-     * experience points for any Unit.
-     *  
-     * @param  xp
-     *         The number of experience points to check.
-     * @return True if and only if the given number of experience points are
-     * 		   above zero.
-     *       | result == (points >= 0)
-    */
-    public boolean isValidXP(int xp) {
-    	return xp >= 0;
-    }  
-    
-    /**
-     * Set the number of experience points of this Unit to the given experience points.
-     *
-     * @param  xp
-     * 		   The number of experience points for this Unit.
-     * @pre	   The given number of experience points must be a valid number of experience points
-     * 		   for any Unit.
-     * 		 | isValidXP(xp)
-     * @post   The number of experience points of this Unit is equal to the given number of
-     * 		   experience points.
-     * 		 | new.getCurrentXP() == xp
-     */
-    @Raw
-    public void setCurrentXP(int xp) {
-        assert isValidXP(xp);
-        this.xp = xp;
-    }
-    
     /**
      * Return the orientation of this Unit.
      */
@@ -1139,6 +1099,78 @@ public class Unit extends MovableWorldObject {
                 "Ferdinand Fikes", "Gary Gander","Hans Harnish","Julie Allard","Arthur Decloedt"};
         return namearr[index];
 
+    }
+    
+    /**
+     * @invar  The experience of each Unit must be a valid experience for any
+     *         Unit.
+     *       | isValidXp(getXp())
+     */
+    
+    /**
+     * Initialize this new Unit with given experience.
+     * 
+     * @param  Xp
+     *         The experience for this new Unit.
+     * @post   If the given experience is a valid experience for any Unit,
+     *         the experience of this new Unit is equal to the given
+     *         experience. Otherwise, the experience of this new Unit is equal
+     *         to 0.
+     *       | if (isValidXp(Xp))
+     *       |   then new.getXp() == Xp
+     *       |   else new.getXp() == 0
+     */
+    public Unit(int Xp) {
+      if (! isValidXp(Xp))
+        Xp = 0;
+      setXp(Xp);
+    }
+    
+    /**
+     * Return the experience of this Unit.
+     */
+    @Basic @Raw
+    public int getXp() {
+      return this.Xp;
+    }
+    
+    /**
+     * Check whether the given experience is a valid experience for
+     * any Unit.
+     *  
+     * @param  Xp
+     *         The experience to check.
+     * @return 
+     *       | result == xp>0
+     */
+    public static boolean isValidXp(int Xp) {
+      return (Xp>=0);
+    }
+    
+    /**
+     * Set the experience of this Unit to the given experience.
+     * 
+     * @param  Xp
+     *         The new experience for this Unit.
+     * @post   If the given experience is a valid experience for any Unit,
+     *         the experience of this new Unit is equal to the given
+     *         experience.
+     *       | if (isValidXp(Xp))
+     *       |   then new.getXp() == Xp
+     */
+    @Raw
+    public void setXp(int Xp) {
+      if (isValidXp(Xp))
+        this.Xp = Xp;
+    }
+    
+    /**
+     * Variable registering the experience of this Unit.
+     */
+    private int Xp;
+
+    public void addXp(int xp){
+        this.setXp(this.getXp()+xp);
     }
     
 }
