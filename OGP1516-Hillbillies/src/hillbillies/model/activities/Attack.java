@@ -33,6 +33,9 @@ public class Attack implements IActivity {
     private final Unit defender;
     private double timeLeft;
     
+	/**
+	 * No documentation required.
+	 */
     @Override
     public void advanceActivityTime(double dt) {
         if (Util.fuzzyGreaterThanOrEqualTo(dt, this.returnSimpleTimeLeft())) {

@@ -15,6 +15,9 @@ import hillbillies.model.IActivity;
 
 public class NoActivity implements IActivity {
 
+	/**
+	 * No documentation required.
+	 */
     @Override
     public void advanceActivityTime(double dt) {
 
