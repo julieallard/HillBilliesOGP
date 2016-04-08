@@ -5,8 +5,6 @@ import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.CubeObjects.CubeWorldObject;
 import hillbillies.model.exceptions.UnitIllegalLocation;
-import hillbillies.model.exceptions.property_type;
-
 public class VLocation {
     
     /**
@@ -37,7 +35,7 @@ public class VLocation {
      *         This new VLocation cannot have the given ZLocation as its ZLocation.
      *       | ! canHaveAsZLocation(this.getZLocation())
      */
-    public VLocation(double XLocation, double YLocation, double ZLocation, Object occupant) throws UnitIllegalLocation {
+    public VLocation(double XLocation, double YLocation, double ZLocation, MovableWorldObject occupant) throws UnitIllegalLocation {
         if (! canHaveAsOccupant(occupant))
         	throw new IllegalArgumentException("IllegalOccupantAssignedToLocation");
         this.occupant = occupant;
@@ -64,7 +62,7 @@ public class VLocation {
         this.ZLocation = ZLocation;
     }
     
-    private Object occupant;
+    private MovableWorldObject occupant;
     private final double XLocation;
     private final double YLocation;
     private final double ZLocation;
@@ -80,7 +78,7 @@ public class VLocation {
      *       		|| object instanceof CubeWorldObject)
      */
     public boolean canHaveAsOccupant(Object object) {
-        return (object instanceof MovableWorldObject || object instanceof CubeWorldObject);
+        return (object instanceof MovableWorldObject);
     }
  
     /**
@@ -104,7 +102,7 @@ public class VLocation {
      */
     @Raw
     public boolean canHaveAsXLocation(double XLocation) {
-        return (XLocation >= 0 && XLocation <= 50);
+        return (XLocation >= 0 && XLocation <= this.occupant.getWorld().sideSize);
     }
     
     /**
@@ -122,13 +120,13 @@ public class VLocation {
      *  
      * @param  YLocation
      *         The y coordinate to check.
-     * @return True if and only if the y coordinate is between 0 and 50.
+     * @return True if and only if the y coordinate is between 0 and size of the sides of this world.
      *       | result == (Ylocation >=0
-     *       		&& YLocation <= 50)
+     *       		&& YLocation <= this.occupant.getWorld().sideSize)
      */
     @Raw
     public boolean canHaveAsYLocation(double YLocation) {
-        return (YLocation >= 0 && YLocation <= 50);
+        return (YLocation >= 0 && YLocation <= this.occupant.getWorld().sideSize);
     }
 
     /**
@@ -152,7 +150,7 @@ public class VLocation {
      */
     @Raw
     public boolean canHaveAsZLocation(double ZLocation) {
-        return (ZLocation >= 0 && ZLocation <= 50);
+        return (ZLocation >= 0 && ZLocation <= this.occupant.getWorld().sideSize);
     }
 
     /**

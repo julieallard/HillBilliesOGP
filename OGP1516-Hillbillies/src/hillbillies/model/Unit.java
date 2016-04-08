@@ -1,10 +1,7 @@
 
 package hillbillies.model;
 import be.kuleuven.cs.som.annotate.*;
-import hillbillies.model.activities.Attack;
-import hillbillies.model.activities.Defend;
-import hillbillies.model.activities.NoActivity;
-import hillbillies.model.activities.Work;
+import hillbillies.model.activities.*;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
 import java.util.Random;
@@ -957,9 +954,14 @@ public class Unit extends MovableWorldObject {
      */
     public void advanceTime(double dt) {
         if (this.getActivity().getId() == 0 && isDefaultBehaviorEnabled()) {
-            behaveDefault(dt); //TODO create this method
+            behaveDefault();
         }
         this.getActivity().advanceActivityTime(dt);
+    }
+
+    public void behaveDefault(){
+        this.setActivity(new Rest(this));
+        //TODO flesh out this method
     }
 
     private boolean interruptCurrentAct(IActivity newActivity) {
@@ -970,8 +972,6 @@ public class Unit extends MovableWorldObject {
             this.pausedActivity = this.getActivity();
         }
         return true;
-        //TODO split in different functions coz this shit sucks
-        //create isinterrupted boolean? + set + start~ + stop~?
     }
 
     /**
@@ -1016,7 +1016,6 @@ public class Unit extends MovableWorldObject {
      * 		   The attack cannot be conducted
      */      
     public void attack(Unit defender) throws IllegalArgumentException {
-        //TODO check if can attack and if defender is not falling
     	if (this.getFaction() == defender.getFaction())
     		throw new IllegalArgumentException("The Units cannot belong to"
     				+ "the same faction.");
@@ -1042,11 +1041,9 @@ public class Unit extends MovableWorldObject {
     			hasneighboringZ = true;
     	}
         if (! (hasneighboringX && hasneighboringY && hasneighboringZ))
-        	throw new IllegalArgumentException("Units can only attack other "
-        			+ "Units in the same or a neighboring cube of the game world");
+        	throw new IllegalArgumentException("Units can only attack other Units in the same or a neighboring cube of the game world");
     	if (defender.getActivity().getId() == 6)
-    		throw new IllegalArgumentException("Units cannot attack other "
-    				+ "Units that are falling.");
+    		throw new IllegalArgumentException("Units cannot attack other Units that are falling.");
         Attack attack = new Attack(this, defender);
         if (! this.interruptCurrentAct(attack))
         	return;
