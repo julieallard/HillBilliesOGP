@@ -4,6 +4,8 @@ import be.kuleuven.cs.som.annotate.*;
 import hillbillies.model.activities.*;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -1121,6 +1123,20 @@ public class Unit extends MovableWorldObject {
         this.unregister();
         this.getWorld().removeUnit(this);
         this.getFaction().removeUnit(this);
+    }
+
+    public String getRandomName(Random random){
+        int index=random.nextInt(51);
+        String[] namearr=new String[]{"Alfonso Addie","Terrence Truluck","Russel Rouse","Fritz Forst","Mckinley Marrow",
+                "Sidney Suttles","Todd Tamura","Lee Lassiter","Sonny Sumpter","Tony Thames","Phil Pittman","Jonathon Jenning",
+                "Clifford Conerly","Tod Tegeler","Lindsay Loken","Bud Bateman","Bradly Bedgood","Reed Rentas","Bernie Balch",
+                "Ezra Eason","Erin Enriguez","Luther Lines","Samuel Stromberg","Enrique Esqueda","Paul Plowden","Francesco Fitton",
+                "Moses Mcmurry","Mickey Mccoin","Romeo Risher","Maxwell Melder","Roman Riddell","Anthony Aycock","Anton Aquilino",
+                "Gale Gerhardt","Oren Ogawa","Hershel Hyslop","Jared Jiminez","Hassan Haubrich","Armando Arner","Graham Glotfelty",
+                "Monroe Martineau","Maynard Milani","Galen Gavin","Boyd Basta","Tyree Threatt","Florentino Forand","King Krom",
+                "Ferdinand Fikes", "Gary Gander","Hans Harnish","Julie Allard","Arthur Decloedt"};
+        return namearr[index];
+
     }
     
 }
