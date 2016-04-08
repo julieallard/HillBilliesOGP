@@ -4,6 +4,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.IActivity;
 import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.Unit;
+import hillbillies.model.VLocation;
 import ogp.framework.util.Util;
 
 /**
@@ -96,7 +97,30 @@ public class Attack implements IActivity {
     }
 
 	private void conductAttack() {
-        //TODO Implement attack on the attackers initiative
+		attacker.setOrientation((float) Math.atan2(defender.getLocation().getYLocation() - attacker.getLocation().getYLocation(), defender.getLocation().getXLocation() - attacker.getLocation().getXLocation()));
+		defender.setOrientation((float) Math.atan2(attacker.getLocation().getYLocation() - defender.getLocation().getYLocation(), attacker.getLocation().getXLocation() - defender.getLocation().getXLocation()));
+		//dodging
+		if (Math.random() <= 0.25 * (defender.getAgility() / attacker.getAgility())) {
+			double oldX = defender.getLocation().getXLocation();
+			double oldY = defender.getLocation().getYLocation();
+			double oldZ = defender.getLocation().getZLocation();
+			VLocation dodgeLoc;
+			while (true) {
+				double newX = oldX + 2*Math.random() - 1;
+				double newY = oldY + 2*Math.random() - 1;
+				dodgeLoc = new VLocation(newX, newY, oldZ, defender);
+				if (VLocation.isValidLocation(dodgeLoc))
+					break;
+			}
+			defender.setLocation(dodgeLoc.getArray());
+		//blocking
+		} else if (Math.random() <= 0.25 * (defender.getStrength() + defender.getAgility()) / (attacker.getStrength() + attacker.getAgility())) {
+			return;
+		//taking damage
+		} else {
+			double damage = attacker.getStrength() / 10;
+			defender.dealDamage(damage);
+		}
 	    attacker.activityFinished();
 	}
 	
