@@ -178,6 +178,6 @@ public class Movement implements IActivity {
         assert (Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2) == 1);
         return new double[]{newX, newY, newZ};
     }
-    Collections
+    
 
 }
