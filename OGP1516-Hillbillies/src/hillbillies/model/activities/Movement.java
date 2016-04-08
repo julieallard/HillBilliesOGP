@@ -39,7 +39,9 @@ public class Movement implements IActivity {
     private final Cube destination;
     private Cube nextStop;
 
-
+	/**
+	 * No documentation required.
+	 */
     @Override
     public void advanceActivityTime(double dt) {
         if (nextStop == null) {

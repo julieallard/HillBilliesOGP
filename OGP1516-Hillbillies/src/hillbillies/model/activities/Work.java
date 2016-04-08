@@ -45,6 +45,9 @@ public class Work implements IActivity {
     private double timeLeft;
 	private final int[] targetLocation;
 
+	/**
+	 * No documentation required.
+	 */
 	@Override
 	public void advanceActivityTime(double dt) {
         if (Util.fuzzyGreaterThanOrEqualTo(dt, this.returnSimpleTimeLeft())) {

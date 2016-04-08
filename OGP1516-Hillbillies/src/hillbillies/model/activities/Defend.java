@@ -37,6 +37,9 @@ public class Defend implements IActivity {
     private double timeLeft;
     private Random random; 
     
+	/**
+	 * No documentation required.
+	 */
     @Override
     public void advanceActivityTime(double dt) {
         if (Util.fuzzyGreaterThanOrEqualTo(dt, this.returnSimpleTimeLeft())) {

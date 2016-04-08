@@ -22,12 +22,26 @@ public class Rest implements IActivity {
 
 	public Unit unit;
 
+	/**
+	 * No documentation required.
+	 */
 	@Override
 	public void advanceActivityTime(double dt) {
+		//per 0.2s or continuously?
 		if (unit.getCurrentHitPoints() < unit.getMaxPoints()) {
-			int HitPointsToAdd = (int) Math.ceil((dt / 0.2) * (unit.getToughness() / 200));
-			unit.setCurrentHitPoints(unit.getCurrentHitPoints() + HitPointsToAdd);
-			//per 0.2s or continuously?	
+			int HPGaining = (int) Math.ceil((dt / 0.2) * (unit.getToughness() / 200));
+			int HPNeeded = unit.getMaxPoints() - unit.getCurrentHitPoints();
+			double timeForGainingHPNeeded = HPNeeded * 0.2 / (unit.getToughness() / 200);
+			if (timeForGainingHPNeeded < dt) {
+				double timeForGainingSP = dt - timeForGainingHPNeeded;
+				unit.setCurrentHitPoints(unit.getCurrentHitPoints() + HPNeeded);
+				advanceActivityTime(timeForGainingSP);
+			} else
+				unit.setCurrentHitPoints(unit.getCurrentHitPoints() + HPGaining);	
+		}
+		if (unit.getCurrentStaminaPoints() < unit.getMaxPoints()) {
+			int SPGaining = (int) Math.ceil((dt / 0.2) * (unit.getToughness() / 100));
+			unit.setCurrentStaminaPoints(unit.getCurrentStaminaPoints() + SPGaining);
 		}
 	}
 

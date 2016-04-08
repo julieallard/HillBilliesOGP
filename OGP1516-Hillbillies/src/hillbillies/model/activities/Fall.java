@@ -25,8 +25,11 @@ public class Fall implements IActivity {
 
     private MovableWorldObject object;
     private double damagetobedone;
-    private double distanceFallen;
+    private double distancefallen;
 
+	/**
+	 * No documentation required.
+	 */
     @Override
     public void advanceActivityTime(double dt) {
         advanceFallLocation(dt);
