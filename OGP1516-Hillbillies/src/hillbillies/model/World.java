@@ -23,28 +23,50 @@ public class World {
      * Initialize this new World with given CubeWorld.
      *
      * @param  CubeWorld
-     * 		   The CubeWorld for this new World.
-     * @effect The CubeWorld of this new World is set to
-     * 		   the given CubeWorld.
+     * 		   The cube world with an allocation of the geological
+     * 		   features for this new World.
+     * @effect The cube world of this new World is set to
+     * 		   the given cube world.
      */
 
     public World(int[][][] CubeWorld) throws UnitIllegalLocation, IllegalArgumentException {
         this.setWorldMap(new WorldMap<>());
         this.sideSize = CubeWorld.length;
-        this.borderConnect=new ConnectedToBorder(sideSize,sideSize,sideSize);
-        this.caveInlist=new ArrayList<>();
+        this.borderConnect = new ConnectedToBorder(sideSize, sideSize, sideSize);
+        this.caveInlist = new ArrayList<>();
         this.setCubeWorld(CubeWorld);
-
     }
+    
+    /**
+     * Variable registering the solid and non-solid state of neigboring cubes (of
+     * neighboring cubes etc.) of this World.
+     */
     private final ConnectedToBorder borderConnect;
+    
+    /**
+     * Variable registering the cubes of this World that are not supported anymore
+     * and which will cave in.
+     */
     private final ArrayList<int[]> caveInlist;
+    
+    /**
+     * Variable registering the cube world with an allocation of the
+     * geological features and the size of this World.
+     */
     private CubeWorldObject[][][] CubeWorld;
-    private WorldMap<VLocation,MovableWorldObject> WorldMap;
+    
+    /**
+     * Variable registering a world map with the objects and their location in this World,
+     * with the location as the key and the object as the value of this HashMap.
+     */
+    private WorldMap<VLocation, MovableWorldObject> WorldMap;
     
 	/**
 	 * Set collecting references to factions belonging to this world.
 	 * 
 	 * @invar The set of factions is effective.
+	 * @invar Each element in the set of factions references a faction that is an
+	 * 		  acceptable faction for this World.
 	 * @invar Each faction in the FactionSet references this world as the world to
 	 * 		  which it is attached. 
 	 */
@@ -54,16 +76,20 @@ public class World {
 	 * Set collecting references to Units belonging to this world.
 	 * 
 	 * @invar The set of Units is effective.
+	 * @invar Each element in the set of Units references a unit that is an
+	 * 		  acceptable unit for this World.
 	 * @invar Each Unit in the TotalUnitSet references this world as the world to
 	 * 		  which it is attached. 
 	 */
 	private Set<Unit> TotalUnitSet; 
 	
+	/**
+	 * Variable registering the length of the sides of this World.
+	 */
     public int sideSize;
     
     /**
-     * Return the CubeWorld of this World.
-     * 		The CubeWorld represents the three dimensional extent of this World.
+     * Return the cube world of this World.
      */
     @Basic
     @Raw
@@ -72,13 +98,13 @@ public class World {
     }
 
     /**
-     * Check whether the given CubeWorld is a valid CubeWorld for
+     * Check whether the given cube world is a valid cube world for
      * any World.
      *
      * @param  CubeWorld
-     * 		   The CubeWorld to check.
-     * @return True if and only if the CubeWorld is cubical, in other words
-     * 		   if all sub arrays have the same size.
+     * 		   The cube world to check.
+     * @return True if and only if the cube world is cubical, in other words
+     * 		   if all sub arrays have the same length.
      */
     public boolean isValidCubeWorld(int[][][] CubeWorld) {
         for (int[][] YZLevel: CubeWorld) {
@@ -95,14 +121,14 @@ public class World {
     }
 
     /**
-     * Set the CubeWorld of this World to the given CubeWorld.
+     * Set the cube world of this World to the given cube world.
      *
      * @param  CubeWorld
-     * 		   The new CubeWorld for this World.
-     * @post   The CubeWorld of this new World is equal to
-     * 		   the given CubeWorld.
+     * 		   The new cube world for this World.
+     * @post   The cube world of this new World is equal to
+     * 		   the given cube world.
      * @throws UnitIllegalLocation
-     * 		   The given CubeWorld is not a valid CubeWorld for any
+     * 		   The given cube world is not a valid cube world for any
      *		   World.
      */
     @Raw
@@ -135,11 +161,11 @@ public class World {
     }
 
     /**
-     * Destroy the cube at given location in this world.
+     * Destroy the cube at given location in this World.
      *
      * @param  location
      * 		   The location of the cube to destroy.
-     * @post   The cube at given location is destroyed and becomes air.
+     * @post   The cube at given location is of air.
      * @throws UnitIllegalLocation
      * 		   The given location is not a valid location.
      * @throws IllegalArgumentException
@@ -156,6 +182,14 @@ public class World {
         replace(cube, location);
     }
 
+    /**
+     * Replace the given cube at given location by a boulder, a log or nothing.
+     * 
+     * @param  cube
+     * 		   The cube to replace.
+     * @param  location
+     * 		   The location of the cube to replace.
+     */
     private void replace(CubeWorldObject cube, int[] location) {
         if (Math.random() <= 0.25) {
             Rock rock = new Rock();
@@ -168,7 +202,7 @@ public class World {
     }
 
     /**
-     * Return the WorldMap of this World.
+     * Return the world map of this World.
      */
     @Basic @Raw
     public WorldMap<VLocation, MovableWorldObject> getWorldMap() {
@@ -176,11 +210,11 @@ public class World {
     }
     
     /**
-     * Check whether the given WorldMap is a valid WorldMap for
+     * Check whether the given world map is a valid world map for
      * any World.
      *  
      * @param  WorldMap
-     *         The WorldMap to check.
+     *         The world map to check.
      * @return Always true.
     */
     public static boolean isValidWorldMap(WorldMap<VLocation, MovableWorldObject> WorldMap) {
@@ -188,14 +222,14 @@ public class World {
     }
     
     /**
-     * Set the WorldMap of this World to the given WorldMap.
+     * Set the world map of this World to the given world map.
      * 
      * @param  WorldMap
-     *         The new WorldMap for this World.
-     * @post   The WorldMap of this new World is equal to
-     *         the given WorldMap.
+     *         The new world map for this World.
+     * @post   The world map of this new World is equal to
+     *         the given world map.
      * @throws IllegalArgumentException
-     *         The given WorldMap is not a valid Worldmap for any
+     *         The given world map is not a valid world map for any
      *         world.
      */
     @Raw
@@ -206,53 +240,55 @@ public class World {
     }
     
 	/**
-	 * Return all the Units in the cube with given location.
+	 * Return a list collecting all the Units in the cube at given location.
 	 * 
 	 * @param  cubeLocation
 	 * 		   The location of the cube with the objects to check.
-	 * @return A list with all the Units in the cube with given location.
 	 */
     public List<Unit> getUnitsAt(int[] cubeLocation) {
         return this.getWorldMap().getAllUnitsInCube(cubeLocation);
     }
     
 	/**
-	 * Return all the Logs in the cube with given location.
+	 * Return a list collecting all the Logs in the cube with given location.
 	 * 
 	 * @param  cubeLocation
 	 * 		   The location of the cube with the Logs to check.
-	 * @return A list with all the Logs in the cube with given location.
 	 */
     public List<Log> getLogsAt(int[] cubeLocation) {
         return this.getWorldMap().getAllLogsInCube(cubeLocation);
     }
     
 	/**
-	 * Return all the Boulders in the cube with given location.
+	 * Return a list collecting all the Boulders in the cube with given location.
 	 * 
 	 * @param  cubeLocation
 	 * 		   The location of the cube with the Boulders to check.
-	 * @return A list with all the Boulders in the cube with given location.
 	 */
     public List<Boulder> getBouldersAt(int[] cubeLocation) {
         return this.getWorldMap().getAllBouldersInCube(cubeLocation);
     }
 
     /**
-     * Check whether 
+     * Check whether the given object can have the given cube location as
+     * its cube location.
      * 
      * @param  cubeLoc
      * 		   The location of the cube to check.
      * @param  object
-     * 		   The object
-     * @return
+     * 		   The object whose location we will check.
+     * @return True if and only if the cube location is a three dimensional array,
+     * 		   if the cube is passable and if the cube underneath can support objects.
+     * 		   If the object is a Unit, this method will also return true, except the
+     * 		   before mentioned conditions, if and only if //TODO
+     * 		   
      */
     public boolean canHaveAsCubeLocation(int[] cubeLoc, MovableWorldObject object) {
         if (cubeLoc.length != 3)
         	return false;
         if (! CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].isPassable())
         	return false;
-        if (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].willSupport())
+        if (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]-1].willSupport())
         	return true;
         if (! (object instanceof Unit))
         	return false;

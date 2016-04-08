@@ -91,10 +91,10 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
      * 		   The given location is the key of another, wrong object in the WorldMap.
      */
     public void moveObject(MovableWorldObject object, VLocation newLoc) throws UnitIllegalLocation, IllegalArgumentException {
-        MovableWorldObject removed = this.remove(object.getLocation());
-        if (removed == null)
+        MovableWorldObject removedObject = this.remove(object.getLocation());
+        if (removedObject == null)
         	throw new IllegalArgumentException("This object did not exist in the WorldMap.");
-        if (! object.equals(removed))
+        if (! object.equals(removedObject))
         	throw new UnitIllegalLocation("The wrong object was removed, the assignment of locations is wrong.");
         object.setLocation(newLoc);
     }

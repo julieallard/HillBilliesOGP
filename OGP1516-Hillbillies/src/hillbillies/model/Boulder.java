@@ -7,6 +7,7 @@ import hillbillies.model.activities.NoActivity;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
 import java.util.Random;
+
 public class Boulder extends MovableWorldObject {
     /**
      * Initialize this new Boulder with given x, y and z coordinate and given world.
