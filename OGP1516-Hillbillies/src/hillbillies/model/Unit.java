@@ -6,6 +6,7 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.Random;
 
 /**
