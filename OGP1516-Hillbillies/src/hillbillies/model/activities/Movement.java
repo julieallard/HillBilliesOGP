@@ -9,6 +9,7 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
 import ogp.framework.util.Util;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * The Id's of the activities are the following:
@@ -175,6 +176,6 @@ public class Movement implements IActivity {
         assert (Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2) == 1);
         return new double[]{newX, newY, newZ};
     }
-
+    Collections
 
 }

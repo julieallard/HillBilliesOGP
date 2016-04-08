@@ -8,8 +8,8 @@ import hillbillies.model.CubeObjects.Rock;
 import hillbillies.model.CubeObjects.Wood;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 import hillbillies.model.CubeObjects.Workshop;
-
-import java.util.HashMap;
+import hillbillies.util.ConnectedToBorder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,11 +29,15 @@ public class World {
      */
 
     public World(int[][][] CubeWorld) throws UnitIllegalLocation, IllegalArgumentException {
-        this.setCubeWorld(CubeWorld);
         this.setWorldMap(new WorldMap<>());
         this.sideSize = CubeWorld.length;
-    }
+        this.borderConnect=new ConnectedToBorder(sideSize,sideSize,sideSize);
+        this.caveInlist=new ArrayList<>();
+        this.setCubeWorld(CubeWorld);
 
+    }
+    private final ConnectedToBorder borderConnect;
+    private final ArrayList<int[]> caveInlist;
     private CubeWorldObject[][][] CubeWorld;
     private WorldMap<VLocation,MovableWorldObject> WorldMap;
     
@@ -55,7 +59,7 @@ public class World {
 	 */
 	private Set<Unit> TotalUnitSet; 
 	
-    public final int sideSize;
+    public int sideSize;
     
     /**
      * Return the CubeWorld of this World.
@@ -111,14 +115,17 @@ public class World {
                 for (int z = 0; z < sideSize; z++) {
                     switch (CubeWorld[x][y][z]) {
                         case 0:		CubeWorldFinal[x][y][z] = new Air();
+                                    caveInlist.addAll(borderConnect.changeSolidToPassable(x,y,z));
                                     break;
                         case 1:		CubeWorldFinal[x][y][z] = new Rock();
                             		break;
                         case 2:		CubeWorldFinal[x][y][z] = new Wood();
                                     break;
                         case 3:		CubeWorldFinal[x][y][z] = new Workshop();
+                                    caveInlist.addAll(borderConnect.changeSolidToPassable(x,y,z));
                                     break;
                         default:	CubeWorldFinal[x][y][z] = new Air();
+                                    caveInlist.addAll(borderConnect.changeSolidToPassable(x,y,z));
                                     break;
                     }
                 }
@@ -143,8 +150,8 @@ public class World {
             throw new UnitIllegalLocation();
         CubeWorldObject[][][] world = this.getCubeWorld();
         CubeWorldObject cube = world[location[0]][location[1]][location[2]];
-        if (! cube.isDestructible())
-        	throw new IllegalArgumentException("This cube is not destructible.");
+        if (! cube.isDestructible()) return;
+        caveInlist.addAll(borderConnect.changeSolidToPassable(location[0],location[1],location[2]));
         this.CubeWorld[location[0]][location[1]][location[2]] = new Air();
         replace(cube, location);
     }
@@ -383,6 +390,8 @@ public class World {
      * 		   The time duration.
      */
     public void advanceTime(double dt){
+        caveIn(caveInlist);
+        //todo advance time
 
     }
 
@@ -404,10 +413,12 @@ public class World {
         throw new IllegalArgumentException();
     }
 
-    public void caveIn(VLocation location, CubeWorldObject object) {
-    	//TODO cave in
-    	if (! object.isDestructible())
-    		return;
+    public void caveIn(List<int[]> locList) {
+
+        for (int[] loc : caveInlist) {
+            destroyCube(loc);
+        }
+        caveInlist.clear();
     }
     
 }
