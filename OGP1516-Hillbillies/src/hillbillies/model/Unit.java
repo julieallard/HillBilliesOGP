@@ -1172,5 +1172,21 @@ public class Unit extends MovableWorldObject {
     public void addXp(int xp){
         this.setXp(this.getXp()+xp);
     }
+
+
+    public void moveTo(int[] destination){
+        if(!this.world.canHaveAsCubeLocation(destination,this)) return;
+        Movement movement=new Movement(this,destination);
+        interruptCurrentAct(movement);
+    }
+    public void moveToAdjacent(int dx,int dy,int dz){
+        if(Math.abs(dx)>1||Math.abs(dy)>1||Math.abs(dz)>1) throw new UnitIllegalLocation("illegal move to Adj destination");
+        if(this.getActivity().getId()==3) return;
+        int[] loc=this.getLocation().getCubeLocation();
+        loc[0]=loc[0]+dx;
+        loc[1]=loc[1]+dy;
+        loc[2]=loc[2]+dz;
+        this.moveTo(loc);
+    }
     
 }

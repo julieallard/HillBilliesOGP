@@ -288,15 +288,18 @@ public class World {
         	return false;
         if (! CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].isPassable())
         	return false;
+        int zLoc = cubeLoc[2];
+        if (zLoc == 0)
+            return true;
         if (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]-1].willSupport())
         	return true;
         if (! (object instanceof Unit))
         	return false;
         int xLoc = cubeLoc[0];
         int yLoc = cubeLoc[1];
-        int zLoc = cubeLoc[2];
-        if (zLoc == 0) 
-        	return true;
+        if(xLoc==0||xLoc==sideSize-1) return true;
+        if(yLoc==0||yLoc==sideSize-1) return true;
+        if(zLoc==sideSize-1) return true;
         for (int x = xLoc-1; x < xLoc+2; x++) {
             for (int y = yLoc-1; y < yLoc+2; y++) {
                 for (int z = zLoc-1; z < zLoc+2; z++) {
