@@ -169,6 +169,48 @@ public class Unit extends MovableWorldObject {
         this.setOrientation((float) (0.5 * Math.PI));
         this.setActivity(null);
         this.setFaction();
+
+
+
+    }
+    public Unit(String name, double x, double y, double z, int weight, int strength,
+                int agility, int toughness, boolean enableDefaultBehavior)
+            throws UnitIllegalLocation, IllegalArgumentException {
+        this.setName(name);
+        this.setLocation(x, y, z);
+        if (weight < 25) {
+            this.setWeight(25);
+        } else if (weight > 100) {
+            this.setWeight(100);
+        } else {
+            this.setWeight(weight);
+        }
+        if (agility < 25) {
+            this.setAgility(25);
+        } else if (agility > 100) {
+            this.setAgility(100);
+        } else {
+            this.setAgility(agility);
+        }
+        if (strength < 25) {
+            this.setStrength(25);
+        } else if (strength > 100) {
+            this.setStrength(100);
+        } else {
+            this.setStrength(strength);
+        }
+        if (toughness < 25) {
+            this.setToughness(25);
+        } else if (toughness > 100) {
+            this.setToughness(100);
+        } else {
+            this.setToughness(toughness);
+        }
+        this.setDefaultBehavior(enableDefaultBehavior);
+        this.setCurrentHitPoints(getMaxPoints());
+        this.setCurrentStaminaPoints(getMaxPoints());
+        this.setOrientation((float) (0.5 * Math.PI));
+        this.setActivity(null);
     }
 
     public Unit(World world, boolean enableDefaultBehavior) {
@@ -1188,5 +1230,8 @@ public class Unit extends MovableWorldObject {
         loc[2] = loc[2] + dz;
         this.moveTo(loc);
     }
-    
+    public void rest(){
+        Rest rest=new Rest(this);
+        interruptCurrentAct(rest);
+    }
 }
