@@ -161,6 +161,7 @@ public class Log extends MovableWorldObject {
     /**
      * No documentation needed.
      */
+    @Override
     public void advanceTime(double dt) {
     	this.getActivity().advanceActivityTime(dt);
     }

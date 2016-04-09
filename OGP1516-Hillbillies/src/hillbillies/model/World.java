@@ -6,12 +6,13 @@ import hillbillies.model.CubeObjects.Air;
 import hillbillies.model.CubeObjects.CubeWorldObject;
 import hillbillies.model.CubeObjects.Rock;
 import hillbillies.model.CubeObjects.Wood;
+import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 import hillbillies.model.CubeObjects.Workshop;
+import hillbillies.part2.listener.TerrainChangeListener;
 import hillbillies.util.ConnectedToBorder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 /**
  * @invar  The CubeWorld of each World must be a valid CubeWorld for any
@@ -29,19 +30,22 @@ public class World {
      * 		   the given cube world.
      */
 
-    public World(int[][][] CubeWorld) throws UnitIllegalLocation, IllegalArgumentException {
+    public World(int[][][] CubeWorld, TerrainChangeListener changeListener) throws UnitIllegalLocation, IllegalArgumentException {
         this.setWorldMap(new WorldMap<>());
         this.sideSize = CubeWorld.length;
         this.borderConnect = new ConnectedToBorder(sideSize, sideSize, sideSize);
         this.caveInlist = new ArrayList<>();
         this.setCubeWorld(CubeWorld);
+        this.changeListener=changeListener;
+        this.FactionSet=new HashSet<>();
     }
+    private final TerrainChangeListener changeListener;
     
     /**
      * Variable registering the solid and non-solid state of neigboring cubes (of
      * neighboring cubes etc.) of this World.
      */
-    private final ConnectedToBorder borderConnect;
+    public final ConnectedToBorder borderConnect;
     
     /**
      * Variable registering the cubes of this World that are not supported anymore
@@ -70,7 +74,7 @@ public class World {
 	 * @invar Each faction in the FactionSet references this world as the world to
 	 * 		  which it is attached. 
 	 */
-	private Set<Faction> FactionSet;
+	public Set<Faction> FactionSet;
 	
 	/**
 	 * Set collecting references to Units belonging to this world.
@@ -177,6 +181,7 @@ public class World {
         CubeWorldObject[][][] world = this.getCubeWorld();
         CubeWorldObject cube = world[location[0]][location[1]][location[2]];
         if (! cube.isDestructible()) return;
+        this.changeListener.notifyTerrainChanged(location[0],location[1],location[2]);
         caveInlist.addAll(borderConnect.changeSolidToPassable(location[0],location[1],location[2]));
         this.CubeWorld[location[0]][location[1]][location[2]] = new Air();
         replace(cube, location);
@@ -383,6 +388,7 @@ public class World {
 		if (! unit.canHaveAsWorld(this)) 
 			throw new IllegalArgumentException("This world has already reached its max amount of Units.");
         this.TotalUnitSet.add(unit);
+        unit.register(unit.getLocation());
 	}
 
 	/**
@@ -429,10 +435,15 @@ public class World {
      * 		   The time duration.
      */
     public void advanceTime(double dt){
-        caveIn(caveInlist);
-
-        //TODO advance time!
-
+        if(!isValidTimeDuration(dt)) throw new IllegalTimeException();
+        caveIn();
+        //World validity check
+        assert this.TotalUnitSet.equals(this.getWorldMap().getAllUnits());
+        Collection<MovableWorldObject> totColl=this.getWorldMap().values();
+        for (MovableWorldObject object :
+                totColl) {
+            object.advanceTime(dt);
+        }
     }
 
     public int getCubeAt(int[] loc) {
@@ -453,7 +464,7 @@ public class World {
         throw new IllegalArgumentException();
     }
 
-    public void caveIn(List<int[]> locList) {
+    public void caveIn() {
 
         for (int[] loc : caveInlist) {
             destroyCube(loc);

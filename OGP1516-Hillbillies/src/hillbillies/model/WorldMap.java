@@ -78,24 +78,34 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
         return unitList;
     }
 
-    /**
-     * Move the given object to given new location in this WorldMap.
-     * 
-     * @param  object
-     * 		   The object to move.
-     * @param  newLoc
-     * 		   The new location of the object.
-     * @throws IllegalArgumentException
-     * 		   The given object is not present in the Worldmap.
-     * @throws UnitIllegalLocation
-     * 		   The given location is the key of another, wrong object in the WorldMap.
-     */
-    public void moveObject(MovableWorldObject object, VLocation newLoc) throws UnitIllegalLocation, IllegalArgumentException {
-        MovableWorldObject removedObject = this.remove(object.getLocation());
-        if (removedObject == null)
-        	throw new IllegalArgumentException("This object did not exist in the WorldMap.");
-        if (! object.equals(removedObject))
-        	throw new UnitIllegalLocation("The wrong object was removed, the assignment of locations is wrong.");
-        object.setLocation(newLoc);
+
+    public Set<Unit> getAllUnits(){
+        Collection<MovableWorldObject> totColl=this.values();
+        Set<Unit> unitset=new HashSet<>();
+        for (MovableWorldObject object:
+             totColl) {
+            if(object instanceof Unit) unitset.add((Unit) object);
+        }
+        return unitset;
     }
+    public Set<Boulder> getAllBoulders(){
+        Collection<MovableWorldObject> totColl=this.values();
+        Set<Boulder> boulderSet=new HashSet<>();
+        for (MovableWorldObject object:
+                totColl) {
+            if(object instanceof Boulder) boulderSet.add((Boulder) object);
+        }
+        return boulderSet;
+    }
+    public Set<Log> getAllLogs(){
+        Collection<MovableWorldObject> totColl=this.values();
+        Set<Log> logSet=new HashSet<>();
+        for (MovableWorldObject object:
+                totColl) {
+            if(object instanceof Log) logSet.add((Log) object);
+        }
+        return logSet;
+    }
+
+
 }

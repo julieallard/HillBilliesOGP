@@ -1,5 +1,9 @@
 package hillbillies.model;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
+import be.kuleuven.cs.som.annotate.Raw;
+
 import java.util.Set;
 
 public class Faction {

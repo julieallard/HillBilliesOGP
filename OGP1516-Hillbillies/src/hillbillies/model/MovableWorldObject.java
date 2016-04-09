@@ -21,5 +21,7 @@ public abstract class MovableWorldObject {
     
     public abstract int getWeight();
 
+    public abstract void advanceTime(double dt);
+
     
 }

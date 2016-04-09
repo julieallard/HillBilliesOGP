@@ -332,7 +332,7 @@ public interface IFacade extends hillbillies.part1.facade.IFacade {
 
 	/**
 	 * This method is no longer necessary, and is replaced by the
-	 * {@link #workAt(Unit, int[])} method.
+	 * {@link #workAt(Unit, int,int,int)} method.
 	 */
 	@Override
 	@Deprecated

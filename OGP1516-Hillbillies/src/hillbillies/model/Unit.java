@@ -3,10 +3,6 @@ package hillbillies.model;
 import be.kuleuven.cs.som.annotate.*;
 import hillbillies.model.activities.*;
 import hillbillies.model.exceptions.UnitIllegalLocation;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import java.util.Random;
 
 /**
@@ -918,6 +914,7 @@ public class Unit extends MovableWorldObject {
     /**
      * No documentation required.
      */
+    @Override
     public void advanceTime(double dt) {
         if (this.getActivity().getId() == 0 && isDefaultBehaviorEnabled()) {
             behaveDefault();
