@@ -217,6 +217,7 @@ public class Unit extends MovableWorldObject {
     private int hitpoints;
     private int staminapoints;
     private int xp = 0;
+    private int xpused = 0;
     private float orientation;
     private IActivity activity;
     private IActivity pausedActivity;    
@@ -1103,7 +1104,7 @@ public class Unit extends MovableWorldObject {
      */
     @Basic @Raw
     public int getXP() {
-      return this.xp;
+    	return this.xp;
     }
     
     /**
@@ -1117,7 +1118,7 @@ public class Unit extends MovableWorldObject {
      *       | result == (xp >= 0)
      */
     public static boolean isValidXP(int xp) {
-      return (xp >= 0);
+    	return (xp >= 0);
     }
     
     /**
@@ -1134,8 +1135,21 @@ public class Unit extends MovableWorldObject {
      */
     @Raw
     public void setXP(int xp) {
-      if (isValidXP(xp))
-        this.xp = xp;
+    	if (isValidXP(xp))
+    		this.xp = xp;
+    	int xptouse = this.getXP() - xpused;
+    	int propertypoints = xptouse / 10;
+    	while (propertypoints > 0) {
+    		if (getAgility() < getStrength()) {
+    			setAgility(getAgility() + 1);
+    		} else if (getToughness() < getAgility()) {
+    			setAgility(getAgility() - 1)
+    			setToughness(getToughness() + 1);
+    		} else
+    			setStrength(getStrength() + 1)
+    		propertypoints -= 1;
+    		this.xpused += 10;
+    	}
     }
     
     /**

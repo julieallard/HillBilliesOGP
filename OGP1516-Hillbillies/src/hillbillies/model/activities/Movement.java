@@ -47,8 +47,9 @@ public class Movement implements IActivity {
     public void advanceActivityTime(double dt) {
         if (nextStop == null) {
             boolean foundpath = setNextStop();
-            if (!foundpath) {
+            if (! foundpath) {
                 unit.activityFinished();
+                unit.addXP(1);
                 return;
             }
         }
