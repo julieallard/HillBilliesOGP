@@ -1086,6 +1086,13 @@ public class Unit extends MovableWorldObject {
     }
 
     public String getRandomName(Random random){
+        boolean flag=random.nextBoolean();
+        if(flag){
+            String[] redneckNameArr=new String[]{"Cletus","Billy","Daquan","Bill","Uncle Bob","Minnie","John","Harly","Molly",
+                    "Tyrone","Daisy","Dale","Ruby","Bonnie","Britney","Earl","Jessie","Moe","Major Marquis Warren","Daisy Domergue","Marco the Mexican"
+                    ,"Chester Charles Smithers","Gemma","Chris Mannix","Sweet Dave","Billy Crash","Rodney","Dicky Speck","Chicken Charlie","Django Freeman"};
+            return redneckNameArr[random.nextInt(redneckNameArr.length)];
+        }
         int index=random.nextInt(51);
         String[] namearr=new String[]{"Alfonso Addie","Terrence Truluck","Russel Rouse","Fritz Forst","Mckinley Marrow",
                 "Sidney Suttles","Todd Tamura","Lee Lassiter","Sonny Sumpter","Tony Thames","Phil Pittman","Jonathon Jenning",
@@ -1143,10 +1150,10 @@ public class Unit extends MovableWorldObject {
     		if (getAgility() < getStrength()) {
     			setAgility(getAgility() + 1);
     		} else if (getToughness() < getAgility()) {
-    			setAgility(getAgility() - 1)
+    			setAgility(getAgility() - 1);
     			setToughness(getToughness() + 1);
     		} else
-    			setStrength(getStrength() + 1)
+    			setStrength(getStrength() + 1);
     		propertypoints -= 1;
     		this.xpused += 10;
     	}
@@ -1165,8 +1172,7 @@ public class Unit extends MovableWorldObject {
     }
 
     public void moveTo(int[] destination) {
-        if(! this.world.canHaveAsCubeLocation(destination, this))
-        	return;
+        if(! this.world.canHaveAsCubeLocation(destination, this)) return;
         Movement movement = new Movement(this,destination);
         interruptCurrentAct(movement);
     }
