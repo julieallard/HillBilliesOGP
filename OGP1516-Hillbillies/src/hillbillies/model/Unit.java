@@ -1099,90 +1099,73 @@ public class Unit extends MovableWorldObject {
     }
     
     /**
-     * @invar  The experience of each Unit must be a valid experience for any
-     *         Unit.
-     *       | isValidXp(getXp())
-     */
-    
-    /**
-     * Initialize this new Unit with given experience.
-     * 
-     * @param  Xp
-     *         The experience for this new Unit.
-     * @post   If the given experience is a valid experience for any Unit,
-     *         the experience of this new Unit is equal to the given
-     *         experience. Otherwise, the experience of this new Unit is equal
-     *         to 0.
-     *       | if (isValidXp(Xp))
-     *       |   then new.getXp() == Xp
-     *       |   else new.getXp() == 0
-     */
-    public Unit(int Xp) {
-      if (! isValidXp(Xp))
-        Xp = 0;
-      setXp(Xp);
-    }
-    
-    /**
      * Return the experience of this Unit.
      */
     @Basic @Raw
-    public int getXp() {
-      return this.Xp;
+    public int getXP() {
+      return this.xp;
     }
     
     /**
-     * Check whether the given experience is a valid experience for
-     * any Unit.
+     * Check whether the given number of experience points is a valid number
+     * of experience points for any Unit.
      *  
-     * @param  Xp
-     *         The experience to check.
-     * @return 
-     *       | result == xp>0
+     * @param  xp
+     *         The number of experience points to check.
+     * @return True if and only if the number of experience points is equal or
+     * 		   greater than zero.
+     *       | result == (xp >= 0)
      */
-    public static boolean isValidXp(int Xp) {
-      return (Xp>=0);
+    public static boolean isValidXP(int xp) {
+      return (xp >= 0);
     }
     
     /**
-     * Set the experience of this Unit to the given experience.
+     * Set the number of experience points of this Unit to the given number of
+     * experience points.
      * 
-     * @param  Xp
-     *         The new experience for this Unit.
-     * @post   If the given experience is a valid experience for any Unit,
-     *         the experience of this new Unit is equal to the given
-     *         experience.
-     *       | if (isValidXp(Xp))
-     *       |   then new.getXp() == Xp
+     * @param  xp
+     *         The new number of experience points for this Unit.
+     * @post   If the given number of experience points is a valid number of
+     * 		   experience points for any Unit, the number of experience points of
+     * 		   this new Unit is equal to the given number of experience points.
+     *       | if (isValidXP(sp))
+     *       |   then new.getXP() == sp
      */
     @Raw
-    public void setXp(int Xp) {
-      if (isValidXp(Xp))
-        this.Xp = Xp;
+    public void setXP(int xp) {
+      if (isValidXP(xp))
+        this.xp = xp;
     }
     
     /**
-     * Variable registering the experience of this Unit.
+     * Add the given number of experience points.
+     * 
+     * @param  xp
+     * 		   The number of experience points to add.
+     * @post   The given number of experience points is added to the current
+     * 		   amount of experience points of this Unit.
      */
-    private int Xp;
-
-    public void addXp(int xp){
-        this.setXp(this.getXp()+xp);
+    public void addXP(int xp) {
+        this.setXP(this.getXP() + xp);
     }
 
-
-    public void moveTo(int[] destination){
-        if(!this.world.canHaveAsCubeLocation(destination,this)) return;
-        Movement movement=new Movement(this,destination);
+    public void moveTo(int[] destination) {
+        if(! this.world.canHaveAsCubeLocation(destination, this))
+        	return;
+        Movement movement = new Movement(this,destination);
         interruptCurrentAct(movement);
     }
-    public void moveToAdjacent(int dx,int dy,int dz){
-        if(Math.abs(dx)>1||Math.abs(dy)>1||Math.abs(dz)>1) throw new UnitIllegalLocation("illegal move to Adj destination");
-        if(this.getActivity().getId()==3) return;
-        int[] loc=this.getLocation().getCubeLocation();
-        loc[0]=loc[0]+dx;
-        loc[1]=loc[1]+dy;
-        loc[2]=loc[2]+dz;
+    
+    public void moveToAdjacent(int dx, int dy, int dz) throws UnitIllegalLocation {
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1 || Math.abs(dz) > 1)
+        	throw new UnitIllegalLocation("Illegal move to adjacent destination");
+        if (this.getActivity().getId() == 3)
+        	return;
+        int[] loc = this.getLocation().getCubeLocation();
+        loc[0] = loc[0] + dx;
+        loc[1] = loc[1] + dy;
+        loc[2] = loc[2] + dz;
         this.moveTo(loc);
     }
     

@@ -85,10 +85,10 @@ public class Work implements IActivity {
      *
      * @param  timeLeft
      *         The time left to check.
-     * @return Always true.
+     * @return True if and only if the time left is greater than zero.
      */
     private static boolean isValidTimeLeft(double timeLeft) {
-        return timeLeft>0;
+        return timeLeft > 0;
     }	
 	
     /**
@@ -112,57 +112,57 @@ public class Work implements IActivity {
     private void conductWork() {
         if (unit.isCarrying()) {
             dropWork();
+            unit.addXP(10);
             return;
         }
-        if (unit.getWorld().getCubeAt(targetLocation)==3){
-            if(!unit.getWorld().getLogsAt(targetLocation).isEmpty()&&!unit.getWorld().getBouldersAt(targetLocation).isEmpty()){
+        if (unit.getWorld().getCubeAt(targetLocation) == 3) {
+            if (! unit.getWorld().getLogsAt(targetLocation).isEmpty() && ! unit.getWorld().getBouldersAt(targetLocation).isEmpty()) {
                 workOutWork();
+                unit.addXP(10);
                 return;
             }
         }
-        if (!unit.getWorld().getBouldersAt(targetLocation).isEmpty()||!unit.getWorld().getLogsAt(targetLocation).isEmpty()){
+        if (! unit.getWorld().getBouldersAt(targetLocation).isEmpty() || ! unit.getWorld().getLogsAt(targetLocation).isEmpty()) {
             pickupWork();
+            unit.addXP(10);
             return;
         }
-        if (unit.getWorld().getCubeAt(targetLocation)==2||unit.getWorld().getCubeAt(targetLocation)==1){
+        if (unit.getWorld().getCubeAt(targetLocation) == 2 || unit.getWorld().getCubeAt(targetLocation) == 1) {
             destroyWork();
+            unit.addXP(10);
             return;
         }
-    	
     }
 
     private void dropWork(){
         unit.drop(unit.getCarriedObject());
         unit.activityFinished();
-
     }
-    private void workOutWork(){
-        World wereld=unit.getWorld();
-        Log log=wereld.getLogsAt(targetLocation).get(0);
-        Boulder boulder=wereld.getBouldersAt(targetLocation).get(0);
+    
+    private void workOutWork() {
+        World world = unit.getWorld();
+        Log log = world.getLogsAt(targetLocation).get(0);
+        Boulder boulder = world.getBouldersAt(targetLocation).get(0);
         //TODO Increase weight and toughness?
         log.unregister();
         boulder.unregister();
         unit.activityFinished();
-
     }
 
-    private void pickupWork(){
-        World wereld=unit.getWorld();
-        List<Boulder> boulderList=wereld.getBouldersAt(targetLocation);
-        if(!boulderList.isEmpty()){
+    private void pickupWork() {
+        World world = unit.getWorld();
+        List<Boulder> boulderList = world.getBouldersAt(targetLocation);
+        if (! boulderList.isEmpty()) {
             unit.carry(boulderList.get(0));
-
-        }
-        else {
-            List<Log> logList=wereld.getLogsAt(targetLocation);
+        } else {
+            List<Log> logList = world.getLogsAt(targetLocation);
             unit.carry(logList.get(0));
         }
         unit.activityFinished();
     }
+    
     private void destroyWork(){
         unit.getWorld().destroyCube(targetLocation);
         unit.activityFinished();
-
     }
 }
