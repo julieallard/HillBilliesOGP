@@ -211,8 +211,7 @@ public class Unit extends MovableWorldObject {
      */
     public Unit(String name, double x, double y, double z, int weight, int strength, int agility, int toughness,
     		boolean enableDefaultBehavior) throws UnitIllegalLocation, IllegalArgumentException {
-        this.setName(name);        
-    	this.setLocation(x, y, z);
+        this.setName(name);
         if (weight < 25) {
             this.setWeight(25);
         } else if (weight > 100) {
@@ -251,6 +250,7 @@ public class Unit extends MovableWorldObject {
         TerrainChangeListener randomTerrainChangeListener = new DefaultTerrainChangeListener();
         World world = new World(randomCubeWorld, randomTerrainChangeListener);
         this.setWorld(world);
+        this.setLocation(x, y, z);
         this.setCurrentHitPoints(getMaxPoints());
         this.setCurrentStaminaPoints(getMaxPoints());
         this.setOrientation((float) (0.5 * Math.PI));
@@ -284,7 +284,6 @@ public class Unit extends MovableWorldObject {
     		if (world.canHaveAsCubeLocation(randomLoc, this))
     			break;	
     	}
-    	this.setLocation(randomLocX, randomLocY, randomLocZ);
     	int randomWeight = random.nextInt(76) + 25;
 		int randomStrength = random.nextInt(76) + 25;
 		int randomAgility = random.nextInt(76) + 25;
@@ -295,6 +294,7 @@ public class Unit extends MovableWorldObject {
         this.setToughness(randomToughness);
         this.setDefaultBehavior(enableDefaultBehavior);
         this.setWorld(world);
+        this.setLocation(randomLocX, randomLocY, randomLocZ);
         this.setCurrentHitPoints(getMaxPoints());
         this.setCurrentStaminaPoints(getMaxPoints());
         this.setOrientation((float) (0.5 * Math.PI));
