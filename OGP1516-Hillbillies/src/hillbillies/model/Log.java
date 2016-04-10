@@ -60,7 +60,7 @@ public class Log extends MovableWorldObject {
     @Basic
     @Raw
     public VLocation getLocation() {
-        return location;
+        return this.location;
     }
   
     /**
@@ -161,7 +161,7 @@ public class Log extends MovableWorldObject {
     @Immutable
     @Override
     public World getWorld() {
-      return world;
+      return this.world;
     }
 
     /**
@@ -199,7 +199,7 @@ public class Log extends MovableWorldObject {
     @Raw
     @Override
     public int getWeight() {
-        return weight;
+        return this.weight;
     }
 
     /**
@@ -216,7 +216,7 @@ public class Log extends MovableWorldObject {
     @Basic
     @Raw
     public IActivity getActivity() {
-        return activity;
+        return this.activity;
     }
 
     /**
