@@ -1143,10 +1143,10 @@ public class Unit extends MovableWorldObject {
     		if (getAgility() < getStrength()) {
     			setAgility(getAgility() + 1);
     		} else if (getToughness() < getAgility()) {
-    			setAgility(getAgility() - 1)
+    			setAgility(getAgility() - 1);
     			setToughness(getToughness() + 1);
     		} else
-    			setStrength(getStrength() + 1)
+    			setStrength(getStrength() + 1);
     		propertypoints -= 1;
     		this.xpused += 10;
     	}
