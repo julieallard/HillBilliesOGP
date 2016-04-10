@@ -11,6 +11,7 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
 import hillbillies.model.CubeObjects.Workshop;
 import hillbillies.part2.listener.TerrainChangeListener;
 import hillbillies.util.ConnectedToBorder;
+import ogp.framework.util.Util;
 
 import java.util.*;
 
@@ -422,7 +423,7 @@ public class World {
      * 		   and lower than 0.2.
      */
      private static boolean isValidTimeDuration(double dt) {
-        return (!(dt<0) && dt < 0.2);
+        return !(Util.fuzzyGreaterThanOrEqualTo(dt,0)||Util.fuzzyLessThanOrEqualTo(dt,0.2));
     }
 
     /**
