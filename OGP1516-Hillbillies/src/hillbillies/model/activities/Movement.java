@@ -83,50 +83,50 @@ public class Movement implements IActivity {
             }
         }
         double[] nextStopFine = Arrays.stream(nextStop.locArray).asDoubleStream().toArray();
-
         nextStopFine[0] = nextStopFine[0] + 0.5;
         nextStopFine[1] = nextStopFine[1] + 0.5;
         nextStopFine[2] = nextStopFine[2] + 0.5;
-
         double[] currLockFine = unit.getLocation().getArray();
         double[] speed = normalizeSpeed(currLockFine, nextStopFine);
-
         if (unit.isSprinting()) {
             double sprintTimeLeft=getTimeLeftSprinting();
             if (Util.fuzzyGreaterThanOrEqualTo(dt,sprintTimeLeft)) dt=sprintTimeLeft;
             unit.setSprinting(false);
         }
         double timeleft;
-
-        if(speed[0]!=0){timeleft=(nextStopFine[0]-currLockFine[0])/speed[0];}
-        else if(speed[1]!=0){timeleft=(nextStopFine[1]-currLockFine[1])/speed[1];}
-        else if(speed[2]!=0){timeleft=(nextStopFine[2]-currLockFine[2])/speed[2];}
-        else {throw new RuntimeException("the next stop is equal to this stop (Movement)");}
-
-        if (Util.fuzzyGreaterThanOrEqualTo(dt,timeleft)){
+        if (speed[0] != 0) {
+        	timeleft = (nextStopFine[0] - currLockFine[0]) / speed[0];
+        } else if (speed[1] != 0) {
+        	timeleft = (nextStopFine[1] - currLockFine[1]) / speed[1];
+        } else if (speed[2] != 0) {
+        	timeleft = (nextStopFine[2] - currLockFine[2]) / speed[2];
+        } else
+        	throw new RuntimeException("the next stop is equal to this stop (Movement)");
+        if (Util.fuzzyGreaterThanOrEqualTo(dt,timeleft)) {
             unit.setLocation(nextStopFine);
-            this.nextStop=null;
-            dt=timeleft;
-        }
-        else {
-            double[] newloc=new double[3];
-            newloc[0]=currLockFine[0]+speed[0]*dt;
-            newloc[1]=currLockFine[1]+speed[1]*dt;
-            newloc[2]=currLockFine[2]+speed[2]*dt;
+            this.nextStop = null;
+            dt = timeleft;
+        } else {
+            double[] newloc = new double[3];
+            newloc[0] = currLockFine[0] + speed[0] * dt;
+            newloc[1] = currLockFine[1] + speed[1] * dt;
+            newloc[2] = currLockFine[2] + speed[2] * dt;
             this.unit.setLocation(newloc);
         }
-        if (unit.isSprinting()){
-            int usedStamPoints=(int) Math.ceil(dt*10);
-            int newStamPoints=unit.getCurrentStaminaPoints()-usedStamPoints;
+        if (unit.isSprinting()) {
+            int usedStamPoints = (int) Math.ceil(dt * 10);
+            int newStamPoints = unit.getCurrentStaminaPoints() - usedStamPoints;
             unit.setCurrentStaminaPoints(newStamPoints);
         }
-
-
     }
-    public double getTimeLeftSprinting(){
-        int stamPoints=unit.getCurrentStaminaPoints();
-        if (stamPoints==0) return 0;
-        return 10*(double) stamPoints;
+    
+    /**
+     * Return the time left for sprinting.
+     */
+    public double getTimeLeftSprinting() {
+        if (unit.getCurrentStaminaPoints() == 0)
+        	return 0;
+        return 10 * (double) unit.getCurrentStaminaPoints();
     }
 
     /**
@@ -169,10 +169,10 @@ public class Movement implements IActivity {
     /**
      * Check whether this Movement can have the given destination as its destination.
      *
-     * @param destination The destination to check.
-     * @return True if and only if the destination is an array containing
-     * 3 coordinates and if the Unit can have the given
-     * destination as a cube location.
+     * @param  destination
+     * 		   The destination to check.
+     * @return True if and only if the destination is a three dimensional array and if the Unit can have the given
+     * 		   destination as a cube location.
      */
     @Raw
     public boolean canHaveAsDestination(int[] destination) {
@@ -181,6 +181,10 @@ public class Movement implements IActivity {
         return this.unit.getWorld().canHaveAsCubeLocation(destination, unit);
     }
 
+    /**
+     * Return whether a next destination cube was found as this Movement still needs to be continued until the next stop
+     * will be this Movement's destination or not.
+     */
     public boolean setNextStop() {
         Cube[] path = pathing.FindPath(new Cube(unit.getLocation().getCubeLocation()), destination);
         if (Arrays.equals(path, new Cube[]{new Cube(new int[]{-1, -1, -1})})) {
@@ -189,26 +193,34 @@ public class Movement implements IActivity {
         }
         this.nextStop = path[0];
         return true;
-
     }
 
+    /**
+     * Return the speed of this Movement.
+     */
     public double getSpeed() {
         double basespeed = 0.75 * ((double) unit.getStrength() + unit.getAgility()) / ((double) unit.getWeight());
         double realSpeed;
         double zDiff = (unit.getLocation().getZLocation() - (((double) nextStop.locArray[2]) + 0.5));
-        if (zDiff > 0) {
+        if (zDiff > 0)
             realSpeed = basespeed * 1.2;
-        } else if (zDiff < 0) {
+        else if (zDiff < 0) 
             realSpeed = basespeed * 0.5;
-        } else {
+        else
             realSpeed = basespeed;
-        }
-        if (unit.isSprinting()) {
+        if (unit.isSprinting())
             realSpeed = realSpeed * 2;
-        }
         return realSpeed;
     }
 
+    /**
+     * Return an array supplying the normalized speed of this Movement.
+     * 
+     * @param  startArray
+     * 		   The array supplying the start x, y and z coordinate for this Movement.
+     * @param  destArray
+     * 		   The array supplying the destination x, y and z coordinate for this Movement.
+     */
     private static double[] normalizeSpeed(double[] startArray, double[] destArray) {
         double dx = destArray[0] - startArray[0];
         double dy = destArray[1] - startArray[1];
@@ -217,9 +229,7 @@ public class Movement implements IActivity {
         double newX = dx / norm;
         double newY = dy / norm;
         double newZ = dy / norm;
-        assert (Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2) == 1);
         return new double[]{newX, newY, newZ};
     }
-    
 
 }

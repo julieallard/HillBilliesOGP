@@ -55,12 +55,19 @@ public class Work implements IActivity {
         return true;
     }
     
+    /**
+     * Variable registering the unit of this Work.
+     */
     private Unit unit;
     
     /**
      * Variable registering the time left until finishing this Work.
      */
     private double timeLeft;
+    
+    /**
+     * Variable registering the target location of this Work.
+     */
 	private final int[] targetLocation;
 
 	/**
@@ -107,8 +114,7 @@ public class Work implements IActivity {
 	}
 
     /**
-     * Check whether the given time left is a valid time left for
-     * any Work.
+     * Check whether the given time left is a valid time left for any Work.
      *
      * @param  timeLeft
      *         The time left to check.
@@ -123,11 +129,9 @@ public class Work implements IActivity {
      *
      * @param  timeLeft
      *         The new time left for this Work.
-     * @post   The time left fot this new Work is equal to
-     *         the given time left.
+     * @post   The time left fot this new Work is equal to the given time left.
      * @throws IllegalTimeException
-     *         The given time left is not a valid time left for any
-     *         Work.
+     *         The given time left is not a valid time left for any Work.
      */
     @Raw
     public void setTimeLeft(double timeLeft) throws IllegalTimeException {
@@ -136,6 +140,9 @@ public class Work implements IActivity {
         this.timeLeft = timeLeft;
     }    
     
+    /**
+     * Let the unit of this Work conduct Work.
+     */
     private void conductWork() {
         if (unit.isCarrying()) {
             dropWork();

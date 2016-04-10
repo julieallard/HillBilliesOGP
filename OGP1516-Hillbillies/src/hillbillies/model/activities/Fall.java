@@ -91,10 +91,11 @@ public class Fall implements IActivity {
      * 
      * @param  dt
      * 		   The amount of time to let the object fall.
-     * @effect The object falls during the given amount of time and its location is updated proportionally. The object
-     * 		   falls with the constant velocity of <0, 0, -3> towards the centre of the underlying cube and stops
-     * 		   when this object reaches a position whose underlying cube is solid. If the object is a Unit,
-     * 		   it will need to deal with a certain amount of damage points calculated as ten point per z-level they fall.
+     * @effect The object falls during the given amount of time and its z coordinate will proportionally be substracted by
+     * 		   three times the amount of time it falls. If the object reaches a position whose underlying cube is solid and the
+     * 		   z coordinate is below the centre of the current cube, the object is moved back, up to the centre of this cube.
+     * 		   If the object is a Unit, it will need to deal with a certain amount of damage points calculated as
+     * 		   ten points per z-level they fall.
      * 		   Lastly, this Fall is finished.
      */
     private void advanceFallLocation(double dt) {

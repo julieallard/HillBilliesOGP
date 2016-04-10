@@ -36,20 +36,32 @@ public class Rest implements IActivity {
 		this.gotFirsthitpoint = false;
 	}
 
+    /**
+     * Variable registering the unit of this Rest.
+     */
 	public Unit unit;
+	
+    /**
+     * Variable registering the time left until the first hitpoint is recovered during this Rest.
+     */
 	private double timeLeftTillFirstPoint;
+	
+    /**
+     * Variable registering whether the first hitpoint has already been recovered during this Rest.
+     */
 	private boolean gotFirsthitpoint;
+	
 	/**
 	 * No documentation required.
 	 */
 	@Override
 	public void advanceActivityTime(double dt) {
-		if(!gotFirsthitpoint){
-			if(Util.fuzzyGreaterThanOrEqualTo(dt,timeLeftTillFirstPoint)){
-				this.gotFirsthitpoint=true;
-				this.timeLeftTillFirstPoint=0;
-			}
-			else { this.timeLeftTillFirstPoint=this.timeLeftTillFirstPoint-dt;}
+		if (! gotFirsthitpoint) {
+			if (Util.fuzzyGreaterThanOrEqualTo(dt, timeLeftTillFirstPoint)) {
+				this.gotFirsthitpoint = true;
+				this.timeLeftTillFirstPoint = 0;
+			} else
+				this.timeLeftTillFirstPoint=this.timeLeftTillFirstPoint-dt;
 		}
 		if (unit.getCurrentHitPoints() < unit.getMaxPoints()) {
 			int HPGaining = (int) Math.ceil((dt / 0.2) * (unit.getToughness() / 200));
