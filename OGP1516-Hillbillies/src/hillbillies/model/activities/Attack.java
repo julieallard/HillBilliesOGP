@@ -87,7 +87,7 @@ public class Attack implements IActivity {
      *         Attack.
      */
     @Raw
-    public void setTimeLeft(double timeLeft) throws IllegalTimeException {
+    private void setTimeLeft(double timeLeft) throws IllegalTimeException {
       if (! isValidTimeLeft(timeLeft))
         throw new IllegalTimeException();
       this.timeLeft = timeLeft;

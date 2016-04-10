@@ -340,7 +340,7 @@ public class World {
 	 * 		   The faction to add.
 	 * @post   The given faction is added to this world.
 	 */
-    public void addFaction(Faction faction) throws IllegalArgumentException {
+    void addFaction(Faction faction) throws IllegalArgumentException {
 		if (! faction.canHaveAsWorld(this))
 			throw new IllegalArgumentException("This world has already reached its max amount of factions.");
         this.FactionSet.add(faction);
@@ -353,21 +353,21 @@ public class World {
 	 * 		   The faction to remove.
 	 * @post   The given faction is removed from this world.
 	 */
-	public void removeFaction(Faction faction) {
+    void removeFaction(Faction faction) {
 		FactionSet.remove(faction);
 	}
 
 	/**
 	 * Return the number of factions in this world.
 	 */
-	public int getNumberOfFactions() {
+    int getNumberOfFactions() {
 		return FactionSet.size();
 	}
 	
 	/**
 	 * Return the faction containing the smallest number of Units.
 	 */
-	public Faction getSmallestFaction() {
+    Faction getSmallestFaction() {
 		Faction smallestFaction = (Faction) FactionSet.toArray()[0];
 		for (Faction faction: FactionSet) {
 			if (faction.getUnitSet().size() < smallestFaction.getUnitSet().size()) {
@@ -398,14 +398,14 @@ public class World {
 	 * 		   The unit to remove.
 	 * @post   The given unit is removed from this world.
 	 */
-	public  void removeUnit(Unit unit) {
+    void removeUnit(Unit unit) {
 		TotalUnitSet.remove(unit);
 	}	
 
 	/**
 	 * Return the number of Units of this world.
 	 */
-	public int getNumberOfUnits() {
+    int getNumberOfUnits() {
 		return TotalUnitSet.size();
 	}
 
@@ -423,7 +423,7 @@ public class World {
      * @return True if and only if the time duration is greater or equal with zero
      * 		   and lower than 0.2.
      */
-    public static boolean isValidTimeDuration(double dt) {
+     private static boolean isValidTimeDuration(double dt) {
         return (dt >= 0 && dt < 0.2);
     }
 
@@ -464,12 +464,42 @@ public class World {
         throw new IllegalArgumentException();
     }
 
-    public void caveIn() {
+    private void caveIn() {
 
         for (int[] loc : caveInlist) {
             destroyCube(loc);
         }
         caveInlist.clear();
+    }
+
+    public void setCubeType(int x,int y,int z,int value){
+        CubeWorldObject cubeObject=new Air();
+        ;
+        switch (value) {
+            case 3:
+                cubeObject = new Workshop();
+                if (getCubeAt(new int[]{x, y, z}) == 1 || getCubeAt(new int[]{x, y, z}) == 2)
+                    this.borderConnect.changeSolidToPassable(x, y, z);
+                break;
+            default:
+            case 0:
+                cubeObject = new Air();
+                if (getCubeAt(new int[]{x, y, z}) == 1 || getCubeAt(new int[]{x, y, z}) == 2)
+                    this.borderConnect.changeSolidToPassable(x, y, z);
+                break;
+            case 1:
+                if (getCubeAt(new int[]{x, y, z}) == 0 || getCubeAt(new int[]{x, y, z}) == 3)
+                    throw new IllegalArgumentException("Facade just tried to make a non-Solid cube Solid");
+                cubeObject = new Rock();
+                break;
+            case 2:
+                if (getCubeAt(new int[]{x, y, z}) == 0 || getCubeAt(new int[]{x, y, z}) == 3)
+                    throw new IllegalArgumentException("Facade just tried to make a non-Solid cube Solid");
+                cubeObject = new Rock();
+                break;
+        }
+        changeListener.notifyTerrainChanged(x,y,z);
+        CubeWorld[x][y][z]=cubeObject;
     }
     
 }
