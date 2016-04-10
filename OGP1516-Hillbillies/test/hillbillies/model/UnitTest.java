@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import org.junit.Assert.*;
 
 
 public class UnitTest {
@@ -39,25 +40,31 @@ public class UnitTest {
         double[] arr=new double[]{3,3,3};
         assertArrayEquals(unit1.getLocation().getArray(),arr,0.005);
     }
-
     @Test
     public void setLocation() throws Exception {
-        unit1.set
+        unit1.setLocation(1,2,3);
+        double[] arr=new double[]{1,2,3};
+        assertArrayEquals(unit1.getLocation().getArray(),arr,0.005);
     }
-
     @Test
     public void setLocation1() throws Exception {
-
+        VLocation loc=new VLocation(4,4,4,unit2);
+        unit2.setLocation(loc);
+        assertFalse(!loc.equals(unit2.getLocation()));
+        assertEquals(unit1.getWorld().getWorldMap().get(loc),unit2);
     }
 
     @Test
     public void setLocation2() throws Exception {
-
+        double[] arr=new double[]{1,2,3};
+        assertArrayEquals(unit1.getLocation().getArray(),arr,0.005);
+        unit1.setLocation(arr);
     }
 
     @Test
     public void register() throws Exception {
-
+        unit1.unregister();
+        assertFalse(world.getWorldMap().getAllUnits().contains(unit1));
     }
 
     @Test
@@ -107,16 +114,6 @@ public class UnitTest {
 
     @Test
     public void setDefaultBehavior() throws Exception {
-
-    }
-
-    @Test
-    public void startDefaultBehavior() throws Exception {
-
-    }
-
-    @Test
-    public void stopDefaultBehavior() throws Exception {
 
     }
 
