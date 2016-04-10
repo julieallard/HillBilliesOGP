@@ -231,7 +231,6 @@ public class Unit extends MovableWorldObject {
 		int randomStrength = random.nextInt(76) + 25;
 		int randomAgility = random.nextInt(76) + 25;
 		int randomToughness = random.nextInt(76) + 25;
-		//this.setName(name);        
     	this.setLocation(randomLocX, randomLocY, randomLocZ);
         this.setWeight(randomWeight);
         this.setAgility(randomAgility);
@@ -290,7 +289,7 @@ public class Unit extends MovableWorldObject {
      *       		&& Character.isUpperCase(name.charAt(0))
      *       		&& "[A-Z|a-z|\"|\'|\\s]*".matches(name)
      */
-    public boolean isValidName(String name) {
+    private boolean isValidName(String name) {
         return (name.length() >= 2) && Character.isUpperCase(name.charAt(0)) && "[A-Z|a-z|\"|\'|\\s]*".matches(name);
     }    
     
@@ -331,7 +330,7 @@ public class Unit extends MovableWorldObject {
      * @return 
      *       | result == VLocation.isValidLocation(location)
      */
-    public static boolean isValidLocation(VLocation location) {
+    private static boolean isValidLocation(VLocation location) {
         return VLocation.isValidLocation(location);
     }
 
@@ -421,7 +420,7 @@ public class Unit extends MovableWorldObject {
      *       | result == (property >= 1
      *       		&& property <= 200)
     */
-    public boolean isValidProperty(int property) {
+    private boolean isValidProperty(int property) {
     	return (property >= 1 && property <= 200);
     }
     
@@ -437,7 +436,7 @@ public class Unit extends MovableWorldObject {
      *       | result == (weight >= 1 && weight <= 200
      *       		&& weight >= 0.5 * (this.getStrength() + this.getAgility()))
     */
-    public boolean isValidWeight(int weight) {
+    private boolean isValidWeight(int weight) {
     	return (weight >= 1 && weight <= 200 && weight >= 0.5 * (this.getStrength() + this.getAgility()));
     }
     
@@ -605,7 +604,7 @@ public class Unit extends MovableWorldObject {
      * @effect The default behavior state of this Unit is set to true.
      * 		 | setDefaultBehavior(true)
      */
-    private void startDefaultBehavior() {
+    public void startDefaultBehavior() {
     	setDefaultBehavior(true);
     }
    
@@ -615,7 +614,7 @@ public class Unit extends MovableWorldObject {
      * @effect The default behavior state of this Unit is set to false.
      * 		 | setDefaultBehavior(false)
      */
-    private void stopDefaultBehavior() {
+    public void stopDefaultBehavior() {
     	setDefaultBehavior(false);
     }
 
@@ -1121,13 +1120,13 @@ public class Unit extends MovableWorldObject {
         	}
     }
 
-    public void die() {
+    private void die() {
         this.unregister();
         this.getWorld().removeUnit(this);
         this.getFaction().removeUnit(this);
     }
 
-    public String getRandomName(Random random){
+    private String getRandomName(Random random){
         boolean flag=random.nextBoolean();
         if(flag){
             String[] redneckNameArr=new String[]{"Cletus","Billy","Daquan","Bill","Uncle Bob","Minnie","John","Harly","Molly",
@@ -1166,7 +1165,7 @@ public class Unit extends MovableWorldObject {
      * 		   greater than zero.
      *       | result == (xp >= 0)
      */
-    public static boolean isValidXP(int xp) {
+    private static boolean isValidXP(int xp) {
     	return (xp >= 0);
     }
     
@@ -1183,7 +1182,7 @@ public class Unit extends MovableWorldObject {
      *       |   then new.getXP() == sp
      */
     @Raw
-    public void setXP(int xp) {
+    private void setXP(int xp) {
     	if (isValidXP(xp))
     		this.xp = xp;
     	int xptouse = this.getXP() - xpused;
