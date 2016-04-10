@@ -72,13 +72,20 @@ public class Rest implements IActivity {
 				unit.setCurrentHitPoints(unit.getCurrentHitPoints() + HPNeeded);
 				advanceActivityTime(timeForGainingSP);
 			} else
-				unit.setCurrentHitPoints(unit.getCurrentHitPoints() + HPGaining);	
-		}
-		if (unit.getCurrentStaminaPoints() < unit.getMaxPoints()) {
+				unit.setCurrentHitPoints(unit.getCurrentHitPoints() + HPGaining);
+				unit.activityFinished();
+		} else if (unit.getCurrentStaminaPoints() < unit.getMaxPoints()) {
 			// TODO: 8/04/16 check for max+let open an option for activity finished
 			int SPGaining = (int) Math.ceil((dt / 0.2) * (unit.getToughness() / 100));
-			unit.setCurrentStaminaPoints(unit.getCurrentStaminaPoints() + SPGaining);
-		}
+			int SPNeeded = unit.getMaxPoints() - unit.getCurrentStaminaPoints();
+			double timeForGainingSPNeeded = SPNeeded * 0.2 / (unit.getToughness() / 100);
+			if (timeForGainingSPNeeded < dt) {
+				unit.setCurrentHitPoints(unit.getCurrentStaminaPoints() + SPNeeded);
+				unit.activityFinished();
+			} else
+				unit.setCurrentHitPoints(unit.getCurrentStaminaPoints() + SPGaining);
+				unit.activityFinished();
+			}
 	}
 
     /**

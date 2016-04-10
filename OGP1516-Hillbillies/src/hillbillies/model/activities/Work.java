@@ -142,6 +142,12 @@ public class Work implements IActivity {
     
     /**
      * Let the unit of this Work conduct Work.
+     * 
+     * @effect If the unit was carrying an object, the object is dropped and the unit gains 10 experience points.
+     * 		   If the target location is in a workshop cube and a Boulder and Log are present at the target location, 
+     * 		   the unit works out and gains 10 experience points. If a Boulder or Log is present at the target location,
+     * 		   the unit picks up the Boulder or Log and gains 10 experience points. If the target location is in a wood or rock
+     * 		   cube, the cube collapses and the unit gains 10 experience points.
      */
     private void conductWork() {
         if (unit.isCarrying()) {
@@ -168,21 +174,38 @@ public class Work implements IActivity {
         }
     }
 
+    /**
+     * Let the unit drop the object it is carrying.
+     * 
+     * @effect The unit drops the object it is carrying and this Work is finished.
+     */
     private void dropWork(){
-        unit.drop(unit.getCarriedObject());
+        unit.drop(unit.getCarriedObject()); 
         unit.activityFinished();
     }
     
+    /**
+     * Let the unit work out.
+     * 
+     * @effect The unit's weight and toughness is increased and this Work is finished.
+     */
     private void workOutWork() {
         World world = unit.getWorld();
         Log log = world.getLogsAt(targetLocation).get(0);
         Boulder boulder = world.getBouldersAt(targetLocation).get(0);
-        //TODO Increase weight and toughness?
+        this.unit.setWeight(unit.getWeight() + 1);
+        this.unit.setToughness(unit.getToughness() + 1);
+        //TODO Increase weight and toughness? by how much
         log.unregister();
         boulder.unregister();
         unit.activityFinished();
     }
 
+    /**
+     * Let the unit carry the object.
+     * 
+     * @effect The unit picks up the boulder or log and this Work is finished.
+     */
     private void pickupWork() {
         World world = unit.getWorld();
         List<Boulder> boulderList = world.getBouldersAt(targetLocation);
@@ -195,8 +218,14 @@ public class Work implements IActivity {
         unit.activityFinished();
     }
     
-    private void destroyWork(){
+    /**
+     * Let the unit destroy the cube.
+     * 
+     * @effect The cube the target location is in is destroyed and this Work is finished.
+     */
+    private void destroyWork() {
         unit.getWorld().destroyCube(targetLocation);
         unit.activityFinished();
     }
+    
 }
