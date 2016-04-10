@@ -424,7 +424,7 @@ public class World {
      * 		   and lower than 0.2.
      */
      private static boolean isValidTimeDuration(double dt) {
-        return (dt >= 0 && dt < 0.2);
+        return (!(dt<0) && dt < 0.2);
     }
 
     /**
