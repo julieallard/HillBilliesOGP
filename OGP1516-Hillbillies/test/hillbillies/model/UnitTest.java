@@ -1,5 +1,6 @@
 package hillbillies.model;
 
+import hillbillies.part2.listener.DefaultTerrainChangeListener;
 import hillbillies.part2.listener.TerrainChangeListener;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,32 +10,39 @@ import static org.junit.Assert.*;
 
 public class UnitTest {
     private World world;
-    private
+    private Unit unit1;
+    private Unit unit2;
+    private Unit unit3;
 
     @Before
     public void setUp() throws Exception {
         int[][][] cubeWorld=new int[10][10][10];
-        TerrainChangeListener terrainChangeListener=new
+        TerrainChangeListener terrainChangeListener=new DefaultTerrainChangeListener();
+        this.world=new World(cubeWorld,terrainChangeListener);
+        this.unit1=new Unit("Billy Bob",3,3,3,75,75,75,75,false,world);
+        this.unit2=new Unit("Cletus",3,3,3,75,75,75,75,false,world);
+        this.unit3=new Unit("John Favreau",3,3,3,75,75,75,75,false,world);
     }
 
     @Test
     public void getName() throws Exception {
-
+        assertEquals(unit1.getName(),"Billy Bob");
+        assertEquals(unit2.getName(),"Cletus");
     }
-
     @Test
     public void setName() throws Exception {
-
+        unit3.setName("Chef");
+        assertEquals(unit3.getName(),"Chef");
     }
-
     @Test
     public void getLocation() throws Exception {
-
+        double[] arr=new double[]{3,3,3};
+        assertArrayEquals(unit1.getLocation().getArray(),arr,0.005);
     }
 
     @Test
     public void setLocation() throws Exception {
-
+        unit1.set
     }
 
     @Test
