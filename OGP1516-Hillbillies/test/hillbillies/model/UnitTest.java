@@ -69,61 +69,67 @@ public class UnitTest {
 
     @Test
     public void getWeight() throws Exception {
+        assertEquals(unit1.getWeight(),75);
 
     }
 
     @Test
     public void setWeight() throws Exception {
+        unit1.setWeight(100);
+        assertEquals(unit1.getWeight(),100);
 
     }
 
     @Test
     public void getStrength() throws Exception {
-
+        assertEquals(unit1.getStrength(),75);
     }
 
     @Test
     public void setStrength() throws Exception {
-
+        unit1.setStrength(100);
+        assertEquals(unit1.getStrength(),100);
     }
 
     @Test
     public void getAgility() throws Exception {
-
+        assertEquals(unit1.getAgility(),75);
     }
 
     @Test
     public void setAgility() throws Exception {
+        unit1.setAgility(100);
+        assertEquals(unit1.getAgility(),100);
 
     }
 
     @Test
-    public void getToughness() throws Exception {
-
-    }
+    public void getToughness() throws Exception{
+        assertEquals(unit1.getToughness(),75);
+        }
 
     @Test
     public void setToughness() throws Exception {
+        unit1.setToughness(100);
+        assertEquals(unit1.getToughness(),100);
 
     }
 
     @Test
     public void isDefaultBehaviorEnabled() throws Exception {
-
+        assertEquals(unit1.isDefaultBehaviorEnabled(),false);
     }
 
     @Test
     public void setDefaultBehavior() throws Exception {
+        unit1.setDefaultBehavior(true);
+        assertEquals(unit1.isDefaultBehaviorEnabled(),true);
 
     }
 
     @Test
     public void getWorld() throws Exception {
-
-    }
-
-    @Test
-    public void canHaveAsWorld() throws Exception {
+        assertEquals(unit1.getWorld(),world);
 
     }
 
@@ -301,55 +307,4 @@ public class UnitTest {
     public void rest() throws Exception {
 
     }
-
-    @Test
-    public void setLocation3() throws Exception {
-
-    }
-
-    @Test
-    public void setLocation4() throws Exception {
-
-    }
-
-    @Test
-    public void setLocation5() throws Exception {
-
-    }
-
-    @Test
-    public void getLocation1() throws Exception {
-
-    }
-
-    @Test
-    public void register1() throws Exception {
-
-    }
-
-    @Test
-    public void unregister1() throws Exception {
-
-    }
-
-    @Test
-    public void getWorld1() throws Exception {
-
-    }
-
-    @Test
-    public void activityFinished1() throws Exception {
-
-    }
-
-    @Test
-    public void getWeight1() throws Exception {
-
-    }
-
-    @Test
-    public void advanceTime1() throws Exception {
-
-    }
-
 }
