@@ -118,7 +118,8 @@ public class Log extends MovableWorldObject {
      *
      * @param  location
      * 		   The new location for this Log.
-     * @post   The location of this new Log is equal to the given location.
+     * @post   The location of this new Log is equal to the given location and this Log and the given location
+     * 		   are registered.
      * @throws UnitIllegalLocation
      * 		   The given location is not a valid location for any Log.
      */

@@ -314,7 +314,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Variable registering the weight of this Unit.
      */
-    private int weight;
+    public int weight;
     
     /**
      * Variable registering the agility of this Unit.
@@ -554,9 +554,7 @@ public class Unit extends MovableWorldObject {
 	public void unregister() {
 		this.getWorld().getWorldMap().remove(this.getLocation());
 	}
-    
-	//CONTINUE HERE WITH DOCUMENTATION
-	
+    	
     /**
      * Check whether the given property is a valid property for any Unit.
      *  
@@ -1023,26 +1021,6 @@ public class Unit extends MovableWorldObject {
     }    
     
     /**
-     * Let this Unit sprint.
-     * 
-     * @effect The sprinting state of this Unit is set to true.
-     * 		 | setSprinting(true)
-     */
-    private void startSprinting() {
-    	setSprinting(true);
-    }
-   
-    /**
-     * Let this Unit stop sprinting.
-     * 
-     * @effect The sprinting state of this Unit is set to false.
-     * 		 | setSprinting(false)
-     */
-    private void stopSprinting() {
-    	setSprinting(false);
-    }
-    
-    /**
      * No documentation required.
      */
     @Override
@@ -1212,22 +1190,34 @@ public class Unit extends MovableWorldObject {
         	this.setCurrentHitPoints(this.getCurrentHitPoints() - intDamage);
     }
 
+    /**
+     * Let this Unit die.
+     * 
+     * @effect This Unit is unregistered, removed from its world and removed from its faction.
+     */
     private void die() {
         this.unregister();
         this.getWorld().removeUnit(this);
         this.getFaction().removeUnit(this);
     }
 
+    /**
+     * Return a random name.
+     * 
+     * @param  random
+     * 		   The grandom object generated and used by the Unit constructor.
+     * @return An element supplied by a list of random names.
+     */
     private String getRandomName(Random random){
-        boolean flag=random.nextBoolean();
-        if(flag){
-            String[] redneckNameArr=new String[]{"Cletus","Billy","Daquan","Bill","Uncle Bob","Minnie","John","Harly","Molly",
+        boolean flag = random.nextBoolean();
+        if (flag) {
+            String[] redneckNameArr = new String[]{"Cletus","Billy","Daquan","Bill","Uncle Bob","Minnie","John","Harly","Molly",
                     "Tyrone","Daisy","Dale","Ruby","Bonnie","Britney","Earl","Jessie","Moe","Major Marquis Warren","Daisy Domergue","Marco the Mexican"
                     ,"Chester Charles Smithers","Gemma","Chris Mannix","Sweet Dave","Billy Crash","Rodney","Dicky Speck","Chicken Charlie","Django Freeman"};
             return redneckNameArr[random.nextInt(redneckNameArr.length)];
         }
-        int index=random.nextInt(51);
-        String[] namearr=new String[]{"Alfonso Addie","Terrence Truluck","Russel Rouse","Fritz Forst","Mckinley Marrow",
+        int index = random.nextInt(51);
+        String[] namearr = new String[]{"Alfonso Addie","Terrence Truluck","Russel Rouse","Fritz Forst","Mckinley Marrow",
                 "Sidney Suttles","Todd Tamura","Lee Lassiter","Sonny Sumpter","Tony Thames","Phil Pittman","Jonathon Jenning",
                 "Clifford Conerly","Tod Tegeler","Lindsay Loken","Bud Bateman","Bradly Bedgood","Reed Rentas","Bernie Balch",
                 "Ezra Eason","Erin Enriguez","Luther Lines","Samuel Stromberg","Enrique Esqueda","Paul Plowden","Francesco Fitton",
@@ -1239,7 +1229,7 @@ public class Unit extends MovableWorldObject {
     }
     
     /**
-     * Return the experience of this Unit.
+     * Return the experience points of this Unit.
      */
     @Basic @Raw
     public int getXP() {
@@ -1247,13 +1237,11 @@ public class Unit extends MovableWorldObject {
     }
     
     /**
-     * Check whether the given number of experience points is a valid number
-     * of experience points for any Unit.
+     * Check whether the given number of experience points is a valid number of experience points for any Unit.
      *  
      * @param  xp
      *         The number of experience points to check.
-     * @return True if and only if the number of experience points is equal or
-     * 		   greater than zero.
+     * @return True if and only if the number of experience points is greater or equal to zero.
      *       | result == (xp >= 0)
      */
     private static boolean isValidXP(int xp) {
@@ -1261,14 +1249,12 @@ public class Unit extends MovableWorldObject {
     }
     
     /**
-     * Set the number of experience points of this Unit to the given number of
-     * experience points.
+     * Set the number of experience points of this Unit to the given number of experience points.
      * 
      * @param  xp
      *         The new number of experience points for this Unit.
-     * @post   If the given number of experience points is a valid number of
-     * 		   experience points for any Unit, the number of experience points of
-     * 		   this new Unit is equal to the given number of experience points.
+     * @post   If the given number of experience points is a valid number of experience points for any Unit,
+     * 		   the number of experience points of this new Unit is equal to the given number of experience points.
      *       | if (isValidXP(sp))
      *       |   then new.getXP() == sp
      */
@@ -1296,19 +1282,40 @@ public class Unit extends MovableWorldObject {
      * 
      * @param  xp
      * 		   The number of experience points to add.
-     * @post   The given number of experience points is added to the current
-     * 		   amount of experience points of this Unit.
+     * @effect The given number of experience points is added to the current amount of experience points of this Unit.
      */
     public void addXP(int xp) {
         this.setXP(this.getXP() + xp);
     }
 
+    /**
+     * Let this Unit conduct a movement to the given location.
+     * 
+     * @param  destination
+     * 		   The location to let this Unit move to.
+     * @effect This Unit conducts a movement to the given location and this Unit's current activity is interrupted
+     * 		   by the movement.
+     */
     public void moveTo(int[] destination) {
-        if(! this.world.canHaveAsCubeLocation(destination, this)) return;
-        Movement movement = new Movement(this,destination);
+        if (! this.world.canHaveAsCubeLocation(destination, this))
+        	return;
+        Movement movement = new Movement(this, destination);
         interruptCurrentAct(movement);
     }
     
+    /**
+     * Let this Unit move to a location in an adjacent cube.
+     * 
+     * @param  dx
+     * 		   The movement along the x axis to make.
+     * @param  dy
+     * 		   The movement along the y axis to make.
+     * @param  dz
+     * 		   The movement along the z axis to make.
+     * @throws UnitIllegalLocation
+     * 		   The intended movement is not a movement to an adjacent cube.
+     * @effect This Unit moves to the adjacent cube, referred to by given dx, dy and dz.
+     */
     public void moveToAdjacent(int dx, int dy, int dz) throws UnitIllegalLocation {
         if (Math.abs(dx) > 1 || Math.abs(dy) > 1 || Math.abs(dz) > 1)
         	throw new UnitIllegalLocation("Illegal move to adjacent destination");
@@ -1320,8 +1327,15 @@ public class Unit extends MovableWorldObject {
         loc[2] = loc[2] + dz;
         this.moveTo(loc);
     }
-    public void rest(){
-        Rest rest=new Rest(this);
+    
+    /**
+     * Let this Unit rest.
+     * 
+     * @effect This Unit conducts an activity of resting and this Unit's current activity is interrupted
+     * 		   by the activity of resting. 
+     */
+    public void rest() {
+        Rest rest = new Rest(this);
         interruptCurrentAct(rest);
     }
 }

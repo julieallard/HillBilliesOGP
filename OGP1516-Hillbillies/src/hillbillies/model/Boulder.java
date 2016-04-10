@@ -118,7 +118,8 @@ public class Boulder extends MovableWorldObject {
      *
      * @param  location
      * 		   The new location for this Boulder.
-     * @post   The location of this new Boulder is equal to the given location.
+     * @post   The location of this new Boulder is equal to the given location and this Boulder and the given location
+     * 		   are registered.
      * @throws UnitIllegalLocation
      * 		   The given location is not a valid location for any Boulder.
      */
