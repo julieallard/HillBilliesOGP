@@ -103,6 +103,7 @@ public class Unit extends MovableWorldObject {
 	 *       |	 then new.getToughness == 100
 	 *       |   else new.getToughness == toughness
      * @post   The initial state of behavior of this new Unit is set according to the given flag.
+     * 		 | new.defaultbehaviorenabled == enableDefaultBehavior
      * @effect The world of this new Unit is set to the given world.
      * 		 | this.setWorld(world)
      */
@@ -206,6 +207,7 @@ public class Unit extends MovableWorldObject {
 	 *       |	 then new.getToughness == 100
 	 *       |   else new.getToughness == toughness
      * @post   The initial state of behavior of this new Unit is set according to the given flag.
+     * 		 | new.defaultbehaviorenabled == enableDefaultBehavior
      */
     public Unit(String name, double x, double y, double z, int weight, int strength, int agility, int toughness,
     		boolean enableDefaultBehavior) throws UnitIllegalLocation, IllegalArgumentException {
@@ -601,11 +603,9 @@ public class Unit extends MovableWorldObject {
      *
      * @param  weight
      * 		   The new weight for this Unit.
-     * @post   If the given weight is not below 1, not above 200 nor above
-     * 		   the minimum weight for any Unit,
-     *         the weight of this new Unit is equal to the given
-     *         weight. Otherwise, its new weight is equal to 1, 200, respectively
-     *         the minimum weight.
+     * @post   If the given weight is not below 1, not above 200 nor above the minimum weight for any Unit,
+     *         the weight of this new Unit is equal to the given weight. Otherwise, its new weight is
+     *         equal to 1, 200, respectively the minimum weight.
      *       | if (isValidWeight(weight))
      *       |   then new.getWeight() == weight
      *       |   else if (weight < 1)
@@ -991,8 +991,8 @@ public class Unit extends MovableWorldObject {
      *
      * @param  carriedObject
      * 		   The object to drop.
-     * @post   The carried object of this Unit will be set to null, the carrying state of this Unit will be set
-     * 		   to false and the object will be added in its world's world map.
+     * @effect The carried object of this Unit is set to null, the carrying state of this Unit is set
+     * 		   to false and the object is added in its world's world map.
      */
     public void drop(MovableWorldObject carriedObject) {
         this.carriedObject = null;
@@ -1060,7 +1060,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Let this Unit finish its current activity.
      * 
-     * @post   If this Unit had a paused activity, the paused activity is resumed and if this Unit did not have
+     * @effect If this Unit had a paused activity, the paused activity is resumed and if this Unit did not have
      * 		   a paused activity, its current activity is set to none.
      */     
     public void activityFinished() {
@@ -1078,7 +1078,7 @@ public class Unit extends MovableWorldObject {
      * 
      * @param  targetCube
      * 		   The position of the cube to let this Unit work at. 
-     * @post   The Unit conducts work at the given target cube.
+     * @effect  The Unit conducts work at the given target cube.
      */      
     public void work(int[] targetCube) {
         Work work = new Work(this, targetCube);
@@ -1092,7 +1092,7 @@ public class Unit extends MovableWorldObject {
      * 
      * @param  defender
      * 		   The Unit to attack.
-     * @post   The Unit conducts an attack against the defender and the defender conducts a defence against this Unit.
+     * @effect The Unit conducts an attack against the defender and the defender conducts a defence against this Unit.
      * @throws IllegalArgumentException
      * 		   The attack cannot be conducted.
      */      
@@ -1155,7 +1155,7 @@ public class Unit extends MovableWorldObject {
 	/**
 	 * Set the faction of this Unit.
 	 * 
-	 * @post   The faction of this new Unit is equal to a newly created faction if the maximum number of active
+	 * @effect The faction of this new Unit is equal to a newly created faction if the maximum number of active
 	 *		   factions is not reached yet, or is equal to the faction with the smallest number of Units if the
 	 *		   maximum number of active factions has already been reached.
 	 * @throws IllegalArgumentException
@@ -1253,7 +1253,7 @@ public class Unit extends MovableWorldObject {
      * 
      * @param  xp
      *         The new number of experience points for this Unit.
-     * @post   If the given number of experience points is a valid number of experience points for any Unit,
+     * @effect If the given number of experience points is a valid number of experience points for any Unit,
      * 		   the number of experience points of this new Unit is equal to the given number of experience points.
      *       | if (isValidXP(sp))
      *       |   then new.getXP() == sp
