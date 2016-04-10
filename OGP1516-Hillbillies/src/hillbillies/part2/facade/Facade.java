@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class Facade extends hillbillies.part1.facade.Facade implements hillbillies.part2.facade.IFacade {
 
- 	/* WORLD */
+    /* WORLD */
 
     /**
      * Create a new world of the given size and with the given terrain. To keep
