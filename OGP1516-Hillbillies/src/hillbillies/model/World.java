@@ -85,7 +85,7 @@ public class World {
 	 * @invar Each Unit in the TotalUnitSet references this world as the world to
 	 * 		  which it is attached. 
 	 */
-	private Set<Unit> TotalUnitSet; 
+	public Set<Unit> TotalUnitSet;
 	
 	/**
 	 * Variable registering the length of the sides of this World.

@@ -316,7 +316,13 @@ public class Facade extends hillbillies.part1.facade.Facade implements hillbilli
      */
     @Override
     public boolean isAlive(Unit unit) throws ModelException{
-        //Todo // FIXME: 9/04/16 die and shit
+
+        try{
+            return unit.getWorld().TotalUnitSet.contains(unit);
+            }
+        catch (Exception error) {throw new ModelException(error);}
+
+
     }
 
     /**
@@ -331,7 +337,7 @@ public class Facade extends hillbillies.part1.facade.Facade implements hillbilli
     public int getExperiencePoints(Unit unit) throws ModelException{
         
         try{
-            return unit.getXp();
+            return unit.getXP();
             }
         catch (Exception error) {throw new ModelException(error);}
         

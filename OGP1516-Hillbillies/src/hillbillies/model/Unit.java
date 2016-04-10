@@ -169,6 +169,48 @@ public class Unit extends MovableWorldObject {
         this.setOrientation((float) (0.5 * Math.PI));
         this.setActivity(null);
         this.setFaction();
+
+
+
+    }
+    public Unit(String name, double x, double y, double z, int weight, int strength,
+                int agility, int toughness, boolean enableDefaultBehavior)
+            throws UnitIllegalLocation, IllegalArgumentException {
+        this.setName(name);
+        this.setLocation(x, y, z);
+        if (weight < 25) {
+            this.setWeight(25);
+        } else if (weight > 100) {
+            this.setWeight(100);
+        } else {
+            this.setWeight(weight);
+        }
+        if (agility < 25) {
+            this.setAgility(25);
+        } else if (agility > 100) {
+            this.setAgility(100);
+        } else {
+            this.setAgility(agility);
+        }
+        if (strength < 25) {
+            this.setStrength(25);
+        } else if (strength > 100) {
+            this.setStrength(100);
+        } else {
+            this.setStrength(strength);
+        }
+        if (toughness < 25) {
+            this.setToughness(25);
+        } else if (toughness > 100) {
+            this.setToughness(100);
+        } else {
+            this.setToughness(toughness);
+        }
+        this.setDefaultBehavior(enableDefaultBehavior);
+        this.setCurrentHitPoints(getMaxPoints());
+        this.setCurrentStaminaPoints(getMaxPoints());
+        this.setOrientation((float) (0.5 * Math.PI));
+        this.setActivity(null);
     }
 
     public Unit(World world, boolean enableDefaultBehavior) {
@@ -1086,6 +1128,13 @@ public class Unit extends MovableWorldObject {
     }
 
     public String getRandomName(Random random){
+        boolean flag=random.nextBoolean();
+        if(flag){
+            String[] redneckNameArr=new String[]{"Cletus","Billy","Daquan","Bill","Uncle Bob","Minnie","John","Harly","Molly",
+                    "Tyrone","Daisy","Dale","Ruby","Bonnie","Britney","Earl","Jessie","Moe","Major Marquis Warren","Daisy Domergue","Marco the Mexican"
+                    ,"Chester Charles Smithers","Gemma","Chris Mannix","Sweet Dave","Billy Crash","Rodney","Dicky Speck","Chicken Charlie","Django Freeman"};
+            return redneckNameArr[random.nextInt(redneckNameArr.length)];
+        }
         int index=random.nextInt(51);
         String[] namearr=new String[]{"Alfonso Addie","Terrence Truluck","Russel Rouse","Fritz Forst","Mckinley Marrow",
                 "Sidney Suttles","Todd Tamura","Lee Lassiter","Sonny Sumpter","Tony Thames","Phil Pittman","Jonathon Jenning",
@@ -1165,8 +1214,7 @@ public class Unit extends MovableWorldObject {
     }
 
     public void moveTo(int[] destination) {
-        if(! this.world.canHaveAsCubeLocation(destination, this))
-        	return;
+        if(! this.world.canHaveAsCubeLocation(destination, this)) return;
         Movement movement = new Movement(this,destination);
         interruptCurrentAct(movement);
     }
@@ -1182,5 +1230,8 @@ public class Unit extends MovableWorldObject {
         loc[2] = loc[2] + dz;
         this.moveTo(loc);
     }
-    
+    public void rest(){
+        Rest rest=new Rest(this);
+        interruptCurrentAct(rest);
+    }
 }
