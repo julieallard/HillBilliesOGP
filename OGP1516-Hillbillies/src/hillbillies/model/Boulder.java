@@ -20,12 +20,9 @@ public class Boulder extends MovableWorldObject {
      *         The z coordinate for this new Boulder.
      * @param  world
      * 		   The world for this new Boulder.
-	 * @effect The x coordinate of this new Boulder is set to
-	 *         the given x coordinate.
-	 * @effect The y coordinate of this new Boulder is set to
-	 *         the given y coordinate.
-	 * @effect The z coordinate of this new Boulder is set to
-	 *         the given z coordinate.       
+	 * @effect The x coordinate of this new Boulder is set to the given x coordinate.
+	 * @effect The y coordinate of this new Boulder is set to the given y coordinate.
+	 * @effect The z coordinate of this new Boulder is set to the given z coordinate.       
      * @post   The world of this new Boulder is equal to the given world.
      * @throws UnitIllegalLocation
      *         The given location is not a valid location for any Boulder.
@@ -37,10 +34,24 @@ public class Boulder extends MovableWorldObject {
         this.weight = 10 + random.nextInt(41);
     }
 
+    /**
+     * Variable registering the location of this Boulder.
+     */
     private VLocation location;
+    
+    /**
+     * Variable registering the world of this Boulder.
+     */
     private World world;
 
+    /**
+     * Variable registering the weight of this Boulder.
+     */
     private final int weight;    
+    
+    /**
+     * Variable registering the activity of this Boulder.
+     */
     private IActivity activity;    
     
     /**
@@ -49,21 +60,35 @@ public class Boulder extends MovableWorldObject {
     @Basic
     @Raw
     public VLocation getLocation() {
-        return this.location;
+        return location;
     }
   
     /**
-     * Check whether the given location is a valid location for
-     * any Boulder.
+     * Check whether the given location is a valid location for any Boulder.
      *
      * @param  location
      * 		   The location to check.
-     * @return 
+     * @return True if and only if this Boulder can have the given location as its location in this Boulder's world.
      */
     public static boolean isValidLocation(VLocation location) {
         return VLocation.isValidLocation(location);
     }    
     
+    /**
+     * Set the location of this Boulder to the given x, y and z coordinate.
+     *
+     * @param  x
+     * 		   The x coordinate for this Boulder.
+     * @param  y
+     * 		   The y coordinate for this Boulder.
+     * @param  z
+     * 		   The z coordinate for this Boulder.
+     * @post   The x coordinate of the location of this new Boulder is equal to the given x coordinate.
+     * @post   The y coordinate of the location of this new Boulder is equal to the given y coordinate.
+     * @post   The z coordinate of the location of this new Boulder is equal to the given z coordinate.
+     * @throws UnitIllegalLocation
+     * 		   The given location is not a valid location for any Boulder.
+     */
     @Override
     @Raw
     public void setLocation(double x, double y, double z) throws UnitIllegalLocation {
@@ -72,37 +97,62 @@ public class Boulder extends MovableWorldObject {
     }
     
     /**
-     * Set the location of this Boulder to the given location.
+     * Set the location of this Boulder to the x, y and z coordinate supplied by the given array.
      *
-     * @param  location
-     * 		   The new location for this Boulder.
-     * @post   The location of this new Boulder is equal to
-     * 		   the given location.
+     * @param  array
+     * 		   The array supplying the x, y and z coordinate for this Boulder.
+     * @post   The x coordinate of the location of this new Boulder is equal to the x coordinate supplied by the given array.
+     * @post   The y coordinate of the location of this new Boulder is equal to the y coordinate supplied by the given array.
+     * @post   The z coordinate of the location of this new Boulder is equal to the z coordinate supplied by the given array.
      * @throws UnitIllegalLocation
-     * 		   The given location is not a valid location for any
-     *         Boulder.
+     * 		   The given location is not a valid location for any Boulder.
      */
-   
-    @Override
-    @Raw
-    public void setLocation(VLocation location) throws UnitIllegalLocation {
-        if ((!isValidLocation(location))||location.occupant == this) throw new UnitIllegalLocation("Illegal location was set to Boulder");
-        this.location = location;
-        this.register(location);
-    }
-
     @Override
     public void setLocation(double[] array) {
         VLocation location = new VLocation(array[0], array[1], array[2], this);
         this.setLocation(location);
     }
+    
+    /**
+     * Set the location of this Boulder to the given location.
+     *
+     * @param  location
+     * 		   The new location for this Boulder.
+     * @post   The location of this new Boulder is equal to the given location.
+     * @throws UnitIllegalLocation
+     * 		   The given location is not a valid location for any Boulder.
+     */
+    @Override
+    @Raw
+    public void setLocation(VLocation location) throws UnitIllegalLocation {
+        if ((! isValidLocation(location)) || location.occupant == this)
+        	throw new UnitIllegalLocation("This is an invalid location for this Boulder.");
+        this.location = location;
+        this.register(location);
+    }
 
-
+    /**
+     * Register the given location and this Boulder in the world's world map.
+     * 
+     * @param  location
+     * 		   The location to register.
+     * @post   The given location and this Boulder are added in the world's world map.
+     */
     @Override
     public void register(VLocation location) {
     	this.getWorld().getWorldMap().put(location, this);
     }
  
+    /**
+     * Unregister this Boulder and its location from the world's world map.
+     * 
+     * @post   This Boulder and its location are removed from the world's world map.
+     */
+	@Override
+    public void unregister() {
+		this.getWorld().getWorldMap().remove(this.getLocation());
+    }
+    
     /**
      * Return the world of this Boulder.
      */
@@ -111,7 +161,7 @@ public class Boulder extends MovableWorldObject {
     @Immutable
     @Override
     public World getWorld() {
-      return this.world;
+      return world;
     }
 
     /**
@@ -119,7 +169,7 @@ public class Boulder extends MovableWorldObject {
      *
      * @param  world
      *         The world to check.
-     * @return Always true.
+     * @return Always true, as a world may contain an unlimited number of Boulder.
      */
     @Raw
     public boolean canHaveAsWorld(World world) {
@@ -131,11 +181,9 @@ public class Boulder extends MovableWorldObject {
      * 
      * @param  world
      *         The new world for this Boulder.
-     * @post   The world of this new Boulder is equal to
-     *         the given world.
+     * @post   The world of this new Boulder is equal to the given world.
      * @throws IllegalArgumentException
-     *         The given world is not a valid world for any
-     *         Boulder.
+     *         The given world is not a valid world for any Boulder.
      */
     @Raw
     public void setWorld(World world) throws IllegalArgumentException {
@@ -154,11 +202,6 @@ public class Boulder extends MovableWorldObject {
         return weight;
     }
 
-    @Override
-    public void unregister() {
-    	this.getWorld().getWorldMap().remove(this.getLocation());
-    }
-
     /**
      * No documentation needed.
      */
@@ -173,17 +216,15 @@ public class Boulder extends MovableWorldObject {
     @Basic
     @Raw
     public IActivity getActivity() {
-        return this.activity;
+        return activity;
     }
 
     /**
-     * Check whether the given activity is a valid activity for
-     * any Boulder.
+     * Check whether the given activity is a valid activity for any Boulder.
      *
      * @param  activity
      *         The activity to check.
-     * @return True if and only if the activity consists of not conducting
-     * 		   any activity or falling.
+     * @return True if and only if the activity consists of not conducting any activity or falling.
      */
     public static boolean isValidActivity(IActivity activity) {
         return ((activity.getId() == 0) || (activity.getId() == 6));
@@ -194,11 +235,9 @@ public class Boulder extends MovableWorldObject {
      *
      * @param  activity
      *         The new activity for this Boulder.
-     * @post   The activity of this new Boulder is equal to
-     *         the given activity.
+     * @post   The activity of this new Boulder is equal to the given activity.
      * @throws IllegalArgumentException
-     *         The given activity is not a valid activity for any
-     *         Boulder.
+     *         The given activity is not a valid activity for any Boulder.
      */
     @Raw
     public void setActivity(IActivity activity) throws IllegalArgumentException {
@@ -207,14 +246,14 @@ public class Boulder extends MovableWorldObject {
         this.activity = activity;
     }
 
+    /**
+     * Let the Boulder finish its current activity.
+     * 
+     * @post   This Boulder is no longer conducting an activity. 
+     */
     @Override
     public void activityFinished() {
         this.setActivity(new NoActivity());
-        return;
     }
 
 }
-
-
-
-

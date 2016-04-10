@@ -980,7 +980,7 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Let the Unit decently finish its current activity.
+     * Let the Unit finish its current activity.
      * 
      * @post   The paused activity will be resumed if the Unit has a paused
      * 		   activity or its current activity will be set to nothing
