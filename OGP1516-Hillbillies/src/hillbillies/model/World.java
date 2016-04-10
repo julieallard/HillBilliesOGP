@@ -15,19 +15,23 @@ import hillbillies.util.ConnectedToBorder;
 import java.util.*;
 
 /**
- * @invar  The CubeWorld of each World must be a valid CubeWorld for any
- *         World. 
+ * A class of Worlds involving a cube world and a listener of world changes.
+ * 
+ * @invar  The CubeWorld of each World must be a valid CubeWorld for any World. 
  *       | isValidCubeWorld(getCubeWorld())
+ * 
+ * @version 0.9 alpha
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
  */
 public class World {
     /**
      * Initialize this new World with given CubeWorld.
      *
      * @param  CubeWorld
-     * 		   The cube world with an allocation of the geological
-     * 		   features for this new World.
-     * @effect The cube world of this new World is set to
-     * 		   the given cube world.
+     * 		   The cube world with an allocation of the geological features for this new World.
+     * @effect The cube world of this new World is set to the given cube world.
      */
 
     public World(int[][][] CubeWorld, TerrainChangeListener changeListener) throws UnitIllegalLocation, IllegalArgumentException {
@@ -36,26 +40,28 @@ public class World {
         this.borderConnect = new ConnectedToBorder(sideSize, sideSize, sideSize);
         this.caveInlist = new ArrayList<>();
         this.setCubeWorld(CubeWorld);
-        this.changeListener=changeListener;
-        this.FactionSet=new HashSet<>();
+        this.changeListener = changeListener;
+        this.FactionSet = new HashSet<>();
+        this.TotalUnitSet = new HashSet<>();
     }
+    
+    /**
+     * Variable registering the changes of terrains of this World.
+     */
     private final TerrainChangeListener changeListener;
     
     /**
-     * Variable registering the solid and non-solid state of neigboring cubes (of
-     * neighboring cubes etc.) of this World.
+     * Variable registering the solid and non-solid state of neigboring cubes (of neighboring cubes etc.) of this World.
      */
     public final ConnectedToBorder borderConnect;
     
     /**
-     * Variable registering the cubes of this World that are not supported anymore
-     * and which will cave in.
+     * Variable registering the cubes of this World that are not supported anymore and which will cave in.
      */
     private final ArrayList<int[]> caveInlist;
     
     /**
-     * Variable registering the cube world with an allocation of the
-     * geological features and the size of this World.
+     * Variable registering the cube world with an allocation of the geological features and the size of this World.
      */
     private CubeWorldObject[][][] CubeWorld;
     
@@ -69,10 +75,8 @@ public class World {
 	 * Set collecting references to factions belonging to this world.
 	 * 
 	 * @invar The set of factions is effective.
-	 * @invar Each element in the set of factions references a faction that is an
-	 * 		  acceptable faction for this World.
-	 * @invar Each faction in the FactionSet references this world as the world to
-	 * 		  which it is attached. 
+	 * @invar Each element in the set of factions references a faction that is an acceptable faction for this World.
+	 * @invar Each faction in the FactionSet references this world as the world to which it is attached. 
 	 */
 	public Set<Faction> FactionSet;
 	
@@ -80,10 +84,8 @@ public class World {
 	 * Set collecting references to Units belonging to this world.
 	 * 
 	 * @invar The set of Units is effective.
-	 * @invar Each element in the set of Units references a unit that is an
-	 * 		  acceptable unit for this World.
-	 * @invar Each Unit in the TotalUnitSet references this world as the world to
-	 * 		  which it is attached. 
+	 * @invar Each element in the set of Units references a unit that is an acceptable unit for this World.
+	 * @invar Each Unit in the TotalUnitSet references this world as the world to which it is attached. 
 	 */
 	public Set<Unit> TotalUnitSet;
 	
@@ -102,13 +104,11 @@ public class World {
     }
 
     /**
-     * Check whether the given cube world is a valid cube world for
-     * any World.
+     * Check whether the given cube world is a valid cube world for any World.
      *
      * @param  CubeWorld
      * 		   The cube world to check.
-     * @return True if and only if the cube world is cubical, in other words
-     * 		   if all sub arrays have the same length.
+     * @return True if and only if the cube world is cubical, in other words if all sub arrays have the same length.
      */
     public boolean isValidCubeWorld(int[][][] CubeWorld) {
         for (int[][] YZLevel: CubeWorld) {
@@ -129,11 +129,9 @@ public class World {
      *
      * @param  CubeWorld
      * 		   The new cube world for this World.
-     * @post   The cube world of this new World is equal to
-     * 		   the given cube world.
+     * @post   The cube world of this new World is equal to the given cube world.
      * @throws UnitIllegalLocation
-     * 		   The given cube world is not a valid cube world for any
-     *		   World.
+     * 		   The given cube world is not a valid cube world for any World.
      */
     @Raw
     public void setCubeWorld(int[][][] CubeWorld) throws UnitIllegalLocation, IllegalArgumentException {
@@ -169,7 +167,7 @@ public class World {
      *
      * @param  location
      * 		   The location of the cube to destroy.
-     * @post   The cube at given location is of air.
+     * @post   The geological feature or the cube at given location is air.
      * @throws UnitIllegalLocation
      * 		   The given location is not a valid location.
      * @throws IllegalArgumentException
@@ -180,9 +178,10 @@ public class World {
             throw new UnitIllegalLocation();
         CubeWorldObject[][][] world = this.getCubeWorld();
         CubeWorldObject cube = world[location[0]][location[1]][location[2]];
-        if (! cube.isDestructible()) return;
-        this.changeListener.notifyTerrainChanged(location[0],location[1],location[2]);
-        caveInlist.addAll(borderConnect.changeSolidToPassable(location[0],location[1],location[2]));
+        if (! cube.isDestructible())
+        	return;
+        this.changeListener.notifyTerrainChanged(location[0], location[1], location[2]);
+        caveInlist.addAll(borderConnect.changeSolidToPassable(location[0], location[1], location[2]));
         this.CubeWorld[location[0]][location[1]][location[2]] = new Air();
         replace(cube, location);
     }
@@ -191,17 +190,19 @@ public class World {
      * Replace the given cube at given location by a boulder, a log or nothing.
      * 
      * @param  cube
-     * 		   The cube to replace.
+     * 		   The cube caving in to replace.
      * @param  location
      * 		   The location of the cube to replace.
+     * @effect With a propbability of 25%, if the cube was of wood, a Log is created in the middle of the cube
+     * 		   and if the cube was of rock, a Boulder is created in the middle of the cube.
      */
     private void replace(CubeWorldObject cube, int[] location) {
         if (Math.random() <= 0.25) {
             Rock rock = new Rock();
             if (cube.getClass() == rock.getClass()) {
-                new Boulder(location[0], location[1], location[2], this);
+                new Boulder((double) location[0] + 0.5, (double) location[1] + 0.5, (double) location[2] + 0.5, this);
             } else {
-                new Log(location[0], location[1], location[2], this);
+                new Log((double) location[0] + 0.5, (double) location[1] + 0.5, (double) location[2] + 0.5, this);
             }
         }
     }
@@ -215,8 +216,7 @@ public class World {
     }
     
     /**
-     * Check whether the given world map is a valid world map for
-     * any World.
+     * Check whether the given world map is a valid world map for any World.
      *  
      * @param  WorldMap
      *         The world map to check.
@@ -231,11 +231,9 @@ public class World {
      * 
      * @param  WorldMap
      *         The new world map for this World.
-     * @post   The world map of this new World is equal to
-     *         the given world map.
+     * @post   The world map of this new World is equal to the given world map.
      * @throws IllegalArgumentException
-     *         The given world map is not a valid world map for any
-     *         world.
+     *         The given world map is not a valid world map for any world.
      */
     @Raw
     public void setWorldMap(WorldMap<VLocation, MovableWorldObject> WorldMap) throws IllegalArgumentException {
@@ -275,17 +273,15 @@ public class World {
     }
 
     /**
-     * Check whether the given object can have the given cube location as
-     * its cube location.
+     * Check whether the given object can have the given cube location as its cube location.
      * 
      * @param  cubeLoc
      * 		   The location of the cube to check.
      * @param  object
-     * 		   The object whose location we will check.
-     * @return True if and only if the cube location is a three dimensional array,
-     * 		   if the cube is passable and if the cube underneath can support objects.
-     * 		   If the object is a Unit, this method will also return true, except the
-     * 		   before mentioned conditions, if and only if //TODO
+     * 		   The object whose location to check.
+     * @return True if and only if the cube location is a three dimensional array, if the cube is passable
+     * 		   and if the cube underneath can support objects. If the object is a Unit, this method will
+     * 		   return true, except the before mentioned conditions, if and only if
      * 		   
      */
     public boolean canHaveAsCubeLocation(int[] cubeLoc, MovableWorldObject object) {
@@ -464,19 +460,34 @@ public class World {
         throw new IllegalArgumentException();
     }
 
+    /**
+     * Let the cubes that need to cave in cave in.
+     * 
+     * @effect The cubes of the list containing the location of the cubes about to cave in are destroyed.
+     */
     private void caveIn() {
-
-        for (int[] loc : caveInlist) {
+        for (int[] loc: caveInlist) {
             destroyCube(loc);
         }
         caveInlist.clear();
     }
 
-    public void setCubeType(int x,int y,int z,int value){
-        CubeWorldObject cubeObject=new Air();
-        ;
+    /**
+     * Set the geological feature of the cube at the location with given x, y and z coordinate to the given feature.
+     * 
+     * @param  x
+     * 		   The x coordinate of the cube to set the geological feature of.
+     * @param  y
+     * 		   The y coordinate of the cube to set the geological feature of.
+     * @param  z
+     * 		   The z coordinate of the cube to set the geological feature of.
+     * @param  value
+     * 		   The number referring to the geological feature.
+     */
+    public void setCubeType(int x, int y, int z, int value) {
+        CubeWorldObject cubeObject = new Air();
         switch (value) {
-            case 3:
+            case 3:	
                 cubeObject = new Workshop();
                 if (getCubeAt(new int[]{x, y, z}) == 1 || getCubeAt(new int[]{x, y, z}) == 2)
                     this.borderConnect.changeSolidToPassable(x, y, z);
@@ -498,8 +509,8 @@ public class World {
                 cubeObject = new Rock();
                 break;
         }
-        changeListener.notifyTerrainChanged(x,y,z);
-        CubeWorld[x][y][z]=cubeObject;
+        changeListener.notifyTerrainChanged(x, y, z);
+        CubeWorld[x][y][z] = cubeObject;
     }
     
 }
