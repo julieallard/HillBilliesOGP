@@ -558,8 +558,7 @@ public class Unit extends MovableWorldObject {
 	//CONTINUE HERE WITH DOCUMENTATION
 	
     /**
-     * Check whether the given property is a valid property for
-     * any Unit.
+     * Check whether the given property is a valid property for any Unit.
      *  
      * @param  property
      *         The property to check.
@@ -573,8 +572,7 @@ public class Unit extends MovableWorldObject {
     }
     
     /**
-     * Check whether the given weight is a valid weight for
-     * any Unit.
+     * Check whether the given weight is a valid weight for any Unit.
      *  
      * @param  weight
      *         The weight to check.
@@ -643,9 +641,8 @@ public class Unit extends MovableWorldObject {
      *
      * @param  strength
      * 		   The new strength for this Unit.
-     * @post   If the given strength is not below 1 and not above 200 for any Unit,
-     *         the strength of this new Unit is equal to the given
-     *         strength. Otherwise, its new strength is equal to 1, respectively 200.
+     * @post   If the given strength is not below 1 and not above 200 for any Unit, the strength of this new Unit is
+     * 		   equal to the given strength. Otherwise, its new strength is equal to 1, respectively 200.
      *       | if (isValidProperty(strength))
      *       |	 then new.getStrength() == strength
      *       |	 else if (strength < 1)
@@ -675,9 +672,8 @@ public class Unit extends MovableWorldObject {
      *
      * @param  agility
      * 		   The new agility for this Unit.
-     * @post   If the given agility is not below 1 and not above 200 for any Unit,
-     *         the agility of this new Unit is equal to the given
-     *         agility. Otherwise, its new agility is equal to 1, respectively 200.
+     * @post   If the given agility is not below 1 and not above 200 for any Unit, the agility of this new Unit is
+     * 		   equal to the given agility. Otherwise, its new agility is equal to 1, respectively 200.
      *       | if (isValidProperty(agility))
      *       |	 then new.getAgility() == agility
      *       |	 else if (agility < 1)
@@ -707,9 +703,8 @@ public class Unit extends MovableWorldObject {
      *
      * @param  toughness
      * 		   The new toughness for this Unit.
-     * @post   If the given toughness is not below 1 and not above 200 for any Unit,
-     *         the toughness of this new Unit is equal to the given
-     *         toughness. Otherwise, its new toughness is equal to 1, respectively 200.
+     * @post   If the given toughness is not below 1 and not above 200 for any Unit, the toughness of this new Unit is
+     * 		   equal to the given toughness. Otherwise, its new toughness is equal to 1, respectively 200.
      *       | if (isValidProperty(toughness))
      *       |	 then new.getToughness() == toughness
      *       |	 else if (toughness < 1)
@@ -728,10 +723,10 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Return whether the default behavior is enabled.
+     * Return whether the default behavior is enabled or not.
      */
     public boolean isDefaultBehaviorEnabled() {
-        return defaultbehaviorenabled;
+        return this.defaultbehaviorenabled;
     }
 
     /**
@@ -782,12 +777,11 @@ public class Unit extends MovableWorldObject {
      *
      * @param  world
      *         The world to check.
-     * @return True if and only if the given world contains less
-     * 		   than 100 Units.
+     * @return True if and only if the given world contains less than 100 Units.
      *       | result == (world.getNumberOfUnits() < 100)
      */
     @Raw
-    public boolean canHaveAsWorld(World world) {
+    boolean canHaveAsWorld(World world) {
     	return (world.getNumberOfUnits() < 100);
     }
     
@@ -796,12 +790,10 @@ public class Unit extends MovableWorldObject {
      * 
      * @param  world
      *         The new world for this Unit.
-     * @post   The world of this new Unit is equal to
-     *         the given world.
+     * @post   The world of this new Unit is equal to the given world.
      *       | new.getWorld() == world
      * @throws IllegalArgumentException
-     *         The given world is not a valid world for any
-     *         Unit.
+     *         The given world is not a valid world for any Unit.
      *       | ! canHaveAsWorld(getWorld())
      */
     @Raw
@@ -820,13 +812,12 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Check whether the given number of points is a valid number of points for
-     * any Unit.
+     * Check whether the given number of points is a valid number of points for any Unit.
      *  
      * @param  points
      *         The number of points to check.
-     * @return True if and only if the given number of points are below the maximum
-     * 		   number of points and above zero.
+     * @return True if and only if the given number of points is less or equal to the  maximum number of points
+     * 		   and greater or equal to zero.
      *       | result == (points <= getMaxPoints()
      *       		&& points >= 0)
     */
@@ -846,11 +837,9 @@ public class Unit extends MovableWorldObject {
      *
      * @param  hitPoints
      * 		   The number of hitpoints for this Unit.
-     * @pre	   The given number of hitpoints must be a valid number of hitpoints
-     * 		   for any Unit.
+     * @pre	   The given number of hitpoints must be a valid number of hitpoints for any Unit.
      * 		 | isValidPoints(hitPoints)
-     * @post   The number of hitpoints of this Unit is equal to the given number of
-     * 		   hitpoints.
+     * @post   The number of hitpoints of this Unit is equal to the given number of hitpoints.
      * 		 | new.getCurrentHitPoints() == hitPoints
      */
     @Raw
@@ -871,11 +860,9 @@ public class Unit extends MovableWorldObject {
      *
      * @param  stamPoints
      * 		   The number of stamina points for this Unit.
-     * @pre	   The given number of stamina points must be a valid number of stamina points
-     * 		   for any Unit.
+     * @pre	   The given number of stamina points must be a valid number of stamina points for any Unit.
      * 		 | isValidPoints(stamPoints)
-     * @post   The number of stamina points of this Unit is equal to the given number of
-     * 		   stamina points.
+     * @post   The number of stamina points of this Unit is equal to the given number of stamina points.
      * 		 | new.getCurrentStamPoints() == stamPoints
      */
     @Raw
@@ -883,6 +870,7 @@ public class Unit extends MovableWorldObject {
         assert isValidPoints(stamPoints);
         this.staminapoints = stamPoints;
     }
+    
     /**
      * Return the orientation of this Unit.
      */
@@ -893,13 +881,11 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Check whether the given orientation is a valid orientation for
-     * any Unit.
+     * Check whether the given orientation is a valid orientation for any Unit.
      *
      * @param  orientation
      * 		   The orientation to check.
-     * @return True if and only if the orientation is greater than zero and
-     * 		   smaller than 2*PI.
+     * @return True if and only if the orientation is greater or equal to zero and less or equal to 2*PI.
      * 		 | result == (orientation >= 0
      * 				&& orientation <= 2*PI)
      */
@@ -912,21 +898,18 @@ public class Unit extends MovableWorldObject {
      *
      * @param  orientation
      * 		   The new orientation for this Unit.
-     * @post   If the given orientation is a valid orientation for any Unit,
-     * 		   the orientation of this new Unit is equal to the given
-     * 		   orientation. Otherwise, the orientation of this new Unit is equal to
-     * 		   0.5*PI.
+     * @post   If the given orientation is a valid orientation for any Unit, the orientation of this new Unit is
+     * 		   equal to the given orientation. Otherwise, the orientation of this new Unit is equal to 0.5*PI.
      * 		 | if (isValidOrientation(orientation))
      * 		 |	 then new.getOrientation() == orientation
      * 		 |   else new.getOrientation() == 0.5*PI
      */
     @Raw
     public void setOrientation(float orientation) {
-        if (isValidOrientation(orientation)) {
+        if (isValidOrientation(orientation))
             this.orientation = orientation;
-        } else {
+        else
             this.orientation = ((float) Math.PI) / 2;
-        }
     }
 
     /**
@@ -939,8 +922,7 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Check whether the given activity is a valid activity for
-     * any Unit.
+     * Check whether the given activity is a valid activity for any Unit.
      *
      * @param  activity
      * 		   The activity to check.
@@ -957,11 +939,9 @@ public class Unit extends MovableWorldObject {
      * @param  activity
      * 		   The new activity for this Unit.
      * @throws IllegalArgumentException
-     * 		   The given activity is not a valid activity for any
-     *         Unit.
+     * 		   The given activity is not a valid activity for any Unit.
      *       | ! isValidActivity(getActivity())
-     * @post   The activity of this new Unit is equal to
-     * 		   the given activity.
+     * @post   The activity of this new Unit is equal to the given activity.
      * 		 | new.getActivity() == activity
      */
     @Raw
@@ -1022,12 +1002,10 @@ public class Unit extends MovableWorldObject {
      *
      * @param  toBeCarriedObject
      * 		   The object which needs to be carried by the unit.
-     * @post   The carried object of this Unit will be equal to the given
-     * 		   object, the carrying state of this Unit will be set on true
-     * 		   and the object will not be considered as present in the world.
+     * @post   The carried object of this Unit will be equal to the given object, the carrying state of this Unit
+     * 		   will be set to true and the object will removed from its world's world map.
      * @throws IllegalArgumentException
-     *         The given object cannot be carried by any
-     *         Unit.
+     *         The given object cannot be carried by any Unit.
      *       | ! canBeCarried(getCarriedObject())
      */    
     public void carry(MovableWorldObject toBeCarriedObject) throws IllegalArgumentException {
@@ -1035,11 +1013,17 @@ public class Unit extends MovableWorldObject {
             this.carriedObject = toBeCarriedObject;
             this.setCarrying(true);
             toBeCarriedObject.unregister();
-        } else {
+        } else
             throw new IllegalArgumentException("This object cannot be carried");
-        }
     }
 
+    /**
+     * Check whether the given object can be carried by this Unit.
+     * 
+     * @param  object
+     * 		   The object to check.
+     * @return True if and only if this Unit is not already carrying an object and if the given object is not a Unit.
+     */
     private boolean canBeCarried(MovableWorldObject object) {
         if (this.isCarrying())
         	return false;
@@ -1050,23 +1034,22 @@ public class Unit extends MovableWorldObject {
      * Let the Unit drop the given carried object.
      *
      * @param  carriedObject
-     * 		   The object which needs to be dropped by the unit.
-     * @post   The carried object of this Unit will be set to null,
-     * 		   the carrying state of this Unit will be set to false
-     * 		   and the object will be considered as present in the world.
+     * 		   The object to drop.
+     * @post   The carried object of this Unit will be set to null, the carrying state of this Unit will be set
+     * 		   to false and the object will be added in its world's world map.
      */
     public void drop(MovableWorldObject carriedObject) {
         this.carriedObject = null;
         this.iscarrying = false;
-        double[] locarray=this.getLocation().getArray();
+        double[] locarray = this.getLocation().getArray();
         carriedObject.setLocation(locarray);
     }
 
     /**
-     * Return whether the Unit is sprinting.
+     * Return whether the Unit is sprinting or not.
      */    
     public boolean isSprinting() {
-        return issprinting;
+        return this.issprinting;
     }
 
     /**
@@ -1075,7 +1058,7 @@ public class Unit extends MovableWorldObject {
      * @param  flag
      * 		   The sprinting state to be registered.
      * @post   The new sprinting state of this Unit is equal to the given flag.
-     * 		 | this.issprinting == flag
+     * 		 | new.issprinting == flag
      */
     public void setSprinting(boolean flag) {
         this.issprinting = flag;
@@ -1112,27 +1095,37 @@ public class Unit extends MovableWorldObject {
         this.getActivity().advanceActivityTime(dt);
     }
 
-    public void behaveDefault(){
+    /**
+     * Let this Unit conduct its default behavior.
+     */
+    public void behaveDefault() {
         this.setActivity(new Rest(this));
         //TODO flesh out this method
     }
 
+    /**
+     * Check whether this Unit's current activity can be interrupted by the given new activity.
+     * 
+     * @param  newActivity
+     * 		   The new activity for this Unit.
+     * @return True if and only if this Unit's current activity can be interrupted by the given new activity. 
+     */
     private boolean interruptCurrentAct(IActivity newActivity) {
         if (! this.getActivity().canBeInterruptedBy(newActivity)) 
         	return false;
-        if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 6)) {
+        if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4)) {
             this.hasPausedActivity = true;
             this.pausedActivity = this.getActivity();
         }
+        this.setActivity(newActivity);
         return true;
     }
 
     /**
-     * Let the Unit finish its current activity.
+     * Let this Unit finish its current activity.
      * 
-     * @post   The paused activity will be resumed if the Unit has a paused
-     * 		   activity or its current activity will be set to nothing
-     * 		   if the Unit does not have a paused activity.
+     * @post   If this Unit had a paused activity, the paused activity is resumed and if this Unit did not have
+     * 		   a paused activity, its current activity is set to none.
      */     
     public void activityFinished() {
         if (this.hasPausedActivity) {
@@ -1145,11 +1138,11 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Let the Unit conduct a generic labor at a specified cube position.
+     * Let this Unit conduct a generic labor at a specified cube position.
      * 
      * @param  targetCube
-     * 		   The position of the cube where the Unit will work. 
-     * @post   The Unit conducts work at the target cube.
+     * 		   The position of the cube to let this Unit work at. 
+     * @post   The Unit conducts work at the given target cube.
      */      
     public void work(int[] targetCube) {
         Work work = new Work(this, targetCube);
@@ -1159,19 +1152,17 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Let the Unit attack another Unit.
+     * Let this Unit attack the given Unit.
      * 
      * @param  defender
-     * 		   The Unit this Unit is attacking.
-     * @post   The Unit conducts an attack to the defender and the defender conducts
-     * 		   a defence against this Unit.
+     * 		   The Unit to attack.
+     * @post   The Unit conducts an attack against the defender and the defender conducts a defence against this Unit.
      * @throws IllegalArgumentException
-     * 		   The attack cannot be conducted
+     * 		   The attack cannot be conducted.
      */      
     public void attack(Unit defender) throws IllegalArgumentException {
     	if (this.getFaction() == defender.getFaction())
-    		throw new IllegalArgumentException("The Units cannot belong to"
-    				+ "the same faction.");
+    		throw new IllegalArgumentException("Units belonging to the same faction cannot fight against each other.");
     	int ACubeX = this.getLocation().getCubeLocation()[0];
     	int ACubeY = this.getLocation().getCubeLocation()[1];
     	int ACubeZ = this.getLocation().getCubeLocation()[2];
@@ -1194,7 +1185,7 @@ public class Unit extends MovableWorldObject {
     			hasneighboringZ = true;
     	}
         if (! (hasneighboringX && hasneighboringY && hasneighboringZ))
-        	throw new IllegalArgumentException("Units can only attack other Units in the same or a neighboring cube of the game world");
+        	throw new IllegalArgumentException("Units can only attack other Units in the same or a neighboring cube.");
     	if (defender.getActivity().getId() == 6)
     		throw new IllegalArgumentException("Units cannot attack other Units that are falling.");
         Attack attack = new Attack(this, defender);
@@ -1214,13 +1205,11 @@ public class Unit extends MovableWorldObject {
 	}
 
     /**
-     * Check whether the given faction is a valid faction for
-     * any Unit.
+     * Check whether the given faction is a valid faction for any Unit.
      *  
      * @param  faction
      *         The faction to check.
-     * @return True if and only if the given faction contains less
-     * 		   than 50 Units.
+     * @return True if and only if the given faction contains less than 50 Units.
      *       | result == (faction.getNumberOfUnits() < 50)
     */
 	public boolean canHaveAsFaction(Faction faction) {
@@ -1230,14 +1219,11 @@ public class Unit extends MovableWorldObject {
 	/**
 	 * Set the faction of this Unit.
 	 * 
-	 * @post   The faction of this new Unit is equal to
-	 *         a newly created faction if the maximum number of active
-	 *		   factions is not reached yet, or is equal to the faction with the
-	 *		   smallest number of Units if the maximum number of active
-	 *		   factions has already been reached.
+	 * @post   The faction of this new Unit is equal to a newly created faction if the maximum number of active
+	 *		   factions is not reached yet, or is equal to the faction with the smallest number of Units if the
+	 *		   maximum number of active factions has already been reached.
 	 * @throws IllegalArgumentException
-	 *         The faction with the smallest number of Units is not a
-	 *         valid faction for any Unit.
+	 *         The faction with the smallest number of Units is not a valid faction for any Unit.
 	 *       | ! canHaveAsFaction(getFaction())
 	 */
 	@Raw		
@@ -1253,14 +1239,20 @@ public class Unit extends MovableWorldObject {
 		}
 	}	
 	
+	/**
+	 * Let this Unit deal with its damage.
+	 * 
+	 * @param  damage
+	 * 		   The damage this Unit is dealing with.
+	 * @effect If the given number of damage points is greater or equal to this Unit's hitpoints, the Unit will die.
+	 * 		   Otherwise, the given number of damage points will be subtracted from this Unit's hitpoints. 
+	 */
     public void dealDamage(double damage) {
-    	//TODO implement loss of HP when fighting
-        int intDamage = (int) Math.floor(damage);
+    	int intDamage = (int) Math.floor(damage);
         if (intDamage >= this.getCurrentHitPoints())
         	die();
-        else {
+        else
         	this.setCurrentHitPoints(this.getCurrentHitPoints() - intDamage);
-        	}
     }
 
     private void die() {
