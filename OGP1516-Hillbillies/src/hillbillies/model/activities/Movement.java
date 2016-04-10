@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
+ * A class of Movement activites involving a unit and a destination.
+ * 
  * The Id's of the activities are the following:
  * 0: noActivity
  * 1: attack
@@ -20,24 +22,51 @@ import java.util.Collections;
  * 4: working
  * 5: resting
  * 6: falling
+ * 
+ * @version 0.9 alpha
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
  */
-
-//TODO Units shall gain 1 experience point for every completed movement step.
-//No experience points shall be awarded if the movement was interrupted.
 public class Movement implements IActivity {
 
+	/**
+	 * Initialize this new Movement with given unit and given destination.
+     *
+     * @param  unit
+     *         The unit for this new Movement.
+     * @param  destination
+     * 		   The destination for this Movement.
+     * @post   The unit of this new Movement is equal to the given unit.
+     * @effect The destination of this new Movement is equal to the cube with given destination.
+     */
     public Movement(Unit unit, int[] destination) throws UnitIllegalLocation {
         this.unit = unit;
-        if (!canHaveAsDestination(destination))
+        if (! canHaveAsDestination(destination))
             throw new UnitIllegalLocation();
         Cube destincube = new Cube(destination);
         this.destination = destincube;
         this.pathing = new Astar(unit);
     }
 
+    /**
+     * Variable registering the pathing of this Movement, calculated according to the A star algorithm.
+     */
     private final Astar pathing;
+    
+    /**
+     * Variable registering the unit of this Movement.
+     */
     private final Unit unit;
+    
+    /**
+     * Variable registering the destination cube of this Movement.
+     */
     private final Cube destination;
+    
+    /**
+     * Variable registering the cube where the next stop of this Movement will be.
+     */
     private Cube nextStop;
 
 	/**
@@ -100,16 +129,28 @@ public class Movement implements IActivity {
         return 10*(double) stamPoints;
     }
 
+    /**
+     * Return the time left until finishing this Movement.
+     */
     @Override
     public double returnSimpleTimeLeft() throws IllegalArgumentException {
         throw new IllegalArgumentException("A movement does not have a SimpleTimeLeft attribute.");
     }
 
+    /**
+     * Check whether this Movement can be interrupted by the given activity.
+     * 
+     * @param  activity
+     * 		   The activity to check.
+     */
     @Override
     public boolean canBeInterruptedBy(IActivity activity) {
         return true;
     }
 
+    /**
+     * Return the ID of this Movement.
+     */
     @Override
     public int getId() {
         return 3;

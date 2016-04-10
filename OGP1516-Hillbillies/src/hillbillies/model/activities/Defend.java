@@ -10,6 +10,8 @@ import ogp.framework.util.Util;
 import java.util.Random;
 
 /**
+ * A class of Defend activities involving a defender and an attacker.
+ * 
  * The Id's of the activities are the following:
  * 0: noActivity
  * 1: attack
@@ -18,20 +20,49 @@ import java.util.Random;
  * 4: working
  * 5: resting
  * 6: falling
+ * 
+ * @version 0.9 alpha
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
  */
-
 public class Defend implements IActivity {
 
+	/**
+	 * Initialize this new Defend with given defender and given attacker.
+     *
+     * @param  defender
+     *         The defender for this new Defend.
+     * @param  attacker
+     *         The attacker for this new Defend.
+     * @post   The defender of this new Defend is equal to the given defender.       
+     * @post   The attacker of this new Defend is equal to the given attacker.
+     */
     public Defend(Unit defender, Unit attacker) {
+        this.defender = defender;   
         this.attacker = attacker;
-        this.defender = defender;
         this.setTimeLeft(1);
         this.random = new Random();
     }
 
-    private final Unit attacker;
+    /**
+     * Variable registering the defender of this Defend.
+     */
     private final Unit defender;
+    
+    /**
+     * Variable registering the attacker of this Defend.
+     */
+    private final Unit attacker;
+
+    /**
+     * Variable registering the time left until finishing this Defend.
+     */
     private double timeLeft;
+    
+    /**
+     * Variable registering the random generated object of this Defend.
+     */
     private Random random; 
     
 	/**
@@ -48,7 +79,7 @@ public class Defend implements IActivity {
     }
 
     /**
-     * Return the time left for this Defense.
+     * Return the time left until finishing this Defend.
      */
     @Basic
     @Raw
@@ -57,23 +88,31 @@ public class Defend implements IActivity {
     	return this.timeLeft;
     }
 
+    /**
+     * Check whether this Defend can be interrupted by the given activity.
+     * 
+     * @param  activity
+     * 		   The activity to check.
+     */
     @Override
     public boolean canBeInterruptedBy(IActivity activity) {
         return false;
     }
 
+    /**
+     * Return the ID of this Defend.
+     */
     @Override
     public int getId() {
         return 2;
     }
 
     /**
-     * Check whether the given time left is a valid time left for
-     * any Defense.
+     * Check whether the given time left is a valid time left for any Defense.
      *
      * @param  timeLeft
      *         The time left to check.
-     * @return True if and only if the time left is above 0 and below 1.
+     * @return True if and only if the time left is greater or equal to 0 and less or equal to 1.
      */
     public static boolean isValidTimeLeft(double timeLeft) {
         return (Util.fuzzyGreaterThanOrEqualTo(timeLeft, 0) && Util.fuzzyLessThanOrEqualTo(timeLeft, 1));
@@ -84,11 +123,9 @@ public class Defend implements IActivity {
      *
      * @param  timeLeft
      *         The new time left for this Defense.
-     * @post   The time left fot this new Defense is equal to
-     *         the given time left.
+     * @post   The time left fot this new Defense is equal to the given time left.
      * @throws IllegalTimeException
-     *         The given time left is not a valid time left for any
-     *         Defense.
+     *         The given time left is not a valid time left for any Defense.
      */
     @Raw
     public void setTimeLeft(double timeLeft) throws IllegalTimeException {
@@ -97,6 +134,11 @@ public class Defend implements IActivity {
         this.timeLeft = timeLeft;
     }
 
+    /**
+     * Let the defender and the attacker of this Attack conduct the Attack.
+     * 
+     * @effect This Attack is finished.
+     */
     private void conductDefense() {
         defender.activityFinished();
     }

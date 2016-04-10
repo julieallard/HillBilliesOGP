@@ -5,6 +5,8 @@ import hillbillies.model.Unit;
 import ogp.framework.util.Util;
 
 /**
+ * A class of Rest activities involving a unit.
+ * 
  * The Id's of the activities are the following:
  * 0: noActivity
  * 1: attack
@@ -13,14 +15,25 @@ import ogp.framework.util.Util;
  * 4: working
  * 5: resting
  * 6: falling
+ * 
+ * @version 0.9 alpha
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
  */
-
 public class Rest implements IActivity {
 
+	/**
+	 * Initialize this new Rest with given unit.
+     *
+     * @param  unit
+     *         The unit for this new Rest.
+     * @post   The unit of this new Rest is equal to the given unit.
+     */
 	public Rest(Unit unit) {
 		this.unit = unit;
-		this.timeLeftTillFirstPoint=((double)40)/this.unit.getToughness();
-		this.gotFirsthitpoint=false;
+		this.timeLeftTillFirstPoint = ((double) 40) / this.unit.getToughness();
+		this.gotFirsthitpoint = false;
 	}
 
 	public Unit unit;
@@ -56,17 +69,29 @@ public class Rest implements IActivity {
 		}
 	}
 
+    /**
+     * Return the time left until finishing this Rest.
+     */
 	@Override
 	public double returnSimpleTimeLeft() throws IllegalArgumentException {
 		throw new IllegalArgumentException("A resting activity does not have a SimpleTimeLeft attribute.");
 	}
 
+    /**
+     * Check whether this Rest can be interrupted by the given activity.
+     * 
+     * @param  activity
+     * 		   The activity to check.
+     */
 	@Override
 	public boolean canBeInterruptedBy(IActivity activity) {
 		if (activity instanceof Defend||activity instanceof Fall) return true;
 		else return gotFirsthitpoint;
 	}
 
+    /**
+     * Return the ID of this Rest.
+     */
 	@Override
 	public int getId() {
 		return 5;

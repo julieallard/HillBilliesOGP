@@ -193,7 +193,7 @@ public class World {
      * 		   The cube caving in to replace.
      * @param  location
      * 		   The location of the cube to replace.
-     * @effect With a propbability of 25%, if the cube was of wood, a Log is created in the middle of the cube
+     * @effect With a probability of 25%, if the cube was of wood, a Log is created in the middle of the cube
      * 		   and if the cube was of rock, a Boulder is created in the middle of the cube.
      */
     private void replace(CubeWorldObject cube, int[] location) {
@@ -321,16 +321,14 @@ public class World {
     }
     
     /**
-     * Check whether the given location contains a cube that will stop the fall
-     * of any object.
+     * Check whether the given location contains a cube that will stop the fall of any object.
      * 
      * @param  cubeLoc
      *         The location of the cube the object is passing while falling.
-     * @return True if and only if the terrain feature of the cube at the given
-     * 		   location will support any object.
+     * @return True if and only if the terrain feature of the underlying cube at the given location will support any object.
      */
     public boolean willBreakFall(int[] cubeLoc) {
-        return (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2]].willSupport());
+        return (CubeWorld[cubeLoc[0]][cubeLoc[1]][cubeLoc[2] - 1].willSupport());
     }
 	
 	/**

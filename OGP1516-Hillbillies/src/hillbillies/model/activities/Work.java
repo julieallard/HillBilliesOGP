@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * A class of Work activities involving a unit and a target location.
+ * 
  * The Id's of the activities are the following:
  * 0: noActivity
  * 1: attack
@@ -20,12 +22,24 @@ import java.util.Set;
  * 4: working
  * 5: resting
  * 6: falling
+ * 
+ * @version 0.9 alpha
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
  */
-
-//TODO Units shall gain 10 experience points for every completed work order. No
-//experience points shall be awarded for interrupted activities.
 public class Work implements IActivity {
 	
+	/**
+	 * Initialize this new Work with given unit and given target location.
+     *
+     * @param  unit
+     *         The unit for this new Work.
+     * @param  target location
+     * 		   The target location for this Work.
+     * @post   The unit of this new Work is equal to the given unit.
+     * @post   The target location of this new Work is equal to the given target location.
+     */
     public Work(Unit unit, int[] targetLocation){
         this.timeLeft = ((double) 500)/unit.getStrength();
         this.unit = unit;
@@ -42,6 +56,10 @@ public class Work implements IActivity {
     }
     
     private Unit unit;
+    
+    /**
+     * Variable registering the time left until finishing this Work.
+     */
     private double timeLeft;
 	private final int[] targetLocation;
 
@@ -69,11 +87,20 @@ public class Work implements IActivity {
 		return this.timeLeft;
 	}
 
+    /**
+     * Check whether this Work can be interrupted by the given activity.
+     * 
+     * @param  activity
+     * 		   The activity to check.
+     */
 	@Override
 	public boolean canBeInterruptedBy(IActivity activity) {
 		return true;
 	}
 
+    /**
+     * Return the ID of this Work.
+     */
 	@Override
 	public int getId() {
 		return 4;
