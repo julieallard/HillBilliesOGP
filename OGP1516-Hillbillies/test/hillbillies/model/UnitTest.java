@@ -1,7 +1,9 @@
 package hillbillies.model;
 
+import hillbillies.model.activities.*;
 import hillbillies.part2.listener.DefaultTerrainChangeListener;
 import hillbillies.part2.listener.TerrainChangeListener;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -164,137 +166,96 @@ public class UnitTest {
 
 
     @Test
-    public void isValidOrientation() throws Exception {
-
-    }
-
-    @Test
     public void setOrientation() throws Exception {
-
-    }
-
-    @Test
-    public void getActivity() throws Exception {
-
-    }
-
-    @Test
-    public void isValidActivity() throws Exception {
+        unit1.setOrientation((float)1.3);
+        assertEquals(unit1.getOrientation(),1.3,0.01);
+        unit1.setOrientation((float)25);
+        assertEquals(unit1.getOrientation(),Math.PI/2,0.01);
 
     }
 
     @Test
     public void setActivity() throws Exception {
+        IActivity newAct= new Fall(unit1);
+        unit1.setActivity(newAct);
+        assertEquals(unit1.getActivity(),newAct);
 
     }
 
     @Test
     public void isCarrying() throws Exception {
-
-    }
-
-    @Test
-    public void setCarrying() throws Exception {
-
-    }
-
-    @Test
-    public void getCarriedObject() throws Exception {
-
+        assertEquals(unit1.isCarrying(),false);
     }
 
     @Test
     public void carry() throws Exception {
-
+        Log log=new Log(2,2,2,world);
+        unit1.carry(log);
+        assertFalse(!unit1.isCarrying());
+        assertEquals(unit1.getCarriedObject(),log);
+        assertFalse(world.getWorldMap().containsValue(log));
     }
 
     @Test
     public void drop() throws Exception {
 
+        unit1.drop(unit1.getCarriedObject());
+        assertFalse(!unit1.isCarrying());
     }
-
-    @Test
-    public void isSprinting() throws Exception {
-
-    }
-
     @Test
     public void setSprinting() throws Exception {
-
-    }
-
-    @Test
-    public void advanceTime() throws Exception {
-
-    }
-
-    @Test
-    public void behaveDefault() throws Exception {
-
+        unit1.setSprinting(true);
+        assertEquals(unit1.isSprinting(),true);
     }
 
     @Test
     public void activityFinished() throws Exception {
+        unit1.activityFinished();
+        assertFalse(!(unit1.getActivity() instanceof NoActivity));
 
     }
 
     @Test
     public void work() throws Exception {
-
+        unit1.setLocation(1,1,1);
+        unit1.work(new int[]{1,1,1});
+        assertFalse(!(unit1.getActivity() instanceof Work));
     }
 
     @Test
     public void attack() throws Exception {
+        unit1.attack(unit3);
+        assertFalse(!(unit1.getActivity() instanceof Attack));
+        assertFalse(!(unit3.getActivity() instanceof Defend));
 
     }
 
-    @Test
-    public void getFaction() throws Exception {
-
-    }
-
-    @Test
-    public void canHaveAsFaction() throws Exception {
-
-    }
-
-    @Test
-    public void setFaction() throws Exception {
-
-    }
-
-    @Test
-    public void unregister() throws Exception {
-
-    }
 
     @Test
     public void dealDamage() throws Exception {
-
-    }
-
-    @Test
-    public void getXP() throws Exception {
-
-    }
-
-    @Test
-    public void addXP() throws Exception {
-
+        unit1.setCurrentHitPoints(100);
+        unit1.dealDamage(20);
+        assertEquals(unit1.getCurrentHitPoints(),80);
     }
 
     @Test
     public void moveTo() throws Exception {
-
+        unit1.moveTo(new int[]{9,9,9});
+        assert(unit1.getActivity() instanceof Movement);
     }
 
     @Test
     public void moveToAdjacent() throws Exception {
+        unit2.moveToAdjacent(1,0,1);
+        assert(unit2.getActivity() instanceof Movement);
 
     }
 
     @Test
     public void rest() throws Exception {
-
+        unit2.setActivity(new NoActivity());
+        unit2.rest();
+        unit1.moveTo(new int[]{9,9,9});
+        assert(unit2.getActivity() instanceof Rest);
     }
 }
