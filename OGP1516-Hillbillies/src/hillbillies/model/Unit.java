@@ -252,6 +252,7 @@ public class Unit extends MovableWorldObject {
         this.setOrientation((float) (0.5 * Math.PI));
         this.setActivity(null);
         this.setFaction();
+
     }
 
     /**
@@ -298,7 +299,12 @@ public class Unit extends MovableWorldObject {
         this.setFaction();
         this.setName(name);
     }
-    
+
+    /**
+     * Variable registering the time since this unit last rested
+     */
+    public double timeSinceLastRest;
+
     /**
      * Variable registering the name of this Unit.
      */
@@ -1021,6 +1027,12 @@ public class Unit extends MovableWorldObject {
      */
     @Override
     public void advanceTime(double dt) {
+        this.timeSinceLastRest=this.timeSinceLastRest+dt;
+        if (this.timeSinceLastRest>=300){
+            boolean flag =this.interruptCurrentAct(new Rest(this));
+            if (flag) this.timeSinceLastRest=0;
+
+        }
         if (this.getActivity().getId() == 0 && isDefaultBehaviorEnabled()) {
             behaveDefault();
         }
