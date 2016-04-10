@@ -169,6 +169,12 @@ public class Facade extends hillbillies.part1.facade.Facade implements hillbilli
     @Override
     public void setCubeType(World world, int x, int y, int z, int value) throws ModelException{
 
+        try{
+            world.setCubeType(x,y,z,value);
+            }
+        catch (Exception error) {throw new ModelException(error);}
+
+
     }
 
     /**
