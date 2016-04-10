@@ -8,7 +8,16 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
 
 import java.util.Random;
 
+/**
+ * A class of Logs involving an x, y and z coordinate and a world.
+ * 
+ * @version 0.9 alpha
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
+ */
 public class Log extends MovableWorldObject {
+	
 	/**
 	 * Initialize this new Log with given x, y and z coordinate and given world.
      *

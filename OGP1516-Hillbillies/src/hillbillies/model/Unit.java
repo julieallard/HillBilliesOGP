@@ -13,11 +13,7 @@ import java.util.Random;
  * 
  * @invar  The name of each Unit must be a valid name for any Unit.
  *       | isValidName(getName())
- * @invar  The x coordinate of each Unit must be a valid x coordinate for any Unit.
- *       | isValidLocation(getLocation)
- * @invar  The y coordinate of each Unit must be a valid y coordinate for any Unit.
- *       | isValidLocation(getLocation)
- * @invar  The z coordinate of each Unit must be a valid z coordinate for any Unit.
+ * @invar  The location of each Unit must be a valid location for any Unit.
  *       | isValidLocation(getLocation)
  * @invar  The weight of each Unit must be a valid weight for any Unit.
  *       | isValidWeight(getWeight())
