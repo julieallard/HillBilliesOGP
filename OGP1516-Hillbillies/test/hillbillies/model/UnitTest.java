@@ -112,7 +112,6 @@ public class UnitTest {
     public void setToughness() throws Exception {
         unit1.setToughness(100);
         assertEquals(unit1.getToughness(),100);
-
     }
 
     @Test
@@ -124,7 +123,6 @@ public class UnitTest {
     public void setDefaultBehavior() throws Exception {
         unit1.setDefaultBehavior(true);
         assertEquals(unit1.isDefaultBehaviorEnabled(),true);
-
     }
 
     @Test
@@ -134,44 +132,36 @@ public class UnitTest {
     }
 
     @Test
-    public void setWorld() throws Exception {
-
-    }
-
-    @Test
     public void getMaxPoints() throws Exception {
-
+        assertEquals(unit1.getMaxPoints(),(int) Math.ceil(unit1.getWeight()*(double) unit1.getToughness()/50));
     }
 
-    @Test
-    public void isValidPoints() throws Exception {
-
-    }
 
     @Test
     public void getCurrentHitPoints() throws Exception {
-
+        assertEquals(unit1.getCurrentHitPoints(),(int) Math.ceil(unit1.getWeight()*(double) unit1.getToughness()/50));
     }
 
     @Test
     public void setCurrentHitPoints() throws Exception {
+        unit1.setCurrentHitPoints(100);
+        assertEquals(unit1.getCurrentHitPoints(),100);
+
+
 
     }
 
     @Test
     public void getCurrentStaminaPoints() throws Exception {
-
+        assertEquals(unit1.getCurrentStaminaPoints(),(int) Math.ceil(unit1.getWeight()*(double) unit1.getToughness()/50));
     }
 
     @Test
     public void setCurrentStaminaPoints() throws Exception {
-
+        unit1.setCurrentStaminaPoints(20);
+        assertEquals(unit1.getCurrentStaminaPoints(),20);
     }
 
-    @Test
-    public void getOrientation() throws Exception {
-
-    }
 
     @Test
     public void isValidOrientation() throws Exception {

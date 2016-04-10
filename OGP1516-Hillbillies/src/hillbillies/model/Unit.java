@@ -740,26 +740,6 @@ public class Unit extends MovableWorldObject {
     public void setDefaultBehavior(boolean flag) {
         this.defaultbehaviorenabled = flag;
     }    
-    
-    /**
-     * Enable the default behavior of this Unit.
-     * 
-     * @effect The default behavior state of this Unit is set to true.
-     * 		 | setDefaultBehavior(true)
-     */
-    public void startDefaultBehavior() {
-    	setDefaultBehavior(true);
-    }
-   
-    /**
-     * Disable the default behavior of this Unit.
-     * 
-     * @effect The default behavior state of this Unit is set to false.
-     * 		 | setDefaultBehavior(false)
-     */
-    public void stopDefaultBehavior() {
-    	setDefaultBehavior(false);
-    }
 
     /**
      * Return the world of this Unit.
@@ -821,7 +801,7 @@ public class Unit extends MovableWorldObject {
      *       | result == (points <= getMaxPoints()
      *       		&& points >= 0)
     */
-    public boolean isValidPoints(int points) {
+    private boolean isValidPoints(int points) {
     	return (points <= getMaxPoints() && points >= 0);
     }    
     
@@ -889,7 +869,7 @@ public class Unit extends MovableWorldObject {
      * 		 | result == (orientation >= 0
      * 				&& orientation <= 2*PI)
      */
-    public static boolean isValidOrientation(float orientation) {
+    private static boolean isValidOrientation(float orientation) {
         return (orientation >= 0 && orientation <= 2 * Math.PI);
     }
 
@@ -929,7 +909,7 @@ public class Unit extends MovableWorldObject {
      * @return Always true.
      * 		 | result == true
      */
-    public static boolean isValidActivity(IActivity activity) {
+    private static boolean isValidActivity(IActivity activity) {
         return true;
     }
 
@@ -966,28 +946,8 @@ public class Unit extends MovableWorldObject {
      * @post   The new carrying state of this Unit is equal to the given flag.
      * 		 | this.iscarrying == flag
      */
-    public void setCarrying(boolean flag) {
+    private void setCarrying(boolean flag) {
         this.iscarrying = flag;
-    }    
-    
-    /**
-     * Let this Unit carry an object.
-     * 
-     * @effect The carrying state of this Unit is set to true.
-     * 		 | setCarrying(true)
-     */
-    private void startCarrying() {
-    	setCarrying(true);
-    }
-   
-    /**
-     * Let this Unit stop carrying an object.
-     * 
-     * @effect The carrying state of this Unit is set to false.
-     * 		 | setCarrying(false)
-     */
-    private void stopCarrying() {
-    	setCarrying(false);
     }
     
     /**
@@ -1025,9 +985,7 @@ public class Unit extends MovableWorldObject {
      * @return True if and only if this Unit is not already carrying an object and if the given object is not a Unit.
      */
     private boolean canBeCarried(MovableWorldObject object) {
-        if (this.isCarrying())
-        	return false;
-        return (! (object instanceof Unit));
+        return !this.isCarrying() && (!(object instanceof Unit));
     }
 
     /**
@@ -1041,8 +999,8 @@ public class Unit extends MovableWorldObject {
     public void drop(MovableWorldObject carriedObject) {
         this.carriedObject = null;
         this.iscarrying = false;
-        double[] locarray = this.getLocation().getArray();
-        carriedObject.setLocation(locarray);
+        double[] locArray = this.getLocation().getArray();
+        carriedObject.setLocation(locArray);
     }
 
     /**
@@ -1098,7 +1056,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Let this Unit conduct its default behavior.
      */
-    public void behaveDefault() {
+    private void behaveDefault() {
         this.setActivity(new Rest(this));
         //TODO flesh out this method
     }
@@ -1212,7 +1170,7 @@ public class Unit extends MovableWorldObject {
      * @return True if and only if the given faction contains less than 50 Units.
      *       | result == (faction.getNumberOfUnits() < 50)
     */
-	public boolean canHaveAsFaction(Faction faction) {
+    boolean canHaveAsFaction(Faction faction) {
 		return (faction.getNumberOfUnits() < 50);
 	}     
 
@@ -1227,10 +1185,9 @@ public class Unit extends MovableWorldObject {
 	 *       | ! canHaveAsFaction(getFaction())
 	 */
 	@Raw		
-	public void setFaction() throws IllegalArgumentException {
+	private void setFaction() throws IllegalArgumentException {
 		if (this.getWorld().getNumberOfFactions() < 5) {
-			Faction faction = new Faction(this, world);
-			this.faction = faction;
+            this.faction = new Faction(this, world);
 		} else if (! canHaveAsFaction(this.getWorld().getSmallestFaction())) {
 			throw new IllegalArgumentException("This faction has already reached its max amount of Units.");
 		} else {
@@ -1319,9 +1276,9 @@ public class Unit extends MovableWorldObject {
     private void setXP(int xp) {
     	if (isValidXP(xp))
     		this.xp = xp;
-    	int xptouse = this.getXP() - xpused;
-    	int propertypoints = xptouse / 10;
-    	while (propertypoints > 0) {
+    	int xpToUse = this.getXP() - xpused;
+    	int propertyPoints = xpToUse / 10;
+    	while (propertyPoints > 0) {
     		if (getAgility() < getStrength()) {
     			setAgility(getAgility() + 1);
     		} else if (getToughness() < getAgility()) {
@@ -1329,7 +1286,7 @@ public class Unit extends MovableWorldObject {
     			setToughness(getToughness() + 1);
     		} else
     			setStrength(getStrength() + 1);
-    		propertypoints -= 1;
+    		propertyPoints -= 1;
     		this.xpused += 10;
     	}
     }
