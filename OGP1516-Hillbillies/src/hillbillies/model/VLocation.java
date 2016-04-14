@@ -5,10 +5,19 @@ import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.CubeObjects.CubeWorldObject;
 import hillbillies.model.exceptions.UnitIllegalLocation;
+
+/**
+ * A class of VLocations involving an x, y and z coordinate and an occupant.
+ * 
+ * @version 0.9 alpha
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
+ */
 public class VLocation {
     
     /**
-     * Initialize this new VLocation with given YLocation.
+     * Initialize this new VLocation with given x, y and z coordinate and given occupant.
      * 
      * @param  XLocation
      *         The XLocation for this new VLocation.     
@@ -50,9 +59,24 @@ public class VLocation {
         this.ZLocation = ZLocation;
     }
     
+    /**
+     * Variable registering the occupant of this VLocation.
+     */
     public final MovableWorldObject occupant;
+    
+    /**
+     * Variable registering the x coordinate of this VLocation.
+     */
     private final double XLocation;
+    
+    /**
+     * Variable registering the y coordinate of this VLocation.
+     */
     private final double YLocation;
+    
+    /**
+     * Variable registering the z coordinate of this VLocation.
+     */
     private final double ZLocation;
     
     /**

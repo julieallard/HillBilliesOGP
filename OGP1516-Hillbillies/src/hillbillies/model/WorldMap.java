@@ -4,6 +4,14 @@ import hillbillies.model.exceptions.UnitIllegalLocation;
 
 import java.util.*;
 
+/**
+ * A class of WorldMaps.
+ * 
+ * @version 0.9 alpha
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
+ */
 public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> extends HashMap<VLocation, MovableWorldObject> {
 	
 	/**
@@ -78,34 +86,43 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
         return unitList;
     }
 
-
+	/**
+	 * Return a set collecting all the units in this WorlMap.
+	 */
     public Set<Unit> getAllUnits(){
-        Collection<MovableWorldObject> totColl=this.values();
-        Set<Unit> unitset=new HashSet<>();
-        for (MovableWorldObject object:
-             totColl) {
-            if(object instanceof Unit) unitset.add((Unit) object);
+        Collection<MovableWorldObject> totColl = this.values();
+        Set<Unit> unitset = new HashSet<>();
+        for (MovableWorldObject object: totColl) {
+            if (object instanceof Unit)
+            	unitset.add((Unit) object);
         }
         return unitset;
     }
-    public Set<Boulder> getAllBoulders(){
-        Collection<MovableWorldObject> totColl=this.values();
-        Set<Boulder> boulderSet=new HashSet<>();
-        for (MovableWorldObject object:
-                totColl) {
-            if(object instanceof Boulder) boulderSet.add((Boulder) object);
+  
+	/**
+	 * Return a set collecting all the boulders in this WorlMap.
+	 */
+    public Set<Boulder> getAllBoulders() {
+        Collection<MovableWorldObject> totColl = this.values();
+        Set<Boulder> boulderSet = new HashSet<>();
+        for (MovableWorldObject object: totColl) {
+            if (object instanceof Boulder)
+            	boulderSet.add((Boulder) object);
         }
         return boulderSet;
     }
+    
+	/**
+	 * Return a set collecting all the logs in this WorlMap.
+	 */
     public Set<Log> getAllLogs(){
-        Collection<MovableWorldObject> totColl=this.values();
-        Set<Log> logSet=new HashSet<>();
-        for (MovableWorldObject object:
-                totColl) {
-            if(object instanceof Log) logSet.add((Log) object);
+        Collection<MovableWorldObject> totColl = this.values();
+        Set<Log> logSet = new HashSet<>();
+        for (MovableWorldObject object: totColl) {
+            if (object instanceof Log)
+            	logSet.add((Log) object);
         }
         return logSet;
     }
-
 
 }

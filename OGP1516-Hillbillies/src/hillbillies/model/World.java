@@ -283,8 +283,7 @@ public class World {
      * @return True if and only if the cube location is a three dimensional array, if the cube is passable
      * 		   and if the cube underneath has zero as its z coordinate or can support objects. If the object is a Unit,
      * 		   this method will return true, except the before mentioned conditions, if and only if the x, y and z
-     * 		   coordinate is at the border of the game world
-     * 		   
+     * 		   coordinate is at the border of the game world.	   
      */
     public boolean canHaveAsCubeLocation(int[] cubeLoc, MovableWorldObject object) {
         if (cubeLoc.length != 3)
@@ -428,24 +427,26 @@ public class World {
     }
 
     /**
-     * Invoke the advanceTime methods of all game objects that are part of the World
-     * with parameter dt.
-     * 
-     * @param  dt
-     * 		   The time duration.
+     * No documentation required.
      */
-    public void advanceTime(double dt){
-        if(!isValidTimeDuration(dt)) throw new IllegalTimeException();
+    public void advanceTime(double dt) {
+        if(! isValidTimeDuration(dt)) throw new IllegalTimeException();
         caveIn();
         //World validity check
         assert this.TotalUnitSet.equals(this.getWorldMap().getAllUnits());
-        Collection<MovableWorldObject> totColl=this.getWorldMap().values();
-        for (MovableWorldObject object :
-                totColl) {
+        Collection<MovableWorldObject> totColl = this.getWorldMap().values();
+        for (MovableWorldObject object: totColl) {
             object.advanceTime(dt);
         }
     }
 
+    /**
+     * Return the geological feature of the cube at the given location.
+     * 
+     * @param  loc
+     * 		   The location of the cube to check.
+     * @return The geological feature of the cube.
+     */
     public int getCubeAt(int[] loc) {
         CubeWorldObject cube;
         try {
