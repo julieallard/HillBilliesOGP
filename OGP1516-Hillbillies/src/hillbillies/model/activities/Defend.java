@@ -130,7 +130,7 @@ public class Defend implements IActivity {
     @Raw
     public void setTimeLeft(double timeLeft) throws IllegalTimeException {
         if (! isValidTimeLeft(timeLeft))
-            throw new IllegalTimeException();
+            throw new IllegalTimeException("thrown by advanceTime from Defend timeleft duration was not valid");
         this.timeLeft = timeLeft;
     }
 

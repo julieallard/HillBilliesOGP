@@ -430,7 +430,7 @@ public class World {
      * No documentation required.
      */
     public void advanceTime(double dt) {
-        if(! isValidTimeDuration(dt)) throw new IllegalTimeException();
+        if(! isValidTimeDuration(dt)) throw new IllegalTimeException("thrown by advanceTime from World time duration was not valid");
         caveIn();
         //World validity check
         assert this.TotalUnitSet.equals(this.getWorldMap().getAllUnits());

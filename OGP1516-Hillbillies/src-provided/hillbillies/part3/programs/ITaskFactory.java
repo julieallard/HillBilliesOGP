@@ -35,17 +35,7 @@ import hillbillies.tests.facade.Part3TestPartial;
  * representing expressions and statements, respectively.
  * 
  * <p>
- * The SourceLocation object in the methods defined by this factory refers to
- * the location (line and column) in the text file where the statement or
- * expression begins.
- * 
- * @param <E>
- *            Your class for representing an expression.
- * @param <S>
- *            Your class for representing a statement.
- * @param <T>
- *            Your class for representing a task (should be Task).
- * 
+ * The SourceLocation object i2
  * 
  */
 public interface ITaskFactory<E, S, T> {
@@ -72,7 +62,6 @@ public interface ITaskFactory<E, S, T> {
 	 */
 	public List<T> createTasks(String name, int priority, S activity, List<int[]> selectedCubes);
 
-	/* STATEMENTS */
 
 	/**
 	 * Create a statement that represents the assignment of a variable.
@@ -94,7 +83,6 @@ public interface ITaskFactory<E, S, T> {
 	 *            statement).
 	 */
 	public S createWhile(E condition, S body, SourceLocation sourceLocation);
-
 	/**
 	 * Create an if-then-else statement.
 	 * 
@@ -348,5 +336,4 @@ public interface ITaskFactory<E, S, T> {
 	 * Create an expression that evaluates to false.
 	 */
 	public E createFalse(SourceLocation sourceLocation);
-
 }

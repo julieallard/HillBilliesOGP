@@ -124,7 +124,7 @@ public class Attack implements IActivity {
     @Raw
     private void setTimeLeft(double timeLeft) throws IllegalTimeException {
       if (! isValidTimeLeft(timeLeft))
-        throw new IllegalTimeException();
+        throw new IllegalTimeException("thrown by advanceTime from Attack timeleft duration was not valid");
       this.timeLeft = timeLeft;
     }
 

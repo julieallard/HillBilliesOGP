@@ -136,7 +136,7 @@ public class Work implements IActivity {
     @Raw
     public void setTimeLeft(double timeLeft) throws IllegalTimeException {
         if (! isValidTimeLeft(timeLeft))
-            throw new IllegalTimeException();
+            throw new IllegalTimeException("thrown by advanceTime from Work timeleft duration was not valid");
         this.timeLeft = timeLeft;
     }    
     
