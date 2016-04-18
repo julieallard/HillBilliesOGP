@@ -3,6 +3,7 @@ package hillbillies.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Scheduler {
 	
@@ -21,16 +22,16 @@ public class Scheduler {
 		TaskList.add(task);
 	}
 	
-	public void addTask(List<Task> taskList) {
-		TaskList.addAll(taskList);
+	public void addTask(List<Task> addList) {
+		TaskList.addAll(addList);
 	}
 	
 	public void removeTask(Task task) {
 		TaskList.remove(task);
 	}
 	
-	public void removeTask(List<Task> taskList) {
-		TaskList.removeAll(taskList);		
+	public void removeTask(List<Task> removeList) {
+		TaskList.removeAll(removeList);		
 	}
 	
 	public void replace(Task oldTask, Task newTask) throws IllegalArgumentException {
@@ -65,29 +66,28 @@ public class Scheduler {
 		return this.TaskList;
 	}
 	
-	public List<Task> getTasksWithCondition(int condition) {
+	public List<Task> getTasksWithCondition(boolean condition) {
 		//TODO: CONDITIONS
+		//http://stackoverflow.com/questions/10600504/passing-a-condition-as-a-parameter-to-an-iterator
 		List<Task> totList = this.TaskList;
 		List<Task> resultList = new ArrayList<>();
 		for (Task task: totList)
-			if (task.conditionTrue())
+			if (task.condition)
 				resultList.add(task);
+		return resultList;
 	}
 	
-    public List<Log> getAllLogsInCube(int[] cubeLocation) {
-        List<MovableWorldObject> totList = getAllInCube(cubeLocation);
-        List<Log> logList = new ArrayList<>();
-        for (MovableWorldObject object: totList) {
-            if (object instanceof Log) {
-                logList.add((Log) object);
-            }
-        }
-        return logList;
-    }
+	public ListIterator<Task> getTasksInDescendingPriority() {
+		
+	}
 	
-	public getTasksInDescendingPriority();
+	public void markAsScheduled(Task task) {
+		
+	}
 	
-	public mark();
+	public void resetMarking(Task task) {
+		
+	}
 	
 	/**
 	 * List collecting references to Tasks belonging to this Scheduler.
@@ -98,5 +98,7 @@ public class Scheduler {
 	 */
 	private List<Task> TaskList;
 	
+	
+	private ListIterator<Task> TaskIterator;
 	
 }

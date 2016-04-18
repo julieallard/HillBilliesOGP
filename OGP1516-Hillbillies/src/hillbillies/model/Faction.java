@@ -33,6 +33,7 @@ public class Faction {
 		world.addFaction(this);
 		this.addUnit(unit);
         this.UnitSet = new HashSet<>();
+        this.scheduler = new Scheduler(this);
 	}
 	
 	/**
@@ -48,6 +49,11 @@ public class Faction {
 	 * @invar Each Unit in the UnitSet references this faction as the faction to which it is attached.
 	 */
 	private Set<Unit> UnitSet;
+	
+	/**
+	 * Variable registering the scheduler of this Faction.
+	 */
+	private final Scheduler scheduler;
 
     /**
      * Return the world of this faction.
@@ -115,4 +121,10 @@ public class Faction {
 		return UnitSet.size();
 	}
 
+	/**
+	 * Return the scheduler of this faction.
+	 */
+	public Scheduler getScheduler() {
+		return this.scheduler;
+	}
 }
