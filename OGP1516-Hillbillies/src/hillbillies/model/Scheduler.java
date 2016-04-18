@@ -142,15 +142,16 @@ public class Scheduler {
 	}
 	
 	public ListIterator<Task> getTasksInDescendingPriority() {
+		return this.TaskIterator;
 		
 	}
 	
-	public void markExecution(Task task) {
-		
+	public void markExecution(Task task, Unit executor) {
+		task.setExecutor(executor);
 	}
 	
 	public void resetMarking(Task task) {
-		Unit.
+		task.setExecutor(null);
 	}
 	
 	/**
@@ -162,6 +163,9 @@ public class Scheduler {
 	private List<Task> TaskList;
 	
 	
+	/**
+	 * Iterator collecting references to Tasks belonging to this Scheduler, in descending order of their priority.
+	 */
 	private ListIterator<Task> TaskIterator;
 	
 }

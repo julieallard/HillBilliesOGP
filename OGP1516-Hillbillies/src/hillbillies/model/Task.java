@@ -77,7 +77,7 @@ public class Task {
 	/**
 	 * Variable registering the executing unit of this Task.
 	 */
-	private Unit executer;
+	private Unit executor;
 	
 	/**
 	 * List collecting references to activities belonging to this Task.
@@ -121,13 +121,21 @@ public class Task {
     }
 	
 	public void startExecution(Unit unit) {
-		this.executer = unit;
+		this.setExecutor(unit);
 		setExecution(true);
 	}
 	
 	public void stopExecution() {
-		this.executer = null;
+		this.setExecutor(null);
 		setExecution(false);
+	}
+
+	public Unit getExecutor() {
+		return executor;
+	}
+
+	public void setExecutor(Unit executor) {
+		this.executor = executor;
 	}
 	
 	
