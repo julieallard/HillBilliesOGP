@@ -309,12 +309,7 @@ public class Unit extends MovableWorldObject {
      * Variable registering the name of this Unit.
      */
     private String name;
-    
-    /**
-     * Variable registering the location of this Unit.
-     */
-    private VLocation location;
-    
+
     /**
      * Variable registering the weight of this Unit.
      */
@@ -339,12 +334,7 @@ public class Unit extends MovableWorldObject {
      * Variable registering the state of default behavior of this Unit.
      */
     private boolean defaultbehaviorenabled;
-    
-    /**
-     * Variable registering the world of this Unit.
-     */
-    private World world;
-    
+
     /**
      * Variable registering the hitpoints of this Unit.
      */
@@ -370,12 +360,7 @@ public class Unit extends MovableWorldObject {
      * Variable registering the orientation of this Unit.
      */
     private float orientation;
-    
-    /**
-     * Variable registering the activity of this Unit.
-     */
-    private IActivity activity;
-    
+
     /**
      * Variable registering the activity of this Unit which is paused but will be continued after this Unit
      * finishes its current activity.
@@ -449,116 +434,6 @@ public class Unit extends MovableWorldObject {
             throw new IllegalArgumentException("This is an invalid name.");
         this.name = name;
     }
-
-    /**
-     * Return the location of this Unit.
-     */
-    @Basic
-    @Raw
-    @Override
-    public VLocation getLocation() {
-        return this.location;
-    }
-
-    /**
-     * Check whether the given location is a valid location for any Unit.
-     *
-     * @param  location
-     * 		   The location to check.
-     * @return True if and only if this Unit can have the given location as its location in this Unit's world.
-     *       | result == VLocation.isValidLocation(location)
-     */
-    private static boolean isValidLocation(VLocation location) {
-        return VLocation.isValidLocation(location);
-    }
-
-    /**
-     * Set the location of this Unit to the given x, y and z coordinate.
-     *
-     * @param  x
-     * 		   The x coordinate for this Unit.
-     * @param  y
-     * 		   The y coordinate for this Unit.
-     * @param  z
-     * 		   The z coordinate for this Unit.
-     * @post   The x coordinate of the location of this new Unit is equal to the given x coordinate.
-     * 		 | new.getLocation() == location
-     * @post   The y coordinate of the location of this new Unit is equal to the given y coordinate.
-     * 		 | new.getLocation() == location
-     * @post   The z coordinate of the location of this new Unit is equal to the given z coordinate.
-     * 		 | new.getLocation() == location
-     * @throws UnitIllegalLocation
-     * 		   The given location is not a valid location for any Unit.
-     *       | ! isValidLocation(getLocation())
-     */
-    @Override
-    public void setLocation(double x, double y, double z) throws UnitIllegalLocation {
-        VLocation location = new VLocation(x, y, z, this);
-    	this.setLocation(location);
-    } 
-    
-    /**
-     * Set the location of this Unit to the x, y and z coordinate supplied by the given array.
-     *
-     * @param  array
-     * 		   The array supplying the x, y and z coordinate for this Unit.
-     * @post   The x coordinate of the location of this new Unit is equal to the x coordinate supplied by the given array.
-     * 		 | new.getLocation() == location
-     * @post   The y coordinate of the location of this new Unit is equal to the y coordinate supplied by the given array.
-     * 		 | new.getLocation() == location
-     * @post   The z coordinate of the location of this new Unit is equal to the z coordinate supplied by the given array.
-     * 		 | new.getLocation() == location
-     * @throws UnitIllegalLocation
-     * 		   The given location is not a valid location for any Unit.
-     * 		 | ! isValidLocation(getLocation())
-     */
-    public void setLocation(double[] array) throws UnitIllegalLocation {
-        VLocation location = new VLocation(array[0], array[1], array[2], this);
-        this.setLocation(location);
-    }
-    
-    /**
-     * Set the location of this Unit to the given location.
-     *
-     * @param  location
-     * 		   The new location for this Unit.
-     * @post   The location of this new Unit is equal to the given location.
-     * 		 | new.getLocation() == location
-     * @throws UnitIllegalLocation
-     * 		   The given location is not a valid location for any Unit.
-     *       | ! isValidLocation(getLocation())
-     */
-    @Raw
-    @Override
-    public void setLocation(VLocation location) throws UnitIllegalLocation {
-        if ((! isValidLocation(location)) || location.occupant == this)
-            throw new UnitIllegalLocation();
-        this.location = location;
-        this.register(location);
-    }
-    
-    /**
-     * Register the given location and this Unit in the world's world map.
-     * 
-     * @param  location
-     * 		   The location to register.
-     * @post   The given location and this Unit are added in the world's world map.
-     */
-    @Override
-    public void register(VLocation location) {
-    	this.getWorld().getWorldMap().put(location, this);
-    }
-    
-    /**
-     * Unregister this Unit and its location from the world's world map.
-     * 
-     * @post   This Unit and its location are removed from the world's world map.
-     */
-	@Override
-	public void unregister() {
-		this.getWorld().getWorldMap().remove(this.getLocation());
-	}
-    	
     /**
      * Check whether the given property is a valid property for any Unit.
      *  
@@ -741,49 +616,12 @@ public class Unit extends MovableWorldObject {
         this.defaultbehaviorenabled = flag;
     }    
 
-    /**
-     * Return the world of this Unit.
-     */
-    @Basic
     @Raw
-    @Immutable
     @Override
-    public World getWorld() {
-      return this.world;
-    }
-
-    /**
-     * Check whether this Unit can have the given world as its world.
-     *
-     * @param  world
-     *         The world to check.
-     * @return True if and only if the given world contains less than 100 Units.
-     *       | result == (world.getNumberOfUnits() < 100)
-     */
-    @Raw
-    boolean canHaveAsWorld(World world) {
+    protected boolean canHaveAsWorld(World world) {
     	return (world.getNumberOfUnits() < 100);
     }
-    
-    /**
-     * Set the world of this Unit to the given world.
-     * 
-     * @param  world
-     *         The new world for this Unit.
-     * @post   The world of this new Unit is equal to the given world.
-     *       | new.getWorld() == world
-     * @throws IllegalArgumentException
-     *         The given world is not a valid world for any Unit.
-     *       | ! canHaveAsWorld(getWorld())
-     */
-    @Raw
-    public void setWorld(World world) throws IllegalArgumentException {
-		if (! canHaveAsWorld(world))
-			throw new IllegalArgumentException("This world has already reached its max amount of Units.");
-		this.world = world;
-		this.getWorld().addUnit(this);	
-	}    
-    
+
     /**
      * Return the maximum number of hitpoints or stamina points of this Unit.
      */
@@ -891,16 +729,6 @@ public class Unit extends MovableWorldObject {
         else
             this.orientation = ((float) Math.PI) / 2;
     }
-
-    /**
-     * Return the activity of this Unit.
-     */
-    @Basic
-    @Raw
-    public IActivity getActivity() {
-        return this.activity;
-    }
-
     /**
      * Check whether the given activity is a valid activity for any Unit.
      *
@@ -909,28 +737,10 @@ public class Unit extends MovableWorldObject {
      * @return Always true.
      * 		 | result == true
      */
-    private static boolean isValidActivity(IActivity activity) {
+    @Override
+    public boolean isValidActivity(IActivity activity) {
         return true;
     }
-
-    /**
-     * Set the activity of this Unit to the given activity.
-     *
-     * @param  activity
-     * 		   The new activity for this Unit.
-     * @throws IllegalArgumentException
-     * 		   The given activity is not a valid activity for any Unit.
-     *       | ! isValidActivity(getActivity())
-     * @post   The activity of this new Unit is equal to the given activity.
-     * 		 | new.getActivity() == activity
-     */
-    @Raw
-    public void setActivity(IActivity activity) throws IllegalArgumentException {
-        if (! isValidActivity(activity))
-            throw new IllegalArgumentException();
-        this.activity = activity;
-    }
- 
     /**
      * Return whether the Unit is carrying an object.
      */    
@@ -1173,7 +983,7 @@ public class Unit extends MovableWorldObject {
 	@Raw		
 	private void setFaction() throws IllegalArgumentException {
 		if (this.getWorld().getNumberOfFactions() < 5) {
-            this.faction = new Faction(this, world);
+            this.faction = new Faction(this, getWorld());
 		} else if (! canHaveAsFaction(this.getWorld().getSmallestFaction())) {
 			throw new IllegalArgumentException("This faction has already reached its max amount of Units.");
 		} else {
@@ -1305,7 +1115,7 @@ public class Unit extends MovableWorldObject {
      * 		   by the movement.
      */
     public void moveTo(int[] destination) {
-        if (! this.world.canHaveAsCubeLocation(destination, this))
+        if (! this.getWorld().canHaveAsCubeLocation(destination, this))
         	return;
         Movement movement = new Movement(this, destination);
         interruptCurrentAct(movement);

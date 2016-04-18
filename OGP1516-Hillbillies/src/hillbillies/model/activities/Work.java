@@ -35,7 +35,7 @@ public class Work implements IActivity {
      *
      * @param  unit
      *         The unit for this new Work.
-     * @param  target location
+     * @param  targetLocation
      * 		   The target location for this Work.
      * @post   The unit of this new Work is equal to the given unit.
      * @post   The target location of this new Work is equal to the given target location.

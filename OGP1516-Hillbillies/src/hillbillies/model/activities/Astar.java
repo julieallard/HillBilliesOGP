@@ -12,7 +12,7 @@ public class Astar {
     }
 
     private final Unit unit;
-
+    
     protected Cube[] FindPath(Cube startcube, Cube destination) throws RuntimeException {
 
         //nodes already discovered and evaluated
