@@ -28,7 +28,7 @@ abstract class InanimateMovableWorldObject extends MovableWorldObject {
      * @throws UnitIllegalLocation
      *         The given location is not a valid location for any Object.
      */
-    public InanimateMovableWorldObject(double x, double y, double z, World world) throws UnitIllegalLocation {
+    InanimateMovableWorldObject(double x, double y, double z, World world) throws UnitIllegalLocation {
         this.setLocation(x, y, z);
         setWorld(world);
         Random random = new Random();

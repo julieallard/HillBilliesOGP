@@ -255,6 +255,8 @@ public class Unit extends MovableWorldObject {
 
     }
 
+
+
     /**
      * Initialize this new hillbilly Unit with given world and given default behaviour state.
      *
@@ -269,7 +271,7 @@ public class Unit extends MovableWorldObject {
      */
     public Unit(World world, boolean enableDefaultBehavior) {
     	Random random = new Random();
-        String name = getRandomName(random);
+        String name = getRandomName();
         int randomLocX;
     	int randomLocY;
     	int randomLocZ;
@@ -279,7 +281,7 @@ public class Unit extends MovableWorldObject {
     		randomLocZ = random.nextInt(world.sideSize);
     		int[] randomLoc = new int[]{randomLocX, randomLocY, randomLocZ};
     		if (world.canHaveAsCubeLocation(randomLoc, this))
-    			break;	
+    			break;
     	}
     	int randomWeight = random.nextInt(76) + 25;
 		int randomStrength = random.nextInt(76) + 25;
@@ -391,6 +393,10 @@ public class Unit extends MovableWorldObject {
      * Variable registering the faction this Unit belongs to.
      */
     private Faction faction;
+    /**
+     * Object holding the random generator used during the random cration of the unit
+     */
+    private Random random;
     
     /**
      * Return the name of this Unit.
@@ -1021,12 +1027,9 @@ public class Unit extends MovableWorldObject {
 
     /**
      * Return a random name.
-     * 
-     * @param  random
-     * 		   The grandom object generated and used by the Unit constructor.
      * @return An element supplied by a list of random names.
      */
-    private String getRandomName(Random random){
+    private String getRandomName(){
         boolean flag = random.nextBoolean();
         if (flag) {
             String[] redneckNameArr = new String[]{"Cletus","Billy","Daquan","Bill","Uncle Bob","Minnie","John","Harly","Molly",
