@@ -1,6 +1,11 @@
 package hillbillies.model.EsotERICScript;
 
 
+import hillbillies.model.exceptions.SyntaxError;
 
-public class Expression {
+public abstract class Expression {
+
+    public abstract Object value() throws SyntaxError;
+
+
 }
