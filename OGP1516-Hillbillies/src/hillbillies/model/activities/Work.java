@@ -3,13 +3,10 @@ package hillbillies.model.activities;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.*;
-import hillbillies.model.CubeObjects.Air;
-import hillbillies.model.CubeObjects.CubeWorldObject;
 import hillbillies.model.exceptions.IllegalTimeException;
 import ogp.framework.util.Util;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * A class of Work activities involving a unit and a target location.
@@ -155,7 +152,7 @@ public class Work implements IActivity {
             unit.addXP(10);
             return;
         }
-        if (unit.getWorld().getCubeAt(targetLocation) == 3) {
+        if (unit.getWorld().getCubeIDAt(targetLocation) == 3) {
             if (! unit.getWorld().getLogsAt(targetLocation).isEmpty() && ! unit.getWorld().getBouldersAt(targetLocation).isEmpty()) {
                 workOutWork();
                 unit.addXP(10);
@@ -167,7 +164,7 @@ public class Work implements IActivity {
             unit.addXP(10);
             return;
         }
-        if (unit.getWorld().getCubeAt(targetLocation) == 2 || unit.getWorld().getCubeAt(targetLocation) == 1) {
+        if (unit.getWorld().getCubeIDAt(targetLocation) == 2 || unit.getWorld().getCubeIDAt(targetLocation) == 1) {
             destroyWork();
             unit.addXP(10);
             return;

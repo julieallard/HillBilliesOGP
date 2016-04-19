@@ -1,6 +1,5 @@
 package hillbillies.model.EsotERICScript.Expressions;
 import hillbillies.model.EsotERICScript.Expression;
-import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
 
@@ -85,11 +84,41 @@ public class BooleanExpression extends Expression {
         }
     }
 
-    public class BooleanIsAliveExpression extends BooleanAndPartExpression {
-
+    public class BooleanIsAlivePartExpression extends BooleanPartExpression {
 
         public BooleanIsAlivePartExpression(UnitExpression arg1) {
+            this.arg1=arg1;
+        }
+        private UnitExpression arg1;
 
+        @Override
+        public Boolean getValue() throws SyntaxError {
+            return arg1.value().isAlive();
+        }
+    }
+    //IsEnemy will be implemented as NOT(IsFriend)
+    public class BooleanIsFriendPartExpression extends BooleanPartExpression{
+        public BooleanIsFriendPartExpression(UnitExpression arg1,UnitExpression arg2) {
+            this.arg1=arg1;
+            this.arg2=arg2;
+        }
+        UnitExpression arg1;
+        UnitExpression arg2;
+        @Override
+        public Boolean getValue() throws SyntaxError {
+            return arg1.value().getFaction().equals(arg2.value().getFaction());
+        }
+    }
+    //IsSolid will be implemented as NOT(IsPassable)
+    public class BooleanIsPassablePartExpression extends BooleanPartExpression{
+        public BooleanIsPassablePartExpression(PositionExpression arg1) {
+            this.arg1=arg1;
+        }
+        private PositionExpression arg1;
+        @Override
+        public Boolean getValue() throws SyntaxError {
+            return task.world.getCubeAt(arg1.value()).isPassable();
         }
     }
 }
+

@@ -447,12 +447,12 @@ public class World {
      * 		   The location of the cube to check.
      * @return The geological feature of the cube.
      */
-    public int getCubeAt(int[] loc) {
+    public int getCubeIDAt(int[] loc) {
         CubeWorldObject cube;
         try {
         	cube = this.CubeWorld[loc[0]][loc[1]][loc[2]];
         } catch (IndexOutOfBoundsException exception) {
-            throw new IllegalArgumentException("An illegal cubelocation was inspected getCubeAt");
+            throw new IllegalArgumentException("An illegal cubelocation was inspected getCubeIDAt");
         }
         if (cube instanceof Air)
         	return 0;
@@ -463,6 +463,16 @@ public class World {
         if (cube instanceof Workshop)
         	return 3;
         throw new IllegalArgumentException();
+    }
+
+    public CubeWorldObject getCubeAt(int[] loc){
+        CubeWorldObject cube;
+        try {
+            cube = this.CubeWorld[loc[0]][loc[1]][loc[2]];
+        } catch (IndexOutOfBoundsException exception) {
+            throw new IllegalArgumentException("An illegal cubelocation was inspected getCubeIDAt");
+        }
+        return cube;
     }
 
     /**
@@ -494,22 +504,22 @@ public class World {
         switch (value) {
             case 3:	
                 cubeObject = new Workshop();
-                if (getCubeAt(new int[]{x, y, z}) == 1 || getCubeAt(new int[]{x, y, z}) == 2)
+                if (getCubeIDAt(new int[]{x, y, z}) == 1 || getCubeIDAt(new int[]{x, y, z}) == 2)
                     this.borderConnect.changeSolidToPassable(x, y, z);
                 break;
             default:
             case 0:
                 cubeObject = new Air();
-                if (getCubeAt(new int[]{x, y, z}) == 1 || getCubeAt(new int[]{x, y, z}) == 2)
+                if (getCubeIDAt(new int[]{x, y, z}) == 1 || getCubeIDAt(new int[]{x, y, z}) == 2)
                     this.borderConnect.changeSolidToPassable(x, y, z);
                 break;
             case 1:
-                if (getCubeAt(new int[]{x, y, z}) == 0 || getCubeAt(new int[]{x, y, z}) == 3)
+                if (getCubeIDAt(new int[]{x, y, z}) == 0 || getCubeIDAt(new int[]{x, y, z}) == 3)
                     throw new IllegalArgumentException("Facade just tried to make a non-Solid cube Solid");
                 cubeObject = new Rock();
                 break;
             case 2:
-                if (getCubeAt(new int[]{x, y, z}) == 0 || getCubeAt(new int[]{x, y, z}) == 3)
+                if (getCubeIDAt(new int[]{x, y, z}) == 0 || getCubeIDAt(new int[]{x, y, z}) == 3)
                     throw new IllegalArgumentException("Facade just tried to make a non-Solid cube Solid");
                 cubeObject = new Rock();
                 break;

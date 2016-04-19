@@ -2,7 +2,6 @@ package hillbillies.part2.facade;
 
 
 import hillbillies.model.*;
-import hillbillies.model.CubeObjects.CubeWorldObject;
 import hillbillies.part2.listener.TerrainChangeListener;
 import ogp.framework.util.ModelException;
 import java.util.Set;
@@ -142,7 +141,7 @@ public class Facade extends hillbillies.part1.facade.Facade implements hillbilli
     @Override
     public int getCubeType(World world, int x, int y, int z) throws ModelException{
 
-        try{return world.getCubeAt(new int[]{x,y,z});}
+        try{return world.getCubeIDAt(new int[]{x,y,z});}
         catch (Exception error) {throw new ModelException(error);}
     }
 

@@ -16,6 +16,8 @@ import hillbillies.model.EsotERICScript.Statement;
  * 			https://github.com/julieallard/HillBilliesOGP.git
  */
 public class Task {
+
+
 	
 	/**
 	 * Initialize this new Task with given name, given priority and given scheduler.
@@ -186,6 +188,8 @@ public class Task {
 	public void setExecutor(Unit executor) {
 		this.executor = executor;
 	}
+
+	public World world;
 	
 	
 	
