@@ -1,5 +1,6 @@
 package hillbillies.model.EsotERICScript.Expressions;
 import hillbillies.model.EsotERICScript.Expression;
+import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
 
@@ -74,7 +75,7 @@ public class BooleanExpression extends Expression {
 
         @Override
         public Boolean getValue() throws SyntaxError {
-            return arg1.value()
+            return (Unfit) arg1.value()
         }
     }
 }
