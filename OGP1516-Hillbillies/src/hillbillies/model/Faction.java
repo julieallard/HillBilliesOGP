@@ -31,8 +31,8 @@ public class Faction {
 	public Faction(Unit unit, World world) throws IllegalArgumentException {
 		this.world = world;
 		world.addFaction(this);
-		this.addUnit(unit);
         this.UnitSet = new HashSet<>();
+		this.addUnit(unit);
         this.scheduler = new Scheduler(this);
 	}
 	
