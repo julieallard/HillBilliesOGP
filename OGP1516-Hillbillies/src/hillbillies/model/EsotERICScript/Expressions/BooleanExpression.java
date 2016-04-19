@@ -73,9 +73,23 @@ public class BooleanExpression extends Expression {
 
     public class BooleanIscarryingPartExpression extends BooleanPartExpression{
 
+        public BooleanIscarryingPartExpression(UnitExpression arg1) {
+            this.arg1=arg1;
+
+        }
+        private UnitExpression arg1;
+
         @Override
         public Boolean getValue() throws SyntaxError {
-            return (Unfit) arg1.value()
+            return arg1.value().isCarrying();
+        }
+    }
+
+    public class BooleanIsAliveExpression extends BooleanAndPartExpression {
+
+
+        public BooleanIsAlivePartExpression(UnitExpression arg1) {
+
         }
     }
 }
