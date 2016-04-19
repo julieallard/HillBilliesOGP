@@ -2,6 +2,7 @@ package hillbillies.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -24,7 +25,7 @@ public class Scheduler {
      */
 	public Scheduler(Faction faction) {
 		this.faction = faction;
-		this.TaskList = new ArrayList<>();
+		this.TaskList = new ArrayList<>(); 
 	}
 	
 	/**
@@ -49,6 +50,12 @@ public class Scheduler {
 	 * 		   The given task cannot have this Scheduler as a Scheduler.
 	 */
 	public void addTask(Task task) {
+		for (Task inList: TaskList)
+			if (task.getPriority() >= inList.getPriority()) {
+				int index = TaskList.indexOf(inList);
+				TaskList.add(index, task);
+				return;
+			}
 		TaskList.add(task);
 	}
 	
@@ -62,13 +69,14 @@ public class Scheduler {
 	 * 		   The given list of tasks cannot have this Scheduler as a Scheduler.
 	 */
 	public void addTask(List<Task> addList) {
-		TaskList.addAll(addList);
-	}
-
-	public void addTask(Task ... addList) {
-		for (Task task :
-				addList) {
-			this.TaskList.add(task);
+		for (Task addToList: addList) {
+			for (Task inList: TaskList)
+				if (addToList.getPriority() >= inList.getPriority()) {
+					int index = TaskList.indexOf(inList);
+					TaskList.add(index, addToList);
+					break;
+				}
+			TaskList.add(addToList);
 		}
 	}
 	
@@ -149,6 +157,8 @@ public class Scheduler {
 	}
 	
 	public ListIterator<Task> getTasksInDescendingPriority() {
+		List<Task> list = new ArrayList<>();
+        Iterator<Task> TaskIterator = list.iterator();
 		return this.TaskIterator;
 		
 	}

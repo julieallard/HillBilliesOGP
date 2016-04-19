@@ -49,7 +49,8 @@ public class Task {
      * 		   The list of schedulers for this new Task.
      * @effect The given list of schedulers is added to this new Task.
      * @post   The name of this new Task is equal to the given name.
-     * @post   The priority of this new Task is equal to the given priority.
+	 * @effect The priority of this new Task is set to the given priority.
+	 *       | this.setPriority(priority)
      */
 	public Task(String name, int priority, List<Scheduler> schedulerList) {
 		this.name = name;
@@ -96,6 +97,54 @@ public class Task {
 	 */
 	private Set<Scheduler> SchedulerSet;
 	
+	/**
+	 * Return the name of this Task.
+	 */
+	@Basic
+	@Raw
+	public String getName() {
+		return this.name;
+	}
+
+	/**
+	 * Return the priority of this Task.
+	 */
+	@Basic
+	@Raw
+	public int getPriority() {
+		return this.priority;
+	}
+
+	/**
+	 * Check whether the given priority is a valid priority for any Task.
+	 *  
+	 * @param  priority
+	 *         The priority to check.
+	 * @return Always true.
+	 *       | result == true
+	*/
+	public static boolean isValidPriority(int priority) {
+		return true;
+	}
+
+	/**
+	 * Set the priority of this Task to the given priority.
+	 * 
+	 * @param  priority
+	 *         The new priority for this Task.
+	 * @post   The priority of this new Task is equal to the given priority.
+	 *       | new.getPriority() == priority
+	 * @throws ExceptionName_Java
+	 *         The given priority is not a valid priority for any Task.
+	 *       | ! isValidPriority(getPriority())
+	 */
+	@Raw
+	public void setpriority(int priority) throws IllegalArgumentException {
+		if (! isValidPriority(priority))
+			throw new IllegalArgumentException();
+		this.priority = priority;
+	}
+	
 	public boolean isBeingExecuted() {
 		return this.isBeingExecuted;
 	}
@@ -137,6 +186,7 @@ public class Task {
 	public void setExecutor(Unit executor) {
 		this.executor = executor;
 	}
+	
 	
 	
 	
