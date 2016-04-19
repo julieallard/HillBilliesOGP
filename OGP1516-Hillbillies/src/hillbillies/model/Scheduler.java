@@ -25,6 +25,13 @@ public class Scheduler {
 	public void addTask(List<Task> addList) {
 		TaskList.addAll(addList);
 	}
+
+	public void addTask(Task ... addList) {
+		for (Task task :
+				addList) {
+			this.TaskList.add(task);
+		}
+	}
 	
 	public void removeTask(Task task) {
 		TaskList.remove(task);
