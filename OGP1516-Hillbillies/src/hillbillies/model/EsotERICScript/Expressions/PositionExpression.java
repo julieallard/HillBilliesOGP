@@ -18,6 +18,19 @@ public class PositionExpression extends Expression {
 
         Expression arg1;
     }
+    public class ConstantPosPartExpression extends PosPartExpression{
+
+        public ConstantPosPartExpression(int[] position) throws SyntaxError{
+            if (position.length!=3) throw new SyntaxError("illegal position supplied");//Todo better check?
+            this.value=position;
+        }
+        int[] value;
+
+        @Override
+        public int[] getValue() throws SyntaxError {
+            return value;
+        }
+    }
     //Here expression will be implemented using this class
     public class LocationOfPosPartExpression extends PosPartExpression{
 
