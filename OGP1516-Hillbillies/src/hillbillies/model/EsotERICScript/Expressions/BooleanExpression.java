@@ -6,24 +6,17 @@ import hillbillies.model.exceptions.SyntaxError;
 public class BooleanExpression extends Expression {
     @Override
     public Boolean value() throws SyntaxError {
-        Object value =this.innerExpression.getValue();
-        try{
-            return (Boolean) value;
-        }catch (ClassCastException exception){
-            throw new SyntaxError("the expression should have returned a Boolean, but didn't ");
-        }
+        return this.innerExpression.getValue();
     }
-    private  PartExpression innerExpression;
-    private  Expression arg1;
-    private  Expression arg2;
+    public  BooleanPartExpression innerExpression;
 
     public abstract class BooleanPartExpression extends PartExpression{
 
         @Override
         public abstract Boolean getValue() throws SyntaxError;
 
-        public Expression arg1;
-        public Expression arg2;
+         Expression arg1;
+         Expression arg2;
     }
 
     public class BooleanConstantPartExpression extends BooleanPartExpression{
