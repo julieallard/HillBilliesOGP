@@ -1,10 +1,6 @@
 package hillbillies.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * A class of Schedulers.
@@ -25,7 +21,7 @@ public class Scheduler {
      */
 	public Scheduler(Faction faction) {
 		this.faction = faction;
-		this.TaskList = new ArrayList<>(); 
+		this.TaskQueue = new PriorityQueue<>(Collections.reverseOrder());
 	}
 	
 	/**
@@ -50,13 +46,7 @@ public class Scheduler {
 	 * 		   The given task cannot have this Scheduler as a Scheduler.
 	 */
 	public void addTask(Task task) {
-		for (Task inList: TaskList)
-			if (task.getPriority() >= inList.getPriority()) {
-				int index = TaskList.indexOf(inList);
-				TaskList.add(index, task);
-				return;
-			}
-		TaskList.add(task);
+		TaskQueue.add(task);
 	}
 	
 	/**
@@ -69,15 +59,7 @@ public class Scheduler {
 	 * 		   The given list of tasks cannot have this Scheduler as a Scheduler.
 	 */
 	public void addTask(List<Task> addList) {
-		for (Task addToList: addList) {
-			for (Task inList: TaskList)
-				if (addToList.getPriority() >= inList.getPriority()) {
-					int index = TaskList.indexOf(inList);
-					TaskList.add(index, addToList);
-					break;
-				}
-			TaskList.add(addToList);
-		}
+		TaskQueue.addAll(addList);
 	}
 	
 	/**
@@ -88,7 +70,7 @@ public class Scheduler {
 	 * @post   The given task is removed from this Scheduler.
 	 */
 	public void removeTask(Task task) {
-		TaskList.remove(task);
+		TaskQueue.remove(task);
 	}
 	
 	/**
@@ -99,7 +81,7 @@ public class Scheduler {
 	 * @post   The given list of tasks is removed from this Scheduler.
 	 */
 	public void removeTask(List<Task> removeList) {
-		TaskList.removeAll(removeList);		
+		TaskQueue.removeAll(removeList);
 	}
 	
 	/**
@@ -111,44 +93,39 @@ public class Scheduler {
 	 * 		   The task to add.
 	 * @post   The given new task is added to this Scheduler.
 	 * @effect The given old task is removed from this Scheduler.
-	 * @throws This Scheduler does not contain the given task to be replaced.
+	 * @throws IllegalArgumentException This Scheduler does not contain the given task to be replaced.
 	 */
 	public void replace(Task oldTask, Task newTask) throws IllegalArgumentException {
-		int index = TaskList.indexOf(oldTask);
-		if (index == -1)
+		if (!TaskQueue.contains(oldTask))
 			throw new IllegalArgumentException("This Scheduler doesn't contain the Task to be replaced.");
 		if (oldTask.isBeingExecuted())
-			oldTask.stop();
-		this.TaskList.add(index, newTask);
+            newTask.startExecution(oldTask.getExecutor());
+			oldTask.stopExecution();
+		newTask.setpriority(oldTask.getPriority());
+		TaskQueue.add(newTask);
 		removeTask(oldTask);
-	}
+    }
 	
 	public void containsTask(Task task) {
-		TaskList.contains(task);
+		TaskQueue.contains(task);
 	}
 	
 	public void containsTask(List<Task> taskList) {
-		TaskList.containsAll(taskList);
+		TaskQueue.containsAll(taskList);
 	}
 	
 	public Task getHPTask() {
-		int index = 0;
-		Task HPTask = TaskList.get(index);
-		while (HPTask.isBeingExecuted()) {
-			index += 1;
-			HPTask = TaskList.get(index);
-		}
-		return HPTask;
+		return TaskQueue.peek();
 	}
 	
 	public List<Task> getAllTasks() {
-		return this.TaskList;
+		return new ArrayList<>(this.TaskQueue);
 	}
 	
 	public List<Task> getTasksWithCondition(boolean condition) {
 		//TODO: CONDITIONS
 		//http://stackoverflow.com/questions/10600504/passing-a-condition-as-a-parameter-to-an-iterator
-		List<Task> totList = this.TaskList;
+		List<Task> totList = new ArrayList<>(this.TaskQueue);
 		List<Task> resultList = new ArrayList<>();
 		for (Task task: totList)
 			if (task.condition)
@@ -177,7 +154,7 @@ public class Scheduler {
 	 * @invar The list of Tasks is effective.
 	 * @invar Each element in the list of Tasks references a Task that is an acceptable Task for this Scheduler.
 	 */
-	private List<Task> TaskList;
+	private PriorityQueue<Task> TaskQueue;
 	
 	
 	/**

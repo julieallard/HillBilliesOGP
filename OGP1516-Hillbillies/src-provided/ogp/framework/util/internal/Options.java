@@ -10,7 +10,6 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class Options {
-
 	public static class Option<T> {
 		private ObjectProperty<T> currentValue = new SimpleObjectProperty<>();
 		private ObjectProperty<T> defaultValue = new SimpleObjectProperty<>();
@@ -23,7 +22,6 @@ public class Options {
 		public Option(Class<T> type, String name, String description, T defaultValue) {
 			this(type, name, description, defaultValue, null);
 		}
-
 		public Option(Class<T> type, String name, String description, T defaultValue, Option<Boolean> condition) {
 			this.type = type;
 			this.defaultValue.set(defaultValue);
