@@ -10,7 +10,7 @@ public class PositionExpression extends Expression {
         return innerExpression.getValue();
     }
     
-    public  PosPartExpression innerExpression;
+    public PosPartExpression innerExpression;
 
     public abstract class PosPartExpression extends PartExpression {
 
@@ -18,12 +18,14 @@ public class PositionExpression extends Expression {
         public abstract int[] getValue() throws SyntaxError;
 
         Expression arg1;
+        
     }
     
     public class ConstantPosPartExpression extends PosPartExpression {
 
-        public ConstantPosPartExpression(int[] position) throws SyntaxError{
-            if (position.length != 3) throw new SyntaxError("illegal position supplied");//Todo better check?
+        public ConstantPosPartExpression(int[] position) throws SyntaxError {
+            if (position.length != 3) throw new SyntaxError("Illegal position supplied");
+            //Todo better check?
             this.value = position;
         }
         
@@ -53,9 +55,11 @@ public class PositionExpression extends Expression {
     }
 
     public class LogPosPartExpression extends PosPartExpression{
+    	
         public LogPosPartExpression(UnitExpression unit) {
             this.arg1 = unit;
         }
+        
         public LogPosPartExpression() {
         }
 
@@ -63,14 +67,15 @@ public class PositionExpression extends Expression {
         public int[] getValue() throws SyntaxError {
             return null;
         }
+        
     }
 
     private static boolean isvalidCube(int[] loc, int request) {
-        //Todo implement
+        //TODO: implement
         return true;
     }
 
-    private int[] scanWorld(int[] initialLoc,String target) throws SyntaxError {
+    private int[] scanWorld(int[] initialLoc, String target) throws SyntaxError {
         int requestType;
         switch (target) {
             case "Log": 		requestType = 0;
@@ -79,11 +84,11 @@ public class PositionExpression extends Expression {
                 				break;
             case "Workshop": 	requestType = 2;
                 				break;
-            default:			throw new SyntaxError("illegal scan request");
+            default:			throw new SyntaxError("Illegal scan request");
         }
-        int[] curLoc=initialLoc.clone();
+        int[] curLoc = initialLoc.clone();
         while (true) {
-            if (isvalidCube(curLoc,requestType))
+            if (isvalidCube(curLoc, requestType))
             	break;
         }
         return null;
