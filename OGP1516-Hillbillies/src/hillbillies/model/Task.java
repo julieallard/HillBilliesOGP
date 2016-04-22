@@ -30,13 +30,13 @@ public class Task implements Comparable {
      * 		   The priority for this new Task.
      * @param  scheduler
      * 		   The scheduler for this new Task.
+     * @effect The priority of this new Task is set to the given priority.
      * @effect The given scheduler is added to this new Task.
      * @post   The name of this new Task is equal to the given name.
-     * @post   The priority of this new Task is equal to the given priority.
      */
 	public Task(String name, int priority, Scheduler scheduler) {
 		this.name = name;
-		this.priority = priority;
+		this.setPriority(priority);
 		this.ActivityList = new ArrayList<>();
 		this.SchedulerSet = new HashSet<>();
 		addScheduler(scheduler);
@@ -143,7 +143,7 @@ public class Task implements Comparable {
 	 *       | ! isValidPriority(getPriority())
 	 */
 	@Raw
-	public void setpriority(int priority) throws IllegalArgumentException {
+	public void setPriority(int priority) throws IllegalArgumentException {
 		if (! isValidPriority(priority))
 			throw new IllegalArgumentException();
 		this.priority = priority;

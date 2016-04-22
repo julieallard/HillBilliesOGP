@@ -93,30 +93,34 @@ public class Scheduler {
 	 * 		   The task to add.
 	 * @post   The given new task is added to this Scheduler.
 	 * @effect The given old task is removed from this Scheduler.
-	 * @throws IllegalArgumentException This Scheduler does not contain the given task to be replaced.
+	 * @throws IllegalArgumentException
+	 * 		   This Scheduler does not contain the given task to be replaced.
 	 */
 	public void replace(Task oldTask, Task newTask) throws IllegalArgumentException {
-		if (!TaskQueue.contains(oldTask))
+		if (! TaskQueue.contains(oldTask))
 			throw new IllegalArgumentException("This Scheduler doesn't contain the Task to be replaced.");
-		if (oldTask.isBeingExecuted())
-            newTask.startExecution(oldTask.getExecutor());
+		if (oldTask.isBeingExecuted()) {
+			Unit executor = oldTask.getExecutor();
 			oldTask.stopExecution();
-		newTask.setpriority(oldTask.getPriority());
+			newTask.startExecution(executor);
+		}
+		newTask.setPriority(oldTask.getPriority());
 		TaskQueue.add(newTask);
 		removeTask(oldTask);
     }
 	
-	public void containsTask(Task task) {
-		TaskQueue.contains(task);
+	public boolean containsTask(Task task) {
+		return TaskQueue.contains(task);
 	}
 	
-	public void containsTask(List<Task> taskList) {
-		TaskQueue.containsAll(taskList);
+	public boolean containsTask(List<Task> taskList) {
+		return TaskQueue.containsAll(taskList);
 	}
 	
 	public Task getHPTask() {
 		return TaskQueue.peek();
 	}
+	
 	public List<Task> getAllTasks() {
 		return new ArrayList<>(this.TaskQueue);
 	}
@@ -131,15 +135,23 @@ public class Scheduler {
 				resultList.add(task);
 		return resultList;
 	}
+	
 	public Iterator<Task> getTasksInDescendingPriority() {
         return TaskQueue.iterator();
 	}
 	
 	public void markExecution(Task task, Unit executor) {
-		task.setExecutor(executor);
+		if (! executor.hasTask()) {
+			task.setExecutor(executor);
+			task.setHasTask(true);
+		}
 	}
 	
 	public void resetMarking(Task task) {
+//		task.getExecutor()....... 
+//		TODO: nie affff
+		task.getExecutor().setHasTask(false);
+		task.getExecutor().setTask(null);
 		task.setExecutor(null);
 	}
 	
@@ -150,11 +162,5 @@ public class Scheduler {
 	 * @invar Each element in the list of Tasks references a Task that is an acceptable Task for this Scheduler.
 	 */
 	private PriorityQueue<Task> TaskQueue;
-	
-	
-	/**
-	 * Iterator collecting references to Tasks belonging to this Scheduler, in descending order of their priority.
-	 */
-	private ListIterator<Task> TaskIterator;
 	
 }

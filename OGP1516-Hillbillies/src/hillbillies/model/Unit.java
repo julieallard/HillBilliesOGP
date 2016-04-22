@@ -233,9 +233,7 @@ public class Unit extends MovableWorldObject {
         this.setOrientation((float) (0.5 * Math.PI));
         this.setActivity(null);
         this.setFaction();
-
     }
-
 
     /**
      * Initialize this new hillbilly Unit with given world and given default behaviour state.
@@ -371,11 +369,27 @@ public class Unit extends MovableWorldObject {
      * Variable registering the faction this Unit belongs to.
      */
     private Faction faction;
+    
     /**
-     * Object holding the random generator used during the random cration of the unit
+     * Object holding the random generator used during the random cration of the unit.
      */
     private Random random;
 
+    /**
+     * Variable registering whether this Unit is alive or not.
+     */
+    private boolean isalive;
+    
+    /**
+     * Variable registering the task assigned to this Unit.
+     */
+    private Task task;
+    
+    /**
+     * Variable registering whether a task is assigned to this Unit.
+     */
+    private boolean hasTask = false;
+    
     /**
      * Return the name of this Unit.
      */
@@ -1106,17 +1120,76 @@ public class Unit extends MovableWorldObject {
         interruptCurrentAct(rest);
     }
 
-
+    /**
+     * Return whether the Unit is alive.
+     */
     public Boolean isAlive() {
-        return Alive;
+        return this.isalive;
     }
 
-    public Unit setAlive(Boolean alive) {
-        Alive = alive;
-        return this;
+    /**
+     * Set the state of being alive of this Unit according to the given flag.
+     *
+     * @param  flag
+     * 		   The state of being alive to be registered.
+     * @post   The new state of being alive of this Unit is equal to the given flag.
+     * 		 | this.isalive == flag
+     */
+    public void setAlive(Boolean flag) {
+        this.isalive = flag;
+    }
+    
+    /**
+     * Return whether a task is assigned to this Unit.
+     */
+    public boolean hasTask() {
+    	return hasTask;
+    }
+    
+    /**
+     * Return the task assigned to this Unit.
+     */
+    public Task getTask() {
+    	return this.task;
+    }
+    
+    /**
+     * Check whether the given task is a valid task for any Unit.
+     *  
+     * @param  task
+     *         The task to check.
+     * @return Always true.
+     *       | result == true
+    */
+    public static boolean isValidTask(Task task) {
+    	return true;
+    }
+    
+    /**
+     * Set the task of this Unit to the given task.
+     * 
+     * @param  task
+     *         The new task for this Unit.
+     * @post   The task of this new Unit is equal to the given task.
+     *       | new.gettask() == task
+     * @throws IllegalArgumentException
+     *         The given task is not a valid task for any Unit.
+     *       | ! isValidTask(getTask())
+     */
+    @Raw
+    public void setTask(Task task) throws IllegalArgumentException {
+    	if (! isValidTask(task))
+    		throw new IllegalArgumentException();
+    	this.task = task;
     }
 
-    private Boolean Alive;
+    /**
+     * Return whether the Unit is idle.
+     */
+    public Boolean isIdle() {
+        return this.isDefaultBehaviorEnabled() && (this.getActivity().getId() == 0);
+    }
+    
 }
 
 
