@@ -117,7 +117,6 @@ public class Scheduler {
 	public Task getHPTask() {
 		return TaskQueue.peek();
 	}
-	
 	public List<Task> getAllTasks() {
 		return new ArrayList<>(this.TaskQueue);
 	}
@@ -132,12 +131,8 @@ public class Scheduler {
 				resultList.add(task);
 		return resultList;
 	}
-	
-	public ListIterator<Task> getTasksInDescendingPriority() {
-		List<Task> list = new ArrayList<>();
-        Iterator<Task> TaskIterator = list.iterator();
-		return this.TaskIterator;
-		
+	public Iterator<Task> getTasksInDescendingPriority() {
+        return TaskQueue.iterator();
 	}
 	
 	public void markExecution(Task task, Unit executor) {
