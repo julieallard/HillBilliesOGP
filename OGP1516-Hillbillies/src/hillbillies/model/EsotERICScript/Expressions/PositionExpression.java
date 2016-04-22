@@ -1,15 +1,18 @@
 package hillbillies.model.EsotERICScript.Expressions;
 
 import hillbillies.model.EsotERICScript.Expression;
+import hillbillies.model.World;
 import hillbillies.model.exceptions.SyntaxError;
 
+import java.util.Collection;
+
 public class PositionExpression extends Expression {
-	
+
     @Override
     public int[] value() throws SyntaxError {
         return innerExpression.getValue();
     }
-    
+
     public PosPartExpression innerExpression;
 
     public abstract class PosPartExpression extends PartExpression {
@@ -18,9 +21,9 @@ public class PositionExpression extends Expression {
         public abstract int[] getValue() throws SyntaxError;
 
         Expression arg1;
-        
+
     }
-    
+
     public class ConstantPosPartExpression extends PosPartExpression {
 
         public ConstantPosPartExpression(int[] position) throws SyntaxError {
@@ -28,38 +31,38 @@ public class PositionExpression extends Expression {
             //Todo better check?
             this.value = position;
         }
-        
+
         int[] value;
 
         @Override
         public int[] getValue() throws SyntaxError {
-            return value;          
+            return value;
         }
-        
+
     }
-    
+
     //Here expression will be implemented using this class
     public class LocationOfPosPartExpression extends PosPartExpression{
 
         public LocationOfPosPartExpression(UnitExpression unit) {
             this.arg1 = unit;
         }
-        
+
         UnitExpression arg1;
-        
+
         @Override
         public int[] getValue() throws SyntaxError {
             return arg1.value().getLocation().getCubeLocation();
         }
-        
+
     }
 
     public class LogPosPartExpression extends PosPartExpression{
-    	
+
         public LogPosPartExpression(UnitExpression unit) {
             this.arg1 = unit;
         }
-        
+
         public LogPosPartExpression() {
         }
 
@@ -67,7 +70,7 @@ public class PositionExpression extends Expression {
         public int[] getValue() throws SyntaxError {
             return null;
         }
-        
+
     }
 
     private static boolean isvalidCube(int[] loc, int request) {
@@ -94,4 +97,9 @@ public class PositionExpression extends Expression {
         return null;
     }
 
+    private Collection<int[]> getAllNeighbours(int[] cubeLoc){
+        World world= this.task.world;
+        
+
+    }
 }
