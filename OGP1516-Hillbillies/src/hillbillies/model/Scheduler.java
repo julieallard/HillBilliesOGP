@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * A class of Schedulers.
  * 
- * @version 0.9 alpha
+ * @version 2.0.5
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
