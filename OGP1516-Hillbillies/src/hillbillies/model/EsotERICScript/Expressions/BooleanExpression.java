@@ -22,6 +22,9 @@ public class BooleanExpression extends Expression {
         
     }
 
+    // true
+    // false
+    // "(" e ")"
     public class BooleanConstantPartExpression extends BooleanPartExpression {
     	
         public BooleanConstantPartExpression(boolean flag) throws SyntaxError {
@@ -37,6 +40,7 @@ public class BooleanExpression extends Expression {
         
     }
     
+    // ! e
     public class BooleanNotPartExpression extends BooleanPartExpression {
     	
         public BooleanNotPartExpression(BooleanExpression arg) {
@@ -50,6 +54,7 @@ public class BooleanExpression extends Expression {
         
     }
 
+    // e || e
     public class BooleanOrPartExpression extends BooleanPartExpression {
     	
         public BooleanOrPartExpression(BooleanExpression arg1, BooleanExpression arg2) {
@@ -63,6 +68,7 @@ public class BooleanExpression extends Expression {
         }
     }
 
+    // e && e
     public class BooleanAndPartExpression extends BooleanPartExpression {
     	
         public BooleanAndPartExpression(BooleanExpression arg1, BooleanExpression arg2) {
@@ -77,6 +83,7 @@ public class BooleanExpression extends Expression {
         
     }
 
+    // carries_item e
     public class BooleanIscarryingPartExpression extends BooleanPartExpression {
 
         public BooleanIscarryingPartExpression(UnitExpression arg1) {
@@ -92,6 +99,7 @@ public class BooleanExpression extends Expression {
         
     }
 
+    // is_alive e
     public class BooleanIsAlivePartExpression extends BooleanPartExpression {
 
         public BooleanIsAlivePartExpression(UnitExpression arg1) {
@@ -106,7 +114,8 @@ public class BooleanExpression extends Expression {
         }
     }
     
-    //IsEnemy will be implemented as NOT(IsFriend)
+    // is_friend e
+    // => is_enemy will be implemented as NOT(is_friend)
     public class BooleanIsFriendPartExpression extends BooleanPartExpression {
     	
         public BooleanIsFriendPartExpression(UnitExpression arg1, UnitExpression arg2) {
@@ -123,7 +132,8 @@ public class BooleanExpression extends Expression {
         }
     }
     
-    //IsSolid will be implemented as NOT(IsPassable)
+    // is_passable e
+    // => is_solid will be implemented as NOT(is_passable)
     public class BooleanIsPassablePartExpression extends BooleanPartExpression {
     	
         public BooleanIsPassablePartExpression(PositionExpression arg1) {
