@@ -16,9 +16,9 @@ public class Astar {
     protected Cube[] FindPath(Cube startcube, Cube destination) throws RuntimeException {
 
         //nodes already discovered and evaluated
-        Set<Cube> closedSet = Collections.emptySet();
+        Set<Cube> closedSet = new HashSet<>();
         //nodes already discovered but yet to be evaluated
-        Set<Cube> openSet = Collections.emptySet();
+        Set<Cube> openSet = new HashSet<>();
 
         openSet.add(startcube);
         //the node this node can be most efficiently be reached from
@@ -73,7 +73,7 @@ public class Astar {
     }
     
     private Cube[] reconstructPath(Map<Cube, Cube> cameFrom, Cube current){
-        List<Cube> path = new ArrayList<Cube>();
+        List<Cube> path = new ArrayList<>();
         path.add(current);
         while (cameFrom.containsKey(current)) {
             current = cameFrom.get(current);
@@ -85,7 +85,7 @@ public class Astar {
 
     private Set<Cube> getAllNeighbours(Cube cube){
         Set<Cube> intermediate = cube.generateNeighbours();
-        Set<Cube> set = new HashSet<Cube>();
+        Set<Cube> set = new HashSet<>();
         for (Cube possibleCube: intermediate) {
             if (unit.getWorld().canHaveAsCubeLocation(possibleCube.locArray, unit)) {
                 set.add(possibleCube);

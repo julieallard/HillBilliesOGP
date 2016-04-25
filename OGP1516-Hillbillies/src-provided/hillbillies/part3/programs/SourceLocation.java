@@ -4,7 +4,7 @@ import be.kuleuven.cs.som.annotate.Value;
 
 /**
  * A source location represents a position in a source file,
- * denoted by the line and column (position in the line) of 
+ * denoted by the line and column (position in the line) of
  * a certain character in the file.
  * 
  * This class is a value class.
@@ -41,7 +41,7 @@ public final class SourceLocation {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if ( obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;

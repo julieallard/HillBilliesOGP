@@ -3,10 +3,7 @@ package hillbillies.model.activities;
 import be.kuleuven.cs.som.annotate.Value;
 import hillbillies.model.exceptions.UnitIllegalLocation;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 @Value
 public class Cube {
@@ -16,7 +13,6 @@ public class Cube {
         	throw new UnitIllegalLocation("Astar tried to create an illegal cube");
         this.locArray = cube;
     }
-    
     @Override
     public boolean equals(Object cube1) {
         if (cube1 == null || ! (cube1 instanceof Cube))
@@ -49,7 +45,7 @@ public class Cube {
     }
 
     protected Set<Cube> generateNeighbours() {
-        Set<Cube> set = Collections.EMPTY_SET;
+        Set<Cube> set = new HashSet<>();
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 for (int z = -1; z< 2; z++) {
@@ -62,5 +58,4 @@ public class Cube {
         }
         return set;
     }
-    
 }
