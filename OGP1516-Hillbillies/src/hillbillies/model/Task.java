@@ -19,8 +19,6 @@ import hillbillies.model.EsotERICScript.Statement;
  */
 public class Task implements Comparable {
 
-
-	
 	/**
 	 * Initialize this new Task with given name, given priority and given scheduler.
      *
@@ -31,15 +29,18 @@ public class Task implements Comparable {
      * @param  scheduler
      * 		   The scheduler for this new Task.
      * @effect The priority of this new Task is set to the given priority.
+     *       | this.setPriority(priority)
      * @effect The given scheduler is added to this new Task.
+     * 		 | this.addScheduler(scheduler)
      * @post   The name of this new Task is equal to the given name.
+     * 		 | new.getName == name
      */
 	public Task(String name, int priority, Scheduler scheduler) {
 		this.name = name;
 		this.setPriority(priority);
-		this.ActivityList = new ArrayList<>();
+		this.StatementList = new ArrayList<>();
 		this.SchedulerSet = new HashSet<>();
-		addScheduler(scheduler);
+		this.addScheduler(scheduler);
 	}
 	
 	/**
@@ -51,17 +52,19 @@ public class Task implements Comparable {
      * 		   The priority for this new Task.
      * @param  schedulerList
      * 		   The list of schedulers for this new Task.
-     * @effect The given list of schedulers is added to this new Task.
-     * @post   The name of this new Task is equal to the given name.
 	 * @effect The priority of this new Task is set to the given priority.
 	 *       | this.setPriority(priority)
+     * @effect The given list of schedulers is added to this new Task.
+     * 		 | this.addScheduler(schedulerList)
+     * @post   The name of this new Task is equal to the given name.
+     * 		 | new.getName == name
      */
 	public Task(String name, int priority, List<Scheduler> schedulerList) {
 		this.name = name;
-		this.priority = priority;
-		this.ActivityList = new ArrayList<>();
+		this.setPriority(priority);
+		this.StatementList = new ArrayList<>();
 		this.SchedulerSet = new HashSet<>();
-		addScheduler(schedulerList);
+		this.addScheduler(schedulerList);
 	}
 	
 	/**
@@ -75,12 +78,7 @@ public class Task implements Comparable {
 	private int priority;
 	
 	/**
-	 * Variable registering whether the of this Task.
-	 */
-	private boolean isBeingExecuted = false;
-	
-	/**
-	 * Variable registering the executing unit of this Task.
+	 * Variable registering the unit executing this Task.
 	 */
 	private Unit executor;
 	
@@ -89,9 +87,8 @@ public class Task implements Comparable {
 	 * 
 	 * @invar The list of activities is effective.
 	 * @invar Each element in the list of activities references an activity that is an acceptable activity for this Task.
-	 * @invar Each activity in the ActivityList references this Task as the Task to which it is attached.
 	 */
-	private List<Statement> ActivityList;
+	private List<Statement> StatementList;
 	
 	/**
 	 * List collecting references to schedulers belonging to this Task.
@@ -149,50 +146,45 @@ public class Task implements Comparable {
 		this.priority = priority;
 	}
 	
-	public boolean isBeingExecuted() {
-		return this.isBeingExecuted;
-	}
-	
+	/**
+	 * Add the given scheduler to this Task.
+	 * 
+	 * @param  scheduler
+	 * 		   The scheduler to add.
+	 * @post   The given scheduler is added to this Task.
+	 */
 	public void addScheduler(Scheduler scheduler) {
 		this.SchedulerSet.add(scheduler);
 	}
 	
+	/**
+	 * Add the given scheduler to this Task.
+	 * 
+	 * @param  scheduler
+	 * 		   The list of schedulers to add.
+	 * @post   The given list of schedulers is added to this Task.
+	 */
 	public void addScheduler(List<Scheduler> schedulerList) {
 		this.SchedulerSet.addAll(schedulerList);
 	}
 	
-    /**
-     * Set the state of execution of this Task according to the given flag.
-     *
-     * @param  flag
-     * 		   The execution state to be registered.
-     * @post   The new execution state of this Task is equal to the given flag.
-     * 		 | this.isBeingExecuted == flag
-     */
-    private void setExecution(boolean flag) {
-        this.isBeingExecuted = flag;
-    }
-	
 	public void startExecution(Unit unit) {
 		this.setExecutor(unit);
-		setExecution(true);
 	}
 	
 	public void stopExecution() {
 		this.setExecutor(null);
-		setExecution(false);
 	}
-
+	
 	public Unit getExecutor() {
 		return executor;
 	}
-
+	
 	public void setExecutor(Unit executor) {
 		this.executor = executor;
 	}
-
+	
 	public World world;
-
 
 	/**
 	 * Compares this object with the specified object for order.  Returns a
@@ -234,12 +226,11 @@ public class Task implements Comparable {
 	 */
 	@Override
 	public int compareTo(Object o) {
-		if(o==null||!(o instanceof Task)){
+		if (o == null || ! (o instanceof Task))
 			throw new IllegalArgumentException("An invalid task was compared");
-		}
-		if (this.getPriority()==((Task)o).getPriority()){
+		if (this.getPriority() == ((Task) o).getPriority())
 			return 0;
-		}
-		return this.getPriority()>((Task)o).getPriority() ? 1:-1;
+		return this.getPriority() > ((Task) o).getPriority() ? 1: -1;
 	}
+	
 }

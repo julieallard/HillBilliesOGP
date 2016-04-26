@@ -734,17 +734,6 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Set the state of carrying of this Unit according to the given flag.
-     *
-     * @param flag The carrying state to be registered.
-     * @post The new carrying state of this Unit is equal to the given flag.
-     * | this.iscarrying == flag
-     */
-    private void setCarrying(boolean flag) {
-        this.iscarrying = flag;
-    }
-
-    /**
      * Return the object carried by this Unit.
      */
     public MovableWorldObject getCarriedObject() {
@@ -763,7 +752,7 @@ public class Unit extends MovableWorldObject {
     public void carry(MovableWorldObject toBeCarriedObject) throws IllegalArgumentException {
         if (canBeCarried(toBeCarriedObject)) {
             this.carriedObject = toBeCarriedObject;
-            this.setCarrying(true);
+            this.iscarrying = true;
             toBeCarriedObject.unregister();
         } else
             throw new IllegalArgumentException("This object cannot be carried");
@@ -1158,7 +1147,7 @@ public class Unit extends MovableWorldObject {
      *  
      * @param  task
      *         The task to check.
-     * @return Always true.
+     * @return Always true. The task validity is checked upon creation.
      *       | result == true
     */
     public static boolean isValidTask(Task task) {
@@ -1181,6 +1170,11 @@ public class Unit extends MovableWorldObject {
     	if (! isValidTask(task))
     		throw new IllegalArgumentException();
     	this.task = task;
+    	if (task == null) {
+    		this.hasTask = false;
+    		return;
+    	}
+    	this.hasTask = true;
     }
 
     /**
