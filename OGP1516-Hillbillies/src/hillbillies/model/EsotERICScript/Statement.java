@@ -31,6 +31,7 @@ public  class Statement {
         public void execute(Unit unit) throws SyntaxError {
             unit.moveTo(argExpr1.value());
             this.setExecuted(true);
+            //TODO: keep information about the completion of this statement
         }
         
     }
@@ -48,6 +49,7 @@ public  class Statement {
         public void execute(Unit unit) throws SyntaxError {
             unit.work(argExpr1.value());
             this.setExecuted(true);
+            //TODO: keep information about the completion of this statement
         }
         
     }
@@ -66,6 +68,7 @@ public  class Statement {
         public void execute(Unit unit) throws SyntaxError {
             //unit.moveTo(argExpr1.value());
             this.setExecuted(true);
+            //TODO: keep information about the completion of this statement
         }
         
     }
@@ -83,6 +86,7 @@ public  class Statement {
         public void execute(Unit unit) throws SyntaxError {
             unit.attack(argExpr1.value());
             this.setExecuted(true);
+            //TODO: keep information about the completion of this statement
         }
         
     }

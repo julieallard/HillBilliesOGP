@@ -2,6 +2,7 @@ package hillbillies.model.EsotERICScript.Expressions;
 
 import hillbillies.model.EsotERICScript.Expression;
 import hillbillies.model.World;
+import hillbillies.model.CubeObjects.Workshop;
 import hillbillies.model.exceptions.SyntaxError;
 
 import java.util.*;
@@ -91,9 +92,13 @@ public class PositionExpression extends Expression {
 
     }
 
-    private static boolean isvalidCube(int[] loc, int request) {
-        //TODO: world is valid cube
-        return true;
+    private boolean isValidCube(int[] loc, int request) {   	
+    	switch (request) {
+    		case 0: 	return ! this.task.world.getLogsAt(loc).isEmpty();    		
+    		case 1: 	return ! this.task.world.getBouldersAt(loc).isEmpty();    		
+    		case 2: 	return this.task.world.getCubeAt(loc) instanceof Workshop;    		
+    		default: 	throw new IllegalArgumentException("illegalen maken dit land kapot ajlkfjeihgirhkahhh");
+    	}
     }
 
     private int[] scanWorld(int[] initialLoc, String target) throws SyntaxError {
@@ -117,7 +122,7 @@ public class PositionExpression extends Expression {
             if (curLoc == null)
             	throw new SyntaxError("No valid location was found");
             inspected.add(curLoc);
-            if (isvalidCube(curLoc, requestType))
+            if (isValidCube(curLoc, requestType))
             	break;
         }
         return curLoc;
