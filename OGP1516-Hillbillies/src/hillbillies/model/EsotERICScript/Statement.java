@@ -1,35 +1,90 @@
 package hillbillies.model.EsotERICScript;
 
-
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
+import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
 import hillbillies.model.EsotERICScript.Statements.PartStatement;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
-
-
 public  class Statement {
 
-    public Statement(Object ... args){
+    public Statement(Object ... args) {
 
     }
+
     public void Execute(Unit unit) throws SyntaxError{
         this.partStatement.execute(unit);
     }
+
     private PartStatement partStatement;
 
+    //moveTo
+    class MoveToPartStatement extends PartStatement {
 
-    class WorkPartStatement extends PartStatement{
+        public MoveToPartStatement(PositionExpression argument) {
+            this.argExpr1 = argument;
+        }
+        
+        PositionExpression argExpr1;
+        
+        @Override
+        public void execute(Unit unit) throws SyntaxError {
+            unit.moveTo(argExpr1.value());
+            this.setExecuted(true);
+        }
+        
+    }
+    
+    //work
+    class WorkPartStatement extends PartStatement {
 
         public WorkPartStatement(PositionExpression argument) {
-            this.argExpr1=argument;
+            this.argExpr1 = argument;
         }
+        
         PositionExpression argExpr1;
+        
         @Override
         public void execute(Unit unit) throws SyntaxError {
             unit.work(argExpr1.value());
             this.setExecuted(true);
+        }
+        
+    }
+    
+    // follow
+    // TODO: bc Arthur likes to procrastinate
+    class FollowPartStatement extends PartStatement {
+
+        public FollowPartStatement(UnitExpression argument) {
+            this.argExpr1 = argument;
+        }
+        
+        UnitExpression argExpr1;
+        
+        @Override
+        public void execute(Unit unit) throws SyntaxError {
+            //unit.moveTo(argExpr1.value());
+            this.setExecuted(true);
+        }
+        
+    }
+    
+    // attack
+    class AttackPartStatement extends PartStatement {
+
+        public AttackPartStatement(UnitExpression argument) {
+            this.argExpr1 = argument;
+        }
+        
+        UnitExpression argExpr1;
+        
+        @Override
+        public void execute(Unit unit) throws SyntaxError {
+            unit.attack(argExpr1.value());
+            this.setExecuted(true);
+        }
+        
     }
 
-
-}}
+}
