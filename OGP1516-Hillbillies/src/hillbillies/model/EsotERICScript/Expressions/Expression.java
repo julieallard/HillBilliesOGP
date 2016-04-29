@@ -16,8 +16,8 @@ public abstract class Expression {
 
     public Unit executor;
 
-    private boolean isValidCube(int[] loc, int request) {
-    	switch (request) {
+    private boolean isValidCube(int[] loc, int requestType) throws IllegalArgumentException {
+    	switch (requestType) {
     		case 0: 	return ! this.task.world.getLogsAt(loc).isEmpty();
     		case 1: 	return ! this.task.world.getBouldersAt(loc).isEmpty();
     		case 2: 	return this.task.world.getCubeAt(loc) instanceof Workshop;
@@ -34,9 +34,10 @@ public abstract class Expression {
 							if (executor.getFaction() != unit.getFaction())
 								enemyPresent = true;
 						return enemyPresent;    			
-    		default: 	throw new IllegalArgumentException("illegalen maken dit land kapot ajlkfjeihgirhkahhh");
+    		default: 	throw new IllegalArgumentException("Illegal requested type");
     	}
     }
+    
     //TODO check if deftig
     protected int[] scanWorld(int[] initialLoc, String target) throws SyntaxError {
         int requestType;
@@ -63,7 +64,7 @@ public abstract class Expression {
             toBeInspected.addAll(getAllNeighbours(curLoc, inspected));
             curLoc = toBeInspected.poll();
             if (curLoc == null)
-            	throw new SyntaxError("No valid location was found");
+            	throw new SyntaxError("No " + target + " object was found.");
             inspected.add(curLoc);
             if (isValidCube(curLoc, requestType))
             	break;
@@ -75,19 +76,19 @@ public abstract class Expression {
         return (loc [0] < world.sideSize && loc[1] < world.sideSize && loc[2] < world.sideSize && loc[0] > 0 && loc[1] > 0 && loc[2] > 0);
     }
 
-    protected Collection<int[]> getAllNeighbours(int[] cubeLoc, Set<int[]> inspected) {
+    protected Collection<int[]> getAllNeighbours(int[] centralCube, Set<int[]> inspected) {
         World world = this.task.world;
-        Collection<int[]> collLoc = new HashSet<>();
-        for (int i = 0; i < 2; i++) {
-            for (int j = -1; j <1 ; j++) {
+        Collection<int[]> neighbourSet = new HashSet<>();
+        for (int i = 0; i < 3; i++) {
+            for (int j = -1; j < 2 ; j++) {
                 if (j == 0)
                 	continue;
-                int[] curloc = cubeLoc.clone();
-                curloc[i] += j;
-                if (this.withinConfines(world, curloc) && !inspected.contains(curloc))
-                    collLoc.add(curloc);
+                int[] surroundingCube = centralCube.clone();
+                surroundingCube[i] += j;
+                if (this.withinConfines(world, surroundingCube) && ! inspected.contains(surroundingCube))
+                    neighbourSet.add(surroundingCube);
             }
         }
-        return collLoc;
+        return neighbourSet;
     }
 }
