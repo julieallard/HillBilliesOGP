@@ -1,4 +1,4 @@
-package hillbillies.model.EsotERICScript;
+package hillbillies.model.EsotERICScript.Statements;
 
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
 import hillbillies.model.EsotERICScript.Expressions.UnitExpression;

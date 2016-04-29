@@ -1,8 +1,7 @@
 package hillbillies.model.EsotERICScript.Statements;
 
 
-import hillbillies.model.EsotERICScript.Expression;
-import hillbillies.model.EsotERICScript.Statement;
+import hillbillies.model.EsotERICScript.Expressions.Expression;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 

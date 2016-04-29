@@ -1,8 +1,5 @@
 package hillbillies.model.EsotERICScript.Expressions;
 
-import hillbillies.model.EsotERICScript.Expression;
-import hillbillies.model.EsotERICScript.Expressions.BooleanExpression.BooleanPartExpression;
-import hillbillies.model.EsotERICScript.Expressions.PositionExpression.PosPartExpression;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 

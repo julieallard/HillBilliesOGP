@@ -1,4 +1,4 @@
-package hillbillies.model.EsotERICScript;
+package hillbillies.model.EsotERICScript.Expressions;
 
 import hillbillies.model.Task;
 import hillbillies.model.exceptions.SyntaxError;

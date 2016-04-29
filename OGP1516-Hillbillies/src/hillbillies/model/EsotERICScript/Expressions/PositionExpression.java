@@ -1,6 +1,5 @@
 package hillbillies.model.EsotERICScript.Expressions;
 
-import hillbillies.model.EsotERICScript.Expression;
 import hillbillies.model.World;
 import hillbillies.model.CubeObjects.Workshop;
 import hillbillies.model.exceptions.SyntaxError;

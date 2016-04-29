@@ -7,7 +7,7 @@ import java.util.Set;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.EsotERICScript.Statement;
+import hillbillies.model.EsotERICScript.Statements.Statement;
 
 /**
  * A class of Tasks.
@@ -160,7 +160,7 @@ public class Task implements Comparable {
 	/**
 	 * Add the given scheduler to this Task.
 	 * 
-	 * @param  scheduler
+	 * @param  schedulerList
 	 * 		   The list of schedulers to add.
 	 * @post   The given list of schedulers is added to this Task.
 	 */
