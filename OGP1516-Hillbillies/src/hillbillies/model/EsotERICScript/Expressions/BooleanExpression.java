@@ -1,11 +1,13 @@
 package hillbillies.model.EsotERICScript.Expressions;
 
+import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
 public class BooleanExpression extends Expression {
 	
     @Override
-    public Boolean value() throws SyntaxError {
+    public Boolean value(Unit executor) throws SyntaxError {
+        this.executor=executor;
         return this.innerExpression.getValue();
     }
     
@@ -48,7 +50,7 @@ public class BooleanExpression extends Expression {
         
         @Override
         public Boolean getValue() throws SyntaxError {
-            return ! ((BooleanExpression) arg1).value();
+            return ! ((BooleanExpression) arg1).value(executor);
         }
         
     }
@@ -63,7 +65,7 @@ public class BooleanExpression extends Expression {
 
         @Override
         public Boolean getValue() throws SyntaxError {
-            return ((boolean) arg1.value()) || ((boolean) arg2.value());
+            return ((boolean) arg1.value(executor)) || ((boolean) arg2.value(executor));
         }
     }
 
@@ -77,7 +79,7 @@ public class BooleanExpression extends Expression {
 
         @Override
         public Boolean getValue() throws SyntaxError {
-            return ((boolean) arg1.value()) && ((boolean) arg2.value());
+            return ((boolean) arg1.value(executor)) && ((boolean) arg2.value(executor));
         }
         
     }
@@ -93,7 +95,7 @@ public class BooleanExpression extends Expression {
 
         @Override
         public Boolean getValue() throws SyntaxError {
-            return arg1.value().isCarrying();
+            return arg1.value(executor).isCarrying();
         }
         
     }
@@ -109,7 +111,7 @@ public class BooleanExpression extends Expression {
 
         @Override
         public Boolean getValue() throws SyntaxError {
-            return arg1.value().isAlive();
+            return arg1.value(executor).isAlive();
         }
     }
     
@@ -127,7 +129,7 @@ public class BooleanExpression extends Expression {
         
         @Override
         public Boolean getValue() throws SyntaxError {
-            return arg1.value().getFaction().equals(arg2.value().getFaction());
+            return arg1.value(executor).getFaction().equals(arg2.value(executor).getFaction());
         }
     }
     
@@ -143,7 +145,7 @@ public class BooleanExpression extends Expression {
         
         @Override
         public Boolean getValue() throws SyntaxError {
-            return task.world.getCubeAt(arg1.value()).isPassable();
+            return task.world.getCubeAt(arg1.value(executor)).isPassable();
         }
         
     }

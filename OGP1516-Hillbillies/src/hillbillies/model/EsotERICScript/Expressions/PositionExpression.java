@@ -1,5 +1,6 @@
 package hillbillies.model.EsotERICScript.Expressions;
 
+import hillbillies.model.Unit;
 import hillbillies.model.World;
 import hillbillies.model.CubeObjects.Workshop;
 import hillbillies.model.exceptions.SyntaxError;
@@ -9,7 +10,8 @@ import java.util.*;
 public class PositionExpression extends Expression {
 
     @Override
-    public int[] value() throws SyntaxError {
+    public int[] value(Unit executor) throws SyntaxError {
+        this.executor=executor;
         return this.innerExpression.getValue();
     }
 
@@ -19,7 +21,6 @@ public class PositionExpression extends Expression {
 
         @Override
         public abstract int[] getValue() throws SyntaxError;
-
         Expression arg1;
 
     }
@@ -41,37 +42,38 @@ public class PositionExpression extends Expression {
         }
     }
 
-    // here
+    // position of
     public class PosLocationOfPartExpression extends PosPartExpression{
 
         public PosLocationOfPartExpression(UnitExpression unit) {
             this.arg1 = unit;
         }
-
         UnitExpression arg1;
-
         @Override
         public int[] getValue() throws SyntaxError {
-            return arg1.value().getLocation().getCubeLocation();
+            return arg1.value(executor).getLocation().getCubeLocation();
         }
 
     }
-
+    //here
+    public class PosHerePartExpression extends PosPartExpression{
+        public PosHerePartExpression() {
+        }
+        @Override
+        public int[] getValue() throws SyntaxError {
+            return executor.getLocation().getCubeLocation();
+        }
+    }
     // log
     public class PosLogPartExpression extends PosPartExpression{
-
         public PosLogPartExpression(UnitExpression unit) {
             this.arg1 = unit;
         }
-
-        public PosLogPartExpression() {
-        }
-
+        private UnitExpression arg1;
         @Override
         public int[] getValue() throws SyntaxError {
-            return null;
+            return scanWorld(this.arg1.value(executor).getLocation().getCubeLocation(),"Log");
         }
-
     }
     
     // boulder
@@ -81,70 +83,44 @@ public class PositionExpression extends Expression {
             this.arg1 = unit;
         }
 
-        public PosBoulderPartExpression() {
+        private UnitExpression arg1;
+        @Override
+        public int[] getValue() throws SyntaxError {
+            return scanWorld(this.arg1.value(executor).getLocation().getCubeLocation(),"Boulder");
         }
+
+    }
+
+    // Workshop
+    public class PosWorkshopPartExpression extends PosPartExpression{
+
+        public PosWorkshopPartExpression(UnitExpression unit) {
+            this.arg1 = unit;
+        }
+
+        private UnitExpression arg1;
+        @Override
+        public int[] getValue() throws SyntaxError {
+            return scanWorld(this.arg1.value(executor).getLocation().getCubeLocation(),"Workshop");
+        }
+
+    }
+    public class NextToPosPartExpression extends PosPartExpression{
+
+        public NextToPosPartExpression(PositionExpression position) {
+            this.arg1=position;
+        }
+        private PositionExpression arg1;
 
         @Override
         public int[] getValue() throws SyntaxError {
-            return null;
-        }
-
-    }
-
-    private boolean isValidCube(int[] loc, int request) {   	
-    	switch (request) {
-    		case 0: 	return ! this.task.world.getLogsAt(loc).isEmpty();    		
-    		case 1: 	return ! this.task.world.getBouldersAt(loc).isEmpty();    		
-    		case 2: 	return this.task.world.getCubeAt(loc) instanceof Workshop;    		
-    		default: 	throw new IllegalArgumentException("illegalen maken dit land kapot ajlkfjeihgirhkahhh");
-    	}
-    }
-
-    private int[] scanWorld(int[] initialLoc, String target) throws SyntaxError {
-        int requestType;
-        switch (target) {
-            case "Log": 		requestType = 0;
-                				break;
-            case "Boulder": 	requestType = 1;
-                				break;
-            case "Workshop": 	requestType = 2;
-                				break;
-            default:			throw new SyntaxError("Illegal scan request");
-        }
-        int[] curLoc = initialLoc.clone();
-        Queue<int[]> toBeInspected = new LinkedList<>();
-        Set<int[]> inspected = new HashSet<>();
-        inspected.add(curLoc);
-        while (true) {
-            toBeInspected.addAll(getAllNeighbours(curLoc, inspected));
-            curLoc = toBeInspected.poll();
-            if (curLoc == null)
-            	throw new SyntaxError("No valid location was found");
-            inspected.add(curLoc);
-            if (isValidCube(curLoc, requestType))
-            	break;
-        }
-        return curLoc;
-    }
-    
-    private boolean withinConfines(World world, int[] loc) {
-        return (loc [0] < world.sideSize && loc[1] < world.sideSize && loc[2] < world.sideSize && loc[0] > 0 && loc[1] > 0 && loc[2] > 0);
-    }
-
-    private Collection<int[]> getAllNeighbours(int[] cubeLoc, Set<int[]> inspected) {
-        World world = this.task.world;
-        Collection<int[]> collLoc = new HashSet<>();
-        for (int i = 0; i < 2; i++) {
-            for (int j = -1; j <1 ; j++) {
-                if (j == 0)
-                	continue;
-                int[] curloc = cubeLoc.clone();
-                curloc[i] += j;
-                if (this.withinConfines(world, curloc) && !inspected.contains(curloc))
-                    collLoc.add(curloc);               
+            Set<int[]> set=(Set<int[]>) Collections.EMPTY_SET;
+            Collection<int[]> neighbours= getAllNeighbours(arg1.value(executor),set);
+            for (int[] loc:neighbours){
+                if(executor.getWorld().canHaveAsCubeLocation(loc,executor)) return loc;
             }
+            throw new RuntimeException("no legal location was found");
         }
-        return collLoc;
     }
-    
+    // TODO: 29/04/16 selected
 }
