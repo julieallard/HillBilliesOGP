@@ -1,5 +1,6 @@
 package hillbillies.model.EsotERICScript.Statements;
 
+import hillbillies.model.EsotERICScript.Expressions.BooleanExpression;
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
 import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
 import hillbillies.model.Task;
@@ -18,7 +19,7 @@ public class Statement {
         this.executed=false;
 
     }
-    public void Execute(Unit unit,double dt) throws SyntaxError{
+    public void execute(Unit unit,double dt) throws SyntaxError{
         this.executor=unit;
         this.partStatement.execute(unit,dt);
     }
@@ -96,6 +97,31 @@ public class Statement {
         public void execute(Unit unit,double dt) throws SyntaxError {
             unit.attack(argExpr1.value(executor));
             //TODO: keep information about the completion of this statement
+        }
+    }
+    class IfPartStatement extends PartStatement {
+
+        private final Statement ifPart;
+        private final BooleanExpression condition;
+        private final Statement elsePart;
+
+        public IfPartStatement(BooleanExpression condition, Statement ifpart, Statement elsePart){
+            this.condition=condition;
+            this.ifPart=ifpart;
+            this.elsePart=elsePart;
+        }
+        private Boolean flag;
+        private Boolean conditionEvaluated;
+
+        @Override
+        public void execute(Unit unit, double dt) throws SyntaxError {
+            if (!conditionEvaluated) {
+                flag = condition.value(unit);
+                conditionEvaluated = true;
+            }
+            if (flag) ifPart.execute(unit, dt);
+            else elsePart.execute(unit,dt);
+
         }
     }
 
