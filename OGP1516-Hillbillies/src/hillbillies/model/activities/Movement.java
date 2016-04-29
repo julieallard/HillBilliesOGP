@@ -99,6 +99,7 @@ public class Movement implements IActivity {
             boolean foundpath = setNextStop();
             if (! foundpath) {
                 unit.activityFinished();
+                if (isDictatedByStatement()) controllingStatement.finishExecuting();
                 unit.addXP(1);
                 return;
             }
@@ -209,7 +210,6 @@ public class Movement implements IActivity {
     public boolean setNextStop() {
         Cube[] path = pathing.FindPath(new Cube(unit.getLocation().getCubeLocation()), destination);
         if (Arrays.equals(path, new Cube[]{new Cube(new int[]{-1, -1, -1})})) {
-            unit.activityFinished();
             return false;
         }
         this.nextStop = path[0];

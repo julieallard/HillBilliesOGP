@@ -6,9 +6,9 @@ import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
 public class Statement {
-    public boolean beingExcecuted;
+    private boolean beingExcecuted;
 
-    public boolean executed;
+    private boolean executed;
 
     public Unit executor;
 
@@ -21,6 +21,17 @@ public class Statement {
     public void Execute(Unit unit,double dt) throws SyntaxError{
         this.executor=unit;
         this.partStatement.execute(unit,dt);
+    }
+
+    public void finishExecuting(){
+        this.beingExcecuted=false;
+        this.executed=true;
+        //Execute next?
+    }
+
+    public void reExecutePrepare(){
+        this.beingExcecuted=false;
+        this.executed=false;
     }
 
     private PartStatement partStatement;

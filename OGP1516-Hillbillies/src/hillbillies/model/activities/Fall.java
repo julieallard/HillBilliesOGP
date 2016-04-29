@@ -1,5 +1,6 @@
 package hillbillies.model.activities;
 
+import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.IActivity;
 import hillbillies.model.MovableWorldObject;
 import hillbillies.model.Unit;
@@ -51,7 +52,17 @@ public class Fall implements IActivity {
      */
     private double distancefallen;
 
-	/**
+    @Override
+    public boolean isDictatedByStatement() {
+        return false;
+    }
+
+    @Override
+    public Statement getControllingStatement() {
+        throw new IllegalArgumentException("Fall cannot be directly dictated by statement");
+    }
+
+    /**
 	 * No documentation required.
 	 */
     @Override

@@ -201,6 +201,7 @@ public class Work implements IActivity {
     private void dropWork(){
         unit.drop(unit.getCarriedObject()); 
         unit.activityFinished();
+        if (isDictatedByStatement()) controllingStatement.finishExecuting();
     }
     
     /**
@@ -218,6 +219,7 @@ public class Work implements IActivity {
         log.unregister();
         boulder.unregister();
         unit.activityFinished();
+        if (isDictatedByStatement()) controllingStatement.finishExecuting();
     }
 
     /**
@@ -235,6 +237,7 @@ public class Work implements IActivity {
             unit.carry(logList.get(0));
         }
         unit.activityFinished();
+        if (isDictatedByStatement()) controllingStatement.finishExecuting();
     }
     
     /**
@@ -245,6 +248,7 @@ public class Work implements IActivity {
     private void destroyWork() {
         unit.getWorld().destroyCube(targetLocation);
         unit.activityFinished();
+        if (isDictatedByStatement()) controllingStatement.finishExecuting();
     }
     
 }
