@@ -21,6 +21,19 @@ public abstract class Expression {
     		case 0: 	return ! this.task.world.getLogsAt(loc).isEmpty();
     		case 1: 	return ! this.task.world.getBouldersAt(loc).isEmpty();
     		case 2: 	return this.task.world.getCubeAt(loc) instanceof Workshop;
+    		case 3:		return ! this.task.world.getUnitsAt(loc).isEmpty();
+    		case 4:		boolean friendPresent = false;
+    					List<Unit> unitList1 = this.task.world.getUnitsAt(loc);
+    					for (Unit unit: unitList1)
+    						if (executor.getFaction() == unit.getFaction())
+    							friendPresent = true;
+    					return friendPresent;
+    		case 5:		boolean enemyPresent = false;
+						List<Unit> unitList2 = this.task.world.getUnitsAt(loc);
+						for (Unit unit: unitList2)
+							if (executor.getFaction() != unit.getFaction())
+								enemyPresent = true;
+						return enemyPresent;    			
     		default: 	throw new IllegalArgumentException("illegalen maken dit land kapot ajlkfjeihgirhkahhh");
     	}
     }
@@ -38,7 +51,7 @@ public abstract class Expression {
                                 break;
             case "Friend":      requestType = 4;
                                 break;
-            case "Enemy":     requestType = 5;
+            case "Enemy":     	requestType = 5;
                                 break;
             default:			throw new SyntaxError("Illegal scan request");
         }
