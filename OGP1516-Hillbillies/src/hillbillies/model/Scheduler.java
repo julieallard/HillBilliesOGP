@@ -45,7 +45,7 @@ public class Scheduler {
 	 * @throws IllegalArgumentException
 	 * 		   The given task cannot have this Scheduler as a Scheduler.
 	 */
-	public void addTask(Task task) {
+	public void schedule(Task task) {
 		TaskQueue.add(task);
 	}
 	
@@ -58,7 +58,7 @@ public class Scheduler {
 	 * @throws IllegalArgumentException
 	 * 		   The given list of tasks cannot have this Scheduler as a Scheduler.
 	 */
-	public void addTask(List<Task> addList) {
+	public void schedule(List<Task> addList) {
 		TaskQueue.addAll(addList);
 	}
 	
@@ -87,33 +87,33 @@ public class Scheduler {
 	/**
 	 * Replace the given task from this Scheduler by the given new task.
 	 * 
-	 * @param  oldTask
+	 * @param  original
 	 * 		   The task to remove.
-	 * @param  newTask
+	 * @param  replacement
 	 * 		   The task to add.
 	 * @post   The given new task is added to this Scheduler.
 	 * @effect The given old task is removed from this Scheduler.
 	 * @throws IllegalArgumentException
 	 * 		   This Scheduler does not contain the given task to be replaced.
 	 */
-	public void replace(Task oldTask, Task newTask) throws IllegalArgumentException {
-		if (! TaskQueue.contains(oldTask))
+	public void replace(Task original, Task replacement) throws IllegalArgumentException {
+		if (! TaskQueue.contains(original))
 			throw new IllegalArgumentException("This Scheduler doesn't contain the Task to be replaced.");
-		if (oldTask.isBeingExecuted()) {
-			Unit executor = oldTask.getExecutor();
-			oldTask.stopExecution();
-			newTask.startExecution(executor);
+		if (original.isBeingExecuted()) {
+			Unit executor = original.getExecutor();
+			original.stopExecution();
+			replacement.startExecution(executor);
 		}
-		newTask.setPriority(oldTask.getPriority());
-		TaskQueue.add(newTask);
-		removeTask(oldTask);
+		replacement.setPriority(original.getPriority());
+		TaskQueue.add(replacement);
+		removeTask(original);
     }
 	
-	public boolean containsTask(Task task) {
+	public boolean areTasksPartOf(Task task) {
 		return TaskQueue.contains(task);
 	}
 	
-	public boolean containsTask(List<Task> taskList) {
+	public boolean areTasksPartOf(List<Task> taskList) {
 		return TaskQueue.containsAll(taskList);
 	}
 	

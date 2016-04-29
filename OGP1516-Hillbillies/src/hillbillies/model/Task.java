@@ -80,7 +80,7 @@ public class Task implements Comparable {
 	/**
 	 * Variable registering the unit executing this Task.
 	 */
-	private Unit executor;
+	private Unit assignedUnit;
 	
 	/**
 	 * List collecting references to activities belonging to this Task.
@@ -169,19 +169,19 @@ public class Task implements Comparable {
 	}
 	
 	public void startExecution(Unit unit) {
-		this.setExecutor(unit);
+		this.setAssignedUnit(unit);
 	}
 	
 	public void stopExecution() {
-		this.setExecutor(null);
+		this.setAssignedUnit(null);
 	}
 	
-	public Unit getExecutor() {
-		return executor;
+	public Unit getAssignedUnit() {
+		return assignedUnit;
 	}
 	
-	public void setExecutor(Unit executor) {
-		this.executor = executor;
+	public void setAssignedUnit(Unit executor) {
+		this.assignedUnit = executor;
 	}
 	
 	public World world;

@@ -1138,7 +1138,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the task assigned to this Unit.
      */
-    public Task getTask() {
+    public Task getAssignedTask() {
     	return this.task;
     }
     
