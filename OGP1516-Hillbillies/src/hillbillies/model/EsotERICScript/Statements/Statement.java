@@ -2,18 +2,25 @@ package hillbillies.model.EsotERICScript.Statements;
 
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
 import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
-import hillbillies.model.EsotERICScript.Statements.PartStatement;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
-public  class Statement {
+public class Statement {
+    public boolean beingExcecuted;
+
+    public boolean executed;
+
+    public Unit executor;
 
     public Statement(Object ... args) {
 
+        beingExcecuted=false;
+        executed=false;
     }
 
-    public void Execute(Unit unit) throws SyntaxError{
-        this.partStatement.execute(unit);
+    public void Execute(Unit unit,double dt) throws SyntaxError{
+        this.executor=unit;
+        this.partStatement.execute(unit,dt);
     }
 
     private PartStatement partStatement;
@@ -28,9 +35,8 @@ public  class Statement {
         PositionExpression argExpr1;
         
         @Override
-        public void execute(Unit unit) throws SyntaxError {
-            unit.moveTo(argExpr1.value());
-            this.setExecuted(true);
+        public void execute(Unit unit,double dt) throws SyntaxError {
+            if (!beingExcecuted) unit.moveTo(argExpr1.value(executor));
             //TODO: keep information about the completion of this statement
         }
         
@@ -46,9 +52,8 @@ public  class Statement {
         PositionExpression argExpr1;
         
         @Override
-        public void execute(Unit unit) throws SyntaxError {
-            unit.work(argExpr1.value());
-            this.setExecuted(true);
+        public void execute(Unit unit,double dt) throws SyntaxError {
+            unit.work(argExpr1.value(executor));
             //TODO: keep information about the completion of this statement
         }
         
@@ -65,30 +70,22 @@ public  class Statement {
         UnitExpression argExpr1;
         
         @Override
-        public void execute(Unit unit) throws SyntaxError {
+        public void execute(Unit unit,double dt) throws SyntaxError {
             //unit.moveTo(argExpr1.value());
-            this.setExecuted(true);
-            //TODO: keep information about the completion of this statement
+            // TODO: keep information about the completion of this statement
         }
         
     }
-    
     // attack
     class AttackPartStatement extends PartStatement {
-
         public AttackPartStatement(UnitExpression argument) {
             this.argExpr1 = argument;
         }
-        
         UnitExpression argExpr1;
-        
         @Override
-        public void execute(Unit unit) throws SyntaxError {
-            unit.attack(argExpr1.value());
-            this.setExecuted(true);
+        public void execute(Unit unit,double dt) throws SyntaxError {
+            unit.attack(argExpr1.value(executor));
             //TODO: keep information about the completion of this statement
         }
-        
     }
-
 }

@@ -1,5 +1,6 @@
 package hillbillies.model.activities;
 
+import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.IActivity;
 import hillbillies.model.Unit;
 import ogp.framework.util.Util;
@@ -114,6 +115,17 @@ public class Rest implements IActivity {
 	@Override
 	public int getId() {
 		return 5;
+	}
+
+	@Override
+	public boolean isDictatedByStatement() {
+		return false;
+	}
+
+	@Override
+	public Statement getControllingStatement() {
+		throw new IllegalArgumentException("Rest can't be directly dictated by statement");
+
 	}
 	
 }

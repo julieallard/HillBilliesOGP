@@ -3,6 +3,7 @@ package hillbillies.model.activities;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.IActivity;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.UnitIllegalLocation;
@@ -49,6 +50,16 @@ public class Movement implements IActivity {
         this.pathing = new Astar(unit);
     }
 
+    public Movement(Unit unit,int[] destination,Statement controllingStatement) {
+        this(unit,destination);
+        this.controllingStatement = controllingStatement;
+        this.isDictatedByStatement = true;
+    }
+
+    private boolean isDictatedByStatement;
+
+    private Statement controllingStatement;
+
     /**
      * Variable registering the pathing of this Movement, calculated according to the A star algorithm.
      */
@@ -69,7 +80,17 @@ public class Movement implements IActivity {
      */
     private Cube nextStop;
 
-	/**
+    @Override
+    public boolean isDictatedByStatement() {
+        return isDictatedByStatement;
+    }
+
+    @Override
+    public Statement getControllingStatement() {
+        return this.controllingStatement;
+    }
+
+    /**
 	 * No documentation required.
 	 */
     @Override

@@ -2,6 +2,7 @@ package hillbillies.model.activities;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.IActivity;
 import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.Unit;
@@ -63,9 +64,20 @@ public class Defend implements IActivity {
     /**
      * Variable registering the random generated object of this Defend.
      */
-    private Random random; 
-    
-	/**
+    private Random random;
+
+    @Override
+    public boolean isDictatedByStatement() {
+        return false;
+    }
+
+    @Override
+    public Statement getControllingStatement() {
+        throw new IllegalArgumentException("Defend can't be directly dictated by statement");
+
+    }
+
+    /**
 	 * No documentation required.
 	 */
     @Override

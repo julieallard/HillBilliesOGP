@@ -1,5 +1,7 @@
 package hillbillies.model;
 
+import hillbillies.model.EsotERICScript.Statements.Statement;
+
 /**
  * The Id's of the activities are the following:
  * 0: noActivity
@@ -12,6 +14,10 @@ package hillbillies.model;
  */
 
 public interface IActivity {
+
+    boolean isDictatedByStatement();
+
+    Statement getControllingStatement();
 
     void advanceActivityTime(double dt);
 

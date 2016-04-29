@@ -7,17 +7,7 @@ import hillbillies.model.exceptions.SyntaxError;
 
 public abstract class PartStatement {
 
-    public abstract void execute(Unit unit) throws SyntaxError;
-
-    public void setExecuted(boolean state) {
-        executed = state;
-    }
-
-    public boolean executed;
-
-    public boolean isExecuted() {
-        return executed;
-    }
+    public abstract void execute(Unit unit,double dt) throws SyntaxError;
 
     public Expression argExpr1;
 

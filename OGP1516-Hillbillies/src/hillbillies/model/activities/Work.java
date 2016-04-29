@@ -3,6 +3,7 @@ package hillbillies.model.activities;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.*;
+import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.exceptions.IllegalTimeException;
 import ogp.framework.util.Util;
 
@@ -43,6 +44,17 @@ public class Work implements IActivity {
         this.targetLocation = targetLocation;
     }
 
+    public Work(Unit unit, int[] targetLocation,Statement controllingStatement){
+        this(unit,targetLocation);
+        this.controllingStatement = controllingStatement;
+        this.isDictatedByStatement = true;
+}
+
+    private boolean isDictatedByStatement;
+
+    private Statement controllingStatement;
+
+
     private boolean canHaveAsTargetLocation(int[] targetLocation){
         if(targetLocation.length!=3) return false;
         for (int loc :
@@ -67,7 +79,17 @@ public class Work implements IActivity {
      */
 	private final int[] targetLocation;
 
-	/**
+    @Override
+    public boolean isDictatedByStatement() {
+        return isDictatedByStatement;
+    }
+
+    @Override
+    public Statement getControllingStatement() {
+        return controllingStatement;
+    }
+
+    /**
 	 * No documentation required.
 	 */
 	@Override

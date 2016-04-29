@@ -1,5 +1,6 @@
 package hillbillies.model.activities;
 
+import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.IActivity;
 
 /**
@@ -54,5 +55,17 @@ public class NoActivity implements IActivity {
     @Override
     public int getId() {
         return 0;
+    }
+
+
+    @Override
+    public boolean isDictatedByStatement() {
+        return false;
+    }
+
+    @Override
+    public Statement getControllingStatement() {
+        throw new IllegalArgumentException("NoActivity can't be directly dictated by statement");
+
     }
 }

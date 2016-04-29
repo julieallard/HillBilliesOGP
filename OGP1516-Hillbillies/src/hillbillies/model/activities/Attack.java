@@ -2,6 +2,7 @@ package hillbillies.model.activities;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.IActivity;
 import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.exceptions.UnitIllegalLocation;
@@ -43,6 +44,16 @@ public class Attack implements IActivity {
         this.defender = defender;
         this.setTimeLeft(1);
     }
+
+    public Attack(Unit attacker, Unit defender, Statement controllingStatement, boolean dictatedByStatement) {
+        this(attacker,defender);
+        this.controllingStatement = controllingStatement;
+        DictatedByStatement = dictatedByStatement;
+    }
+
+    private boolean DictatedByStatement;
+
+    private Statement controllingStatement;
     
     /**
      * Variable registering the attacker of this Attack.
@@ -58,8 +69,18 @@ public class Attack implements IActivity {
      * Variable registering the time left until finishing this Attack.
      */
     private double timeLeft;
-    
-	/**
+
+    @Override
+    public boolean isDictatedByStatement() {
+        return DictatedByStatement;
+    }
+
+    @Override
+    public Statement getControllingStatement() {
+        return controllingStatement;
+    }
+
+    /**
 	 * No documentation required.
 	 */
     @Override
