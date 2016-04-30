@@ -7,7 +7,7 @@ public class BooleanExpression extends Expression {
 	
     @Override
     public Boolean value(Unit executor) throws SyntaxError {
-        this.executor=executor;
+        this.executor = executor;
         return this.innerExpression.getValue();
     }
     
@@ -25,7 +25,6 @@ public class BooleanExpression extends Expression {
 
     // true
     // false
-    // "(" e ")"
     public class BooleanConstantPartExpression extends BooleanPartExpression {
     	
         public BooleanConstantPartExpression(boolean flag) throws SyntaxError {
@@ -38,6 +37,20 @@ public class BooleanExpression extends Expression {
         public Boolean getValue() throws SyntaxError {
             return value;
         }
+    
+    }
+    
+     // "(" e ")"    
+    public class BooleanGivenPartExpression extends BooleanPartExpression {
+        	
+        public BooleanGivenPartExpression(BooleanExpression arg) throws SyntaxError {
+            this.arg1 = arg;
+        }
+            
+        @Override
+        public Boolean getValue() throws SyntaxError {
+            return ((BooleanExpression) arg1).value(executor);
+        }    
         
     }
     
@@ -83,36 +96,22 @@ public class BooleanExpression extends Expression {
         }
         
     }
-
-    // carries_item e
-    public class BooleanIscarryingPartExpression extends BooleanPartExpression {
-
-        public BooleanIscarryingPartExpression(UnitExpression arg1) {
-            this.arg1 = arg1;
+    
+    // is_passable e
+    // => is_solid will be implemented as NOT(is_passable)
+    public class BooleanIsPassablePartExpression extends BooleanPartExpression {
+    	
+        public BooleanIsPassablePartExpression(PositionExpression arg) {
+            this.arg1 = arg;
         }
         
-        private UnitExpression arg1;
-
+        private PositionExpression arg1;
+        
         @Override
         public Boolean getValue() throws SyntaxError {
-            return arg1.value(executor).isCarrying();
+            return task.world.getCubeAt(arg1.value(executor)).isPassable();
         }
         
-    }
-
-    // is_alive e
-    public class BooleanIsAlivePartExpression extends BooleanPartExpression {
-
-        public BooleanIsAlivePartExpression(UnitExpression arg1) {
-            this.arg1 = arg1;
-        }
-        
-        private UnitExpression arg1;
-
-        @Override
-        public Boolean getValue() throws SyntaxError {
-            return arg1.value(executor).isAlive();
-        }
     }
     
     // is_friend e
@@ -131,21 +130,37 @@ public class BooleanExpression extends Expression {
         public Boolean getValue() throws SyntaxError {
             return arg1.value(executor).getFaction().equals(arg2.value(executor).getFaction());
         }
+        
     }
     
-    // is_passable e
-    // => is_solid will be implemented as NOT(is_passable)
-    public class BooleanIsPassablePartExpression extends BooleanPartExpression {
-    	
-        public BooleanIsPassablePartExpression(PositionExpression arg1) {
-            this.arg1 = arg1;
+    // is_alive e
+    public class BooleanIsAlivePartExpression extends BooleanPartExpression {
+
+        public BooleanIsAlivePartExpression(UnitExpression arg) {
+            this.arg1 = arg;
         }
         
-        private PositionExpression arg1;
-        
+        private UnitExpression arg1;
+
         @Override
         public Boolean getValue() throws SyntaxError {
-            return task.world.getCubeAt(arg1.value(executor)).isPassable();
+            return arg1.value(executor).isAlive();
+        }
+        
+    }
+    
+    // carries_item e
+    public class BooleanIscarryingPartExpression extends BooleanPartExpression {
+
+        public BooleanIscarryingPartExpression(UnitExpression arg) {
+            this.arg1 = arg;
+        }
+        
+        private UnitExpression arg1;
+
+        @Override
+        public Boolean getValue() throws SyntaxError {
+            return arg1.value(executor).isCarrying();
         }
         
     }
