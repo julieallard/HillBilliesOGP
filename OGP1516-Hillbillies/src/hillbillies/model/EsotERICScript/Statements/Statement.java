@@ -4,12 +4,11 @@ import hillbillies.model.EsotERICScript.Expressions.BooleanExpression;
 import hillbillies.model.EsotERICScript.Expressions.Expression;
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
 import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
-
-import java.util.List;
-
 import hillbillies.model.Task;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
+
+import java.util.List;
 
 public class Statement {
 

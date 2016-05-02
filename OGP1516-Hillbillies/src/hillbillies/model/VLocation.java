@@ -3,8 +3,7 @@ package hillbillies.model;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.CubeObjects.CubeWorldObject;
-import hillbillies.model.exceptions.UnitIllegalLocation;
+import hillbillies.model.exceptions.IllegalLocation;
 
 /**
  * A class of VLocations involving an x, y and z coordinate and an occupant.
@@ -34,28 +33,28 @@ public class VLocation {
      * @post   The ZLocation of this new VLocation is equal to the given
      *         ZLocation.
      *       | new.getZLocation() == ZLocation
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      *         This new VLocation cannot have the given XLocation as its XLocation.
      *       | ! canHaveAsXLocation(this.getXLocation())
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      *         This new VLocation cannot have the given YLocation as its YLocation.
      *       | ! canHaveAsYLocation(this.getYLocation())
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      *         This new VLocation cannot have the given ZLocation as its ZLocation.
      *       | ! canHaveAsZLocation(this.getZLocation())
      */
-    public VLocation(double XLocation, double YLocation, double ZLocation, MovableWorldObject occupant) throws UnitIllegalLocation {
+    public VLocation(double XLocation, double YLocation, double ZLocation, MovableWorldObject occupant) throws IllegalLocation {
         if (! canHaveAsOccupant(occupant))
         	throw new IllegalArgumentException("IllegalOccupantAssignedToLocation");
         this.occupant = occupant;
     	if (! canHaveAsXLocation(XLocation))
-            throw new UnitIllegalLocation();
+            throw new IllegalLocation();
         this.XLocation = XLocation;
     	if (! canHaveAsYLocation(YLocation))
-    		throw new UnitIllegalLocation();
+    		throw new IllegalLocation();
         this.YLocation = YLocation;        
         if (! canHaveAsZLocation(ZLocation))
-            throw new UnitIllegalLocation();
+            throw new IllegalLocation();
         this.ZLocation = ZLocation;
     }
     

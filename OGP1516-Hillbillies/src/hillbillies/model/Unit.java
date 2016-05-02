@@ -1,7 +1,9 @@
 package hillbillies.model;
-import be.kuleuven.cs.som.annotate.*;
+
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.activities.*;
-import hillbillies.model.exceptions.UnitIllegalLocation;
+import hillbillies.model.exceptions.IllegalLocation;
 import hillbillies.part2.listener.DefaultTerrainChangeListener;
 import hillbillies.part2.listener.TerrainChangeListener;
 
@@ -94,7 +96,7 @@ public class Unit extends MovableWorldObject {
      * | this.setWorld(world)
      */
     public Unit(String name, double x, double y, double z, int weight, int strength, int agility, int toughness,
-                boolean enableDefaultBehavior, World world) throws UnitIllegalLocation, IllegalArgumentException {
+                boolean enableDefaultBehavior, World world) throws IllegalLocation, IllegalArgumentException {
         this.setName(name);
         if (weight < 25) {
             this.setWeight(25);
@@ -187,7 +189,7 @@ public class Unit extends MovableWorldObject {
      * | new.defaultbehaviorenabled == enableDefaultBehavior
      */
     public Unit(String name, double x, double y, double z, int weight, int strength, int agility, int toughness,
-                boolean enableDefaultBehavior) throws UnitIllegalLocation, IllegalArgumentException {
+                boolean enableDefaultBehavior) throws IllegalLocation, IllegalArgumentException {
         this.setName(name);
         if (weight < 25) {
             this.setWeight(25);
@@ -1084,12 +1086,12 @@ public class Unit extends MovableWorldObject {
      * @param dx The movement along the x axis to make.
      * @param dy The movement along the y axis to make.
      * @param dz The movement along the z axis to make.
-     * @throws UnitIllegalLocation The intended movement is not a movement to an adjacent cube.
+     * @throws IllegalLocation The intended movement is not a movement to an adjacent cube.
      * @effect This Unit moves to the adjacent cube, referred to by given dx, dy and dz.
      */
-    public void moveToAdjacent(int dx, int dy, int dz) throws UnitIllegalLocation {
+    public void moveToAdjacent(int dx, int dy, int dz) throws IllegalLocation {
         if (Math.abs(dx) > 1 || Math.abs(dy) > 1 || Math.abs(dz) > 1)
-            throw new UnitIllegalLocation("Illegal move to adjacent destination");
+            throw new IllegalLocation("Illegal move to adjacent destination");
         if (this.getActivity().getId() == 3)
             return;
         int[] loc = this.getLocation().getCubeLocation();

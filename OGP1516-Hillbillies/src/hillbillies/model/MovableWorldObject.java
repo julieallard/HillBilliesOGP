@@ -3,7 +3,7 @@ package hillbillies.model;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.exceptions.UnitIllegalLocation;
+import hillbillies.model.exceptions.IllegalLocation;
 
 public abstract class MovableWorldObject {
     /**
@@ -21,7 +21,7 @@ public abstract class MovableWorldObject {
      * 		 | new.getLocation() == location
      * @post   The z coordinate of the location of this new Object is equal to the given z coordinate.
      * 		 | new.getLocation() == location
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      * 		   The given location is not a valid location for any Object.
      *       | ! isValidLocation(getLocation())
      */
@@ -36,14 +36,14 @@ public abstract class MovableWorldObject {
      * 		   The new location for this Unit.
      * @post   The location of this new Unit is equal to the given location.
      * 		 | new.getLocation() == location
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      * 		   The given location is not a valid location for any Unit.
      *       | ! isValidLocation(getLocation())
      */
     @Raw
-    public void setLocation(VLocation location) throws UnitIllegalLocation {
+    public void setLocation(VLocation location) throws IllegalLocation {
         if ((! isValidLocation(location)) || location.occupant == this)
-            throw new UnitIllegalLocation();
+            throw new IllegalLocation();
         this.location = location;
         this.register(location);
     }
@@ -82,7 +82,7 @@ public abstract class MovableWorldObject {
      * @post   The x coordinate of the location of this new Object is equal to the x coordinate supplied by the given array.
      * @post   The y coordinate of the location of this new Object is equal to the y coordinate supplied by the given array.
      * @post   The z coordinate of the location of this new Object is equal to the z coordinate supplied by the given array.
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      * 		   The given location is not a valid location for any Object.
      */
 

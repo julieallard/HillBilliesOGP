@@ -2,13 +2,9 @@ package hillbillies.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.CubeObjects.Air;
-import hillbillies.model.CubeObjects.CubeWorldObject;
-import hillbillies.model.CubeObjects.Rock;
-import hillbillies.model.CubeObjects.Wood;
+import hillbillies.model.CubeObjects.*;
+import hillbillies.model.exceptions.IllegalLocation;
 import hillbillies.model.exceptions.IllegalTimeException;
-import hillbillies.model.exceptions.UnitIllegalLocation;
-import hillbillies.model.CubeObjects.Workshop;
 import hillbillies.part2.listener.TerrainChangeListener;
 import hillbillies.util.ConnectedToBorder;
 import ogp.framework.util.Util;
@@ -35,7 +31,7 @@ public class World {
      * @effect The cube world of this new World is set to the given cube world.
      */
 
-    public World(int[][][] CubeWorld, TerrainChangeListener changeListener) throws UnitIllegalLocation, IllegalArgumentException {
+    public World(int[][][] CubeWorld, TerrainChangeListener changeListener) throws IllegalLocation, IllegalArgumentException {
         this.setWorldMap(new WorldMap<>());
         this.sideSize = CubeWorld.length;
         this.borderConnect = new ConnectedToBorder(sideSize, sideSize, sideSize);
@@ -131,13 +127,13 @@ public class World {
      * @param  CubeWorld
      * 		   The new cube world for this World.
      * @post   The cube world of this new World is equal to the given cube world.
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      * 		   The given cube world is not a valid cube world for any World.
      */
     @Raw
-    public void setCubeWorld(int[][][] CubeWorld) throws UnitIllegalLocation, IllegalArgumentException {
+    public void setCubeWorld(int[][][] CubeWorld) throws IllegalLocation, IllegalArgumentException {
         if (! isValidCubeWorld(CubeWorld))
-            throw new UnitIllegalLocation();
+            throw new IllegalLocation();
         CubeWorldObject[][][] CubeWorldFinal = new CubeWorldObject[sideSize][sideSize][sideSize];
         for (int x = 0; x < sideSize; x++) {
             for (int y = 0; y < sideSize; y++) {
@@ -169,14 +165,14 @@ public class World {
      * @param  location
      * 		   The location of the cube to destroy.
      * @post   The geological feature or the cube at given location is air.
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      * 		   The given location is not a valid location.
      * @throws IllegalArgumentException
      * 		   The cube at given location is not destructible.
      */    
-    public void destroyCube(int[] location) throws IllegalArgumentException, UnitIllegalLocation {
+    public void destroyCube(int[] location) throws IllegalArgumentException, IllegalLocation {
         if (location.length != 3)
-            throw new UnitIllegalLocation();
+            throw new IllegalLocation();
         CubeWorldObject[][][] world = this.getCubeWorld();
         CubeWorldObject cube = world[location[0]][location[1]][location[2]];
         if (! cube.isDestructible())

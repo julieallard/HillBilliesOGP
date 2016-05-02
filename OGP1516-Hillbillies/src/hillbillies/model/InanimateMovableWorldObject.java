@@ -3,7 +3,7 @@ package hillbillies.model;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.activities.NoActivity;
-import hillbillies.model.exceptions.UnitIllegalLocation;
+import hillbillies.model.exceptions.IllegalLocation;
 
 import java.util.Random;
 
@@ -25,10 +25,10 @@ abstract class InanimateMovableWorldObject extends MovableWorldObject {
      * @effect The y coordinate of this new Object is set to the given y coordinate.
      * @effect The z coordinate of this new Object is set to the given z coordinate.
      * @post   The world of this new Object is equal to the given world.
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      *         The given location is not a valid location for any Object.
      */
-    InanimateMovableWorldObject(double x, double y, double z, World world) throws UnitIllegalLocation {
+    InanimateMovableWorldObject(double x, double y, double z, World world) throws IllegalLocation {
         this.setLocation(x, y, z);
         setWorld(world);
         Random random = new Random();

@@ -6,11 +6,10 @@ import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.IActivity;
 import hillbillies.model.Unit;
-import hillbillies.model.exceptions.UnitIllegalLocation;
+import hillbillies.model.exceptions.IllegalLocation;
 import ogp.framework.util.Util;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * A class of Movement activites involving a unit and a destination.
@@ -41,10 +40,10 @@ public class Movement implements IActivity {
      * @post   The unit of this new Movement is equal to the given unit.
      * @effect The destination of this new Movement is equal to the cube with given destination.
      */
-    public Movement(Unit unit, int[] destination) throws UnitIllegalLocation {
+    public Movement(Unit unit, int[] destination) throws IllegalLocation {
         this.unit = unit;
         if (! canHaveAsDestination(destination))
-            throw new UnitIllegalLocation();
+            throw new IllegalLocation();
         Cube destincube = new Cube(destination);
         this.destination = destincube;
         this.pathing = new Astar(unit);

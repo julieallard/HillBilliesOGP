@@ -191,6 +191,9 @@ public class Work implements IActivity {
             unit.addXP(10);
             return;
         }
+        unit.activityFinished();
+        if (isDictatedByStatement()) controllingStatement.finishExecuting();
+
     }
 
     /**

@@ -4,10 +4,9 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.IActivity;
-import hillbillies.model.exceptions.IllegalTimeException;
-import hillbillies.model.exceptions.UnitIllegalLocation;
 import hillbillies.model.Unit;
 import hillbillies.model.VLocation;
+import hillbillies.model.exceptions.IllegalTimeException;
 import ogp.framework.util.Util;
 
 /**

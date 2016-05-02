@@ -1,12 +1,6 @@
 package hillbillies.model;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Immutable;
-import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.activities.NoActivity;
-import hillbillies.model.exceptions.UnitIllegalLocation;
-
-import java.util.Random;
+import hillbillies.model.exceptions.IllegalLocation;
 
 /**
  * A class of Logs involving an x, y and z coordinate and a world.
@@ -32,10 +26,10 @@ public class Log extends InanimateMovableWorldObject {
      * @effect The y coordinate of this new Log is set to the given y coordinate.
      * @effect The z coordinate of this new Log is set to the given z coordinate.
      * @post   The world of this new Log is equal to the given world.
-     * @throws UnitIllegalLocation
+     * @throws IllegalLocation
      *         The given location is not a valid location for any Log.
      */
-    public Log(double x, double y, double z, World world) throws UnitIllegalLocation {
+    public Log(double x, double y, double z, World world) throws IllegalLocation {
         super(x,y,z,world);
     }
 }

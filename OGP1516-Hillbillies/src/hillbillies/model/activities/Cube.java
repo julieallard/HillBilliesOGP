@@ -1,16 +1,18 @@
 package hillbillies.model.activities;
 
 import be.kuleuven.cs.som.annotate.Value;
-import hillbillies.model.exceptions.UnitIllegalLocation;
+import hillbillies.model.exceptions.IllegalLocation;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Value
 public class Cube {
 
-    public Cube(int[] cube) throws UnitIllegalLocation{ 
+    public Cube(int[] cube) throws IllegalLocation {
         if (cube.length != 3)
-        	throw new UnitIllegalLocation("Astar tried to create an illegal cube");
+        	throw new IllegalLocation("Astar tried to create an illegal cube");
         this.locArray = cube;
     }
     @Override
@@ -21,7 +23,7 @@ public class Cube {
         	return true;
         Cube cube = (Cube) cube1;
         if (cube.locArray.length != 3)
-        	throw new UnitIllegalLocation("Astar tried to compare an illegal cube");
+        	throw new IllegalLocation("Astar tried to compare an illegal cube");
         for (int i = 0; i < 3; i++) {
             if (cube.locArray[i] != this.locArray[i])
             	return false;

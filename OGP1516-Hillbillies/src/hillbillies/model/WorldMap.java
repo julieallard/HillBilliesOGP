@@ -1,7 +1,5 @@
 package hillbillies.model;
 
-import hillbillies.model.exceptions.UnitIllegalLocation;
-
 import java.util.*;
 
 /**
