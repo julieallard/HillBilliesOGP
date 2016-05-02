@@ -1,13 +1,13 @@
 package hillbillies.model;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.EsotERICScript.Statements.Statement;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.EsotERICScript.Statements.Statement;
 
 /**
  * A class of Tasks.
@@ -224,6 +224,9 @@ public class Task implements Comparable {
 	 * @throws ClassCastException   if the specified object's type prevents it
 	 *                              from being compared to this object.
 	 */
+
+
+
 	@Override
 	public int compareTo(Object o) {
 		if (o == null || ! (o instanceof Task))

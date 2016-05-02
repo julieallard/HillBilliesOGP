@@ -17,13 +17,16 @@ public class Statement {
         this.executed = false;
         this.task = task;
     }
-    
+
+    public Statement encapsulatingStatement;
+
     protected boolean beingExcecuted;
     protected boolean executed;
+
     public Task task;
     public Unit executor;
     private PartStatement partStatement;
-    
+
     public void execute(Unit unit, double dt) throws SyntaxError {
         this.executor = unit;
         this.partStatement.execute(unit, dt);
@@ -34,7 +37,7 @@ public class Statement {
         this.executed = true;
         //TODO Execute next?
     }
-    
+
     public void reExecutePrepare() {
         this.beingExcecuted = false;
         this.executed = false;
@@ -48,7 +51,7 @@ public class Statement {
             this.variableName = variableName;
             this.value = value;
         }
-        
+
         private final String variableName;
         private final Expression value;
 
@@ -57,15 +60,15 @@ public class Statement {
             if (value instanceof BooleanExpression) {
                 boolean booleanVar = ((BooleanExpression) value).value(unit);
             } else if (value instanceof PositionExpression) {
-            	int[] intVar = ((PositionExpression) value).value(unit);
+                int[] intVar = ((PositionExpression) value).value(unit);
             } else if (value instanceof UnitExpression) {
-            	Unit unitVar = ((UnitExpression) value).value(unit);
+                Unit unitVar = ((UnitExpression) value).value(unit);
             }
-            	
+
         }
-        
+
     }
-    
+
     // while e do s done
     class WhilePartStatement extends PartStatement {
 
@@ -73,7 +76,7 @@ public class Statement {
             this.condition = condition;
             this.body = body;
         }
-        
+
         private final BooleanExpression condition;
         private final Statement body;
         private Boolean flag;
@@ -81,16 +84,16 @@ public class Statement {
 
         @Override
         public void execute(Unit unit, double dt) throws SyntaxError {
-            if (! conditionEvaluated) {
+            if (!conditionEvaluated) {
                 flag = condition.value(unit);
                 conditionEvaluated = true;
             }
             while (flag)
-            	body.execute(unit, dt);
+                body.execute(unit, dt);
         }
-        
+
     }
-    
+
     // if e then s [ else s ] fi
     class IfPartStatement extends PartStatement {
 
@@ -99,7 +102,7 @@ public class Statement {
             this.ifPart = ifPart;
             this.elsePart = elsePart;
         }
-        
+
         private final BooleanExpression condition;
         private final Statement ifPart;
         private final Statement elsePart;
@@ -108,68 +111,41 @@ public class Statement {
 
         @Override
         public void execute(Unit unit, double dt) throws SyntaxError {
-            if (! conditionEvaluated) {
+            if (!conditionEvaluated) {
                 flag = condition.value(unit);
                 conditionEvaluated = true;
             }
             if (flag)
-            	ifPart.execute(unit, dt);
+                ifPart.execute(unit, dt);
             else
-            	elsePart.execute(unit, dt);
+                elsePart.execute(unit, dt);
         }
-        
+
     }
-    
+
     // break
     // TODO
-    
+
     // print e
     // TODO
-    
+
     // {s}
     class SequencePartStatement extends PartStatement {
 
         public SequencePartStatement(List<Statement> statements) {
             this.statementList = statements;
         }
-        
+
         private final List<Statement> statementList;
 
         @Override
         public void execute(Unit unit, double dt) throws SyntaxError {
-        	if (statementList.size() == 0)
-        		throw new SyntaxError("The list of statements is empty.");
-            for (Statement statement: statementList)
-            	statement.execute(unit, dt);
+            if (statementList.size() == 0)
+                throw new SyntaxError("The list of statements is empty.");
+            for (Statement statement : statementList)
+                statement.execute(unit, dt);
         }
-        
-    }	
 
-    /**
-     * Static methods for creating new statements
-     */
-    public static Statement newWorkAt(PositionExpression loc, Task task) {
-        Statement statement = new Statement(task);
-        statement.partStatement = statement.new WorkPartStatement(loc);
-        return statement;
-    }
-    
-    public static Statement newAttack(UnitExpression unit, Task task){
-        Statement statement = new Statement(task);
-        statement.partStatement = statement.new AttackPartStatement(unit);
-        return statement;
-    }
-    
-    public static Statement newFollow(UnitExpression unit, Task task){
-        Statement statement = new Statement(task);
-        statement.partStatement = statement.new FollowPartStatement(unit);
-        return statement;
-    }
-    
-    public static Statement newMoveTo(PositionExpression pos, Task task){
-        Statement statement = new Statement(task);
-        statement.partStatement = statement.new MoveToPartStatement(pos);
-        return statement;
     }
 
 }

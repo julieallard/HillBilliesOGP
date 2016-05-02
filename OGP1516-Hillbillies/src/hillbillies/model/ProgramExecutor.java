@@ -16,7 +16,7 @@ public class ProgramExecutor {
     private final Unit executor;
     private final Task task;
     private final List<Statement> statementList = new ArrayList<>();
-    private Stack<Statement> statementStack = new Stack<>();
+    private Stack<Statement> statementCallStack = new Stack<>();
 
     public Unit getExecutor() {
         return executor;
@@ -39,12 +39,27 @@ public class ProgramExecutor {
     }
 
     public Stack<Statement> getStatementStackClone() {
-        return (Stack<Statement>) statementStack.clone();
+        return (Stack<Statement>) statementCallStack.clone();
     }
+
+
 
     public static boolean TaskBreakValidityCheck(Task task){
     	return false;
     	//TODO
+    }
+
+    public void updateCallStackWith(Statement latestStat){
+        if(statementCallStack.peek().equals(latestStat.encapsulatingStatement)){
+            statementCallStack.push(latestStat);
+            return;
+        }
+        Statement stat=statementCallStack.peek();
+        while (!stat.equals(latestStat.encapsulatingStatement)){
+            statementCallStack.pop();
+            statementCallStack.peek();
+        }
+        statementCallStack.push(latestStat);
     }
 
 }
