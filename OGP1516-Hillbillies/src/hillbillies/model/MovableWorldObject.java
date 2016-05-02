@@ -6,6 +6,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.exceptions.IllegalLocation;
 
 public abstract class MovableWorldObject {
+	
     /**
      * Set the location of this Object to the given x, y and z coordinate.
      *

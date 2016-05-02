@@ -6,25 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-
 public class ProgramExecutor {
 
-    private final Unit Excecutor;
-    private final Task task;
-    private final List<Statement> statementList;
-
-    private Stack<Statement> statementStack;
-
-    public ProgramExecutor(Unit excecutor, Task task, List<Statement> statementList) {
-        this.Excecutor = excecutor;
+    public ProgramExecutor(Unit executor, Task task) {
+        this.executor = executor;
         this.task = task;
-        this.statementList=new ArrayList<>();
-        this.statementStack=new Stack<>();
-
     }
+    
+    private final Unit executor;
+    private final Task task;
+    private final List<Statement> statementList = new ArrayList<>();
+    private Stack<Statement> statementStack = new Stack<>();
 
-    public Unit getExcecutor() {
-        return Excecutor;
+    public Unit getExecutor() {
+        return executor;
     }
 
     public Task getTask() {
@@ -39,11 +34,9 @@ public class ProgramExecutor {
         return (Stack<Statement>) statementStack.clone();
     }
 
-
-
-
     public static boolean TaskBreakValidityCheck(Task task){
-
-        task.taks
+    	return false;
+    	//TODO
     }
+
 }
