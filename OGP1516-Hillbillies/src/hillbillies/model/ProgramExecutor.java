@@ -25,6 +25,14 @@ public class ProgramExecutor {
     public Task getTask() {
         return task;
     }
+    
+    public void addStatementToList(Statement statement) {
+    	statementList.add(statement);
+    }
+    
+    public void removeStatementFromList(Statement statement) {
+    	statementList.remove(statement);
+    }
 
     public List<Statement> getStatementList() {
         return statementList;
