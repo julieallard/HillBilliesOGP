@@ -17,9 +17,6 @@ public class BooleanExpression extends Expression {
     	
     	@Override
         public abstract Boolean getValue() throws SyntaxError;
-    	
-    	Expression arg1;
-        Expression arg2;
         
     }
 
@@ -47,9 +44,11 @@ public class BooleanExpression extends Expression {
             this.arg1 = arg;
         }
             
+        private BooleanExpression arg1;
+        
         @Override
         public Boolean getValue() throws SyntaxError {
-            return ((BooleanExpression) arg1).value(executor);
+            return arg1.value(executor);
         }    
         
     }
@@ -61,9 +60,11 @@ public class BooleanExpression extends Expression {
             this.arg1 = arg;
         }
         
+        private BooleanExpression arg1;
+        
         @Override
         public Boolean getValue() throws SyntaxError {
-            return ! ((BooleanExpression) arg1).value(executor);
+            return ! arg1.value(executor);
         }
         
     }
@@ -76,6 +77,9 @@ public class BooleanExpression extends Expression {
             this.arg2 = arg2;
         }
 
+        private BooleanExpression arg1;
+        private BooleanExpression arg2;
+        
         @Override
         public Boolean getValue() throws SyntaxError {
             return ((boolean) arg1.value(executor)) || ((boolean) arg2.value(executor));
@@ -90,6 +94,9 @@ public class BooleanExpression extends Expression {
             this.arg2 = arg2;
         }
 
+        private BooleanExpression arg1;
+        private BooleanExpression arg2;
+        
         @Override
         public Boolean getValue() throws SyntaxError {
             return ((boolean) arg1.value(executor)) && ((boolean) arg2.value(executor));
@@ -123,8 +130,8 @@ public class BooleanExpression extends Expression {
             this.arg2 = arg2;
         }
         
-        UnitExpression arg1;
-        UnitExpression arg2;
+        private UnitExpression arg1;
+        private UnitExpression arg2;
         
         @Override
         public Boolean getValue() throws SyntaxError {

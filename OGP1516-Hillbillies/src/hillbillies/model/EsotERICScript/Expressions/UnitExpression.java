@@ -20,9 +20,6 @@ public class UnitExpression extends Expression {
     	
     	@Override
         public abstract Unit getValue() throws SyntaxError;
-    	
-    	Expression arg1;
-        Expression arg2;
         
     }
     

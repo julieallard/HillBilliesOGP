@@ -21,8 +21,6 @@ public class PositionExpression extends Expression {
 
         @Override
         public abstract int[] getValue() throws SyntaxError;
-        
-        Expression arg1;
 
     }
 

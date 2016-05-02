@@ -18,8 +18,8 @@ public class Statement {
         this.task = task;
     }
     
-    private boolean beingExcecuted;
-    private boolean executed;
+    protected boolean beingExcecuted;
+    protected boolean executed;
     public Task task;
     public Unit executor;
     private PartStatement partStatement;
@@ -144,73 +144,6 @@ public class Statement {
         }
         
     }	
-    		
-    // moveTo e
-    class MoveToPartStatement extends PartStatement {
-
-        public MoveToPartStatement(PositionExpression destination) {
-            this.argExpr1 = destination;
-        }
-        
-        PositionExpression argExpr1;
-        
-        @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
-            if (! beingExcecuted)
-            	unit.moveTo(argExpr1.value(executor));
-            //TODO: keep information about the completion of this statement
-        }
-    }
-    
-    // work e
-    class WorkPartStatement extends PartStatement {
-
-        public WorkPartStatement(PositionExpression position) {
-            this.argExpr1 = position;
-        }
-        
-        PositionExpression argExpr1;
-        
-        @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
-            unit.work(argExpr1.value(executor));
-            //TODO: keep information about the completion of this statement
-        }
-        
-    }
-    
-    // follow e
-    // TODO: bc Arthur likes to procrastinate
-    class FollowPartStatement extends PartStatement {
-
-        public FollowPartStatement(UnitExpression unitToFollow) {
-            this.argExpr1 = unitToFollow;
-        }
-        
-        UnitExpression argExpr1;
-        
-        @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
-            //unit.moveTo(argExpr1.value());
-            // TODO: keep information about the completion of this statement
-        }
-        
-    }
-    
-    // attack e
-    class AttackPartStatement extends PartStatement {
-        public AttackPartStatement(UnitExpression defender) {
-            this.argExpr1 = defender;
-        }
-        
-        UnitExpression argExpr1;
-        
-        @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
-            unit.attack(argExpr1.value(executor));
-            //TODO: keep information about the completion of this statement
-        }
-    }
 
     /**
      * Static methods for creating new statements
