@@ -132,7 +132,7 @@ public class Unit extends MovableWorldObject {
         this.setCurrentHitPoints(getMaxPoints());
         this.setCurrentStaminaPoints(getMaxPoints());
         this.setOrientation((float) (0.5 * Math.PI));
-        this.setActivity(null);
+        this.setActivity(new NoActivity());
         this.setFaction();
     }
 
@@ -233,7 +233,7 @@ public class Unit extends MovableWorldObject {
         this.setCurrentHitPoints(getMaxPoints());
         this.setCurrentStaminaPoints(getMaxPoints());
         this.setOrientation((float) (0.5 * Math.PI));
-        this.setActivity(null);
+        this.setActivity(new NoActivity());
         this.setFaction();
     }
 
@@ -275,7 +275,7 @@ public class Unit extends MovableWorldObject {
         this.setCurrentHitPoints(getMaxPoints());
         this.setCurrentStaminaPoints(getMaxPoints());
         this.setOrientation((float) (0.5 * Math.PI));
-        this.setActivity(null);
+        this.setActivity(new NoActivity());
         this.setFaction();
         this.setName(name);
     }
@@ -811,7 +811,6 @@ public class Unit extends MovableWorldObject {
         if (this.timeSinceLastRest >= 300) {
             boolean flag = this.interruptCurrentAct(new Rest(this));
             if (flag) this.timeSinceLastRest = 0;
-
         }
         if (this.getActivity().getId() == 0 && isDefaultBehaviorEnabled()) {
             behaveDefault();
