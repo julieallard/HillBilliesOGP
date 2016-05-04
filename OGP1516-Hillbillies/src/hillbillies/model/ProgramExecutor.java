@@ -17,6 +17,16 @@ public class ProgramExecutor {
     private final Task task;
     private final List<Statement> statementList = new ArrayList<>();
     private Stack<Statement> statementCallStack = new Stack<>();
+    private double dt;
+
+    public double getDeltat() {
+        return dt;
+    }
+
+    public ProgramExecutor setDeltat(double dt) {
+        this.dt = dt;
+        return this;
+    }
 
     public Unit getExecutor() {
         return executor;
@@ -60,6 +70,10 @@ public class ProgramExecutor {
             statementCallStack.peek();
         }
         statementCallStack.push(latestStat);
+    }
+    public void pushUpdate(Statement statement){
+        this.addStatementToList(statement);
+        this.updateCallStackWith(statement);
     }
 
 }

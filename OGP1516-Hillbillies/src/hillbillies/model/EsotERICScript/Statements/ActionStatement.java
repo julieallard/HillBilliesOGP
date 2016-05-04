@@ -1,10 +1,10 @@
 package hillbillies.model.EsotERICScript.Statements;
 
-import hillbillies.model.Task;
-import hillbillies.model.Unit;
-import hillbillies.model.EsotERICScript.Expressions.Expression;
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
 import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
+import hillbillies.model.ProgramExecutor;
+import hillbillies.model.Task;
+import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
 public class ActionStatement extends Statement {
@@ -16,8 +16,8 @@ public class ActionStatement extends Statement {
 	public abstract class ActionPartStatement extends PartStatement {
 		
 		@Override
-	    public abstract void execute(Unit unit, double dt) throws SyntaxError;
-		
+	    public abstract void execute(ProgramExecutor executor) throws SyntaxError;
+
 	}
 
     // moveTo e
@@ -30,9 +30,10 @@ public class ActionStatement extends Statement {
         PositionExpression argExpr1;
         
         @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
+        public void execute(ProgramExecutor executor) throws SyntaxError {
+            Unit unit=executor.getExecutor();
             if (! beingExcecuted)
-            	unit.moveTo(argExpr1.value(executor));
+            	unit.moveTo(argExpr1.value(ActionStatement.this.executor));
             //TODO: keep information about the completion of this statement
         }
     }
@@ -47,8 +48,9 @@ public class ActionStatement extends Statement {
         PositionExpression argExpr1;
         
         @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
-            unit.work(argExpr1.value(executor));
+        public void execute(ProgramExecutor executor) throws SyntaxError {
+            Unit unit=executor.getExecutor();
+            unit.work(argExpr1.value(ActionStatement.this.executor));
             //TODO: keep information about the completion of this statement
         }
         
@@ -65,7 +67,7 @@ public class ActionStatement extends Statement {
         UnitExpression argExpr1;
         
         @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
+        public void execute(ProgramExecutor executor) throws SyntaxError {
             //unit.moveTo(argExpr1.value());
             // TODO: keep information about the completion of this statement
         }
@@ -82,8 +84,9 @@ public class ActionStatement extends Statement {
         UnitExpression argExpr1;
         
         @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
-            unit.attack(argExpr1.value(executor));
+        public void execute(ProgramExecutor executor) throws SyntaxError {
+            Unit unit=executor.getExecutor();
+            unit.attack(argExpr1.value(ActionStatement.this.executor));
             //TODO: keep information about the completion of this statement
         }
         

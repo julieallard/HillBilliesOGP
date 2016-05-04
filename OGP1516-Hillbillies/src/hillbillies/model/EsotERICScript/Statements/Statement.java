@@ -1,9 +1,9 @@
 package hillbillies.model.EsotERICScript.Statements;
-
 import hillbillies.model.EsotERICScript.Expressions.BooleanExpression;
 import hillbillies.model.EsotERICScript.Expressions.Expression;
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
 import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
+import hillbillies.model.ProgramExecutor;
 import hillbillies.model.Task;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
@@ -27,9 +27,10 @@ public class Statement {
     public Unit executor;
     private PartStatement partStatement;
 
-    public void execute(Unit unit, double dt) throws SyntaxError {
-        this.executor = unit;
-        this.partStatement.execute(unit, dt);
+    public void execute(ProgramExecutor executor) throws SyntaxError {
+        this.executor = executor.getExecutor();
+        executor.updateCallStackWith(this);
+        this.partStatement.execute(executor);
     }
 
     public void finishExecuting() {
@@ -56,7 +57,8 @@ public class Statement {
         private final Expression value;
 
         @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
+        public void execute(ProgramExecutor executor) throws SyntaxError {
+            Unit unit=executor.getExecutor();
             if (value instanceof BooleanExpression) {
                 boolean booleanVar = ((BooleanExpression) value).value(unit);
             } else if (value instanceof PositionExpression) {
@@ -83,13 +85,14 @@ public class Statement {
         private Boolean conditionEvaluated = false;
 
         @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
+        public void execute(ProgramExecutor executor) throws SyntaxError {
+            Unit unit=executor.getExecutor();
             if (!conditionEvaluated) {
                 flag = condition.value(unit);
                 conditionEvaluated = true;
             }
             while (flag)
-                body.execute(unit, dt);
+                body.execute(executor);
         }
 
     }
@@ -110,15 +113,16 @@ public class Statement {
         private Boolean conditionEvaluated = false;
 
         @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
+        public void execute(ProgramExecutor executor) throws SyntaxError {
+            Unit unit=executor.getExecutor();
             if (!conditionEvaluated) {
                 flag = condition.value(unit);
                 conditionEvaluated = true;
             }
             if (flag)
-                ifPart.execute(unit, dt);
+                ifPart.execute(executor);
             else
-                elsePart.execute(unit, dt);
+                elsePart.execute(executor);
         }
 
     }
@@ -139,11 +143,11 @@ public class Statement {
         private final List<Statement> statementList;
 
         @Override
-        public void execute(Unit unit, double dt) throws SyntaxError {
+        public void execute(ProgramExecutor executor) throws SyntaxError {
             if (statementList.size() == 0)
                 throw new SyntaxError("The list of statements is empty.");
             for (Statement statement : statementList)
-                statement.execute(unit, dt);
+                statement.execute(executor);
         }
 
     }
