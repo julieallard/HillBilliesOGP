@@ -418,7 +418,7 @@ public class World {
      * 		   and lower than 0.2.
      */
      private static boolean isValidTimeDuration(double dt) {
-        return !(Util.fuzzyGreaterThanOrEqualTo(dt,0)||Util.fuzzyLessThanOrEqualTo(dt,0.2));
+        return (Util.fuzzyGreaterThanOrEqualTo(dt,0)&&Util.fuzzyLessThanOrEqualTo(dt,0.2));
 
     }
 

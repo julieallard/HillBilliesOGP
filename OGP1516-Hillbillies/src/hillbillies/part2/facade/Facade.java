@@ -4,6 +4,7 @@ package hillbillies.part2.facade;
 import hillbillies.model.*;
 import hillbillies.part2.listener.TerrainChangeListener;
 import ogp.framework.util.ModelException;
+
 import java.util.Set;
 
 
@@ -471,7 +472,6 @@ public class Facade extends hillbillies.part1.facade.Facade implements hillbilli
             return boulder.getLocation().getArray();
             }
         catch (Exception error) {throw new ModelException(error);}
-        
     }
 
     /**
