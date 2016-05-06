@@ -13,24 +13,24 @@ import java.util.Random;
  * A class of hillbilly units involving a name, an x, y and z coordinate, a weight, agility, strength, toughness,
  * a facility to enable the default behaviour and a world.
  * 
- * @invar  The name of each unit must be a valid name for any unit.
- *       | isValidName(getName())
- * @invar  The location of each unit must be a valid location for any unit.
- *       | isValidLocation(getLocation)
- * @invar  The weight of each unit must be a valid weight for any unit.
- *       | isValidWeight(getWeight())
- * @invar  The strength of each unit must be a valid strength for any unit.
- *       | isValidProperty(getStrength())
- * @invar  The agility of each unit must be a valid agility for any unit.
- *       | isValidProperty(getAgility()) 
- * @invar  The toughness of each unit must be a valid toughness for any unit.
- *       | isValidProperty(getToughness()) 
- * @invar  The number of hitpoints of each unit must be a valid number of hitpoints for any unit.
- * 		 | isValidPoints(getCurrentHitPoints())
- * @invar  The number of stamina points of each unit must be a valid number of stamina points for any unit.
- * 		 | isValidPoints(getCurrentStaminaPoints())
- * @invar  The orientation of each unit must be a valid orientation for any unit.
- * 		 | isValidOrientation(getOrientation())
+ * @invar	The name of each unit must be a valid name for any unit.
+ *		  | isValidName(getName())
+ * @invar	The location of each unit must be a valid location for any unit.
+ *		  | isValidLocation(getLocation)
+ * @invar	The weight of each unit must be a valid weight for any unit.
+ *		  |	isValidWeight(getWeight())
+ * @invar	The strength of each unit must be a valid strength for any unit.
+ *		  |	isValidProperty(getStrength())
+ * @invar	The agility of each unit must be a valid agility for any unit.
+ *		  |	isValidProperty(getAgility()) 
+ * @invar	The toughness of each unit must be a valid toughness for any unit.
+ *		  |	isValidProperty(getToughness()) 
+ * @invar	The number of hitpoints of each unit must be a valid number of hitpoints for any unit.
+ *		  |	isValidPoints(getCurrentHitPoints())
+ * @invar	The number of stamina points of each unit must be a valid number of stamina points for any unit.
+ *		  |	isValidPoints(getCurrentStaminaPoints())
+ * @invar	The orientation of each unit must be a valid orientation for any unit.
+ *		  |	isValidOrientation(getOrientation())
  *        
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica
@@ -40,129 +40,87 @@ import java.util.Random;
 public class Unit extends MovableWorldObject {
 
     /**
-     * Initialize this new hillbilly unit with given name, given initial x, y and z
-     * coordinate, given weight, given agility, given strength, given toughness,
+     * Initialize this new unit with given name, given initial x, y and z coordinate, given weight, given agility, given strength, given toughness,
      * given default behaviour state and given world.
      *
-     * @param name                  The name for this unit.
-     * @param x                     The x coordinate for this unit.
-     * @param y                     The y coordinate for this unit.
-     * @param z                     The z coordinate for this unit.
-     * @param weight                The weight for this unit.
-     * @param strength              The strength for this unit.
-     * @param agility               The agility for this unit.
-     * @param toughness             The toughness for this unit.
-     * @param enableDefaultBehavior The state of behaviour for this unit.
-     * @param world                 The world for this unit.
-     * @effect The name of this new unit is set to the given name.
-     * | this.setName(name)
-     * @effect The x coordinate of this new unit is set to the given x coordinate.
-     * | this.setLocation(x, y, z)
-     * @effect The y coordinate of this new unit is set to the given y coordinate.
-     * | this.setLocation(x, y, z)
-     * @effect The z coordinate of this new unit is set to the given z coordinate.
-     * | this.setLocation(x, y, z)
-     * @post If the given weight is not below 25 and not above 100 for any unit, the weight of this new unit is
-     * equal to the given weight. Otherwise, the weight of this new unit is equal to 25, respectively 100.
-     * | if (weight < 25)
-     * |   then new.getWeight == 25
-     * |   else if (weight > 100)
-     * |	 then new.getWeight == 100
-     * |   else new.getWeight == weight
-     * @post If the given strength is not below 25 and not above 100 for any unit, the strength of this new unit is
-     * equal to the given strength. Otherwise, the strength of this new unit is equal to 25, respectively 100.
-     * | if (strength < 25)
-     * |   then new.getStrength == 25
-     * |   else if (strength > 100)
-     * |	 then new.getStrength == 100
-     * |   else new.getStrength == strength
-     * @post If the given agility is not below 25 and not above 100 for any unit, the agility of this new unit is
-     * equal to the given agility. Otherwise, the agility of this new unit is equal to 25, respectively 100.
-     * | if (agility < 25)
-     * |   then new.getAgility == 25
-     * |   else if (agility > 100)
-     * |	 then new.getAgility == 100
-     * |   else new.getAgility == agility
-     * @post If the given toughness is not below 25 and not above 100 for any unit, the toughness of this new unit is
-     * equal to the given toughness. Otherwise, the toughness of this new unit is equal to 25, respectively 100.
-     * | if (toughness < 25)
-     * |   then new.getToughness == 25
-     * |   else if (toughness > 100)
-     * |	 then new.getToughness == 100
-     * |   else new.getToughness == toughness
-     * @post The initial state of behavior of this new unit is set according to the given flag.
-     * | new.defaultbehaviorenabled == enableDefaultBehavior
+     * @param	name
+     * 			The name for this unit.
+     * @param	x
+     * 			The x coordinate for this unit.
+     * @param	y
+     * 			The y coordinate for this unit.
+     * @param	z
+     * 			The z coordinate for this unit.
+     * @param	weight
+				The weight for this unit.
+     * @param	strength
+				The strength for this unit.
+     * @param	agility
+				The agility for this unit.
+     * @param	toughness
+				The toughness for this unit.
+     * @param	enableDefaultBehavior
+     * 			The state of behaviour for this unit.
+     * @effect	The name of this new unit is set to the given name.
+     *		  |	this.setName(name)
+     * @effect	The location if this unit is set to the given x, y and z coordinate.
+     *		  |	this.setLocation(x, y, z)
+     * @effect	The agility of this unit is set to the given agility.
+     * @effect	The strength of this unit is set to the given strength.
+     * @effect	The toughness of this unit is set to the given toughness.
+     * @effect	The weight of this unit is set to the given weight.
+     * @effect	The initial state of behavior of this new unit is set according to the given flag.
+     *		  |	new.defaultbehaviorenabled == enableDefaultBehavior
      * @effect The world of this new unit is set to the given world.
      * | this.setWorld(world)
      */
-    public Unit(String name, double x, double y, double z, int weight, int strength, int agility, int toughness,
-                boolean enableDefaultBehavior, World world) throws IllegalLocation, IllegalArgumentException {
+    public Unit(String name, double x, double y, double z, int weight, int strength, int agility, int toughness, boolean enableDefaultBehavior, World world)
+    		throws IllegalLocation, IllegalArgumentException {
         this.setName(name);
         this.setAgility(agility);
         this.setStrength(strength);
         this.setToughness(toughness);
         this.setWeight(weight);
+        propAssignedUponCreation = true;
         this.setDefaultBehavior(enableDefaultBehavior);
         this.setWorld(world);
-        this.setLocation(x, y, z);
-        this.setCurrentHitPoints(getMaxPoints());
-        this.setCurrentStaminaPoints(getMaxPoints());
-        this.setOrientation((float) (0.5 * Math.PI));
-        this.setActivity(new NoActivity());
         this.setFaction();
+        this.setLocation(x, y, z);
+        this.setActivity(new NoActivity());
     }
 
     /**
      * Initialize this new hillbilly unit with given name, given initial x, y and z coordinate, given weight,
      * given agility, given strength, given toughness and given default behaviour state.
      *
-     * @param name                  The name for this unit.
-     * @param x                     The x coordinate for this unit.
-     * @param y                     The y coordinate for this unit.
-     * @param z                     The z coordinate for this unit.
-     * @param weight                The weight for this unit.
-     * @param strength              The strength for this unit.
-     * @param agility               The agility for this unit.
-     * @param toughness             The toughness for this unit.
-     * @param enableDefaultBehavior The state of behaviour for this unit.
-     * @effect The name of this new unit is set to the given name.
-     * | this.setName(name)
-     * @effect The x coordinate of this new unit is set to the given x coordinate.
-     * | this.setLocation(x, y, z)
-     * @effect The y coordinate of this new unit is set to the given y coordinate.
-     * | this.setLocation(x, y, z)
-     * @effect The z coordinate of this new unit is set to the given z coordinate.
-     * | this.setLocation(x, y, z)
-     * @post If the given weight is not below 25 and not above 100 for any unit, the weight of this new unit is
-     * equal to the given weight. Otherwise, the weight of this new unit is equal to 25, respectively 100.
-     * | if (weight < 25)
-     * |   then new.getWeight == 25
-     * |   else if (weight > 100)
-     * |	 then new.getWeight == 100
-     * |   else new.getWeight == weight
-     * @post If the given strength is not below 25 and not above 100 for any unit, the strength of this new unit is
-     * equal to the given strength. Otherwise, the strength of this new unit is equal to 25, respectively 100.
-     * | if (strength < 25)
-     * |   then new.getStrength == 25
-     * |   else if (strength > 100)
-     * |	 then new.getStrength == 100
-     * |   else new.getStrength == strength
-     * @post If the given agility is not below 25 and not above 100 for any unit, the agility of this new unit is
-     * equal to the given agility. Otherwise, the agility of this new unit is equal to 25, respectively 100.
-     * | if (agility < 25)
-     * |   then new.getAgility == 25
-     * |   else if (agility > 100)
-     * |	 then new.getAgility == 100
-     * |   else new.getAgility == agility
-     * @post If the given toughness is not below 25 and not above 100 for any unit, the toughness of this new unit is
-     * equal to the given toughness. Otherwise, the toughness of this new unit is equal to 25, respectively 100.
-     * | if (toughness < 25)
-     * |   then new.getToughness == 25
-     * |   else if (toughness > 100)
-     * |	 then new.getToughness == 100
-     * |   else new.getToughness == toughness
-     * @post The initial state of behavior of this new unit is set according to the given flag.
-     * | new.defaultbehaviorenabled == enableDefaultBehavior
+     * @param	name
+     * 			The name for this unit.
+     * @param	x
+     * 			The x coordinate for this unit.
+     * @param	y
+     * 			The y coordinate for this unit.
+     * @param	z
+     * 			The z coordinate for this unit.
+     * @param	weight
+				The weight for this unit.
+     * @param	strength
+				The strength for this unit.
+     * @param	agility
+				The agility for this unit.
+     * @param	toughness
+				The toughness for this unit.
+     * @param	enableDefaultBehavior
+     * 			The state of behaviour for this unit.
+     * @effect	The name of this new unit is set to the given name.
+     *		  |	this.setName(name)
+     * @effect	The location if this unit is set to the given x, y and z coordinate.
+     *		  |	this.setLocation(x, y, z)
+     * @effect	The agility of this unit is set to the given agility.
+     * @effect	The strength of this unit is set to the given strength.
+     * @effect	The toughness of this unit is set to the given toughness.
+     * @effect	The weight of this unit is set to the given weight.
+     * @effect	The initial state of behavior of this new unit is set according to the given flag.
+     *		  |	new.defaultbehaviorenabled == enableDefaultBehavior
      */
     public Unit(String name, double x, double y, double z, int weight, int strength, int agility, int toughness,
                 boolean enableDefaultBehavior) throws IllegalLocation, IllegalArgumentException {
@@ -171,22 +129,20 @@ public class Unit extends MovableWorldObject {
         this.setStrength(strength);
         this.setToughness(toughness);
         this.setWeight(weight);
+        propAssignedUponCreation = true;
         this.setDefaultBehavior(enableDefaultBehavior);
-        int extent = (int) Math.ceil(x);
-        if (y > extent)
-            extent = (int) Math.ceil(y);
-        if (z > extent)
-            extent = (int) Math.ceil(z);
-        int[][][] randomCubeWorld = new int[extent][extent][extent];
+        int longestSideSize = (int) Math.ceil(x);
+        if (y > longestSideSize)
+            longestSideSize = (int) Math.ceil(y);
+        if (z > longestSideSize)
+            longestSideSize = (int) Math.ceil(z);
+        int[][][] randomCubeWorld = new int[longestSideSize][longestSideSize][longestSideSize];
         TerrainChangeListener randomTerrainChangeListener = new DefaultTerrainChangeListener();
         World world = new World(randomCubeWorld, randomTerrainChangeListener);
         this.setWorld(world);
-        this.setLocation(x, y, z);
-        this.setCurrentHitPoints(getMaxPoints());
-        this.setCurrentStaminaPoints(getMaxPoints());
-        this.setOrientation((float) (0.5 * Math.PI));
-        this.setActivity(new NoActivity());
         this.setFaction();
+        this.setLocation(x, y, z);
+        this.setActivity(new NoActivity());
     }
 
     /**
@@ -202,6 +158,19 @@ public class Unit extends MovableWorldObject {
     public Unit(World world, boolean enableDefaultBehavior) {
         Random random = new Random();
         String name = getRandomName();
+        this.setName(name);
+        int randomWeight = random.nextInt(76) + 25;
+        int randomStrength = random.nextInt(76) + 25;
+        int randomAgility = random.nextInt(76) + 25;
+        int randomToughness = random.nextInt(76) + 25;
+        this.setAgility(randomAgility);
+        this.setStrength(randomStrength);
+        this.setToughness(randomToughness);
+        this.setWeight(randomWeight);
+        propAssignedUponCreation = true;
+        this.setDefaultBehavior(enableDefaultBehavior);
+        this.setWorld(world);
+        this.setFaction();
         int randomLocX;
         int randomLocY;
         int randomLocZ;
@@ -213,30 +182,12 @@ public class Unit extends MovableWorldObject {
             if (world.canHaveAsCubeLocation(randomLoc, this))
                 break;
         }
-        int randomWeight = random.nextInt(76) + 25;
-        int randomStrength = random.nextInt(76) + 25;
-        int randomAgility = random.nextInt(76) + 25;
-        int randomToughness = random.nextInt(76) + 25;
-        this.setAgility(randomAgility);
-        this.setStrength(randomStrength);
-        this.setToughness(randomToughness);
-        this.setWeight(randomWeight);
-        this.setDefaultBehavior(enableDefaultBehavior);
-        this.setWorld(world);
         this.setLocation(randomLocX, randomLocY, randomLocZ);
-        this.setCurrentHitPoints(getMaxPoints());
-        this.setCurrentStaminaPoints(getMaxPoints());
-        this.setOrientation((float) (0.5 * Math.PI));
         this.setActivity(new NoActivity());
-        this.setFaction();
-        this.setName(name);
     }
 
-    /**
-     * Variable registering the time since this unit last rested
-     */
-    public double timeSinceLastRest;
-
+    /* Variables */
+    
     /**
      * Variable registering the name of this unit.
      */
@@ -270,12 +221,12 @@ public class Unit extends MovableWorldObject {
     /**
      * Variable registering the hitpoints of this unit.
      */
-    private int hitpoints;
+    private int hitpoints = getMaxPoints();
 
     /**
      * Variable registering the stamina points of this unit.
      */
-    private int staminapoints;
+    private int staminapoints = getMaxPoints();
 
     /**
      * Variable registering the experience points of this unit.
@@ -283,29 +234,27 @@ public class Unit extends MovableWorldObject {
     private int xp = 0;
 
     /**
-     * Variable registering the number of experience points of this unit that have already been used to increase
-     * its strength, agility or toughness.
+     * Variable registering the number of experience points of this unit that have already been used to increase its strength, agility or toughness.
      */
     private int xpused = 0;
 
     /**
      * Variable registering the orientation of this unit.
      */
-    private float orientation;
+    private float orientation = (float) (0.5 * Math.PI);
 
     /**
-     * Variable registering the activity of this unit which is paused but will be continued after this unit
-     * finishes its current activity.
+     * Variable registering the activity of this unit which is paused but will be continued after this unit finishes its current activity.
      */
     private IActivity pausedActivity;
 
     /**
-     * Variable registering whether this unit has a paused activity or not.
+     * Variable registering whether this unit has a paused activity.
      */
     private boolean hasPausedActivity;
 
     /**
-     * Variable registering whether this unit is carrying an object or not.
+     * Variable registering whether this unit is carrying an object.
      */
     private boolean isCarrying = false;
 
@@ -315,10 +264,15 @@ public class Unit extends MovableWorldObject {
     private InanimateMovableWorldObject carriedObject;
 
     /**
-     * Variable registering whether this unit is sprinting or not.
+     * Variable registering whether this unit is sprinting.
      */
     private boolean isSprinting = false;
 
+    /**
+     * Variable registering the time since this unit rested for the last time.
+     */
+    public double timeSinceLastRest;
+    
     /**
      * Variable registering the faction this unit belongs to.
      */
@@ -330,9 +284,9 @@ public class Unit extends MovableWorldObject {
     private Random random;
 
     /**
-     * Variable registering whether this unit is alive or not.
+     * Variable registering whether this unit is alive.
      */
-    private boolean isalive;
+    private boolean isAlive;
     
     /**
      * Variable registering the task assigned to this unit.
@@ -342,27 +296,12 @@ public class Unit extends MovableWorldObject {
     /**
      * Variable registering whether a task is assigned to this unit.
      */
-    private boolean hasTask = false;
+    private boolean hasTask = false;  
     
     /**
-     * Variable registering whether an initial weight still needs to be assigned to this unit.
+     * Variable registering whether the weight, strength, agility and toughness properties have already been assigned upon creation of this unit.
      */
-    private boolean weightUponCreation = true;
-    
-    /**
-     * Variable registering whether an initial agility still needs to be assigned to this unit.
-     */
-    private boolean agilityUponCreation = true;
-    
-    /**
-     * Variable registering whether an initial strength still needs to be assigned to this unit.
-     */
-    private boolean strengthUponCreation = true;
-    
-    /**
-     * Variable registering whether an initial toughness still needs to be assigned to this unit.
-     */
-    private boolean toughnessUponCreation = true;
+    private boolean propAssignedUponCreation = false;
     
 	/**
 	 * Constant reflecting the lowest possible value for the weight, strength, agility and toughness properties of a unit.
@@ -396,6 +335,8 @@ public class Unit extends MovableWorldObject {
 	 */
 	public static final int MAX_PROPERTY_UPON_CREATION = 100;
     
+	/* Methods */
+	
     /**
      * Return the name of this unit.
      */
@@ -491,9 +432,8 @@ public class Unit extends MovableWorldObject {
      */
     public void setWeight(int weight) {
     	int max = MAX_PROPERTY;
-    	if (weightUponCreation) {
+    	if (!propAssignedUponCreation) {
     		max = MAX_PROPERTY_UPON_CREATION;
-    		weightUponCreation = false;
     	}    
         if (isValidProperty(weight, getMinWeight(), max))
             this.weight = weight;
@@ -530,10 +470,9 @@ public class Unit extends MovableWorldObject {
     public void setStrength(int strength) {
     	int min = MIN_PROPERTY;
     	int max = MAX_PROPERTY;
-    	if (strengthUponCreation) {
+    	if (!propAssignedUponCreation) {
     		min = MIN_PROPERTY_UPON_CREATION;
     		max = MAX_PROPERTY_UPON_CREATION;
-    		strengthUponCreation = false;
     	}
         if (isValidProperty(strength, min, max))
             this.strength = strength;
@@ -570,10 +509,9 @@ public class Unit extends MovableWorldObject {
     public void setAgility(int agility) {
     	int min = MIN_PROPERTY;
     	int max = MAX_PROPERTY;
-    	if (agilityUponCreation) {
+    	if (!propAssignedUponCreation) {
     		min = MIN_PROPERTY_UPON_CREATION;
     		max = MAX_PROPERTY_UPON_CREATION;
-    		agilityUponCreation = false;
     	}    	
         if (isValidProperty(agility, min, max))
             this.agility = agility;
@@ -610,10 +548,9 @@ public class Unit extends MovableWorldObject {
     public void setToughness(int toughness) {
     	int min = MIN_PROPERTY;
     	int max = MAX_PROPERTY;
-    	if (toughnessUponCreation) {
+    	if (!propAssignedUponCreation) {
     		min = MIN_PROPERTY_UPON_CREATION;
     		max = MAX_PROPERTY_UPON_CREATION;
-    		toughnessUponCreation = false;
     	}    
         if (isValidProperty(toughness, min, max))
             this.toughness = toughness;
@@ -761,7 +698,7 @@ public class Unit extends MovableWorldObject {
      *
      * @param	activity
      * 			The activity to check.
-     * @return	Always true.
+     * @return	Always true. The activity validity is checked upon creation.
      * 		  |	result == true
      */
     @Override
@@ -869,18 +806,53 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
+     * Return whether this unit has a paused activity.
+     */
+    public boolean hasPausedActivity() {
+    	return this.hasPausedActivity;
+    }
+    
+    /**
+     * Return the paused activity of this unit.
+     */
+    public IActivity getPausedActivity() {
+    	return this.pausedActivity;
+    }
+    
+    /**
+     * Set the paused activity of this unit to the given activity.
+     * 
+     * @param  activity
+     *         The new paused activity for this unit.
+     * @post   The paused activity of this new unit is equal to the given activity.
+     *       | new.getPausedActivity() == activity
+     * @throws IllegalArgumentException
+     *         The given activity is not a valid activity for any unit.
+     *       | ! isValidActivity(getPausedActivity())
+     */
+    private void setPausedActivity(IActivity activity) throws IllegalArgumentException {
+    	if (!isValidActivity(activity))
+    		throw new IllegalArgumentException("Invalid activity");
+    	this.pausedActivity = activity;
+    	if (activity == null)
+    		this.hasPausedActivity = false;
+    	else
+    		this.hasPausedActivity = true;
+    }
+    
+    /**
      * Check whether this unit's current activity can be interrupted by the given new activity.
      *
      * @param	newActivity
      * 			The new activity for this unit.
+     * @effect	If the new activity is a defense and if the current activity is a movement or work, 
      * @return	True if and only if this unit's current activity can be interrupted by the given new activity.
      */
     private boolean interruptCurrentAct(IActivity newActivity) {
         if (!this.getActivity().canBeInterruptedBy(newActivity))
             return false;
         if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4)) {
-            this.hasPausedActivity = true;
-            this.pausedActivity = this.getActivity();
+        	this.setPausedActivity(this.getActivity());
         }
         this.setActivity(newActivity);
         return true;
@@ -894,13 +866,11 @@ public class Unit extends MovableWorldObject {
      * 			If this unit doesn't have a paused activity, its current activity is set to none.
      */
     public void activityFinished() {
-        if (this.hasPausedActivity) {
-            this.setActivity(this.pausedActivity);
-            this.hasPausedActivity = false;
-            this.pausedActivity = null;
-        } else {
+        if (this.hasPausedActivity()) {
+            this.setActivity(this.getPausedActivity());
+            this.setPausedActivity(null);
+        } else
             this.setActivity(new NoActivity());
-        }
     }
 
     /**
@@ -908,7 +878,7 @@ public class Unit extends MovableWorldObject {
      *
      * @param	targetCube
      * 			The position of the cube to let this unit work at.
-     * @effect	The unit conducts work at the given target cube.
+     * @effect	The unit conducts work at the given target cube. The current activity is set to work.
      */
     public void work(int[] targetCube) {
         Work work = new Work(this, targetCube);
@@ -920,9 +890,11 @@ public class Unit extends MovableWorldObject {
     /**
      * Let this unit attack the given unit.
      *
-     * @param defender The unit to attack.
-     * @throws IllegalArgumentException The attack cannot be conducted.
-     * @effect The unit conducts an attack against the defender and the defender conducts a defence against this unit.
+     * @param	defender
+     * 			The unit to attack.
+     * @effect	The unit conducts an attack against the defender and the defender conducts a defence against this unit.
+     * @throws	IllegalArgumentException
+     * 			The attack cannot be conducted.
      */
     public void attack(Unit defender) throws IllegalArgumentException {
         if (this.getFaction() == defender.getFaction())
@@ -963,17 +935,17 @@ public class Unit extends MovableWorldObject {
      * Return the faction of this unit.
      */
     @Basic
-    @Raw
     public Faction getFaction() {
         return this.faction;
     }
 
     /**
-     * Check whether the given faction is a valid faction for any unit.
+     * Check whether this unit can have the given faction as its faction.
      *
-     * @param faction The faction to check.
-     * @return True if and only if the given faction contains less than 50 Units.
-     * | result == (faction.getNumberOfUnits() < 50)
+     * @param	faction
+     * 			The faction to check.
+     * @return	True if and only if the given faction contains less than 50 units.
+     * 		  |	result == faction.getNumberOfUnits() < 50
      */
     boolean canHaveAsFaction(Faction faction) {
         return (faction.getNumberOfUnits() < 50);
@@ -982,18 +954,19 @@ public class Unit extends MovableWorldObject {
     /**
      * Set the faction of this unit.
      *
-     * @throws IllegalArgumentException The faction with the smallest number of Units is not a valid faction for any unit.
-     *                                  | ! canHaveAsFaction(getFaction())
-     * @effect The faction of this new unit is equal to a newly created faction if the maximum number of active
-     * factions is not reached yet, or is equal to the faction with the smallest number of Units if the
+     * @effect	The faction of this new unit is equal to a newly created faction if the maximum number of active
+     * factions is not reached yet, or is equal to the faction with the smallest number of units if the
      * maximum number of active factions has already been reached.
+     * @throws	IllegalArgumentException
+     * 			The faction with the smallest number of units is not a valid faction for this unit.
+     *		  |	! canHaveAsFaction(getFaction())
      */
     @Raw
     private void setFaction() throws IllegalArgumentException {
         if (this.getWorld().getNumberOfFactions() < 5) {
             this.faction = new Faction(this, getWorld());
         } else if (!canHaveAsFaction(this.getWorld().getSmallestFaction())) {
-            throw new IllegalArgumentException("This faction has already reached its max amount of Units.");
+            throw new IllegalArgumentException("This faction has already reached its max amount of units.");
         } else {
             this.faction = this.getWorld().getSmallestFaction();
             this.getWorld().getSmallestFaction().addUnit(this);
@@ -1003,9 +976,10 @@ public class Unit extends MovableWorldObject {
     /**
      * Let this unit deal with its damage.
      *
-     * @param damage The damage this unit is dealing with.
-     * @effect If the given number of damage points is equal or higher than this unit's hitpoints, the unit will die.
-     * Otherwise, the given number of damage points will be subtracted from this unit's hitpoints.
+     * @param	damage
+     * 			The damage to deal with.
+     * @effect	If the given number of damage points is equal or higher than this unit's hitpoints, the unit dies. Otherwise, the given number of damage points
+     * 			is subtracted from this unit's hitpoints.
      */
     public void dealDamage(double damage) {
         int intDamage = (int) Math.floor(damage);
@@ -1018,7 +992,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Let this unit die.
      *
-     * @effect This unit is unregistered, removed from its world and removed from its faction.
+     * @effect	This unit is not alive anymore, this unit is unregistered, removed from its world and removed from its faction.
      */
     private void die() {
         this.setAlive(false);
@@ -1030,7 +1004,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Return a random name.
      *
-     * @return An element supplied by a list of random names.
+     * @return	An element supplied by a list of random String names.
      */
     private String getRandomName() {
         boolean flag = random.nextBoolean();
@@ -1064,9 +1038,10 @@ public class Unit extends MovableWorldObject {
     /**
      * Check whether the given number of experience points is a valid number of experience points for any unit.
      *
-     * @param xp The number of experience points to check.
-     * @return True if and only if the number of experience points is equal or higher than zero.
-     * | result == (xp >= 0)
+     * @param	xp
+     * 			The number of experience points to check.
+     * @return	True if and only if the number of experience points is equal or higher than zero.
+     * 		  |	result == xp >= 0
      */
     private static boolean isValidXP(int xp) {
         return (xp >= 0);
@@ -1075,27 +1050,33 @@ public class Unit extends MovableWorldObject {
     /**
      * Set the number of experience points of this unit to the given number of experience points.
      *
-     * @param xp The new number of experience points for this unit.
-     * @effect If the given number of experience points is a valid number of experience points for any unit,
-     * the number of experience points of this new unit is equal to the given number of experience points.
-     * | if (isValidXP(sp))
-     * |   then new.getXP() == sp
+     * @param	xp
+     * 			The new number of experience points for this unit.
+     * @effect	If the given number of experience points is a valid number of experience points for any unit, the number of experience points of this new unit
+     * 			is equal to the given number of experience points.
+     *		  |	if (isValidXP(xp))
+     *		  |		then new.getXP() == xp
+     * @effect	The lowest of the strength, agility and toughness attributes is incremented by one.
      */
     @Raw
     private void setXP(int xp) {
         if (isValidXP(xp))
             this.xp = xp;
         int xpToUse = this.getXP() - xpused;
-        int propertyPoints = xpToUse / 10;
-        while (propertyPoints > 0) {
+        int propertyPointsToAdd = xpToUse / 10;
+        while (propertyPointsToAdd > 0) {
             if (getAgility() < getStrength()) {
-                setAgility(getAgility() + 1);
-            } else if (getToughness() < getAgility()) {
-                setAgility(getAgility() - 1);
-                setToughness(getToughness() + 1);
-            } else
-                setStrength(getStrength() + 1);
-            propertyPoints -= 1;
+                if (getToughness() < getAgility())
+                	setToughness(getToughness() + 1);
+                else
+                	setAgility(getAgility() + 1);
+            } else {
+            	if (getToughness() < getStrength()) 
+            		setToughness(getToughness() + 1);
+            	else
+            		setStrength(getStrength() + 1);
+            }	
+            propertyPointsToAdd -= 1;
             this.xpused += 10;
         }
     }
@@ -1103,8 +1084,9 @@ public class Unit extends MovableWorldObject {
     /**
      * Add the given number of experience points.
      *
-     * @param xp The number of experience points to add.
-     * @effect The given number of experience points is added to the current amount of experience points of this unit.
+     * @param	xp
+     * 			The number of experience points to add.
+     * @effect	The number of experience points of this unit is incremented by the given number of experience points.
      */
     public void addXP(int xp) {
         this.setXP(this.getXP() + xp);
@@ -1113,9 +1095,9 @@ public class Unit extends MovableWorldObject {
     /**
      * Let this unit conduct a movement to the given location.
      *
-     * @param destination The location to let this unit move to.
-     * @effect This unit conducts a movement to the given location and this unit's current activity is interrupted
-     * by the movement.
+     * @param	destination
+     * 			The location to let this unit move to.
+     * @effect	This unit moves to the given location and this unit's current activity is interrupted by the movement.
      */
     public void moveTo(int[] destination) {
         if (!this.getWorld().canHaveAsCubeLocation(destination, this))
@@ -1127,11 +1109,16 @@ public class Unit extends MovableWorldObject {
     /**
      * Let this unit move to a location in an adjacent cube.
      *
-     * @param dx The movement along the x axis to make.
-     * @param dy The movement along the y axis to make.
-     * @param dz The movement along the z axis to make.
-     * @throws IllegalLocation The intended movement is not a movement to an adjacent cube.
-     * @effect This unit moves to the adjacent cube, referred to by given dx, dy and dz.
+     * @param	dx
+     * 			The movement along the x axis to do.
+     * @param	dy
+     * 			The movement along the y axis to do.
+     * @param	dz
+     * 			The movement along the z axis to do.
+     * @effect	This unit moves to the adjacent cube, referred to by addition of given dx, dy and dz to the current position
+     * 			coordinates.
+     * @throws	IllegalLocation
+     * 			The intended movement is not a movement to an adjacent cube.
      */
     public void moveToAdjacent(int dx, int dy, int dz) throws IllegalLocation {
         if (Math.abs(dx) > 1 || Math.abs(dy) > 1 || Math.abs(dz) > 1)
@@ -1147,8 +1134,8 @@ public class Unit extends MovableWorldObject {
 
     /**
      * Let this unit rest.
-     * @effect This unit conducts an activity of resting and this unit's current activity is interrupted
-     * by the activity of resting.
+     * 
+     * @effect	This unit is resting and this unit's current activity is interrupted by the activity of resting.
      */
     public void rest() {
         Rest rest = new Rest(this);
@@ -1158,8 +1145,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether the unit is alive.
      */
-    public Boolean isAlive() {
-        return this.isalive;
+    public boolean isAlive() {
+        return this.isAlive;
     }
 
     /**
@@ -1168,14 +1155,14 @@ public class Unit extends MovableWorldObject {
      * @param  flag
      * 		   The state of being alive to be registered.
      * @post   The new state of being alive of this unit is equal to the given flag.
-     * 		 | this.isalive == flag
+     * 		 | this.isAlive == flag
      */
-    public void setAlive(Boolean flag) {
-        this.isalive = flag;
+    public void setAlive(boolean flag) {
+        this.isAlive = flag;
     }
     
     /**
-     * Return whether a task is assigned to this unit.
+     * Return whether this unit has a task.
      */
     public boolean hasTask() {
     	return hasTask;
@@ -1184,7 +1171,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the task assigned to this unit.
      */
-    public Task getAssignedTask() {
+    public Task getTask() {
     	return this.task;
     }
     
@@ -1206,30 +1193,31 @@ public class Unit extends MovableWorldObject {
      * @param  task
      *         The new task for this unit.
      * @post   The task of this new unit is equal to the given task.
-     *       | new.gettask() == task
+     *       | new.getTask() == task
      * @throws IllegalArgumentException
      *         The given task is not a valid task for any unit.
      *       | ! isValidTask(getTask())
      */
-    @Raw
     public void setTask(Task task) throws IllegalArgumentException {
-    	if (! isValidTask(task))
-    		throw new IllegalArgumentException();
+    	if (!isValidTask(task))
+    		throw new IllegalArgumentException("Invalid task");
     	this.task = task;
-    	if (task == null) {
+    	if (task == null)
     		this.hasTask = false;
-    		return;
-    	}
-    	this.hasTask = true;
+    	else
+	    	this.hasTask = true;
     }
 
     /**
      * Return whether the unit is idle.
+     * 
+     * @return	True if and only if this unit's default behavior is enabled and if it's not conducting any activity.
+     *		  |	result ==
+     *		  |		this.isDefaultBehaviorEnabled()
+     *		  |		&& (this.getActivity().getId() == 0)     
      */
-    public Boolean isIdle() {
+    public boolean isIdle() {
         return this.isDefaultBehaviorEnabled() && (this.getActivity().getId() == 0);
     }
     
 }
-
-

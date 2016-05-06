@@ -32,11 +32,15 @@ public class Facade implements IFacade {
      */
     @Override
     public Unit createUnit(String name, int[] initialPosition, int weight, int agility, int strength, int toughness,
-                           boolean enableDefaultBehavior) throws ModelException{
-        try {double[] loc=new double[]{(double) initialPosition[0],(double) initialPosition[1],(double) initialPosition[2]};
-            Unit unit= new Unit(name, loc[0],loc[1],loc[2],weight,strength,agility,toughness,enableDefaultBehavior);
-            return unit;}
-        catch (Throwable error){throw new ModelException(error);}    }
+                           boolean enableDefaultBehavior) throws ModelException {
+        try {
+        	double[] loc = new double[]{(double) initialPosition[0], (double) initialPosition[1], (double) initialPosition[2]};
+            Unit unit = new Unit(name, loc[0], loc[1], loc[2], weight, strength, agility, toughness, enableDefaultBehavior);
+            return unit;
+        } catch (Throwable error) {
+        	throw new ModelException(error);
+        }
+    }
 
 	/* Position */
     /**
@@ -66,15 +70,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public int[] getCubeCoordinate(Unit unit) throws ModelException{
-
+    public int[] getCubeCoordinate(Unit unit) throws ModelException {
         try {
-            return unit.getLocation().getCubeLocation();
-            }
-        catch (Exception error) {throw new ModelException(error);}
-
-
-
+        	return unit.getLocation().getCubeLocation();
+        } catch (Exception error) {
+        	throw new ModelException(error);
+        }
     }
 
 	/* Name */
@@ -88,14 +89,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public String getName(Unit unit) throws ModelException{
-
+    public String getName(Unit unit) throws ModelException {
         try {
-            return unit.getName();
-            }
-        catch (Exception error) {throw new ModelException(error);}
-
-
+        	return unit.getName();
+        } catch (Exception error) {
+        	throw new ModelException(error);
+        }
     }
 
     /**
@@ -110,8 +109,11 @@ public class Facade implements IFacade {
      */
     @Override
     public void setName(Unit unit, String newName) throws ModelException{
-        try {unit.setName(newName);}
-        catch (Throwable error){throw new ModelException(error);}
+        try {
+        	unit.setName(newName);
+        } catch (Throwable error) {
+        	throw new ModelException(error);
+        }
     }
 
 	/* Attributes */
@@ -126,9 +128,8 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public int getWeight(Unit unit) throws ModelException{
+    public int getWeight(Unit unit) throws ModelException {
         return unit.getWeight();
-
     }
 
     /**
@@ -142,9 +143,13 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public void setWeight(Unit unit, int newValue) throws ModelException{
-        try {unit.setWeight(newValue);}
-        catch (Throwable error){throw new ModelException(error);}    }
+    public void setWeight(Unit unit, int newValue) throws ModelException {
+        try {
+        	unit.setWeight(newValue);
+        } catch (Throwable error) {
+        	throw new ModelException(error);
+        }
+    }
 
     /**
      * Return the strength attribute of the given unit.
@@ -156,7 +161,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public int getStrength(Unit unit) throws ModelException{
+    public int getStrength(Unit unit) throws ModelException {
         return unit.getStrength();
     }
 
@@ -172,8 +177,12 @@ public class Facade implements IFacade {
      */
     @Override
     public void setStrength(Unit unit, int newValue) throws ModelException{
-        try {unit.setStrength(newValue);}
-        catch (Throwable error){throw new ModelException(error);}    }
+        try {
+        	unit.setStrength(newValue);
+        } catch (Throwable error) {
+        	throw new ModelException(error);
+        }
+    }
 
     /**
      * Return the agility attribute of the given unit.
@@ -185,7 +194,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public int getAgility(Unit unit) throws ModelException{
+    public int getAgility(Unit unit) throws ModelException {
         return unit.getAgility();
     }
 
@@ -201,8 +210,11 @@ public class Facade implements IFacade {
      */
     @Override
     public void setAgility(Unit unit, int newValue) throws ModelException{
-        try {unit.setAgility(newValue);}
-        catch (Throwable error){throw new ModelException(error);}
+        try {
+        	unit.setAgility(newValue);
+        } catch (Throwable error) {
+        	throw new ModelException(error);
+        }
     }
 
     /**
@@ -215,7 +227,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public int getToughness(Unit unit) throws ModelException{
+    public int getToughness(Unit unit) throws ModelException {
         return unit.getToughness();
     }
 
@@ -232,8 +244,11 @@ public class Facade implements IFacade {
      */
     @Override
     public void setToughness(Unit unit, int newValue) throws ModelException{
-        try {unit.setToughness(newValue);}
-        catch (Throwable error){throw new ModelException(error);}
+        try {
+        	unit.setToughness(newValue);
+        } catch (Throwable error) {
+        	throw new ModelException(error);
+        }
     }
 
 	/* Points */
@@ -248,7 +263,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public int getMaxHitPoints(Unit unit) throws ModelException{
+    public int getMaxHitPoints(Unit unit) throws ModelException {
         return unit.getMaxPoints();
 
     }
@@ -263,7 +278,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public int getCurrentHitPoints(Unit unit) throws ModelException{
+    public int getCurrentHitPoints(Unit unit) throws ModelException {
         return unit.getCurrentHitPoints();
     }
 
@@ -278,7 +293,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public int getMaxStaminaPoints(Unit unit) throws ModelException{
+    public int getMaxStaminaPoints(Unit unit) throws ModelException {
         return unit.getMaxPoints();
     }
 
@@ -293,7 +308,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public int getCurrentStaminaPoints(Unit unit) throws ModelException{
+    public int getCurrentStaminaPoints(Unit unit) throws ModelException {
         return unit.getCurrentStaminaPoints();
     }
 
@@ -311,10 +326,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public void advanceTime(Unit unit, double dt) throws ModelException{
-        try { unit.advanceTime(dt);}
-        catch (Throwable error){throw new ModelException(error);}
-
+    public void advanceTime(Unit unit, double dt) throws ModelException {
+        try {
+        	unit.advanceTime(dt);
+        } catch (Throwable error) {
+        	throw new ModelException(error);
+        }
     }
 
 	/* Basic movement */
@@ -337,14 +354,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public void moveToAdjacent(Unit unit, int dx, int dy, int dz) throws ModelException{
+    public void moveToAdjacent(Unit unit, int dx, int dy, int dz) throws ModelException {
         try {
             unit.moveToAdjacent(dx,dy,dz);
-            }
-        catch (Exception error) {throw new ModelException(error);}
-
-
-
+        } catch (Exception error) {
+        	throw new ModelException(error);
+        }
     }
 
     /**
@@ -357,8 +372,8 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public double getCurrentSpeed(Unit unit) throws ModelException{
-        return (1.5*(unit.getStrength()+unit.getAgility())/(2*unit.getWeight()));
+    public double getCurrentSpeed(Unit unit) throws ModelException {
+        return (1.5 * (unit.getStrength() + unit.getAgility()) / (2 * unit.getWeight()));
     }
 
     /**
@@ -371,8 +386,8 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public boolean isMoving(Unit unit) throws ModelException{
-        return (unit.getActivity().getId()     == 3);
+    public boolean isMoving(Unit unit) throws ModelException {
+        return (unit.getActivity().getId() == 3);
     }
 
     /**
@@ -384,9 +399,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public void startSprinting(Unit unit) throws ModelException{
-        try {unit.setSprinting(true);}
-        catch (Throwable error){throw new ModelException(error);}
+    public void startSprinting(Unit unit) throws ModelException {
+        try {
+        	unit.setSprinting(true);
+        } catch (Throwable error) {
+        	throw new ModelException(error);
+        }
     }
 
     /**
@@ -398,11 +416,13 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public void stopSprinting(Unit unit) throws ModelException{
-        try {unit.setSprinting(false);}
-        catch (Throwable error){throw new ModelException(error);}
+    public void stopSprinting(Unit unit) throws ModelException {
+        try {
+        	unit.setSprinting(false);
+        } catch (Throwable error) {
+        	throw new ModelException(error);
+        }
     }
-
 
     /**
      * Return whether the given unit is currently sprinting.
@@ -414,7 +434,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public boolean isSprinting(Unit unit) throws ModelException{
+    public boolean isSprinting(Unit unit) throws ModelException {
         return unit.isSprinting();
     }
 
@@ -430,7 +450,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public double getOrientation(Unit unit) throws ModelException{
+    public double getOrientation(Unit unit) throws ModelException {
         return unit.getOrientation();
     }
 
@@ -448,12 +468,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public void moveTo(Unit unit, int[] cube) throws ModelException{
+    public void moveTo(Unit unit, int[] cube) throws ModelException {
         try {
             unit.moveTo(cube);
-            }
-        catch (Exception error) {throw new ModelException(error);}
-
+        } catch (Exception error) {
+        	throw new ModelException(error);
+        }
     }
 
 	/* Working */
@@ -467,11 +487,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public void work(Unit unit) throws ModelException{
+    public void work(Unit unit) throws ModelException {
         try {
-            unit.work(new int[]{0,0,0});
-            }
-        catch (Exception error) {throw new ModelException(error);}
+            unit.work(new int[]{0, 0, 0});
+        } catch (Exception error) {
+        	throw new ModelException(error);
+        }
     }
 
     /**
@@ -484,12 +505,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public boolean isWorking(Unit unit) throws ModelException{
+    public boolean isWorking(Unit unit) throws ModelException {
         try {
-            return (unit.getActivity().getId()     == 4);
-            }
-        catch (Exception error) {throw new ModelException(error);}
-
+            return (unit.getActivity().getId() == 4);
+        } catch (Exception error) {
+        	throw new ModelException(error);
+        }
     }
 
 	/* Attacking */
@@ -508,8 +529,9 @@ public class Facade implements IFacade {
     public void fight(Unit attacker, Unit defender) throws ModelException{
         try {
             attacker.attack(defender);
+        } catch (Throwable error) {
+        	throw new ModelException(error);
         }
-        catch (Throwable error){throw new ModelException(error);}
     }
 
     /**
@@ -526,9 +548,9 @@ public class Facade implements IFacade {
     public boolean isAttacking(Unit unit) throws ModelException{
         try {
             return (unit.getActivity().getId()     == 1);
-            }
-        catch (Exception error) {throw new ModelException(error);}
-
+        } catch (Exception error) {
+        	throw new ModelException(error);
+        }
     }
 
 	/* Resting */
@@ -542,11 +564,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public void rest(Unit unit) throws ModelException{
+    public void rest(Unit unit) throws ModelException {
         try {
             unit.rest();
-            }
-        catch (Exception error) {throw new ModelException(error);}
+        } catch (Exception error) {
+        	throw new ModelException(error);
+        }
     }
 
     /**
@@ -559,13 +582,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public boolean isResting(Unit unit) throws ModelException{
+    public boolean isResting(Unit unit) throws ModelException {
         try {
-            return (unit.getActivity().getId()     ==       5);
+            return (unit.getActivity().getId() == 5);
+        } catch (Exception error) {
+        	throw new ModelException(error);
         }
-            catch (Exception error) {throw new ModelException(error);}
-
-
     }
 
 	/* Default behavior */
@@ -582,11 +604,12 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public void setDefaultBehaviorEnabled(Unit unit, boolean value) throws ModelException{
+    public void setDefaultBehaviorEnabled(Unit unit, boolean value) throws ModelException {
         try {
             unit.setDefaultBehavior(value);
-            }
-        catch (Exception error) {throw new ModelException(error);}
+        } catch (Exception error) {
+        	throw new ModelException(error);
+        }
     }
 
     /**
@@ -599,7 +622,7 @@ public class Facade implements IFacade {
      *             A precondition was violated or an exception was thrown.
      */
     @Override
-    public boolean isDefaultBehaviorEnabled(Unit unit) throws ModelException{
+    public boolean isDefaultBehaviorEnabled(Unit unit) throws ModelException {
         return unit.isDefaultBehaviorEnabled();
     }
 }
