@@ -195,8 +195,7 @@ public class World {
      */
     private void replace(CubeWorldObject cube, int[] location) {
         if (Math.random() <= 0.25) {
-            Rock rock = new Rock();
-            if (cube.getClass() == rock.getClass()) {
+            if (cube.getClass() == Rock.class) {
                 new Boulder((double) location[0] + 0.5, (double) location[1] + 0.5, (double) location[2] + 0.5, this);
             } else {
                 new Log((double) location[0] + 0.5, (double) location[1] + 0.5, (double) location[2] + 0.5, this);
