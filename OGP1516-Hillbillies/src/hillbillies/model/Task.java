@@ -4,8 +4,10 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,6 +42,10 @@ public class Task implements Comparable {
 
 		this.SchedulerSet = new HashSet<>();
 		this.addScheduler(scheduler);
+		
+		Map<String, int[]> locGlabalMap = new HashMap<>();
+		Map<String, Boolean> booleanGlobalMap = new HashMap<>();
+		Map<String, Unit> unitGlobalMap = new HashMap<>();
 	}
 	
 	/**
@@ -75,7 +81,7 @@ public class Task implements Comparable {
 	private Statement rootStatement;
 	private boolean isBeingExecuted;
 	private boolean isExecuted;
-
+		
 	public boolean isBeingExecuted() {
 		return isBeingExecuted;
 	}

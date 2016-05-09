@@ -33,9 +33,14 @@ public class ActionStatement extends Statement {
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit=executor.getExecutor();
             if (! beingExcecuted)
-            	unit.moveTo(argExpr1.value(ActionStatement.this.executor));
+            	unit.moveTo(argExpr1.value(ActionStatement.this.executingUnit));
             //TODO: keep information about the completion of this statement
         }
+        
+        boolean singular() {
+        	return false;
+        }
+        
     }
     
     // work e
@@ -50,8 +55,12 @@ public class ActionStatement extends Statement {
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit=executor.getExecutor();
-            unit.work(argExpr1.value(ActionStatement.this.executor));
+            unit.work(argExpr1.value(ActionStatement.this.executingUnit));
             //TODO: keep information about the completion of this statement
+        }
+        
+        boolean singular() {
+        	return false;
         }
         
     }
@@ -72,6 +81,10 @@ public class ActionStatement extends Statement {
             // TODO: keep information about the completion of this statement
         }
         
+        boolean singular() {
+        	return false;
+        }
+        
     }
     
     // attack e
@@ -86,8 +99,12 @@ public class ActionStatement extends Statement {
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit=executor.getExecutor();
-            unit.attack(argExpr1.value(ActionStatement.this.executor));
+            unit.attack(argExpr1.value(ActionStatement.this.executingUnit));
             //TODO: keep information about the completion of this statement
+        }
+        
+        boolean singular() {
+        	return false;
         }
         
     }

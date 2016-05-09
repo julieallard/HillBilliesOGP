@@ -11,25 +11,26 @@ import hillbillies.model.exceptions.SyntaxError;
 import java.util.List;
 
 public class Statement {
+	
     public Statement(Task task) {
         this.beingExcecuted = false;
         this.executed = false;
         this.task = task;
     }
+    
     public Statement encapsulatingStatement;
     protected boolean beingExcecuted;
     protected boolean executed;
     public Task task;
-    public Unit executor;
+    public Unit executingUnit;
     private PartStatement partStatement;
 
-    public boolean mustBecompletedInOneExecution(){
+    public boolean mustBeCompletedInOneExecution() {
         return this.partStatement.singular();
     }
 
-
     public void execute(ProgramExecutor executor) throws SyntaxError {
-        this.executor = executor.getExecutor();
+        this.executingUnit = executor.getExecutor();
         executor.updateCallStackWith(this);
         this.partStatement.execute(executor);
     }
@@ -57,11 +58,9 @@ public class Statement {
         private final String variableName;
         private final Expression value;
 
-
-
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
-            Unit unit=executor.getExecutor();
+            Unit unit = executor.getExecutor();
             if (value instanceof BooleanExpression) {
                 boolean booleanVar = ((BooleanExpression) value).value(unit);
             } else if (value instanceof PositionExpression) {
@@ -94,13 +93,15 @@ public class Statement {
 
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
-            Unit unit=executor.getExecutor();
+            Unit unit = executor.getExecutor();
             if (!conditionEvaluated) {
                 flag = condition.value(unit);
                 conditionEvaluated = true;
             }
-            while (flag)
+            while (flag) {
                 body.execute(executor);
+            	flag =;
+            }
         }
         @Override
         boolean singular() {
@@ -124,7 +125,7 @@ public class Statement {
 
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
-            Unit unit=executor.getExecutor();
+            Unit unit = executor.getExecutor();
             if (!conditionEvaluated) {
                 flag = condition.value(unit);
                 conditionEvaluated = true;
@@ -160,7 +161,7 @@ public class Statement {
         public void execute(ProgramExecutor executor) throws SyntaxError {
             if (statementList.size() == 0)
                 throw new SyntaxError("The list of statements is empty.");
-            for (Statement statement : statementList)
+            for (Statement statement: statementList)
                 statement.execute(executor);
         }
 

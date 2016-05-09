@@ -172,4 +172,13 @@ public class BooleanExpression extends Expression {
         
     }
     
+    // read and assign in statement
+    public class BooleanReadPartExpression extends BooleanPartExpression {
+    	
+    	public BooleanReadPartExpression(BooleanExpression arg) {
+    		
+    	}
+    	
+    }
+    
 }
