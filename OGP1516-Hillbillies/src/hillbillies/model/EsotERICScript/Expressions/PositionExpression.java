@@ -1,11 +1,12 @@
 package hillbillies.model.EsotERICScript.Expressions;
 
 import hillbillies.model.Unit;
-import hillbillies.model.World;
-import hillbillies.model.CubeObjects.Workshop;
 import hillbillies.model.exceptions.SyntaxError;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 public class PositionExpression extends Expression {
 
@@ -136,6 +137,24 @@ public class PositionExpression extends Expression {
             return arg1.value(executor).getLocation().getCubeLocation();
         }
 
+    }
+
+
+    public class PositionReadPartExpression extends PosHerePartExpression {
+
+        public void setKeynMap(String key, Map<String, int[]> map) throws SyntaxError {
+            this.key = key;
+            this.usedMap = map;
+        }
+
+        private String key;
+
+        private Map<String, int[]> usedMap;
+
+        @Override
+        public int[] getValue() throws SyntaxError {
+            return this.usedMap.get(key);
+        }
     }
     
     // TODO: 29/04/16 selected

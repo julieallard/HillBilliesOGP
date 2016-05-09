@@ -4,11 +4,7 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A class of Tasks.
@@ -261,19 +257,20 @@ public class Task implements Comparable {
 	}
 
 	public void advanceTime(double dt) {
-    }
 
+    }
     public void forceExcecuteComplete(){
         while (!this.isExecuted()){
             this.advanceTime(0.2);
             try{Thread.sleep(500);}
             catch (InterruptedException exception){
                 System.out.println("Somehow The application was multithreading "+"\n"+
-                        "this really really shouldn't happen");
+                        "this really really really shouldn't happen");
                 throw new RuntimeException(exception);
             }
         }
     }
+
 
 
 }

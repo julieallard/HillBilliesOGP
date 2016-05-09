@@ -1,10 +1,11 @@
 package hillbillies.model.EsotERICScript.Expressions;
 
-import java.util.List;
-
 import hillbillies.model.Faction;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
+
+import java.util.List;
+import java.util.Map;
 
 public class UnitExpression extends Expression {
 	
@@ -98,6 +99,23 @@ public class UnitExpression extends Expression {
             return task.world.getUnitsAt(loc).get(0);
         }
         
+    }
+
+    public class UnitReadPartExpression extends UnitPartExpression {
+
+        public void setKeynMap(String key, Map<String, Unit> map) throws SyntaxError {
+            this.key = key;
+            this.usedMap = map;
+        }
+
+        private String key;
+
+        private Map<String, Unit> usedMap;
+
+        @Override
+        public Unit getValue() throws SyntaxError {
+            return this.usedMap.get(key);
+        }
     }
     
 }

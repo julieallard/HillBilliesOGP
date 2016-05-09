@@ -1,8 +1,8 @@
 package hillbillies.part3.programs;
 
-import java.util.List;
-
 import hillbillies.tests.facade.Part3TestPartial;
+
+import java.util.List;
 
 /**
  * A task factory is used by the parser ({@link TaskParser}) to construct an
