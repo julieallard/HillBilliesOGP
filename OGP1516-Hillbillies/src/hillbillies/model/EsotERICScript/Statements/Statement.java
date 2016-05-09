@@ -11,21 +11,22 @@ import hillbillies.model.exceptions.SyntaxError;
 import java.util.List;
 
 public class Statement {
-
     public Statement(Task task) {
         this.beingExcecuted = false;
         this.executed = false;
         this.task = task;
     }
-
     public Statement encapsulatingStatement;
-
     protected boolean beingExcecuted;
     protected boolean executed;
-
     public Task task;
     public Unit executor;
     private PartStatement partStatement;
+
+    public boolean mustBecompletedInOneExecution(){
+        return this.partStatement.singular();
+    }
+
 
     public void execute(ProgramExecutor executor) throws SyntaxError {
         this.executor = executor.getExecutor();
@@ -56,6 +57,8 @@ public class Statement {
         private final String variableName;
         private final Expression value;
 
+
+
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit=executor.getExecutor();
@@ -67,6 +70,11 @@ public class Statement {
                 Unit unitVar = ((UnitExpression) value).value(unit);
             }
 
+        }
+
+        @Override
+        boolean singular() {
+            return true;
         }
 
     }
@@ -94,12 +102,14 @@ public class Statement {
             while (flag)
                 body.execute(executor);
         }
-
+        @Override
+        boolean singular() {
+            return false;
+        }
     }
 
     // if e then s [ else s ] fi
     class IfPartStatement extends PartStatement {
-
         public IfPartStatement(BooleanExpression condition, Statement ifPart, Statement elsePart) {
             this.condition = condition;
             this.ifPart = ifPart;
@@ -123,6 +133,10 @@ public class Statement {
                 ifPart.execute(executor);
             else
                 elsePart.execute(executor);
+        }
+        @Override
+        boolean singular() {
+            return true;
         }
 
     }
@@ -148,6 +162,11 @@ public class Statement {
                 throw new SyntaxError("The list of statements is empty.");
             for (Statement statement : statementList)
                 statement.execute(executor);
+        }
+
+        @Override
+        boolean singular() {
+            return false;
         }
 
     }

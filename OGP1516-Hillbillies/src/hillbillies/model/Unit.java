@@ -797,7 +797,7 @@ public class Unit extends MovableWorldObject {
     public void advanceTime(double dt) {
         this.timeSinceLastRest = this.timeSinceLastRest + dt;
         if (this.timeSinceLastRest >= 300) {
-            boolean flag = this.interruptCurrentAct(new Rest(this));
+            boolean flag = this.interrupt(new Rest(this));
             if (flag) this.timeSinceLastRest = 0;
         }
         if (this.getActivity().getId() == 0 && isDefaultBehaviorEnabled())
@@ -869,7 +869,9 @@ public class Unit extends MovableWorldObject {
      * @effect	If the new activity is a defense and if the current activity is a movement or work, 
      * @return	True if and only if this unit's current activity can be interrupted by the given new activity.
      */
-    private boolean interruptCurrentAct(IActivity newActivity) {
+    private boolean interrupt(IActivity newActivity) {
+
+        // TODO: 9/05/16 dis shit, tied up in the clusterfuck that is out execution engine;
         if (!this.getActivity().canBeInterruptedBy(newActivity))
             return false;
         if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4)) {
@@ -903,7 +905,7 @@ public class Unit extends MovableWorldObject {
      */
     public void work(int[] targetCube) {
         Work work = new Work(this, targetCube);
-        if (!interruptCurrentAct(work))
+        if (!interrupt(work))
             return;
         this.setActivity(work);
     }
@@ -946,7 +948,7 @@ public class Unit extends MovableWorldObject {
         if (defender.getActivity().getId() == 6)
             throw new IllegalArgumentException("Units cannot attack other Units that are falling.");
         Attack attack = new Attack(this, defender);
-        if (!this.interruptCurrentAct(attack))
+        if (!this.interrupt(attack))
             return;
         this.setActivity(attack);
         defender.setActivity(new Defend(defender, this));
@@ -1139,7 +1141,7 @@ public class Unit extends MovableWorldObject {
         if (!this.getWorld().canHaveAsCubeLocation(destination, this))
             return;
         Movement movement = new Movement(this, destination);
-        interruptCurrentAct(movement);
+        interrupt(movement);
     }
 
     /**
@@ -1175,7 +1177,7 @@ public class Unit extends MovableWorldObject {
      */
     public void rest() {
         Rest rest = new Rest(this);
-        interruptCurrentAct(rest);
+        interrupt(rest);
     }
 
     /**

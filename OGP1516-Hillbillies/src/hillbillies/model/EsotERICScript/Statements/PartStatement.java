@@ -14,4 +14,6 @@ public abstract class PartStatement {
 
     Statement argStat2;
 
+    abstract boolean singular();
+
 }
