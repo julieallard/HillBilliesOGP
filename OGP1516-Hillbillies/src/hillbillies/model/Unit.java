@@ -1090,16 +1090,36 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Return the experience points of this unit.
+     * Return the number of experience points of this unit that have already been used to increase its strength, agility or toughness.
      */
     private int getXPUsed() {
     	return this.xpused;
     }
     
+    /**
+     * Check whether the given number of experience points of this unit that have already been used to increase its strength, agility or toughness
+     * is a valid number of used experience points for any unit.
+     *
+     * @param	xpused
+     * 			The number of used experience points to check.
+     * @return	True if and only if the number of used experience points is divisible by 10.
+     * 		  |	result == (xpused / 10 == 0)
+     */
     private static boolean isValidXPUsed(int xpused) {
     	return (xpused / 10 == 0);
     }
     
+    /**
+     * Set the number of experience points of this unit that have already been used to increase its strength, agility or toughness to the given number of used
+     * experience points.
+     *
+     * @param	xpused
+     * 			The new number of used experience points for this unit.
+     * @effect	If the given number of used experience points is a valid number of used experience points for any unit, the number of used experience points
+     * 			of this new unit is equal to the given number of used experience points.
+     *		  |	if (isValidXPUsed(xpused))
+     *		  |		then new.getXPUsed() == xpused
+     */
     private void setXPUsed(int xpused) {
     	if (isValidXPUsed(xpused))
     		this.xpused = xpused;
