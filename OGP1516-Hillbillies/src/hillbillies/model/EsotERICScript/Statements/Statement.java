@@ -30,7 +30,7 @@ public class Statement {
     }
 
     public void execute(ProgramExecutor executor) throws SyntaxError {
-        this.executingUnit = executor.getExecutor();
+        this.executingUnit = executor.getExecutingUnit();
         executor.updateCallStackWith(this);
         this.partStatement.execute(executor);
     }
@@ -50,6 +50,7 @@ public class Statement {
     // TODO: name the variable by given string
     class AssignmentPartStatement extends PartStatement {
 
+
         public AssignmentPartStatement(String variableName, Expression value) {
             this.variableName = variableName;
             this.value = value;
@@ -60,13 +61,13 @@ public class Statement {
 
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
-            Unit unit = executor.getExecutor();
+            Unit unit = executor.getExecutingUnit();
             if (value instanceof BooleanExpression) {
-                boolean booleanVar = ((BooleanExpression) value).value(unit);
+                task.booleanGlobalMap.put(variableName,(Boolean) value.value(unit));
             } else if (value instanceof PositionExpression) {
-                int[] intVar = ((PositionExpression) value).value(unit);
+                task.positionGlabalMap.put(variableName,(int[]) value.value(unit));
             } else if (value instanceof UnitExpression) {
-                Unit unitVar = ((UnitExpression) value).value(unit);
+                task.unitGlobalMap.put(variableName,(Unit) value.value(unit));
             }
 
         }
@@ -93,7 +94,7 @@ public class Statement {
 
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
-            Unit unit = executor.getExecutor();
+            Unit unit = executor.getExecutingUnit();
             if (!conditionEvaluated) {
                 flag = condition.value(unit);
                 conditionEvaluated = true;
@@ -125,7 +126,7 @@ public class Statement {
 
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
-            Unit unit = executor.getExecutor();
+            Unit unit = executor.getExecutingUnit();
             if (!conditionEvaluated) {
                 flag = condition.value(unit);
                 conditionEvaluated = true;

@@ -28,7 +28,7 @@ public class ProgramExecutor {
         return this;
     }
 
-    public Unit getExecutor() {
+    public Unit getExecutingUnit() {
         return executor;
     }
 

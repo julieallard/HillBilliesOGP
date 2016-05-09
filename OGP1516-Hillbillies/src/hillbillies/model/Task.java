@@ -35,14 +35,16 @@ public class Task implements Comparable {
 	public Task(String name, int priority, Scheduler scheduler) {
 		this.name = name;
 		this.setPriority(priority);
-
 		this.SchedulerSet = new HashSet<>();
 		this.addScheduler(scheduler);
-		
-		Map<String, int[]> locGlabalMap = new HashMap<>();
-		Map<String, Boolean> booleanGlobalMap = new HashMap<>();
-		Map<String, Unit> unitGlobalMap = new HashMap<>();
+		this.positionGlabalMap = new HashMap<>();
+        this.booleanGlobalMap = new HashMap<>();
+		this.unitGlobalMap = new HashMap<>();
 	}
+
+    public Map<String, int[]> positionGlabalMap;
+    public Map<String, Boolean> booleanGlobalMap;
+    public Map<String, Unit> unitGlobalMap;
 	
 	/**
 	 * Initialize this new Task with given name, given priority and given scheduler.

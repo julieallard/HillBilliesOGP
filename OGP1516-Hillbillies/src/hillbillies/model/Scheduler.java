@@ -148,7 +148,7 @@ public class Scheduler {
 	}
 	
 	public void resetMarking(Task task) {
-//		task.getExecutor()....... 
+//		task.getExecutingUnit().......
 //		TODO: nie affff
 		task.getExecutor().setHasTask(false);
 		task.getExecutor().setTask(null);
