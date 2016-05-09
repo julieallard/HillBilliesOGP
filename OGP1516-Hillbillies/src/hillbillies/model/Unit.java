@@ -156,7 +156,6 @@ public class Unit extends MovableWorldObject {
      * | this.setWorld(world)
      */
     public Unit(World world, boolean enableDefaultBehavior) {
-        Random random = new Random();
         String name = getRandomName();
         this.setName(name);
         int randomWeight = random.nextInt(76) + 25;
@@ -212,6 +211,11 @@ public class Unit extends MovableWorldObject {
      * Variable registering the toughness of this unit.
      */
     private int toughness;
+    
+    /**
+     * Variable registering whether the weight, strength, agility and toughness properties have already been assigned upon creation of this unit.
+     */
+    private boolean propAssignedUponCreation = false;
 
     /**
      * Variable registering the state of default behavior of this unit.
@@ -229,29 +233,9 @@ public class Unit extends MovableWorldObject {
     private int staminapoints = getMaxPoints();
 
     /**
-     * Variable registering the experience points of this unit.
-     */
-    private int xp = 0;
-
-    /**
-     * Variable registering the number of experience points of this unit that have already been used to increase its strength, agility or toughness.
-     */
-    private int xpused = 0;
-
-    /**
      * Variable registering the orientation of this unit.
      */
     private float orientation = (float) (0.5 * Math.PI);
-
-    /**
-     * Variable registering the activity of this unit which is paused but will be continued after this unit finishes its current activity.
-     */
-    private IActivity pausedActivity;
-
-    /**
-     * Variable registering whether this unit has a paused activity.
-     */
-    private boolean hasPausedActivity;
 
     /**
      * Variable registering whether this unit is carrying an object.
@@ -272,6 +256,16 @@ public class Unit extends MovableWorldObject {
      * Variable registering the time since this unit rested for the last time.
      */
     public double timeSinceLastRest;
+
+    /**
+     * Variable registering the activity of this unit which is paused but will be continued after this unit finishes its current activity.
+     */
+    private IActivity pausedActivity;
+
+    /**
+     * Variable registering whether this unit has a paused activity.
+     */
+    private boolean hasPausedActivity;
     
     /**
      * Variable registering the faction this unit belongs to.
@@ -281,7 +275,17 @@ public class Unit extends MovableWorldObject {
     /**
      * Object holding the random generator used during the random cration of the unit.
      */
-    private Random random;
+    private Random random = new Random();
+    
+    /**
+     * Variable registering the experience points of this unit.
+     */
+    private int xp = 0;
+
+    /**
+     * Variable registering the number of experience points of this unit that have already been used to increase its strength, agility or toughness.
+     */
+    private int xpused = 0;
 
     /**
      * Variable registering whether this unit is alive.
@@ -297,11 +301,6 @@ public class Unit extends MovableWorldObject {
      * Variable registering whether a task is assigned to this unit.
      */
     private boolean hasTask = false;  
-    
-    /**
-     * Variable registering whether the weight, strength, agility and toughness properties have already been assigned upon creation of this unit.
-     */
-    private boolean propAssignedUponCreation = false;
     
 	/**
 	 * Constant reflecting the lowest possible value for the weight, strength, agility and toughness properties of a unit.
@@ -403,7 +402,7 @@ public class Unit extends MovableWorldObject {
     @Override
     public int getWeight() {
         if (isCarrying())
-            return this.weight + carriedObject.getWeight();
+            return this.weight + this.carriedObject.getWeight();
         return this.weight;
     }
     
@@ -694,23 +693,31 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Check whether the given activity is a valid activity for any unit.
-     *
-     * @param	activity
-     * 			The activity to check.
-     * @return	Always true. The activity validity is checked upon creation.
-     * 		  |	result == true
-     */
-    @Override
-    public boolean isValidActivity(IActivity activity) {
-        return true;
-    }
-
-    /**
      * Return whether the unit is carrying an object.
      */
     public boolean isCarrying() {
-        return isCarrying;
+        return this.isCarrying;
+    }
+    
+    /**
+     * Set the state of carrying of this unit according to the given flag.
+     *
+     * @param	flag
+     * 			The carrying state to be registered.
+     * @post	The new carrying state of this unit is equal to the given flag.
+     * 		  |	new.isCarrying == flag
+     */
+    private void setCarrying(boolean flag) {
+    	this.isCarrying = flag;
+    }
+    
+    /**
+     * Check whether the given object can be carried by this unit.
+     *
+     * @return	True if and only if this unit is not already carrying an object.
+     */
+    private boolean canCarry() {
+        return !this.isCarrying();
     }
 
     /**
@@ -718,6 +725,18 @@ public class Unit extends MovableWorldObject {
      */
     public InanimateMovableWorldObject getCarriedObject() {
         return this.carriedObject;
+    }
+    
+    /**
+     * Set the object this unit is carrying to the given object.
+     *
+     * @param	object
+     * 			The new object this unit is carrying.
+     * @post	The object this unit is carrying is equal to the given object.
+     *		  | new.getCarriedObject() == object
+     */
+    private void setCarriedObject(InanimateMovableWorldObject object) {
+    	this.carriedObject = object;
     }
 
     /**
@@ -732,23 +751,12 @@ public class Unit extends MovableWorldObject {
      *		  |	! canBeCarried(getCarriedObject())
      */
     public void carry(InanimateMovableWorldObject objectToBeCarried) throws IllegalArgumentException {
-        if (canBeCarried(objectToBeCarried)) {
-            this.carriedObject = objectToBeCarried;
-            this.isCarrying = true;
+        if (canCarry()) {
+            this.setCarriedObject(objectToBeCarried);
+            this.setCarrying(true);
             objectToBeCarried.unregister();
         } else
             throw new IllegalArgumentException("This object cannot be carried.");
-    }
-
-    /**
-     * Check whether the given object can be carried by this unit.
-     *
-     * @param	object
-     * 			The object to check.
-     * @return	True if and only if this unit is not already carrying an object.
-     */
-    private boolean canBeCarried(InanimateMovableWorldObject object) {
-        return !this.isCarrying();
     }
 
     /**
@@ -760,8 +768,8 @@ public class Unit extends MovableWorldObject {
      * @effect	The given object's location is set to this unit's location.
      */
     public void drop(InanimateMovableWorldObject carriedObject) {
-        this.carriedObject = null;
-        this.isCarrying = false;
+        this.setCarriedObject(null);
+        this.setCarrying(false);
         double[] locArray = this.getLocation().getArray();
         carriedObject.setLocation(locArray);
     }
@@ -820,6 +828,19 @@ public class Unit extends MovableWorldObject {
     }
     
     /**
+     * Check whether the given activity is a valid activity for any unit.
+     *
+     * @param	activity
+     * 			The activity to check.
+     * @return	Always true. The activity validity is checked upon creation.
+     * 		  |	result == true
+     */
+    @Override
+    public boolean isValidActivity(IActivity activity) {
+        return true;
+    }
+    
+    /**
      * Set the paused activity of this unit to the given activity.
      * 
      * @param  activity
@@ -834,7 +855,7 @@ public class Unit extends MovableWorldObject {
     	if (!isValidActivity(activity))
     		throw new IllegalArgumentException("Invalid activity");
     	this.pausedActivity = activity;
-    	if (activity == null)
+    	if (activity instanceof NoActivity)
     		this.hasPausedActivity = false;
     	else
     		this.hasPausedActivity = true;
@@ -868,7 +889,7 @@ public class Unit extends MovableWorldObject {
     public void activityFinished() {
         if (this.hasPausedActivity()) {
             this.setActivity(this.getPausedActivity());
-            this.setPausedActivity(null);
+            this.setPausedActivity(new NoActivity());
         } else
             this.setActivity(new NoActivity());
     }
@@ -1030,7 +1051,6 @@ public class Unit extends MovableWorldObject {
      * Return the experience points of this unit.
      */
     @Basic
-    @Raw
     public int getXP() {
         return this.xp;
     }
@@ -1062,7 +1082,7 @@ public class Unit extends MovableWorldObject {
     private void setXP(int xp) {
         if (isValidXP(xp))
             this.xp = xp;
-        int xpToUse = this.getXP() - xpused;
+        int xpToUse = this.getXP() - this.getXPUsed();
         int propertyPointsToAdd = xpToUse / 10;
         while (propertyPointsToAdd > 0) {
             if (getAgility() < getStrength()) {
@@ -1077,10 +1097,26 @@ public class Unit extends MovableWorldObject {
             		setStrength(getStrength() + 1);
             }	
             propertyPointsToAdd -= 1;
-            this.xpused += 10;
+            this.setXPUsed(this.getXPUsed() + 10);
         }
     }
 
+    /**
+     * Return the experience points of this unit.
+     */
+    private int getXPUsed() {
+    	return this.xpused;
+    }
+    
+    private static boolean isValidXPUsed(int xpused) {
+    	return (xpused / 10 == 0);
+    }
+    
+    private void setXPUsed(int xpused) {
+    	if (isValidXPUsed(xpused))
+    		this.xpused = xpused;
+    }
+    
     /**
      * Add the given number of experience points.
      *
