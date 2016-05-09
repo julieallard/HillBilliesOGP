@@ -4,7 +4,6 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +37,7 @@ public class Task implements Comparable {
 	public Task(String name, int priority, Scheduler scheduler) {
 		this.name = name;
 		this.setPriority(priority);
-		this.StatementList = new ArrayList<>();
+
 		this.SchedulerSet = new HashSet<>();
 		this.addScheduler(scheduler);
 	}
@@ -62,11 +61,37 @@ public class Task implements Comparable {
 	public Task(String name, int priority, List<Scheduler> schedulerList) {
 		this.name = name;
 		this.setPriority(priority);
-		this.StatementList = new ArrayList<>();
 		this.SchedulerSet = new HashSet<>();
 		this.addScheduler(schedulerList);
 	}
-	
+	public Statement getRootStatement() {
+		return rootStatement;
+	}
+	public void setRootStatement(Statement rootStatement) {
+		//Todo must not be a break statement
+		this.rootStatement = rootStatement;
+	}
+
+	private Statement rootStatement;
+	private boolean isBeingExecuted;
+	private boolean isExecuted;
+
+	public boolean isBeingExecuted() {
+		return isBeingExecuted;
+	}
+
+	public void setBeingExecuted(boolean beingExecuted) {
+		isBeingExecuted = beingExecuted;
+	}
+
+	public boolean isExecuted() {
+		return isExecuted;
+	}
+
+	public void setExecuted(boolean executed) {
+		isExecuted = executed;
+	}
+
 	/**
 	 * Variable registering the name of this Task.
 	 */
@@ -81,15 +106,7 @@ public class Task implements Comparable {
 	 * Variable registering the unit executing this Task.
 	 */
 	private Unit assignedUnit;
-	
-	/**
-	 * List collecting references to activities belonging to this Task.
-	 * 
-	 * @invar The list of activities is effective.
-	 * @invar Each element in the list of activities references an activity that is an acceptable activity for this Task.
-	 */
-	private List<Statement> StatementList;
-	
+
 	/**
 	 * List collecting references to schedulers belonging to this Task.
 	 * 
@@ -227,6 +244,7 @@ public class Task implements Comparable {
 
 
 
+
 	@Override
 	public int compareTo(Object o) {
 		if (o == null || ! (o instanceof Task))
@@ -235,5 +253,21 @@ public class Task implements Comparable {
 			return 0;
 		return this.getPriority() > ((Task) o).getPriority() ? 1: -1;
 	}
-	
+
+	public void advanceTime(double dt) {
+    }
+
+    public void forceExcecuteComplete(){
+        while (!this.isExecuted()){
+            this.advanceTime(0.2);
+            try{Thread.sleep(500);}
+            catch (InterruptedException exception){
+                System.out.println("Somehow The application was multithreading "+"\n"+
+                        "this really really shouldn't happen");
+                throw new RuntimeException(exception);
+            }
+        }
+    }
+
+
 }

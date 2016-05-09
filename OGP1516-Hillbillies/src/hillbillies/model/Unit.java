@@ -1251,7 +1251,6 @@ public class Unit extends MovableWorldObject {
     	else
 	    	this.hasTask = true;
     }
-
     /**
      * Return whether the unit is idle.
      * 
