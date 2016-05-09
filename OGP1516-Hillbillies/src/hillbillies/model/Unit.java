@@ -1030,25 +1030,11 @@ public class Unit extends MovableWorldObject {
      * @return	An element supplied by a list of random String names.
      */
     private String getRandomName() {
-        boolean flag = random.nextBoolean();
-        if (flag) {
             String[] redneckNameArr = new String[]{"Cletus", "Billy", "Daquan", "Bill", "Uncle Bob", "Minnie", "John", "Harly", "Molly",
                     "Tyrone", "Daisy", "Dale", "Ruby", "Bonnie", "Britney", "Earl", "Jessie", "Moe", "Major Marquis Warren", "Daisy Domergue", "Marco the Mexican"
                     , "Chester Charles Smithers", "Gemma", "Chris Mannix", "Sweet Dave", "Billy Crash", "Rodney", "Dicky Speck", "Chicken Charlie", "Django Freeman"};
             return redneckNameArr[random.nextInt(redneckNameArr.length)];
-        }
-        int index = random.nextInt(51);
-        String[] namearr = new String[]{"Alfonso Addie", "Terrence Truluck", "Russel Rouse", "Fritz Forst", "Mckinley Marrow",
-                "Sidney Suttles", "Todd Tamura", "Lee Lassiter", "Sonny Sumpter", "Tony Thames", "Phil Pittman", "Jonathon Jenning",
-                "Clifford Conerly", "Tod Tegeler", "Lindsay Loken", "Bud Bateman", "Bradly Bedgood", "Reed Rentas", "Bernie Balch",
-                "Ezra Eason", "Erin Enriguez", "Luther Lines", "Samuel Stromberg", "Enrique Esqueda", "Paul Plowden", "Francesco Fitton",
-                "Moses Mcmurry", "Mickey Mccoin", "Romeo Risher", "Maxwell Melder", "Roman Riddell", "Anthony Aycock", "Anton Aquilino",
-                "Gale Gerhardt", "Oren Ogawa", "Hershel Hyslop", "Jared Jiminez", "Hassan Haubrich", "Armando Arner", "Graham Glotfelty",
-                "Monroe Martineau", "Maynard Milani", "Galen Gavin", "Boyd Basta", "Tyree Threatt", "Florentino Forand", "King Krom",
-                "Ferdinand Fikes", "Gary Gander", "Hans Harnish", "Julie Allard", "Arthur Decloedt"};
-        return namearr[index];
     }
-
     /**
      * Return the experience points of this unit.
      */
