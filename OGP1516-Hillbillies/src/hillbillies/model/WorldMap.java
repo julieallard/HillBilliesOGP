@@ -2,10 +2,9 @@ package hillbillies.model;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
- * A class of WorldMaps.
+ * A class of world maps.
  * 
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica

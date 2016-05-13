@@ -265,7 +265,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Variable registering whether this unit has a paused activity.
      */
-    private boolean hasPausedActivity;
+    private boolean hasProperPausedActivity;
     
     /**
      * Variable registering the faction this unit belongs to.
@@ -300,7 +300,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Variable registering whether a task is assigned to this unit.
      */
-    private boolean hasTask = false;  
+    private boolean hasProperTask = false;  
     
 	/**
 	 * Constant reflecting the lowest possible value for the weight, strength, agility and toughness properties of a unit.
@@ -816,8 +816,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether this unit has a paused activity.
      */
-    public boolean hasPausedActivity() {
-    	return this.hasPausedActivity;
+    public boolean hasProperPausedActivity() {
+    	return this.hasProperPausedActivity;
     }
     
     /**
@@ -856,9 +856,9 @@ public class Unit extends MovableWorldObject {
     		throw new IllegalArgumentException("Invalid activity");
     	this.pausedActivity = activity;
     	if (activity instanceof NoActivity)
-    		this.hasPausedActivity = false;
+    		this.hasProperPausedActivity = false;
     	else
-    		this.hasPausedActivity = true;
+    		this.hasProperPausedActivity = true;
     }
     
     /**
@@ -889,7 +889,7 @@ public class Unit extends MovableWorldObject {
      * 			If this unit doesn't have a paused activity, its current activity is set to none.
      */
     public void activityFinished() {
-        if (this.hasPausedActivity()) {
+        if (this.hasProperPausedActivity()) {
             this.setActivity(this.getPausedActivity());
             this.setPausedActivity(new NoActivity());
         } else
@@ -1208,8 +1208,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether this unit has a task.
      */
-    public boolean hasTask() {
-    	return hasTask;
+    public boolean hasProperTask() {
+    	return hasProperTask;
     }
     
     /**
@@ -1247,9 +1247,9 @@ public class Unit extends MovableWorldObject {
     		throw new IllegalArgumentException("Invalid task");
     	this.task = task;
     	if (task == null)
-    		this.hasTask = false;
+    		this.hasProperTask = false;
     	else
-	    	this.hasTask = true;
+	    	this.hasProperTask = true;
     }
     /**
      * Return whether the unit is idle.

@@ -141,7 +141,7 @@ public class Scheduler {
 	}
 	
 	public void markExecution(Task task, Unit executor) {
-		if (! executor.hasTask()) {
+		if (! executor.hasProperTask()) {
 			task.setExecutor(executor);
 			task.setHasTask(true);
 		}
