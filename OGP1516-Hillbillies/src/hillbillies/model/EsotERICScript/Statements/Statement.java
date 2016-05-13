@@ -83,36 +83,6 @@ public class Statement {
 
     }
 
-    // while e do s done
-    class WhilePartStatement extends PartStatement {
-
-        public WhilePartStatement(BooleanExpression condition, Statement body) {
-            this.condition = condition;
-            this.body = body;
-        }
-
-        private final BooleanExpression condition;
-        private final Statement body;
-        private Boolean flag;
-        private Boolean conditionEvaluated = false;
-
-        @Override
-        public void execute(ProgramExecutor executor) throws SyntaxError {
-            Unit unit = executor.getExecutingUnit();
-            if (!conditionEvaluated) {
-                flag = condition.value(unit);
-                conditionEvaluated = true;
-            }
-            while (flag) {
-                body.execute(executor);
-            	flag =;
-            }
-        }
-        @Override
-        boolean singular() {
-            return false;
-        }
-    }
 
     // if e then s [ else s ] fi
     class IfPartStatement extends PartStatement {

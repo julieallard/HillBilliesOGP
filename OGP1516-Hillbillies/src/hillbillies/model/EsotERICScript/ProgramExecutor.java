@@ -1,8 +1,5 @@
 package hillbillies.model.EsotERICScript;
 
-
-
-
 import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.Task;
 import hillbillies.model.Unit;
@@ -18,7 +15,6 @@ public class ProgramExecutor {
         this.executor = executor;
         this.task = task;
     }
-    
     private final Unit executor;
     private final Task task;
     private final List<Statement> statementList = new ArrayList<>();
@@ -67,8 +63,7 @@ public class ProgramExecutor {
         if(statementCallStack.peek().equals(latestStat.encapsulatingStatement)){
             statementCallStack.push(latestStat);
             return;
-        }
-        Statement stat=statementCallStack.peek();
+        }Statement stat=statementCallStack.peek();
         while (!stat.equals(latestStat.encapsulatingStatement)){
             statementCallStack.pop();
             statementCallStack.peek();
@@ -78,17 +73,18 @@ public class ProgramExecutor {
     public boolean canExecute(){
         return !(this.dt<0.001);
     }
-    public void execute(Statement statement) throws SyntaxError{
-        if (statement.isBeingExcecuted()){
+    public void execute(Statement statement) throws SyntaxError {
+        if (statement.isBeingExcecuted()) {
             statement.proceed(this);
-        }
-        else{
-            this.setDeltat(dt-0.001);
+        } else {
+            this.setDeltat(dt - 0.001);
         }
     }
- 
     public void pushUpdate(Statement statement) {
         this.addStatementToList(statement);
         this.updateCallStackWith(statement);
     }
+
+
+
 }
