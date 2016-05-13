@@ -1,6 +1,12 @@
-package hillbillies.model;
+package hillbillies.model.EsotERICScript;
+
+
+
 
 import hillbillies.model.EsotERICScript.Statements.Statement;
+import hillbillies.model.Task;
+import hillbillies.model.Unit;
+import hillbillies.model.exceptions.SyntaxError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +30,7 @@ public class ProgramExecutor {
     }
 
     public ProgramExecutor setDeltat(double dt) {
+        if (dt<0) dt=0;
         this.dt = dt;
         return this;
     }
@@ -52,11 +59,8 @@ public class ProgramExecutor {
         return (Stack<Statement>) statementCallStack.clone();
     }
 
-
-
     public static boolean TaskBreakValidityCheck(Task task){
     	return false;
-    	//TODO
     }
 
     public void updateCallStackWith(Statement latestStat){
@@ -71,9 +75,20 @@ public class ProgramExecutor {
         }
         statementCallStack.push(latestStat);
     }
-    public void pushUpdate(Statement statement){
+    public boolean canExecute(){
+        return !(this.dt<0.001);
+    }
+    public void execute(Statement statement) throws SyntaxError{
+        if (statement.isBeingExcecuted()){
+            statement.proceed(this);
+        }
+        else{
+            this.setDeltat(dt-0.001);
+        }
+    }
+
+    public void pushUpdate(Statement statement) {
         this.addStatementToList(statement);
         this.updateCallStackWith(statement);
     }
-
 }

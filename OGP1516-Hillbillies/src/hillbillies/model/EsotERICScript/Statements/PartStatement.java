@@ -1,7 +1,7 @@
 package hillbillies.model.EsotERICScript.Statements;
 
 import hillbillies.model.EsotERICScript.Expressions.Expression;
-import hillbillies.model.ProgramExecutor;
+import hillbillies.model.EsotERICScript.ProgramExecutor;
 import hillbillies.model.exceptions.SyntaxError;
 
 public abstract class PartStatement {

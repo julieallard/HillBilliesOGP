@@ -3,7 +3,7 @@ import hillbillies.model.EsotERICScript.Expressions.BooleanExpression;
 import hillbillies.model.EsotERICScript.Expressions.Expression;
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
 import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
-import hillbillies.model.ProgramExecutor;
+import hillbillies.model.EsotERICScript.ProgramExecutor;
 import hillbillies.model.Task;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
@@ -11,13 +11,17 @@ import hillbillies.model.exceptions.SyntaxError;
 import java.util.List;
 
 public class Statement {
-	
+
     public Statement(Task task) {
         this.beingExcecuted = false;
         this.executed = false;
         this.task = task;
     }
-    
+
+    public boolean isBeingExcecuted() {
+        return beingExcecuted;
+    }
+
     public Statement encapsulatingStatement;
     protected boolean beingExcecuted;
     protected boolean executed;
@@ -172,5 +176,9 @@ public class Statement {
         }
 
     }
+
+    public void proceed(ProgramExecutor executor){
+
+    };
 
 }
