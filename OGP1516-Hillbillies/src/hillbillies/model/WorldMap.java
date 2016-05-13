@@ -1,6 +1,8 @@
 package hillbillies.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A class of WorldMaps.
@@ -30,7 +32,7 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
         return objectSet;
     }
 
-	/**
+    /**
 	 * Return all the Logs in the cube with given location.
 	 * 
 	 * @param  cubeLocation
@@ -39,15 +41,11 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
 	 */
     public List<Log> getAllLogsInCube(int[] cubeLocation) {
         List<MovableWorldObject> totList = getAllInCube(cubeLocation);
-        List<Log> logList = new ArrayList<>();
-        for (MovableWorldObject object: totList) {
-            if (object instanceof Log) {
-                logList.add((Log) object);
-            }
-        }
-        return logList;
+        List<MovableWorldObject> logList = totList.stream().filter(object -> (object instanceof Log)).collect(Collectors.toList());
+        List<Log> log = (List) logList;
+        return log;
     }
-    
+   
 	/**
 	 * Return all the Boulders in the cube with given location.
 	 * 
@@ -57,13 +55,9 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
 	 */
     public List<Boulder> getAllBouldersInCube(int[] cubeLocation){
         List<MovableWorldObject> totList = getAllInCube(cubeLocation);
-        List<Boulder> boulderList = new ArrayList<>();
-        for (MovableWorldObject object: totList) {
-            if (object instanceof Boulder) {
-                boulderList.add((Boulder) object);
-            }
-        }
-        return boulderList;
+        List<MovableWorldObject> boulderList = totList.stream().filter(object -> (object instanceof Boulder)).collect(Collectors.toList());
+        List<Boulder> boulder = (List) boulderList;
+        return boulder;
     }
     
 	/**
@@ -75,13 +69,9 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
 	 */ 
     public List<Unit> getAllUnitsInCube(int[] cubeLocation){
         List<MovableWorldObject> totList = getAllInCube(cubeLocation);
-        List<Unit> unitList = new ArrayList<>();
-        for (MovableWorldObject object: totList) {
-            if (object instanceof Unit) {
-                unitList.add((Unit) object);
-            }
-        }
-        return unitList;
+        List<MovableWorldObject> unitList = totList.stream().filter(object -> (object instanceof Unit)).collect(Collectors.toList());
+        List<Unit> unit = (List) unitList;
+        return unit;
     }
 
 	/**
@@ -89,12 +79,9 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
 	 */
     public Set<Unit> getAllUnits(){
         Collection<MovableWorldObject> totColl = this.values();
-        Set<Unit> unitset = new HashSet<>();
-        for (MovableWorldObject object: totColl) {
-            if (object instanceof Unit)
-            	unitset.add((Unit) object);
-        }
-        return unitset;
+        Set<MovableWorldObject> unitSet = totColl.stream().filter(object -> (object instanceof Unit)).collect(Collectors.toSet());
+        Set<Unit> unit = (Set) unitSet;
+        return unit;
     }
   
 	/**
@@ -102,25 +89,19 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
 	 */
     public Set<Boulder> getAllBoulders() {
         Collection<MovableWorldObject> totColl = this.values();
-        Set<Boulder> boulderSet = new HashSet<>();
-        for (MovableWorldObject object: totColl) {
-            if (object instanceof Boulder)
-            	boulderSet.add((Boulder) object);
-        }
-        return boulderSet;
+        Set<MovableWorldObject> boulderSet = totColl.stream().filter(object -> (object instanceof Boulder)).collect(Collectors.toSet());
+        Set<Boulder> boulder = (Set) boulderSet;
+        return boulder;
     }
     
 	/**
 	 * Return a set collecting all the logs in this WorlMap.
 	 */
-    public Set<Log> getAllLogs(){
+    public Set<Log> getAllLogs() {
         Collection<MovableWorldObject> totColl = this.values();
-        Set<Log> logSet = new HashSet<>();
-        for (MovableWorldObject object: totColl) {
-            if (object instanceof Log)
-            	logSet.add((Log) object);
-        }
-        return logSet;
+        Set<MovableWorldObject> logSet = totColl.stream().filter(object -> (object instanceof Log)).collect(Collectors.toSet());
+        Set<Log> log = (Set) logSet;
+        return log;
     }
 
 }
