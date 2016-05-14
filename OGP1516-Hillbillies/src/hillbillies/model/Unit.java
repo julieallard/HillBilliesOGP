@@ -288,9 +288,9 @@ public class Unit extends MovableWorldObject {
     private int xpused = 0;
 
     /**
-     * Variable registering whether this unit is alive.
+     * Variable registering whether this unit is terminated.
      */
-    private boolean isAlive;
+    private boolean isTerminated = false;
     
     /**
      * Variable registering the task assigned to this unit.
@@ -1007,18 +1007,18 @@ public class Unit extends MovableWorldObject {
     public void dealDamage(double damage) {
         int intDamage = (int) Math.floor(damage);
         if (intDamage >= this.getCurrentHitPoints())
-            die();
+            terminate();
         else
             this.setCurrentHitPoints(this.getCurrentHitPoints() - intDamage);
     }
 
     /**
-     * Let this unit die.
+     * Terminate this unit, unregistering it from its world's world map and removing it from its world and faction.
      *
      * @effect	This unit is not alive anymore, this unit is unregistered, removed from its world and removed from its faction.
      */
-    private void die() {
-        this.setAlive(false);
+    private void terminate() {
+        this.isTerminated = true;
         this.unregister();
         this.getWorld().removeUnit(this);
         this.getFaction().removeUnit(this);
@@ -1186,24 +1186,13 @@ public class Unit extends MovableWorldObject {
         interrupt(rest);
     }
 
-    /**
-     * Return whether the unit is alive.
-     */
-    public boolean isAlive() {
-        return this.isAlive;
-    }
-
-    /**
-     * Set the state of being alive of this unit according to the given flag.
-     *
-     * @param  flag
-     * 		   The state of being alive to be registered.
-     * @post   The new state of being alive of this unit is equal to the given flag.
-     * 		 | this.isAlive == flag
-     */
-    public void setAlive(boolean flag) {
-        this.isAlive = flag;
-    }
+	/**
+	 * Return whether this unit is terminated.
+	 */
+	@Basic
+	public boolean isTerminated() {
+		return this.isTerminated;
+	} 
     
     /**
      * Return whether this unit has a task.
