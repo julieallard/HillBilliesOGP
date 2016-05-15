@@ -410,7 +410,7 @@ public class Unit extends MovableWorldObject {
      * Return the minimum weight of this unit.
      */
     public int getMinWeight() {
-        return (int) 0.5 * (this.getStrength() + this.getAgility());
+        return (int) (0.5 * (this.getStrength() + this.getAgility()));
     }
 
     /**

@@ -11,8 +11,6 @@ public abstract class PartStatement {
     
     abstract boolean singular();
 
-
-
     public void refresh(){
         this.probe().forEach(Statement::reExecutePrepare);
     }

@@ -142,6 +142,11 @@ public class Statement {
             return probeset;
         }
 
+        @Override
+        public void refresh() {
+            super.refresh();
+            this.conditionEvaluated=false;
+        }
     }
 
     // break
@@ -151,6 +156,8 @@ public class Statement {
     // TODO
 
     // {s}
+    
+    //// TODO: 15/05/16 still broken; 
     class SequencePartStatement extends PartStatement {
 
         public SequencePartStatement(List<Statement> statements) {
