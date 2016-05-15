@@ -297,7 +297,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Variable registering whether a task is assigned to this unit.
      */
-    private boolean hasProperTask = false;  
+    private boolean hasTask = false;
     
 	/**
 	 * Constant reflecting the lowest possible value for the weight, strength, agility and toughness properties of a unit.
@@ -1193,8 +1193,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether this unit has a task.
      */
-    public boolean hasProperTask() {
-    	return hasProperTask;
+    public boolean hasTask() {
+    	return hasTask;
     }
     
     /**
@@ -1231,7 +1231,7 @@ public class Unit extends MovableWorldObject {
     	if (!isValidTask(task))
     		throw new IllegalArgumentException("Invalid task");
     	this.task = task;
-        this.hasProperTask = task != null;
+        this.hasTask = (task != null);
     }
     /**
      * Return whether the unit is idle.

@@ -129,8 +129,7 @@ public class Scheduler {
 	
 	public List<Task> getTasksWithCondition(Predicate<Task> condition) {
 		List<Task> totList = new ArrayList<>(this.TaskQueue);
-		List<Task> resultList = totList.stream().filter(task -> condition.test(task)).collect(Collectors.toList());
-		return resultList;
+		return  totList.stream().filter(task -> condition.test(task)).collect(Collectors.toList());
 	}
 	
 	public Iterator<Task> getTasksInDescendingPriority() {
@@ -138,16 +137,14 @@ public class Scheduler {
 	}
 	
 	public void markExecution(Task task, Unit executor) {
-		if (! executor.hasProperTask()) {
+		if (! executor.hasTask()) {
 			task.setExecutor(executor);
-			task.setHasTask(true);
 		}
 	}
 	
 	public void resetMarking(Task task) {
 //		task.getExecutingUnit().......
 //		TODO: nie affff
-		task.getExecutor().setHasTask(false);
 		task.getExecutor().setTask(null);
 		task.setExecutor(null);
 	}
