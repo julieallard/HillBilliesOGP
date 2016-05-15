@@ -109,7 +109,7 @@ public class Task implements Comparable {
 	/**
 	 * Variable registering the unit executing this Task.
 	 */
-	private Unit assignedUnit;
+	private Unit executor;
 
 	/**
 	 * List collecting references to schedulers belonging to this Task.
@@ -190,19 +190,19 @@ public class Task implements Comparable {
 	}
 	
 	public void startExecution(Unit unit) {
-		this.setAssignedUnit(unit);
+		this.setExecutor(unit);
 	}
 	
 	public void stopExecution() {
-		this.setAssignedUnit(null);
+		this.setExecutor(null);
 	}
 	
-	public Unit getAssignedUnit() {
-		return assignedUnit;
+	public Unit getExecutor() {
+		return executor;
 	}
 	
-	public void setAssignedUnit(Unit executor) {
-		this.assignedUnit = executor;
+	public void setExecutor(Unit executor) {
+		this.executor = executor;
 	}
 	
 	public World world;

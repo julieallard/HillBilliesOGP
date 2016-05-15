@@ -1,6 +1,8 @@
 package hillbillies.model;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * A class of Schedulers.
@@ -125,14 +127,9 @@ public class Scheduler {
 		return new ArrayList<>(this.TaskQueue);
 	}
 	
-	public List<Task> getTasksWithCondition(boolean condition) {
-		//TODO: CONDITIONS
-		//http://stackoverflow.com/questions/10600504/passing-a-condition-as-a-parameter-to-an-iterator
+	public List<Task> getTasksWithCondition(Predicate<Task> condition) {
 		List<Task> totList = new ArrayList<>(this.TaskQueue);
-		List<Task> resultList = new ArrayList<>();
-		for (Task task: totList)
-			if (task.condition)
-				resultList.add(task);
+		List<Task> resultList = totList.stream().filter(task -> condition.test(task)).collect(Collectors.toList());
 		return resultList;
 	}
 	

@@ -5,6 +5,10 @@ import hillbillies.model.Task;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 public class LoopStatement extends Statement {
     public LoopStatement(Task task) {
         super(task);
@@ -27,6 +31,12 @@ public class LoopStatement extends Statement {
         @Override
         boolean singular() {
             return false;
+        }
+        @Override
+        public Collection<Statement> probe() {
+            Set<Statement> probeset =new HashSet<>();
+            probeset.add(body);
+            return probeset;
         }
     }
 }
