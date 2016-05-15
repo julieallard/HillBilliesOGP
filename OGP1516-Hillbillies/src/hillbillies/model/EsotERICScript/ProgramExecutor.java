@@ -1,5 +1,6 @@
 package hillbillies.model.EsotERICScript;
 
+import hillbillies.model.EsotERICScript.Statements.LoopStatement;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.Task;
 import hillbillies.model.Unit;
@@ -8,6 +9,7 @@ import hillbillies.model.exceptions.SyntaxError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 public class ProgramExecutor {
 
     public ProgramExecutor(Unit executor, Task task) {
@@ -59,11 +61,11 @@ public class ProgramExecutor {
     }
 
     public void updateCallStackWith(Statement latestStat){
-        if(statementCallStack.peek().equals(latestStat.encapsulatingStatement)){
+        if(statementCallStack.peek().equals(latestStat.getEncapsulatingStatement())){
             statementCallStack.push(latestStat);
             return;
         }Statement stat=statementCallStack.peek();
-        while (!stat.equals(latestStat.encapsulatingStatement)){
+        while (!stat.equals(latestStat.getEncapsulatingStatement())){
             statementCallStack.pop();
             statementCallStack.peek();
         }
@@ -84,7 +86,10 @@ public class ProgramExecutor {
         this.updateCallStackWith(statement);
     }
 
-    public Object probe(FunctionalInterface method){
-        
+    public boolean hasEncapsulatingLoop(Statement statement){
+        Statement encapstat=statement.getEncapsulatingStatement();
+        if (encapstat==null) return false;
+        if (encapstat instanceof LoopStatement) return true;
+        return hasEncapsulatingLoop(encapstat);
     }
 }

@@ -8,7 +8,7 @@ import hillbillies.model.Task;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
-import java.util.List;
+import java.util.*;
 
 public class Statement {
 
@@ -31,43 +31,57 @@ public class Statement {
        return this.status.equals(ExecutionStatus.BEINGEXECUTED);
     }
 
-    public Statement encapsulatingStatement;
+    private Statement encapsulatingStatement;
     public Task task;
     public Unit executingUnit;
     private PartStatement partStatement;
 
     public boolean mustBeCompletedInOneExecution() {
-        return this.partStatement.singular();
+        return this.getPartStatement().singular();
     }
 
     public void execute(ProgramExecutor executor) throws SyntaxError {
         this.executingUnit = executor.getExecutingUnit();
         executor.updateCallStackWith(this);
-        this.partStatement.execute(executor);
+        this.getPartStatement().execute(executor);
     }
 
     public void finishExecuting() {
         this.status=ExecutionStatus.FINISHED;
-        //TODO Execute next?
     }
 
     public void reExecutePrepare() {
+        this.getPartStatement().refresh();
         this.status=ExecutionStatus.READYTOBEREEXECUTED;
+    }
+
+    public Statement getEncapsulatingStatement() {
+        return encapsulatingStatement;
+    }
+
+    public Statement setEncapsulatingStatement(Statement encapsulatingStatement) {
+        this.encapsulatingStatement = encapsulatingStatement;
+        return this;
+    }
+
+    public PartStatement getPartStatement() {
+        return partStatement;
+    }
+
+    public void setPartStatement(PartStatement partStatement) {
+        this.partStatement = partStatement;
     }
 
     // x := e
     // TODO: name the variable by given string
     class AssignmentPartStatement extends PartStatement {
 
-
         public AssignmentPartStatement(String variableName, Expression value) {
             this.variableName = variableName;
             this.value = value;
         }
-
         private final String variableName;
         private final Expression value;
-
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit = executor.getExecutingUnit();
@@ -78,14 +92,16 @@ public class Statement {
             } else if (value instanceof UnitExpression) {
                 task.unitGlobalMap.put(variableName,(Unit) value.value(unit));
             }
-
         }
-
         @Override
         boolean singular() {
             return true;
         }
 
+        @Override
+        public Collection<Statement> probe() {
+            return Collections.EMPTY_SET;
+        }
     }
 
 
@@ -96,7 +112,6 @@ public class Statement {
             this.ifPart = ifPart;
             this.elsePart = elsePart;
         }
-
         private final BooleanExpression condition;
         private final Statement ifPart;
         private final Statement elsePart;
@@ -118,6 +133,13 @@ public class Statement {
         @Override
         boolean singular() {
             return true;
+        }
+
+        @Override
+        public Collection<Statement> probe() {
+            Set<Statement> probeset =new HashSet<>();
+            probeset.add(ifPart);probeset.add(elsePart);
+            return probeset;
         }
 
     }
@@ -150,6 +172,10 @@ public class Statement {
             return false;
         }
 
+        @Override
+        public Collection<Statement> probe() {
+            return statementList;
+        }
     }
 
     public void proceed(ProgramExecutor executor){

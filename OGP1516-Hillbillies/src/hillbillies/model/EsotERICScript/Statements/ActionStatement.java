@@ -7,6 +7,9 @@ import hillbillies.model.Task;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class ActionStatement extends Statement {
 
 	public ActionStatement(Task task) {
@@ -14,9 +17,10 @@ public class ActionStatement extends Statement {
 	}
 
 	public abstract class ActionPartStatement extends PartStatement {
-		
-		@Override
-	    public abstract void execute(ProgramExecutor executor) throws SyntaxError;
+        @Override
+        public Collection<Statement> probe() {
+            return Collections.EMPTY_SET;
+        }
 
 	}
 
