@@ -125,7 +125,5 @@ public class Rest implements IActivity {
 	@Override
 	public Statement getControllingStatement() {
 		throw new IllegalArgumentException("Rest can't be directly dictated by statement");
-
 	}
-	
 }

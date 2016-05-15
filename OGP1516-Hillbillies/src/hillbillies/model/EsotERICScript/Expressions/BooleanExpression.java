@@ -84,7 +84,7 @@ public class BooleanExpression extends Expression {
         
         @Override
         public Boolean getValue() throws SyntaxError {
-            return ((boolean) arg1.value(executor)) || ((boolean) arg2.value(executor));
+            return ( arg1.value(executor)) || ((boolean) arg2.value(executor));
         }
     }
 
@@ -101,7 +101,7 @@ public class BooleanExpression extends Expression {
         
         @Override
         public Boolean getValue() throws SyntaxError {
-            return ((boolean) arg1.value(executor)) && ((boolean) arg2.value(executor));
+            return ( arg1.value(executor)) && (arg2.value(executor));
         }
         
     }
@@ -153,7 +153,7 @@ public class BooleanExpression extends Expression {
 
         @Override
         public Boolean getValue() throws SyntaxError {
-            return arg1.value(executor).isAlive();
+            return arg1.value(executor).isTerminated();
         }
         
     }

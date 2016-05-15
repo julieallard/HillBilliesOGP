@@ -287,9 +287,6 @@ public class Unit extends MovableWorldObject {
      */
     private int xpused = 0;
 
-    /**
-     * Variable registering whether this unit is terminated.
-     */
     private boolean isTerminated = false;
     
     /**
@@ -855,10 +852,7 @@ public class Unit extends MovableWorldObject {
     	if (!isValidActivity(activity))
     		throw new IllegalArgumentException("Invalid activity");
     	this.pausedActivity = activity;
-    	if (activity instanceof NoActivity)
-    		this.hasProperPausedActivity = false;
-    	else
-    		this.hasProperPausedActivity = true;
+        this.hasProperPausedActivity = !(activity instanceof NoActivity);
     }
     
     /**
@@ -1018,7 +1012,7 @@ public class Unit extends MovableWorldObject {
      * @effect	This unit is not alive anymore, this unit is unregistered, removed from its world and removed from its faction.
      */
     private void terminate() {
-        this.isTerminated = true;
+        this.setTerminated(true);
         this.unregister();
         this.getWorld().removeUnit(this);
         this.getFaction().removeUnit(this);
@@ -1187,6 +1181,8 @@ public class Unit extends MovableWorldObject {
     }
 
 	/**
+     * Variable registering whether this unit is terminated.
+     */ /**
 	 * Return whether this unit is terminated.
 	 */
 	@Basic
@@ -1235,10 +1231,7 @@ public class Unit extends MovableWorldObject {
     	if (!isValidTask(task))
     		throw new IllegalArgumentException("Invalid task");
     	this.task = task;
-    	if (task == null)
-    		this.hasProperTask = false;
-    	else
-	    	this.hasProperTask = true;
+        this.hasProperTask = task != null;
     }
     /**
      * Return whether the unit is idle.
@@ -1251,5 +1244,9 @@ public class Unit extends MovableWorldObject {
     public boolean isIdle() {
         return this.isDefaultBehaviorEnabled() && (this.getActivity().getId() == 0);
     }
-    
+
+    public void setTerminated(boolean terminated) {
+        isTerminated = terminated;
+
+    }
 }

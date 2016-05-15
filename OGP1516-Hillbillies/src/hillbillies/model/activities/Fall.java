@@ -133,7 +133,6 @@ public class Fall implements IActivity {
             ((Unit) object).dealDamage(this.damagetobedone);
         }
         this.object.activityFinished();
-        return;
     }
 
 }
