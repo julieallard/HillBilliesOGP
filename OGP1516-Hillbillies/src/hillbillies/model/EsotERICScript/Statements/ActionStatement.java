@@ -32,7 +32,7 @@ public class ActionStatement extends Statement {
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit=executor.getExecutingUnit();
-            if (! beingExcecuted)
+            if (! isBeingExcecuted())
             	unit.moveTo(argExpr1.value(ActionStatement.this.executingUnit));
             //TODO: keep information about the completion of this statement
         }

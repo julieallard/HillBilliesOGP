@@ -12,19 +12,26 @@ import java.util.List;
 
 public class Statement {
 
+    private ExecutionStatus status;
+
+    public ExecutionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ExecutionStatus status) {
+        this.status = status;
+    }
+
     public Statement(Task task) {
-        this.beingExcecuted = false;
-        this.executed = false;
+        this.status=ExecutionStatus.NOTYETEXECUTED;
         this.task = task;
     }
 
     public boolean isBeingExcecuted() {
-        return beingExcecuted;
+       return this.status.equals(ExecutionStatus.BEINGEXECUTED);
     }
 
     public Statement encapsulatingStatement;
-    protected boolean beingExcecuted;
-    protected boolean executed;
     public Task task;
     public Unit executingUnit;
     private PartStatement partStatement;
@@ -40,14 +47,12 @@ public class Statement {
     }
 
     public void finishExecuting() {
-        this.beingExcecuted = false;
-        this.executed = true;
+        this.status=ExecutionStatus.FINISHED;
         //TODO Execute next?
     }
 
     public void reExecutePrepare() {
-        this.beingExcecuted = false;
-        this.executed = false;
+        this.status=ExecutionStatus.READYTOBEREEXECUTED;
     }
 
     // x := e
@@ -149,6 +154,6 @@ public class Statement {
 
     public void proceed(ProgramExecutor executor){
 
-    };
+    }
 
 }

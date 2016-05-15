@@ -8,7 +8,6 @@ import hillbillies.model.exceptions.SyntaxError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 public class ProgramExecutor {
 
     public ProgramExecutor(Unit executor, Task task) {
@@ -85,6 +84,7 @@ public class ProgramExecutor {
         this.updateCallStackWith(statement);
     }
 
-
-
+    public Object probe(FunctionalInterface method){
+        
+    }
 }
