@@ -1,9 +1,9 @@
 package hillbillies.model.activities;
 
 import hillbillies.model.Unit;
-import hillbillies.model.activities.Cube;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Astar {
 
@@ -85,12 +85,7 @@ public class Astar {
 
     private Set<Cube> getAllNeighbours(Cube cube){
         Set<Cube> intermediate = cube.generateNeighbours();
-        Set<Cube> set = new HashSet<>();
-        for (Cube possibleCube: intermediate) {
-            if (unit.getWorld().canHaveAsCubeLocation(possibleCube.locArray, unit)) {
-                set.add(possibleCube);
-            }
-        }
+        Set<Cube> set = intermediate.stream().filter(possibleCube -> unit.getWorld().canHaveAsCubeLocation(possibleCube.locArray, unit)).collect(Collectors.toSet());
         return set;
     }
 

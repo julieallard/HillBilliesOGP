@@ -10,7 +10,9 @@ public abstract class PartStatement {
     public abstract void execute(ProgramExecutor executor) throws SyntaxError;
     
     abstract boolean singular();
-    
+
+
+
     public void refresh(){
         this.probe().forEach(Statement::reExecutePrepare);
     }

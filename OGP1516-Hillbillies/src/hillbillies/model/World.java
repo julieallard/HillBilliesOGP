@@ -476,9 +476,7 @@ public class World {
      * @effect The cubes of the list containing the location of the cubes about to cave in are destroyed.
      */
     private void caveIn() {
-        for (int[] loc: caveInlist) {
-            destroyCube(loc);
-        }
+        caveInlist.forEach(this::destroyCube);
         caveInlist.clear();
     }
 
@@ -495,7 +493,7 @@ public class World {
      * 		   The number referring to the geological feature.
      */
     public void setCubeType(int x, int y, int z, int value) {
-        CubeWorldObject cubeObject = new Air();
+        CubeWorldObject cubeObject;
         switch (value) {
             case 3:	
                 cubeObject = new Workshop();
