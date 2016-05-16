@@ -3,9 +3,8 @@ package hillbillies.model.activities;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.Statements.Statement;
-import hillbillies.model.IActivity;
-import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.model.Unit;
+import hillbillies.model.exceptions.IllegalTimeException;
 import ogp.framework.util.Util;
 
 import java.util.Random;
@@ -119,6 +118,12 @@ public class Defend implements IActivity {
         return 2;
     }
 
+    private Boolean isFinished;
+
+    @Override
+    public boolean isFinished() {
+        return isFinished;
+    }
     /**
      * Check whether the given time left is a valid time left for any Defense.
      *

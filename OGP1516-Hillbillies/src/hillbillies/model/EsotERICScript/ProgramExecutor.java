@@ -6,10 +6,7 @@ import hillbillies.model.Task;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-
+import java.util.*;
 public class ProgramExecutor {
 
     public ProgramExecutor(Unit executor, Task task) {
@@ -53,18 +50,34 @@ public class ProgramExecutor {
     }
 
     public Stack<Statement> getStatementStackClone() {
-        return (Stack<Statement>) statementCallStack.clone();
+        Stack<Statement> stack= new Stack<>();
+        stack.addAll(this.statementCallStack);
+        return stack;
     }
-
-    public static boolean TaskBreakValidityCheck(Task task){
-    	return false;
+    public static boolean CheckBreakLegality(Task task){
+        Statement root =task.getRootStatement();
+        Stack<Statement> statementStack=new Stack<>();
+        statementStack.push(root);
+        Set<Statement> Breakset= new HashSet<>();
+        while(!statementStack.isEmpty()){
+            Collection<Statement> statementCollection=statementStack.pop().getPartStatement().probe();
+            for (Statement statement : statementCollection) {
+                statementStack.push(statement);
+                if(statement.getPartStatement() instanceof Statement.BreakPartStatement) Breakset.add(statement);
+            }
+        }
+        for (Statement statement : Breakset) {
+            if (!hasEncapsulatingLoop(statement)) return false;
+        }
+        return true;
     }
 
     public void updateCallStackWith(Statement latestStat){
         if(statementCallStack.peek().equals(latestStat.getEncapsulatingStatement())){
             statementCallStack.push(latestStat);
             return;
-        }Statement stat=statementCallStack.peek();
+        }
+        Statement stat=statementCallStack.peek();
         while (!stat.equals(latestStat.getEncapsulatingStatement())){
             statementCallStack.pop();
             statementCallStack.peek();
@@ -85,8 +98,7 @@ public class ProgramExecutor {
         this.addStatementToList(statement);
         this.updateCallStackWith(statement);
     }
-
-    public boolean hasEncapsulatingLoop(Statement statement){
+    public static boolean hasEncapsulatingLoop(Statement statement){
         Statement encapstat=statement.getEncapsulatingStatement();
         if (encapstat==null) return false;
         if (encapstat instanceof LoopStatement) return true;

@@ -1,4 +1,4 @@
-package hillbillies.model;
+package hillbillies.model.activities;
 
 import hillbillies.model.EsotERICScript.Statements.Statement;
 
@@ -26,6 +26,10 @@ public interface IActivity {
     boolean canBeInterruptedBy(IActivity activity);
 
     int getId();
+
+    boolean isFinished();
+
+
 
 }
 

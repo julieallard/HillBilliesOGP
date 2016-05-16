@@ -4,7 +4,6 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.Statements.Statement;
-import hillbillies.model.IActivity;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.IllegalLocation;
 import ogp.framework.util.Util;
@@ -177,6 +176,7 @@ public class Movement implements IActivity {
         return 3;
     }
 
+
     /**
      * Return the destination of this Movement.
      */
@@ -251,5 +251,13 @@ public class Movement implements IActivity {
         double newZ = dy / norm;
         return new double[]{newX, newY, newZ};
     }
+
+    private Boolean isFinished;
+
+    @Override
+    public boolean isFinished() {
+        return isFinished;
+    }
+
 
 }

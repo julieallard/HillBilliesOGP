@@ -1,7 +1,6 @@
 package hillbillies.model.activities;
 
 import hillbillies.model.EsotERICScript.Statements.Statement;
-import hillbillies.model.IActivity;
 import hillbillies.model.MovableWorldObject;
 import hillbillies.model.Unit;
 import hillbillies.model.VLocation;
@@ -95,6 +94,13 @@ public class Fall implements IActivity {
     @Override
     public int getId() {
         return 6;
+    }
+
+    private Boolean isFinished;
+
+    @Override
+    public boolean isFinished() {
+        return isFinished;
     }
 
     /**

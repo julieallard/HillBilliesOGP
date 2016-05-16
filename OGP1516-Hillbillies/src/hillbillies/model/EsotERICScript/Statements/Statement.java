@@ -23,12 +23,12 @@ public class Statement {
     }
 
     public Statement(Task task) {
-        this.status=ExecutionStatus.NOTYETEXECUTED;
+        this.status = ExecutionStatus.NOTYETEXECUTED;
         this.task = task;
     }
 
     public boolean isBeingExcecuted() {
-       return this.status.equals(ExecutionStatus.BEINGEXECUTED);
+        return this.status.equals(ExecutionStatus.BEINGEXECUTED);
     }
 
     private Statement encapsulatingStatement;
@@ -47,12 +47,12 @@ public class Statement {
     }
 
     public void finishExecuting() {
-        this.status=ExecutionStatus.FINISHED;
+        this.status = ExecutionStatus.FINISHED;
     }
 
     public void reExecutePrepare() {
         this.getPartStatement().refresh();
-        this.status=ExecutionStatus.READYTOBEREEXECUTED;
+        this.status = ExecutionStatus.READYTOBEREEXECUTED;
     }
 
     public Statement getEncapsulatingStatement() {
@@ -80,19 +80,22 @@ public class Statement {
             this.variableName = variableName;
             this.value = value;
         }
+
         private final String variableName;
         private final Expression value;
+
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit = executor.getExecutingUnit();
             if (value instanceof BooleanExpression) {
-                task.booleanGlobalMap.put(variableName,(Boolean) value.value(unit));
+                task.booleanGlobalMap.put(variableName, (Boolean) value.value(unit));
             } else if (value instanceof PositionExpression) {
-                task.positionGlabalMap.put(variableName,(int[]) value.value(unit));
+                task.positionGlabalMap.put(variableName, (int[]) value.value(unit));
             } else if (value instanceof UnitExpression) {
-                task.unitGlobalMap.put(variableName,(Unit) value.value(unit));
+                task.unitGlobalMap.put(variableName, (Unit) value.value(unit));
             }
         }
+
         @Override
         boolean singular() {
             return true;
@@ -112,6 +115,7 @@ public class Statement {
             this.ifPart = ifPart;
             this.elsePart = elsePart;
         }
+
         private final BooleanExpression condition;
         private final Statement ifPart;
         private final Statement elsePart;
@@ -130,6 +134,7 @@ public class Statement {
             else
                 elsePart.execute(executor);
         }
+
         @Override
         boolean singular() {
             return true;
@@ -137,56 +142,72 @@ public class Statement {
 
         @Override
         public Collection<Statement> probe() {
-            Set<Statement> probeset =new HashSet<>();
-            probeset.add(ifPart);probeset.add(elsePart);
+            Set<Statement> probeset = new HashSet<>();
+            probeset.add(ifPart);
+            probeset.add(elsePart);
             return probeset;
         }
 
         @Override
         public void refresh() {
             super.refresh();
-            this.conditionEvaluated=false;
+            this.conditionEvaluated = false;
         }
     }
 
     // break
-    // TODO
-
-    // print e
-    // TODO
-
-    // {s}
-    
-    //// TODO: 15/05/16 still broken; 
-    class SequencePartStatement extends PartStatement {
-
-        public SequencePartStatement(List<Statement> statements) {
-            this.statementList = statements;
-        }
-
-        private final List<Statement> statementList;
-
+    public class BreakPartStatement extends PartStatement {
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
-            if (statementList.size() == 0)
-                throw new SyntaxError("The list of statements is empty.");
-            for (Statement statement: statementList)
-                statement.execute(executor);
+
         }
 
         @Override
         boolean singular() {
-            return false;
+            return true;
         }
 
         @Override
         public Collection<Statement> probe() {
-            return statementList;
+            return Collections.EMPTY_SET;
         }
+
+        // print e
+        // TODO
+
+        // {s}
+
+        //// TODO: 15/05/16 still broken;
+        class SequencePartStatement extends PartStatement {
+
+            public SequencePartStatement(List<Statement> statements) {
+                this.statementList = statements;
+            }
+
+            private final List<Statement> statementList;
+
+            @Override
+            public void execute(ProgramExecutor executor) throws SyntaxError {
+                if (statementList.size() == 0)
+                    throw new SyntaxError("The list of statements is empty.");
+                for (Statement statement : statementList)
+                    statement.execute(executor);
+            }
+
+            @Override
+            boolean singular() {
+                return false;
+            }
+
+            @Override
+            public Collection<Statement> probe() {
+                return statementList;
+            }
+        }
+
+        public void proceed(ProgramExecutor executor) {
+
+        }
+
     }
-
-    public void proceed(ProgramExecutor executor){
-
-    }
-
 }

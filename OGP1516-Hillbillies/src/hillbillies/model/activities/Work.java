@@ -2,8 +2,11 @@ package hillbillies.model.activities;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.*;
+import hillbillies.model.Boulder;
 import hillbillies.model.EsotERICScript.Statements.Statement;
+import hillbillies.model.Log;
+import hillbillies.model.Unit;
+import hillbillies.model.World;
 import hillbillies.model.exceptions.IllegalTimeException;
 import ogp.framework.util.Util;
 
@@ -27,8 +30,10 @@ import java.util.List;
  * 			https://github.com/julieallard/HillBilliesOGP.git
  */
 public class Work implements IActivity {
-	
-	/**
+
+    private Boolean isFinished;
+
+    /**
 	 * Initialize this new Work with given unit and given target location.
      *
      * @param  unit
@@ -131,6 +136,11 @@ public class Work implements IActivity {
 	public int getId() {
 		return 4;
 	}
+
+    @Override
+    public boolean isFinished() {
+        this.isFinished;
+    }
 
     /**
      * Check whether the given time left is a valid time left for any Work.

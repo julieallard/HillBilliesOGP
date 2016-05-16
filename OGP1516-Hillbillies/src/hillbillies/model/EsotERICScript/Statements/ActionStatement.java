@@ -5,6 +5,8 @@ import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
 import hillbillies.model.EsotERICScript.ProgramExecutor;
 import hillbillies.model.Task;
 import hillbillies.model.Unit;
+import hillbillies.model.activities.IActivity;
+import hillbillies.model.activities.Movement;
 import hillbillies.model.exceptions.SyntaxError;
 
 import java.util.Collection;
@@ -22,6 +24,14 @@ public class ActionStatement extends Statement {
             return Collections.EMPTY_SET;
         }
 
+        boolean activityStarted;
+
+        @Override
+        public void refresh() {
+            super.refresh();
+            this.activityStarted = false;
+        }
+
 	}
 
     // moveTo e
@@ -32,19 +42,28 @@ public class ActionStatement extends Statement {
         }
         
         PositionExpression argExpr1;
+
+
         
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit=executor.getExecutingUnit();
-            if (! isBeingExcecuted())
-            	unit.moveTo(argExpr1.value(ActionStatement.this.executingUnit));
-            //TODO: keep information about the completion of this statement
+            if (! activityStarted) {
+                unit.moveTo(argExpr1.value(ActionStatement.this.executingUnit));
+                this.activityStarted=true;
+            }
+            IActivity activity =unit.getActivity();
+            assert activity instanceof Movement;
+            unit.advanceTime(executor.getDeltat());
+            if (activity.isFinished()) finishExecuting();
         }
         
         boolean singular() {
         	return false;
         }
-        
+
+
+
     }
     
     // work e

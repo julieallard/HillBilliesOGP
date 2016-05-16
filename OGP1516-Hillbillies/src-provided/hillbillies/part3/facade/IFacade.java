@@ -1,21 +1,15 @@
 package hillbillies.part3.facade;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-
-import hillbillies.model.Boulder;
-import hillbillies.model.Faction;
-import hillbillies.model.Log;
-import hillbillies.model.Scheduler;
-import hillbillies.model.Task;
-import hillbillies.model.Unit;
-import hillbillies.model.World;
+import hillbillies.model.*;
 import hillbillies.part2.facade.Facade;
 import hillbillies.part3.programs.ITaskFactory;
 import hillbillies.part3.programs.TaskParser;
 import hillbillies.tests.facade.Part3TestPartial;
 import ogp.framework.util.ModelException;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Implement this interface to connect your code to the graphical user interface
@@ -218,6 +212,7 @@ public interface IFacade extends hillbillies.part2.facade.IFacade {
 	 * @throws ModelException
 	 *             A precondition was violated or an exception was thrown.
 	 */
+
 	public Iterator<Task> getAllTasksIterator(Scheduler scheduler) throws ModelException;
 
 	/**

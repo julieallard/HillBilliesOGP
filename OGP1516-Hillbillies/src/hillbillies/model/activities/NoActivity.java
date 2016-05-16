@@ -1,7 +1,6 @@
 package hillbillies.model.activities;
 
 import hillbillies.model.EsotERICScript.Statements.Statement;
-import hillbillies.model.IActivity;
 
 /**
  * A class of the states of not conducting any activity.
@@ -55,6 +54,11 @@ public class NoActivity implements IActivity {
     @Override
     public int getId() {
         return 0;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 
 

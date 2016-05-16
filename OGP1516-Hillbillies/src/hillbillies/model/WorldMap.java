@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
  */
-public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> extends HashMap<VLocation, MovableWorldObject> {
+public class WorldMap< K extends VLocation, V extends MovableWorldObject> extends HashMap<VLocation, MovableWorldObject> {
 	
 	/**
 	 * Return all the objects in the cube with given location.
@@ -55,8 +55,7 @@ public class WorldMap<Key extends VLocation, Value extends MovableWorldObject> e
     public List<Boulder> getAllBouldersInCube(int[] cubeLocation){
         List<MovableWorldObject> totList = getAllInCube(cubeLocation);
         List<MovableWorldObject> boulderList = totList.stream().filter(object -> (object instanceof Boulder)).collect(Collectors.toList());
-        List<Boulder> boulder = (List) boulderList;
-        return boulder;
+        return (List) boulderList;
     }
     
 	/**

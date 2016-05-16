@@ -1,7 +1,6 @@
 package hillbillies.model.activities;
 
 import hillbillies.model.EsotERICScript.Statements.Statement;
-import hillbillies.model.IActivity;
 import hillbillies.model.Unit;
 import ogp.framework.util.Util;
 
@@ -117,6 +116,12 @@ public class Rest implements IActivity {
 		return 5;
 	}
 
+	private Boolean isFinished;
+
+	@Override
+	public boolean isFinished() {
+		return isFinished;
+	}
 	@Override
 	public boolean isDictatedByStatement() {
 		return false;

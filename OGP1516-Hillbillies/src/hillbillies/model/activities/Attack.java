@@ -3,7 +3,6 @@ package hillbillies.model.activities;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.Statements.Statement;
-import hillbillies.model.IActivity;
 import hillbillies.model.Unit;
 import hillbillies.model.VLocation;
 import hillbillies.model.exceptions.IllegalTimeException;
@@ -119,6 +118,13 @@ public class Attack implements IActivity {
     @Override
     public int getId() {
         return 1;
+    }
+
+    private Boolean isFinished;
+
+    @Override
+    public boolean isFinished() {
+        return isFinished;
     }
 
     /**
