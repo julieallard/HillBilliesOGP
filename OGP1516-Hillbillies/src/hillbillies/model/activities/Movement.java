@@ -259,5 +259,9 @@ public class Movement implements IActivity {
         return isFinished;
     }
 
-
+    @Override
+    public void finishActivity() {
+        this.isFinished = true;
+        unit.activityFinished();
+    }
 }

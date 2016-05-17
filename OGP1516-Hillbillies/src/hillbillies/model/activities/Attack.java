@@ -127,6 +127,11 @@ public class Attack implements IActivity {
         return isFinished;
     }
 
+    @Override
+    public void finishActivity() {
+
+    }
+
     /**
      * Check whether the given time left is a valid time left for any Attack.
      *
@@ -197,5 +202,11 @@ public class Attack implements IActivity {
 		}
 	    attacker.activityFinished();
 	}
-	
+
+
+    public Attack(Statement controllingStatement, Unit attacker, Unit defender) {
+        this.controllingStatement = controllingStatement;
+        this.attacker = attacker;
+        this.defender = defender;
+    }
 }

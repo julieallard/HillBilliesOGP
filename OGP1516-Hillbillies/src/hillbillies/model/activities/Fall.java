@@ -103,6 +103,12 @@ public class Fall implements IActivity {
         return isFinished;
     }
 
+    @Override
+    public void finishActivity() {
+        this.isFinished = true;
+        if (this.object instanceof Unit) ((Unit) object).activityFinished();
+    }
+
     /**
      * Let the object continue this Fall for the given amount of time.
      * 
@@ -140,5 +146,7 @@ public class Fall implements IActivity {
         }
         this.object.activityFinished();
     }
+
+
 
 }

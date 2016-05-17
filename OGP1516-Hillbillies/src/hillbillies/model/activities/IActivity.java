@@ -29,6 +29,8 @@ public interface IActivity {
 
     boolean isFinished();
 
+    void finishActivity();
+
 
 
 }

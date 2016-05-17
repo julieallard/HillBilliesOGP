@@ -124,6 +124,12 @@ public class Defend implements IActivity {
     public boolean isFinished() {
         return isFinished;
     }
+
+    @Override
+    public void finishActivity() {
+
+    }
+
     /**
      * Check whether the given time left is a valid time left for any Defense.
      *

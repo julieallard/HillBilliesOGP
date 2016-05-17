@@ -60,6 +60,9 @@ public class NoActivity implements IActivity {
     public boolean isFinished() {
         return false;
     }
+    @Override
+    public void finishActivity() {
+    }
 
 
     @Override

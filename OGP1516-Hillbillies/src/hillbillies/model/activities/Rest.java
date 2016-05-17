@@ -122,6 +122,13 @@ public class Rest implements IActivity {
 	public boolean isFinished() {
 		return isFinished;
 	}
+
+	@Override
+	public void finishActivity() {
+		this.isFinished = true;
+		unit.activityFinished();
+	}
+
 	@Override
 	public boolean isDictatedByStatement() {
 		return false;

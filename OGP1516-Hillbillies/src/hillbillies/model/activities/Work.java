@@ -139,7 +139,13 @@ public class Work implements IActivity {
 
     @Override
     public boolean isFinished() {
-        this.isFinished;
+        return this.isFinished;
+    }
+
+    @Override
+    public void finishActivity() {
+        this.isFinished = true;
+        unit.activityFinished();
     }
 
     /**
@@ -263,5 +269,4 @@ public class Work implements IActivity {
         unit.activityFinished();
         if (isDictatedByStatement()) controllingStatement.finishExecuting();
     }
-    
 }
