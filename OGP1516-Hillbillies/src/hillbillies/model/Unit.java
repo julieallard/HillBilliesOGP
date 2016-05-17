@@ -57,13 +57,13 @@ public class Unit extends MovableWorldObject {
      * @param	z
      * 			The z coordinate for this unit.
      * @param	weight
-				The weight for this unit.
+     * 			The weight for this unit.
      * @param	strength
-				The strength for this unit.
+     * 			The strength for this unit.
      * @param	agility
-				The agility for this unit.
+     * 			The agility for this unit.
      * @param	toughness
-				The toughness for this unit.
+     * 			The toughness for this unit.
      * @param	enableDefaultBehavior
      * 			The state of behaviour for this unit.
      * @effect	The name of this new unit is set to the given name.
@@ -171,12 +171,30 @@ public class Unit extends MovableWorldObject {
     /**
      * Initialize this new hillbilly unit with given world and given default behaviour state.
      *
-     * @param world                 The world for this unit.
-     * @param enableDefaultBehavior The state of behaviour for this unit.
-     * @post The initial state of behavior of this new unit is set according to the given flag.
-     * | new.defaultbehaviorenabled == enableDefaultBehavior
-     * @effect The world of this new unit is set to the given world.
-     * | this.setWorld(world)
+     * @param	world
+     * 			The world for this unit.
+     * @param	enableDefaultBehavior
+     * 			The state of behaviour for this unit.
+     * @effect	The name of this new unit is set to the given name.
+     *		  |	this.setName(name)
+     * @effect	The agility of this unit is set to the given agility.
+     * 		  |	this.setAgility(agility)
+     * @effect	The strength of this unit is set to the given strength.
+     * 		  |	this.setStrength(strength)
+     * @effect	The toughness of this unit is set to the given toughness.
+     * 		  |	this.setToughness(toughness)
+     * @effect	The weight of this unit is set to the given weight.
+     * 		  |	this.setWeight(weight)
+     * @effect	The initial state of behavior of this new unit is set according to the given flag.
+     *		  |	this.setDefaultBehavior(enableDefaultBehavior)
+     * @effect	The world of this new unit is set to the given world.
+     *		  |	this.setWorld(world)
+     * @effect	A faction is assigned to this new unit.
+     * 		  | this.setFaction()
+     * @effect	The location if this unit is set to the given x, y and z coordinate.
+     *		  |	this.setLocation(x, y, z)
+     * @effect	The activity of this new unit is set to none.
+     * 		  |	this.setActivity(new NoActivity)
      */
     public Unit(World world, boolean enableDefaultBehavior) {
         String name = getRandomName();
