@@ -4,19 +4,17 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.activities.*;
 import hillbillies.model.exceptions.IllegalLocation;
+import hillbillies.model.exceptions.IllegalTimeException;
 import hillbillies.part2.listener.DefaultTerrainChangeListener;
 import hillbillies.part2.listener.TerrainChangeListener;
 
 import java.util.Random;
 
 /**
- * A class of hillbilly units involving a name, an x, y and z coordinate, a weight, agility, strength, toughness,
- * a facility to enable the default behaviour and a world.
+ * A class of hillbilly units involving a name, an x, y and z coordinate, a weight, agility, strength, toughness, a facility to enable the default behaviour and a world.
  * 
  * @invar	The name of each unit must be a valid name for any unit.
  *		  | isValidName(getName())
- * @invar	The location of each unit must be a valid location for any unit.
- *		  | isValidLocation(getLocation)
  * @invar	The weight of each unit must be a valid weight for any unit.
  *		  |	isValidWeight(getWeight())
  * @invar	The strength of each unit must be a valid strength for any unit.
@@ -31,8 +29,15 @@ import java.util.Random;
  *		  |	isValidPoints(getCurrentStaminaPoints())
  * @invar	The orientation of each unit must be a valid orientation for any unit.
  *		  |	isValidOrientation(getOrientation())
+ * @invar	The time since each unit's last rest must be a valid time since the last rest for any unit.
+ * 		  |	isValidTimeSinceLastRest(getTimeSinceLastRest())
+ * @invar	The number of experience points of each unit must be a valid number of experience points for any unit.
+ *		  |	isValidXP(getXP())
+ * @invar	The number of experience points of each unit that have already been used to increase its strength, agility or toughness must be a valid number of
+ * 			used experience points for any unit.
+ *		  |	isValidXPUsed(getXPUsed())
  *        
- * @version 0.9 alpha
+ * @version 2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
@@ -63,16 +68,24 @@ public class Unit extends MovableWorldObject {
      * 			The state of behaviour for this unit.
      * @effect	The name of this new unit is set to the given name.
      *		  |	this.setName(name)
+     * @effect	The agility of this unit is set to the given agility.
+     * 		  |	this.setAgility(agility)
+     * @effect	The strength of this unit is set to the given strength.
+     * 		  |	this.setStrength(strength)
+     * @effect	The toughness of this unit is set to the given toughness.
+     * 		  |	this.setToughness(toughness)
+     * @effect	The weight of this unit is set to the given weight.
+     * 		  |	this.setWeight(weight)
+     * @effect	The initial state of behavior of this new unit is set according to the given flag.
+     *		  |	this.setDefaultBehavior(enableDefaultBehavior)
+     * @effect	The world of this new unit is set to the given world.
+     *		  |	this.setWorld(world)
+     * @effect	A faction is assigned to this new unit.
+     * 		  | this.setFaction()
      * @effect	The location if this unit is set to the given x, y and z coordinate.
      *		  |	this.setLocation(x, y, z)
-     * @effect	The agility of this unit is set to the given agility.
-     * @effect	The strength of this unit is set to the given strength.
-     * @effect	The toughness of this unit is set to the given toughness.
-     * @effect	The weight of this unit is set to the given weight.
-     * @effect	The initial state of behavior of this new unit is set according to the given flag.
-     *		  |	new.defaultbehaviorenabled == enableDefaultBehavior
-     * @effect The world of this new unit is set to the given world.
-     * | this.setWorld(world)
+     * @effect	The activity of this new unit is set to none.
+     * 		  |	this.setActivity(new NoActivity)
      */
     public Unit(String name, double x, double y, double z, int weight, int strength, int agility, int toughness, boolean enableDefaultBehavior, World world)
     		throws IllegalLocation, IllegalArgumentException {
@@ -90,8 +103,8 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Initialize this new hillbilly unit with given name, given initial x, y and z coordinate, given weight,
-     * given agility, given strength, given toughness and given default behaviour state.
+     * Initialize this new hillbilly unit with given name, given initial x, y and z coordinate, given weight, given agility, given strength, given toughness
+     * and given default behaviour state.
      *
      * @param	name
      * 			The name for this unit.
@@ -113,14 +126,24 @@ public class Unit extends MovableWorldObject {
      * 			The state of behaviour for this unit.
      * @effect	The name of this new unit is set to the given name.
      *		  |	this.setName(name)
+     * @effect	The agility of this unit is set to the given agility.
+     * 		  |	this.setAgility(agility)
+     * @effect	The strength of this unit is set to the given strength.
+     * 		  |	this.setStrength(strength)
+     * @effect	The toughness of this unit is set to the given toughness.
+     * 		  |	this.setToughness(toughness)
+     * @effect	The weight of this unit is set to the given weight.
+     * 		  |	this.setWeight(weight)
+     * @effect	The initial state of behavior of this new unit is set according to the given flag.
+     *		  |	this.setDefaultBehavior(enableDefaultBehavior)
+     * @effect	The world of this new unit is set to the a cubical world witch side size max(x, y, z).
+     *		  |	this.setWorld(world)
+     * @effect	A faction is assigned to this new unit.
+     * 		  | this.setFaction()
      * @effect	The location if this unit is set to the given x, y and z coordinate.
      *		  |	this.setLocation(x, y, z)
-     * @effect	The agility of this unit is set to the given agility.
-     * @effect	The strength of this unit is set to the given strength.
-     * @effect	The toughness of this unit is set to the given toughness.
-     * @effect	The weight of this unit is set to the given weight.
-     * @effect	The initial state of behavior of this new unit is set according to the given flag.
-     *		  |	new.defaultbehaviorenabled == enableDefaultBehavior
+     * @effect	The activity of this new unit is set to none.
+     * 		  |	this.setActivity(new NoActivity)
      */
     public Unit(String name, double x, double y, double z, int weight, int strength, int agility, int toughness,
                 boolean enableDefaultBehavior) throws IllegalLocation, IllegalArgumentException {
@@ -790,12 +813,50 @@ public class Unit extends MovableWorldObject {
         this.isSprinting = flag;
     }
 
+    /**
+     * Return the time since this unit rested for the last time.
+     */
+    @Basic
+    private double getTimeSinceLastRest() {
+    	return this.timeSinceLastRest;
+    }
+    
+    /**
+     * Check whether the given time is a valid time since the last rest for any unit.
+     *  
+     * @param  dt
+     *         The time to check.
+     * @return True if and only if the given time is positive.
+     *       | result == dt >= 0
+    */
+    private boolean isValidTimeSinceLastRest(double dt) {
+    	return (dt >= 0);
+    }
+    
+    /**
+     * Set the time since this unit's last rest to the given time.
+     * 
+     * @param  dt
+     *         The new time since the last rest for this unit.
+     * @post   The time since this unit's last rest is equal to the given time.
+     *       | new.getTimeSinceLastRest() == dt
+     * @throws IllegalTimeException
+     *         The given time is not a valid time since the last rest for any unit.
+     *       | ! isValidTimeSinceLastRest(dt)
+     */
+    private void setTimeSinceLastRest(double dt) throws IllegalTimeException {
+    	if (!isValidTimeSinceLastRest(dt))
+    		throw new IllegalTimeException();
+    	this.timeSinceLastRest = dt;
+    }
+    
     @Override
     public void advanceTime(double dt) {
-        this.timeSinceLastRest = this.timeSinceLastRest + dt;
-        if (this.timeSinceLastRest >= 300) {
+        setTimeSinceLastRest(getTimeSinceLastRest() + dt);
+        if (getTimeSinceLastRest() >= 300) {
             boolean flag = this.interrupt(new Rest(this));
-            if (flag) this.timeSinceLastRest = 0;
+            if (flag)
+            	setTimeSinceLastRest(0);
         }
         if (this.getActivity().getId() == 0 && isDefaultBehaviorEnabled())
             behaveDefault();
@@ -1042,7 +1103,7 @@ public class Unit extends MovableWorldObject {
      *
      * @param	xp
      * 			The number of experience points to check.
-     * @return	True if and only if the number of experience points is equal or higher than zero.
+     * @return	True if and only if the number of experience points is positive.
      * 		  |	result == xp >= 0
      */
     private static boolean isValidXP(int xp) {
