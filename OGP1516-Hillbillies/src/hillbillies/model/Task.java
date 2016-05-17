@@ -2,6 +2,7 @@ package hillbillies.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.EsotERICScript.ProgramExecutor;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 
 import java.util.*;
@@ -40,6 +41,10 @@ public class Task implements Comparable {
 		this.positionGlabalMap = new HashMap<>();
         this.booleanGlobalMap = new HashMap<>();
 		this.unitGlobalMap = new HashMap<>();
+	}
+
+	public boolean isLegaltask(){
+		return ProgramExecutor.checkBreakLegality(this);
 	}
 
     public Map<String, int[]> positionGlabalMap;

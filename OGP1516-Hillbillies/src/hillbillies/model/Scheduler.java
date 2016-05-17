@@ -129,8 +129,9 @@ public class Scheduler {
 	
 	public List<Task> getTasksWithCondition(Predicate<Task> condition) {
 		List<Task> totList = new ArrayList<>(this.TaskQueue);
-		return  totList.stream().filter(task -> condition.test(task)).collect(Collectors.toList());
+		return  totList.stream().filter(condition::test).collect(Collectors.toList());
 	}
+
 	
 	public Iterator<Task> getTasksInDescendingPriority() {
         return TaskQueue.iterator();

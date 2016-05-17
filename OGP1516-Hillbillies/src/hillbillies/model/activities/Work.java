@@ -232,9 +232,8 @@ public class Work implements IActivity {
         World world = unit.getWorld();
         Log log = world.getLogsAt(targetLocation).get(0);
         Boulder boulder = world.getBouldersAt(targetLocation).get(0);
-        this.unit.setWeight(unit.getWeight() + 1);
-        this.unit.setToughness(unit.getToughness() + 1);
-        //TODO Increase weight and toughness? by how much
+        this.unit.setWeight((int)Math.ceil(unit.getWeight()*1.1));
+        this.unit.setToughness(((int)Math.ceil(unit.getToughness()*1.1)));
         log.unregister();
         boulder.unregister();
         unit.activityFinished();

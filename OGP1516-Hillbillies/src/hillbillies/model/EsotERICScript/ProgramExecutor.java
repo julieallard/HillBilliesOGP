@@ -1,5 +1,6 @@
 package hillbillies.model.EsotERICScript;
 
+import hillbillies.model.EsotERICScript.Statements.ExecutionStatus;
 import hillbillies.model.EsotERICScript.Statements.LoopStatement;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.Task;
@@ -13,6 +14,7 @@ public class ProgramExecutor {
         this.executor = executor;
         this.task = task;
     }
+
     private final Unit executor;
     private final Task task;
     private final List<Statement> statementList = new ArrayList<>();
@@ -54,7 +56,7 @@ public class ProgramExecutor {
         stack.addAll(this.statementCallStack);
         return stack;
     }
-    public static boolean CheckBreakLegality(Task task){
+    public static boolean checkBreakLegality(Task task){
         Statement root =task.getRootStatement();
         Stack<Statement> statementStack=new Stack<>();
         statementStack.push(root);
@@ -87,13 +89,7 @@ public class ProgramExecutor {
     public boolean canExecute(){
         return !(this.dt<0.001);
     }
-    public void execute(Statement statement) throws SyntaxError {
-        if (statement.isBeingExcecuted()) {
-            statement.proceed(this);
-        } else {
-            this.setDeltat(dt - 0.001);
-        }
-    }
+
     public void pushUpdate(Statement statement) {
         this.addStatementToList(statement);
         this.updateCallStackWith(statement);
@@ -104,4 +100,15 @@ public class ProgramExecutor {
         if (encapstat instanceof LoopStatement) return true;
         return hasEncapsulatingLoop(encapstat);
     }
+
+    public Statement getPausedStatement() {
+        return pausedStatement;
+    }
+    public void setPausedStatement(Statement pausedStatement) throws SyntaxError {
+        if (pausedStatement.getStatus()!= ExecutionStatus.PAUSED) throw new SyntaxError("tried to save a non paused statement");
+        this.pausedStatement = pausedStatement;
+    }
+    private Statement pausedStatement;
+
+
 }

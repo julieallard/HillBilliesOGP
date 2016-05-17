@@ -32,8 +32,11 @@ public class Statement {
     }
 
     private Statement encapsulatingStatement;
+
     public Task task;
+
     public Unit executingUnit;
+
     private PartStatement partStatement;
 
     public boolean mustBeCompletedInOneExecution() {
@@ -82,6 +85,7 @@ public class Statement {
         }
 
         private final String variableName;
+
         private final Expression value;
 
         @Override
@@ -106,8 +110,6 @@ public class Statement {
             return Collections.EMPTY_SET;
         }
     }
-
-
     // if e then s [ else s ] fi
     class IfPartStatement extends PartStatement {
         public IfPartStatement(BooleanExpression condition, Statement ifPart, Statement elsePart) {
@@ -178,6 +180,8 @@ public class Statement {
         // {s}
 
         //// TODO: 15/05/16 still broken;
+
+    }
         class SequencePartStatement extends PartStatement {
 
             public SequencePartStatement(List<Statement> statements) {
@@ -205,9 +209,8 @@ public class Statement {
             }
         }
 
-        public void proceed(ProgramExecutor executor) {
-
-        }
-
+    public void proceed(ProgramExecutor executor) throws SyntaxError {
+        if (getStatus()!=ExecutionStatus.PAUSED) throw new SyntaxError("tried to proceed a non-paused statement");
+        this.execute(executor);
     }
 }
