@@ -29,13 +29,8 @@ import java.util.Random;
  *		  |	isValidPoints(getCurrentStaminaPoints())
  * @invar	The orientation of each unit must be a valid orientation for any unit.
  *		  |	isValidOrientation(getOrientation())
- * @invar	The time since each unit's last rest must be a valid time since the last rest for any unit.
- * 		  |	isValidTimeSinceLastRest(getTimeSinceLastRest())
  * @invar	The number of experience points of each unit must be a valid number of experience points for any unit.
  *		  |	isValidXP(getXP())
- * @invar	The number of experience points of each unit that have already been used to increase its strength, agility or toughness must be a valid number of
- * 			used experience points for any unit.
- *		  |	isValidXPUsed(getXPUsed())
  *        
  * @version 2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
@@ -136,7 +131,7 @@ public class Unit extends MovableWorldObject {
      * 		  |	this.setWeight(weight)
      * @effect	The initial state of behavior of this new unit is set according to the given flag.
      *		  |	this.setDefaultBehavior(enableDefaultBehavior)
-     * @effect	The world of this new unit is set to the a cubical world witch side size max(x, y, z).
+     * @effect	The world of this new unit is set to a cubical world with side size max(x, y, z).
      *		  |	this.setWorld(world)
      * @effect	A faction is assigned to this new unit.
      * 		  | this.setFaction()
@@ -175,15 +170,15 @@ public class Unit extends MovableWorldObject {
      * 			The world for this unit.
      * @param	enableDefaultBehavior
      * 			The state of behaviour for this unit.
-     * @effect	The name of this new unit is set to the given name.
+     * @effect	The name of this new unit is set to a random name.
      *		  |	this.setName(name)
-     * @effect	The agility of this unit is set to the given agility.
+     * @effect	The agility of this unit is set to a random agility.
      * 		  |	this.setAgility(agility)
-     * @effect	The strength of this unit is set to the given strength.
+     * @effect	The strength of this unit is set to a random strength.
      * 		  |	this.setStrength(strength)
-     * @effect	The toughness of this unit is set to the given toughness.
+     * @effect	The toughness of this unit is set to a random toughness.
      * 		  |	this.setToughness(toughness)
-     * @effect	The weight of this unit is set to the given weight.
+     * @effect	The weight of this unit is set to a random weight.
      * 		  |	this.setWeight(weight)
      * @effect	The initial state of behavior of this new unit is set according to the given flag.
      *		  |	this.setDefaultBehavior(enableDefaultBehavior)
@@ -191,7 +186,7 @@ public class Unit extends MovableWorldObject {
      *		  |	this.setWorld(world)
      * @effect	A faction is assigned to this new unit.
      * 		  | this.setFaction()
-     * @effect	The location if this unit is set to the given x, y and z coordinate.
+     * @effect	The location if this unit is set to ta random x, y and z coordinate.
      *		  |	this.setLocation(x, y, z)
      * @effect	The activity of this new unit is set to none.
      * 		  |	this.setActivity(new NoActivity)
@@ -328,6 +323,9 @@ public class Unit extends MovableWorldObject {
      */
     private int xpused = 0;
 
+    /**
+     * Variable registering whether this unit is terminated.
+     */
     private boolean isTerminated = false;
     
     /**
@@ -343,32 +341,32 @@ public class Unit extends MovableWorldObject {
 	/**
 	 * Constant reflecting the lowest possible value for the weight, strength, agility and toughness properties of a unit.
 	 * 
-	 * @return The lowest possible value for the weight, strength, agility and toughness properties of all units is 1.
-	 *       | result == 1
+	 * @return	The lowest possible value for the weight, strength, agility and toughness properties of all units is 1.
+	 *		  |	result == 1
 	 */
 	public static final int MIN_PROPERTY = 1;
 	
 	/**
 	 * Constant reflecting the highest possible value for the weight, strength, agility and toughness properties of a unit.
 	 * 
-	 * @return The highest possible value for the weight, strength, agility and toughness properties of all units is 200.
-	 *       | result == 200
+	 * @return	The highest possible value for the weight, strength, agility and toughness properties of all units is 200.
+	 *        |	result == 200
 	 */
 	public static final int MAX_PROPERTY = 200;
 	
 	/**
 	 * Constant reflecting the lowest possible value for the weight, strength, agility and toughness properties of a unit upon creation of the unit.
 	 * 
-	 * @return The lowest possible value for the weight, strength, agility and toughness properties of all units is 25 upon creation of the units.
-	 *       | result == 25
+	 * @return	The lowest possible value for the weight, strength, agility and toughness properties of all units is 25 upon creation of the units.
+	 *		  |	result == 25
 	 */
 	public static final int MIN_PROPERTY_UPON_CREATION = 25;
 	
 	/**
 	 * Constant reflecting the highest possible value for the weight, strength, agility and toughness properties of a unit upon creation of the unit.
 	 * 
-	 * @return The highest possible value for the weight, strength, agility and toughness properties of all units is 100 upon creation of the units.
-	 *       | result == 100
+	 * @return	The highest possible value for the weight, strength, agility and toughness properties of all units is 100 upon creation of the units.
+	 *		  |	result == 100
 	 */
 	public static final int MAX_PROPERTY_UPON_CREATION = 100;
     
@@ -378,6 +376,7 @@ public class Unit extends MovableWorldObject {
      * Return the name of this unit.
      */
     @Basic
+    @Raw
     public String getName() {
         return name;
     }
@@ -403,11 +402,12 @@ public class Unit extends MovableWorldObject {
      * @param	name
      * 			The new name for this unit.
      * @post	The name of this new unit is equal to the given name.
-     * 		  |	new.getName == name
+     * 		  |	new.getName() == name
      * @throws	IllegalArgumentException()
      * 			The given initial name is not a valid name for any unit.
      *        | ! isValidName(getName)
      */
+    @Raw
     public void setName(String name) throws IllegalArgumentException {
         if (!isValidName(name))
             throw new IllegalArgumentException("Invalid name");
@@ -437,6 +437,7 @@ public class Unit extends MovableWorldObject {
      * Return the weight of this unit.
      */
     @Basic
+    @Raw
     @Override
     public int getWeight() {
         if (isCarrying())
@@ -460,22 +461,23 @@ public class Unit extends MovableWorldObject {
      * 			Otherwise, if the given weight is below the minimum weight of this unit, its new weight is equal to the minimum weight of this unit.
      * 			If the given weight is above the highest possible value for the weight of a unit, its new weight is equal to the highest possible value for
      * 			the weight of a unit.
-     *		  | if (isValidProperty(weight, getMinWeight(), max))
+     *		  | if (isValidProperty(weight, min, max))
      * 		  |		then new.getWeight() == weight
-     * 		  |		else if (weight < getMinWeight())
-     * 		  |		then new.getWeight() == getMinWeight()
+     * 		  |		else if (weight < min)
+     * 		  |		then new.getWeight() == min
      * 		  |	 	else if (weight > max)
      * 		  |	 	then new.getWeight() == max
      */
+    @Raw
     public void setWeight(int weight) {
+    	int min = getMinWeight();
     	int max = MAX_PROPERTY;
-    	if (!propAssignedUponCreation) {
-    		max = MAX_PROPERTY_UPON_CREATION;
-    	}    
-        if (isValidProperty(weight, getMinWeight(), max))
+    	if (!propAssignedUponCreation)
+    		max = MAX_PROPERTY_UPON_CREATION;    
+        if (isValidProperty(weight, min, max))
             this.weight = weight;
-        if (weight < getMinWeight())
-            this.weight = getMinWeight();
+        else if (weight < min)
+            this.weight = min;
         else if (weight > max)
             this.weight = max;
     }
@@ -483,6 +485,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the strength of this unit.
      */
+    @Basic
+    @Raw
     public int getStrength() {
         return this.strength;
     }
@@ -504,6 +508,7 @@ public class Unit extends MovableWorldObject {
      * 		  |	 	else if (strength > max)
      * 		  |	 	then new.getStrength() == max
      */
+    @Raw
     public void setStrength(int strength) {
     	int min = MIN_PROPERTY;
     	int max = MAX_PROPERTY;
@@ -522,6 +527,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the agility of this unit.
      */
+    @Basic
+    @Raw
     public int getAgility() {
         return this.agility;
     }
@@ -543,6 +550,7 @@ public class Unit extends MovableWorldObject {
      * 		  |	 	else if (agility > max)
      * 		  |	 	then new.getAgility() == max
      */
+    @Raw
     public void setAgility(int agility) {
     	int min = MIN_PROPERTY;
     	int max = MAX_PROPERTY;
@@ -561,6 +569,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the toughness of this unit.
      */
+    @Basic
+    @Raw
     public int getToughness() {
         return this.toughness;
     }
@@ -582,6 +592,7 @@ public class Unit extends MovableWorldObject {
      * 		  |	 	else if (toughness > max)
      * 		  |	 	then new.getToughness() == max
      */
+    @Raw
     public void setToughness(int toughness) {
     	int min = MIN_PROPERTY;
     	int max = MAX_PROPERTY;
@@ -600,6 +611,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether the default behavior of this unit is enabled.
      */
+    @Basic
+    @Raw
     public boolean isDefaultBehaviorEnabled() {
         return this.defaultBehaviorEnabled;
     }
@@ -612,6 +625,7 @@ public class Unit extends MovableWorldObject {
      * @post	The new default behavior state of this unit is equal to the given flag.
      * 		  |	this.defaultbehaviorenabled == flag
      */
+    @Raw
     public void setDefaultBehavior(boolean flag) {
         this.defaultBehaviorEnabled = flag;
     }
