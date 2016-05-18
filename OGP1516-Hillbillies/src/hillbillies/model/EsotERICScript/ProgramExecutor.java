@@ -100,6 +100,7 @@ public class ProgramExecutor {
         if (encapstat == null) return false;
         return encapstat instanceof LoopStatement || hasEncapsulatingLoop(encapstat);
     }
+
     public Statement findPausedStatement() {
         Statement root = task.getRootStatement();
         Stack<Statement> statementStack = new Stack<>();

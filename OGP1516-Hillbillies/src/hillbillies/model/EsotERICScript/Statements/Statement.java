@@ -62,9 +62,9 @@ public class Statement {
         return encapsulatingStatement;
     }
 
-    public Statement setEncapsulatingStatement(Statement encapsulatingStatement) {
+    public void setEncapsulatingStatement(Statement encapsulatingStatement) {
         this.encapsulatingStatement = encapsulatingStatement;
-        return this;
+
     }
 
     public PartStatement getPartStatement() {
