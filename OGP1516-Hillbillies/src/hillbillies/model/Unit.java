@@ -29,6 +29,8 @@ import java.util.Random;
  *		  |	isValidPoints(getCurrentStaminaPoints())
  * @invar	The orientation of each unit must be a valid orientation for any unit.
  *		  |	isValidOrientation(getOrientation())
+ * @invar	
+ * 		  |	isValidFaction(getFaction
  * @invar	The number of experience points of each unit must be a valid number of experience points for any unit.
  *		  |	isValidXP(getXP())
  *        
