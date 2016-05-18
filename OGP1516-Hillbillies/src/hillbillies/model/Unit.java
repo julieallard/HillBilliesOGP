@@ -375,6 +375,72 @@ public class Unit extends MovableWorldObject {
 	/* Methods */
 	
     /**
+     * Return the amount of time since this unit rested for the last time.
+     */
+    @Basic
+    @Raw
+    private double getTimeSinceLastRest() {
+    	return this.timeSinceLastRest;
+    }
+    
+    /**
+     * Check whether the given time is a valid amount of time since the last rest for any unit.
+     *  
+     * @param	dt
+     *			The time to check.
+     * @return	True if and only if the given time is positive.
+     *		  |	result == dt >= 0
+     */
+    private boolean isValidTimeSinceLastRest(double dt) {
+    	return (dt >= 0);
+    }
+    
+    /**
+     * Set the amount of time since this unit's last rest to the given time.
+     * 
+     * @param  dt
+     *         The new time since the last rest for this unit.
+     * @post   The amount of time since this unit's last rest is equal to the given time.
+     *       | new.getTimeSinceLastRest() == dt
+     * @throws IllegalTimeException
+     *         The given time is not a valid amount of time since the last rest for any unit.
+     *       | ! isValidTimeSinceLastRest(dt)
+     */
+    @Raw
+    private void setTimeSinceLastRest(double dt) throws IllegalTimeException {
+    	if (!isValidTimeSinceLastRest(dt))
+    		throw new IllegalTimeException();
+    	this.timeSinceLastRest = dt;
+    }
+    
+    /**
+     * Update this unit's position and activity status according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     */
+    @Override
+    public void advanceTime(double dt) {
+        setTimeSinceLastRest(getTimeSinceLastRest() + dt);
+        if (getTimeSinceLastRest() >= 300) {
+            boolean flag = this.interrupt(new Rest(this));
+            if (flag)
+            	setTimeSinceLastRest(0);
+        }
+        if (this.getActivity().getId() == 0 && isDefaultBehaviorEnabled())
+            behaveDefault();
+        this.getActivity().advanceActivityTime(dt);
+    }
+
+    /**
+     * Let this unit conduct its default behavior.
+     */
+    private void behaveDefault() {
+        this.setActivity(new Rest(this));
+        //TODO flesh out this method
+    }
+	
+    /**
      * Return the name of this unit.
      */
     @Basic
@@ -437,6 +503,12 @@ public class Unit extends MovableWorldObject {
 
     /**
      * Return the weight of this unit.
+     * 
+     * @return	This unit's weight, augmented by its carried object's weight, if this unit is carrying an object.
+     * 			Otherwise, only its own weight.
+     * 		  | if (isCarrying())
+     * 		  |		then result == this.weight + this.carriedObject.getWeight()
+     * 		  |		else result == this.weight
      */
     @Basic
     @Raw
@@ -449,6 +521,8 @@ public class Unit extends MovableWorldObject {
     
     /**
      * Return the minimum weight of this unit.
+     * 
+     * @return	An integer calculated as half of the sum of this unit's strength and agility.
      */
     public int getMinWeight() {
         return (int) (0.5 * (this.getStrength() + this.getAgility()));
@@ -625,7 +699,7 @@ public class Unit extends MovableWorldObject {
      * @param	flag
      * 			The default behavior state to be registered.
      * @post	The new default behavior state of this unit is equal to the given flag.
-     * 		  |	this.defaultbehaviorenabled == flag
+     * 		  |	new.isDefaultBehaviorEnabled == flag
      */
     @Raw
     public void setDefaultBehavior(boolean flag) {
@@ -634,6 +708,11 @@ public class Unit extends MovableWorldObject {
 
     /**
      * Check whether this unit can have the given world as its world.
+     * 
+     * @param	world
+     * 			The world to check.
+     * @return	True if and only if the given world contains less than 100 units.
+     * 		  | result == world.getNumberOfUnits() < 100
      */
     @Override
     protected boolean canHaveAsWorld(World world) {
@@ -642,6 +721,9 @@ public class Unit extends MovableWorldObject {
 
     /**
      * Return the maximum number of hitpoints or stamina points of this unit.
+     * 
+     * @return	The product of 0,02 and this unit's weight and toughness, rounded up to the next integer.
+     * 		  |	result == Math.ceil(200 * (this.getWeight() / 100) * (this.getToughness() / 100))
      */
     public int getMaxPoints() {
         return (int) Math.ceil(200 * ((double) this.getWeight() / 100) * ((double) this.getToughness() / 100));
@@ -652,8 +734,7 @@ public class Unit extends MovableWorldObject {
      *
      * @param	points
      * 			The number of points to check.
-     * @return	True if and only if the given number of points is equal or less than the maximum number of points
-     * 			and equal or higher than zero.
+     * @return	True if and only if the given number of points is equal or less than the maximum number of points and positive.
      * 		  | result ==
      * 		  |		points <= getMaxPoints()
      * 		  |		&& points >= 0
@@ -719,8 +800,9 @@ public class Unit extends MovableWorldObject {
      *
      * @param	orientation
      * 			The orientation to check.
-     * @return	True if and only if the orientation is equal or higher than zero and equal or less than 2*PI.
-     * 		  |	result == orientation >= 0
+     * @return	True if and only if the orientation is positive and equal or less than the double of PI.
+     * 		  |	result ==
+     * 		  |		orientation >= 0
      * 		  |		&& orientation <= 2 * Math.PI
      */
     private static boolean isValidOrientation(float orientation) {
@@ -733,7 +815,7 @@ public class Unit extends MovableWorldObject {
      * @param	orientation
      * 			The new orientation for this unit.
      * @post	If the given orientation is a valid orientation for any unit, the orientation of this new unit is equal to the given orientation.
-     * 			Otherwise, the orientation of this new unit is equal to Math.PI / 2.
+     * 			Otherwise, the orientation of this new unit is equal to the half of PI.
      * 		  | if (isValidOrientation(orientation))
      * 		  |		then new.getOrientation() == orientation
      * 		  |		else new.getOrientation() == Math.PI / 2
@@ -743,7 +825,7 @@ public class Unit extends MovableWorldObject {
         if (isValidOrientation(orientation))
             this.orientation = orientation;
         else
-            this.orientation = ((float) Math.PI) / 2;
+            this.orientation = (float) ((Math.PI) / 2);
     }
 
     /**
@@ -769,6 +851,7 @@ public class Unit extends MovableWorldObject {
      * Check whether the given object can be carried by this unit.
      *
      * @return	True if and only if this unit is not already carrying an object.
+     * 		  |	result == !this.isCarrying()
      */
     private boolean canCarry() {
         return !this.isCarrying();
@@ -798,19 +881,22 @@ public class Unit extends MovableWorldObject {
      *
      * @param	objectToBeCarried
      * 			The object which needs to be carried by the unit.
-     * @post	The carried object of this unit is equal to the given object and the carrying state of this unit is set to true.
-     * @effect	The given object is unregistered.
+     * @effect	This unit carries the given object.
+     * 		  | this.setCarriedObject(objectToBeCarried)
+     * @effect	This unit's state of carrying is set to true.
+     * 		  | this.setCarrying(true)
+     * @effect	The given objectis unregistered.
+     * 		  |	objectToBeCarried.unregister()
      * @throws	IllegalArgumentException
      * 			The given object cannot be carried by any unit.
      *		  |	! canBeCarried(getCarriedObject())
      */
-    public void carry(InanimateMovableWorldObject objectToBeCarried) throws IllegalArgumentException {
-        if (canCarry()) {
-            this.setCarriedObject(objectToBeCarried);
-            this.setCarrying(true);
-            objectToBeCarried.unregister();
-        } else
-            throw new IllegalArgumentException("This object cannot be carried.");
+    public void carry(InanimateMovableWorldObject objectToBeCarried) throws IllegalArgumentException { 	
+        if (!canCarry())
+        	throw new IllegalArgumentException("This object cannot be carried.");
+        this.setCarriedObject(objectToBeCarried);
+        this.setCarrying(true);
+        objectToBeCarried.unregister();            
     }
 
     /**
@@ -818,8 +904,12 @@ public class Unit extends MovableWorldObject {
      *
      * @param	carriedObject
      * 			The object to drop.
-     * @post	The carried object of this unit is not effective and the carrying state of this unit is set to false.
+     * @effect	The carried object of this unit is not effective.
+     * 		  | this.setCarriedObject(null)
+     * @effect	This unit's state of carrying is set to false.
+     * 		  | this.setCarrying(false)
      * @effect	The given object's location is set to this unit's location.
+     * 		  |	carriedObject.setLocation(locArray)
      */
     public void drop(InanimateMovableWorldObject carriedObject) {
         this.setCarriedObject(null);
@@ -829,7 +919,7 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Return whether the unit is sprinting or not.
+     * Return whether the unit is sprinting.
      */
     public boolean isSprinting() {
         return this.isSprinting;
@@ -841,156 +931,24 @@ public class Unit extends MovableWorldObject {
      * @param	flag
      * 			The sprinting state to be registered.
      * @post	The new sprinting state of this unit is equal to the given flag.
-     * 		  |	new.isSprinting == flag
+     * 		  |	new.isSprinting() == flag
      */
     public void setSprinting(boolean flag) {
         this.isSprinting = flag;
     }
 
     /**
-     * Return the time since this unit rested for the last time.
-     */
-    @Basic
-    private double getTimeSinceLastRest() {
-    	return this.timeSinceLastRest;
-    }
-    
-    /**
-     * Check whether the given time is a valid time since the last rest for any unit.
-     *  
-     * @param  dt
-     *         The time to check.
-     * @return True if and only if the given time is positive.
-     *       | result == dt >= 0
-    */
-    private boolean isValidTimeSinceLastRest(double dt) {
-    	return (dt >= 0);
-    }
-    
-    /**
-     * Set the time since this unit's last rest to the given time.
-     * 
-     * @param  dt
-     *         The new time since the last rest for this unit.
-     * @post   The time since this unit's last rest is equal to the given time.
-     *       | new.getTimeSinceLastRest() == dt
-     * @throws IllegalTimeException
-     *         The given time is not a valid time since the last rest for any unit.
-     *       | ! isValidTimeSinceLastRest(dt)
-     */
-    private void setTimeSinceLastRest(double dt) throws IllegalTimeException {
-    	if (!isValidTimeSinceLastRest(dt))
-    		throw new IllegalTimeException();
-    	this.timeSinceLastRest = dt;
-    }
-    
-    @Override
-    public void advanceTime(double dt) {
-        setTimeSinceLastRest(getTimeSinceLastRest() + dt);
-        if (getTimeSinceLastRest() >= 300) {
-            boolean flag = this.interrupt(new Rest(this));
-            if (flag)
-            	setTimeSinceLastRest(0);
-        }
-        if (this.getActivity().getId() == 0 && isDefaultBehaviorEnabled())
-            behaveDefault();
-        this.getActivity().advanceActivityTime(dt);
-    }
-
-    /**
-     * Let this unit conduct its default behavior.
-     */
-    private void behaveDefault() {
-        this.setActivity(new Rest(this));
-        //TODO flesh out this method
-    }
-
-    /**
-     * Return whether this unit has a paused activity.
-     */
-    public boolean hasProperPausedActivity() {
-    	return this.hasProperPausedActivity;
-    }
-    
-    /**
-     * Return the paused activity of this unit.
-     */
-    public IActivity getPausedActivity() {
-    	return this.pausedActivity;
-    }
-    
-    /**
-     * Check whether the given activity is a valid activity for any unit.
-     *
-     * @param	activity
-     * 			The activity to check.
-     * @return	Always true. The activity validity is checked upon creation.
-     * 		  |	result == true
-     */
-    @Override
-    public boolean isValidActivity(IActivity activity) {
-        return true;
-    }
-    
-    /**
-     * Set the paused activity of this unit to the given activity.
-     * 
-     * @param  activity
-     *         The new paused activity for this unit.
-     * @post   The paused activity of this new unit is equal to the given activity.
-     *       | new.getPausedActivity() == activity
-     * @throws IllegalArgumentException
-     *         The given activity is not a valid activity for any unit.
-     *       | ! isValidActivity(getPausedActivity())
-     */
-    private void setPausedActivity(IActivity activity) throws IllegalArgumentException {
-    	if (!isValidActivity(activity))
-    		throw new IllegalArgumentException("Invalid activity");
-    	this.pausedActivity = activity;
-        this.hasProperPausedActivity = !(activity instanceof NoActivity);
-    }
-    
-    /**
-     * Check whether this unit's current activity can be interrupted by the given new activity.
-     *
-     * @param	newActivity
-     * 			The new activity for this unit.
-     * @effect	If the new activity is a defense and if the current activity is a movement or work, 
-     * @return	True if and only if this unit's current activity can be interrupted by the given new activity.
-     */
-    private boolean interrupt(IActivity newActivity) {
-
-        // TODO: 9/05/16 dis shit, tied up in the clusterfuck that is out execution engine;
-        if (!this.getActivity().canBeInterruptedBy(newActivity))
-            return false;
-        if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4)) {
-        	this.setPausedActivity(this.getActivity());
-        }
-        this.setActivity(newActivity);
-        return true;
-    }
-
-    /**
-     * Let this unit finish its current activity.
-     *
-     * @effect	If this unit has a paused activity, the paused activity is resumed, this unit doesn't have a paused activity anymore, this unit's paused activity
-     * 			is not effective.
-     * 			If this unit doesn't have a paused activity, its current activity is set to none.
-     */
-    public void activityFinished() {
-        if (this.hasProperPausedActivity()) {
-            this.setActivity(this.getPausedActivity());
-            this.setPausedActivity(new NoActivity());
-        } else
-            this.setActivity(new NoActivity());
-    }
-
-    /**
-     * Let this unit conduct a generic labor at a specified cube position.
+     * Let this unit work at given cube position.
      *
      * @param	targetCube
      * 			The position of the cube to let this unit work at.
      * @effect	The unit conducts work at the given target cube. The current activity is set to work.
+     * @effect	The carried object of this unit is not effective.
+     * 		  | this.setCarriedObject(null)
+     * @effect	This unit's state of carrying is set to false.
+     * 		  | this.setCarrying(false)
+     * @effect	The given object's location is set to this unit's location.
+     * 		  |	carriedObject.setLocation(locArray)
      */
     public void work(int[] targetCube) {
         Work work = new Work(this, targetCube);
@@ -1342,6 +1300,86 @@ public class Unit extends MovableWorldObject {
 
     public void setTerminated(boolean terminated) {
         isTerminated = terminated;
-
     }
+    
+    /**
+     * Return whether this unit has a paused activity.
+     */
+    public boolean hasProperPausedActivity() {
+    	return this.hasProperPausedActivity;
+    }
+    
+    /**
+     * Return the paused activity of this unit.
+     */
+    public IActivity getPausedActivity() {
+    	return this.pausedActivity;
+    }
+    
+    /**
+     * Check whether the given activity is a valid activity for any unit.
+     *
+     * @param	activity
+     * 			The activity to check.
+     * @return	Always true. The activity validity is checked upon creation.
+     * 		  |	result == true
+     */
+    @Override
+    public boolean isValidActivity(IActivity activity) {
+        return true;
+    }
+    
+    /**
+     * Set the paused activity of this unit to the given activity.
+     * 
+     * @param  activity
+     *         The new paused activity for this unit.
+     * @post   The paused activity of this new unit is equal to the given activity.
+     *       | new.getPausedActivity() == activity
+     * @throws IllegalArgumentException
+     *         The given activity is not a valid activity for any unit.
+     *       | ! isValidActivity(getPausedActivity())
+     */
+    private void setPausedActivity(IActivity activity) throws IllegalArgumentException {
+    	if (!isValidActivity(activity))
+    		throw new IllegalArgumentException("Invalid activity");
+    	this.pausedActivity = activity;
+        this.hasProperPausedActivity = !(activity instanceof NoActivity);
+    }
+    
+    /**
+     * Check whether this unit's current activity can be interrupted by the given new activity.
+     *
+     * @param	newActivity
+     * 			The new activity for this unit.
+     * @effect	If the new activity is a defense and if the current activity is a movement or work, 
+     * @return	True if and only if this unit's current activity can be interrupted by the given new activity.
+     */
+    private boolean interrupt(IActivity newActivity) {
+
+        // TODO: 9/05/16 dis shit, tied up in the clusterfuck that is out execution engine;
+        if (!this.getActivity().canBeInterruptedBy(newActivity))
+            return false;
+        if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4)) {
+        	this.setPausedActivity(this.getActivity());
+        }
+        this.setActivity(newActivity);
+        return true;
+    }
+
+    /**
+     * Let this unit finish its current activity.
+     *
+     * @effect	If this unit has a paused activity, the paused activity is resumed, this unit doesn't have a paused activity anymore, this unit's paused activity
+     * 			is not effective.
+     * 			If this unit doesn't have a paused activity, its current activity is set to none.
+     */
+    public void activityFinished() {
+        if (this.hasProperPausedActivity()) {
+            this.setActivity(this.getPausedActivity());
+            this.setPausedActivity(new NoActivity());
+        } else
+            this.setActivity(new NoActivity());
+    }
+    
 }
