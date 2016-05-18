@@ -1040,7 +1040,7 @@ public class Unit extends MovableWorldObject {
         if (!this.interrupt(attack))
             return;
         this.setActivity(attack);
-        defender.setActivity(new Defend(defender, this));
+        defender.setActivity(new Defend(defender));
     }
 
     /**

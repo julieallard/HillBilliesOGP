@@ -98,8 +98,7 @@ public class ProgramExecutor {
     public static boolean hasEncapsulatingLoop(Statement statement) {
         Statement encapstat = statement.getEncapsulatingStatement();
         if (encapstat == null) return false;
-        if (encapstat instanceof LoopStatement) return true;
-        return hasEncapsulatingLoop(encapstat);
+        return encapstat instanceof LoopStatement || hasEncapsulatingLoop(encapstat);
     }
     public Statement findPausedStatement() {
         Statement root = task.getRootStatement();
