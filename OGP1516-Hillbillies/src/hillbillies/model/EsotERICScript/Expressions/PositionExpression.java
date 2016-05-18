@@ -159,9 +159,7 @@ public class PositionExpression extends Expression {
         public PosSelectedPartExpression() {
             this.arg = task.getSelected();
         }
-
         int[] arg;
-
         @Override
         public int[] getValue() throws SyntaxError {
             return arg;

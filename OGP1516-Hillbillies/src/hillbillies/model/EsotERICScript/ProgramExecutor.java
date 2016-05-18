@@ -119,4 +119,17 @@ public class ProgramExecutor {
         return paused;
     }
 
+
+    public static void resetExecutionstyle(Task task){
+        Statement root = task.getRootStatement();
+        Stack<Statement> statementStack = new Stack<>();
+        statementStack.push(root);
+        while (!statementStack.isEmpty()) {
+            Collection<Statement> statementCollection = statementStack.pop().getPartStatement().probe();
+            for (Statement statement : statementCollection) {
+                statementStack.push(statement);
+                    statement.setStatus(ExecutionStatus.NOTYETEXECUTED);
+            }
+        }
+    }
 }
