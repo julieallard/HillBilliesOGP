@@ -26,7 +26,7 @@ public class BooleanExpression extends Expression {
     // false
     public class BooleanConstantPartExpression extends BooleanPartExpression {
     	
-        public BooleanConstantPartExpression(boolean flag) throws SyntaxError {
+        public BooleanConstantPartExpression(boolean flag) {
             this.value = flag;
         }
         
@@ -42,7 +42,7 @@ public class BooleanExpression extends Expression {
      // "(" e ")"    
     public class BooleanGivenPartExpression extends BooleanPartExpression {
         	
-        public BooleanGivenPartExpression(BooleanExpression arg) throws SyntaxError {
+        public BooleanGivenPartExpression(BooleanExpression arg) {
             this.arg1 = arg;
         }
             
@@ -177,7 +177,7 @@ public class BooleanExpression extends Expression {
     // read and assign in statement
     public class BooleanReadPartExpression extends BooleanPartExpression {
 
-        public void setKeynMap(String key, Map<String, Boolean> map) throws SyntaxError {
+        public void setKeynMap(String key, Map<String, Boolean> map) {
             this.key = key;
             this.usedMap = map;
         }

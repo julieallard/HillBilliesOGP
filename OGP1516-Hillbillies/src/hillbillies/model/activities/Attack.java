@@ -203,10 +203,9 @@ public class Attack implements IActivity {
 	    attacker.activityFinished();
 	}
 
-
     public Attack(Statement controllingStatement, Unit attacker, Unit defender) {
+        this(attacker,defender);
         this.controllingStatement = controllingStatement;
-        this.attacker = attacker;
-        this.defender = defender;
+
     }
 }

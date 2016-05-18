@@ -27,7 +27,7 @@ public class UnitExpression extends Expression {
     // this
     public class UnitThisPartExpression extends UnitPartExpression {
     	
-        public UnitThisPartExpression() throws SyntaxError {
+        public UnitThisPartExpression() {
         }
         
         @Override
@@ -103,7 +103,7 @@ public class UnitExpression extends Expression {
 
     public class UnitReadPartExpression extends UnitPartExpression {
 
-        public void setKeynMap(String key, Map<String, Unit> map) throws SyntaxError {
+        public void setKeynMap(String key, Map<String, Unit> map) {
             this.key = key;
             this.usedMap = map;
         }

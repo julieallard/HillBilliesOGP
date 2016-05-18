@@ -46,6 +46,7 @@ public class Work implements IActivity {
     public Work(Unit unit, int[] targetLocation){
         this.timeLeft = ((double) 500)/unit.getStrength();
         this.unit = unit;
+        if (!this.canHaveAsTargetLocation(targetLocation)) this.finishActivity();
         this.targetLocation = targetLocation;
     }
 

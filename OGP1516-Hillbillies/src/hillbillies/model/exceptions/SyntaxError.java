@@ -1,7 +1,6 @@
 package hillbillies.model.exceptions;
 
 
-import java.io.SyncFailedException;
 
 public class SyntaxError extends Exception {
 

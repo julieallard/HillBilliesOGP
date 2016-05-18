@@ -5,7 +5,6 @@ import hillbillies.model.EsotERICScript.Statements.LoopStatement;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.Task;
 import hillbillies.model.Unit;
-import hillbillies.model.exceptions.SyntaxError;
 
 import java.util.*;
 public class ProgramExecutor {
@@ -25,10 +24,9 @@ public class ProgramExecutor {
         return dt;
     }
 
-    public ProgramExecutor setDeltat(double dt) {
-        if (dt<0) dt=0;
+    public void setDeltat(double dt) {
+        if (dt < 0) dt = 0;
         this.dt = dt;
-        return this;
     }
 
     public Unit getExecutingUnit() {
@@ -38,13 +36,13 @@ public class ProgramExecutor {
     public Task getTask() {
         return task;
     }
-    
+
     public void addStatementToList(Statement statement) {
-    	statementList.add(statement);
+        statementList.add(statement);
     }
-    
+
     public void removeStatementFromList(Statement statement) {
-    	statementList.remove(statement);
+        statementList.remove(statement);
     }
 
     public List<Statement> getStatementList() {
@@ -52,20 +50,21 @@ public class ProgramExecutor {
     }
 
     public Stack<Statement> getStatementStackClone() {
-        Stack<Statement> stack= new Stack<>();
+        Stack<Statement> stack = new Stack<>();
         stack.addAll(this.statementCallStack);
         return stack;
     }
-    public static boolean checkBreakLegality(Task task){
-        Statement root =task.getRootStatement();
-        Stack<Statement> statementStack=new Stack<>();
+
+    public static boolean checkBreakLegality(Task task) {
+        Statement root = task.getRootStatement();
+        Stack<Statement> statementStack = new Stack<>();
         statementStack.push(root);
-        Set<Statement> Breakset= new HashSet<>();
-        while(!statementStack.isEmpty()){
-            Collection<Statement> statementCollection=statementStack.pop().getPartStatement().probe();
+        Set<Statement> Breakset = new HashSet<>();
+        while (!statementStack.isEmpty()) {
+            Collection<Statement> statementCollection = statementStack.pop().getPartStatement().probe();
             for (Statement statement : statementCollection) {
                 statementStack.push(statement);
-                if(statement.getPartStatement() instanceof Statement.BreakPartStatement) Breakset.add(statement);
+                if (statement.getPartStatement() instanceof Statement.BreakPartStatement) Breakset.add(statement);
             }
         }
         for (Statement statement : Breakset) {
@@ -74,41 +73,51 @@ public class ProgramExecutor {
         return true;
     }
 
-    public void updateCallStackWith(Statement latestStat){
-        if(statementCallStack.peek().equals(latestStat.getEncapsulatingStatement())){
+    public void updateCallStackWith(Statement latestStat) {
+        if (statementCallStack.peek().equals(latestStat.getEncapsulatingStatement())) {
             statementCallStack.push(latestStat);
             return;
         }
-        Statement stat=statementCallStack.peek();
-        while (!stat.equals(latestStat.getEncapsulatingStatement())){
+        Statement stat = statementCallStack.peek();
+        while (!stat.equals(latestStat.getEncapsulatingStatement())) {
             statementCallStack.pop();
             statementCallStack.peek();
         }
         statementCallStack.push(latestStat);
     }
-    public boolean canExecute(){
-        return !(this.dt<0.001);
+
+    public boolean canExecute() {
+        return !(this.dt < 0.001);
     }
 
     public void pushUpdate(Statement statement) {
         this.addStatementToList(statement);
         this.updateCallStackWith(statement);
     }
-    public static boolean hasEncapsulatingLoop(Statement statement){
-        Statement encapstat=statement.getEncapsulatingStatement();
-        if (encapstat==null) return false;
+
+    public static boolean hasEncapsulatingLoop(Statement statement) {
+        Statement encapstat = statement.getEncapsulatingStatement();
+        if (encapstat == null) return false;
         if (encapstat instanceof LoopStatement) return true;
         return hasEncapsulatingLoop(encapstat);
     }
+    public Statement findPausedStatement() {
+        Statement root = task.getRootStatement();
+        Stack<Statement> statementStack = new Stack<>();
+        statementStack.push(root);
+        Statement paused = null;
+        while (!statementStack.isEmpty()) {
+            Collection<Statement> statementCollection = statementStack.pop().getPartStatement().probe();
+            for (Statement statement : statementCollection) {
+                statementStack.push(statement);
+                if (statement.getStatus().equals(ExecutionStatus.PAUSED)) {
+                    paused = statement;
+                    break;
+                }
 
-    public Statement getPausedStatement() {
-        return pausedStatement;
+            }
+        }
+        return paused;
     }
-    public void setPausedStatement(Statement pausedStatement) throws SyntaxError {
-        if (pausedStatement.getStatus()!= ExecutionStatus.PAUSED) throw new SyntaxError("tried to save a non paused statement");
-        this.pausedStatement = pausedStatement;
-    }
-    private Statement pausedStatement;
-
 
 }

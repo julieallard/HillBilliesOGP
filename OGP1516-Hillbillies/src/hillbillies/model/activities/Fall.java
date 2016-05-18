@@ -106,7 +106,7 @@ public class Fall implements IActivity {
     @Override
     public void finishActivity() {
         this.isFinished = true;
-        if (this.object instanceof Unit) ((Unit) object).activityFinished();
+        if (this.object instanceof Unit) object.activityFinished();
     }
 
     /**

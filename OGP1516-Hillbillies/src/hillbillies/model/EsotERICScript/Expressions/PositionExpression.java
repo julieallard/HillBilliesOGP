@@ -142,7 +142,7 @@ public class PositionExpression extends Expression {
 
     public class PositionReadPartExpression extends PosHerePartExpression {
 
-        public void setKeynMap(String key, Map<String, int[]> map) throws SyntaxError {
+        public void setKeynMap(String key, Map<String, int[]> map) {
             this.key = key;
             this.usedMap = map;
         }

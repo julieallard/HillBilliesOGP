@@ -197,9 +197,7 @@ public class Movement implements IActivity {
      */
     @Raw
     public boolean canHaveAsDestination(int[] destination) {
-        if (destination.length != 3)
-            return false;
-        return this.unit.getWorld().canHaveAsCubeLocation(destination, unit);
+        return destination.length == 3 && this.unit.getWorld().canHaveAsCubeLocation(destination, unit);
     }
 
     /**

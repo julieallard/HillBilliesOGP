@@ -104,8 +104,7 @@ public class Rest implements IActivity {
      */
 	@Override
 	public boolean canBeInterruptedBy(IActivity activity) {
-		if (activity instanceof Defend||activity instanceof Fall) return true;
-		else return gotFirsthitpoint;
+		return activity instanceof Defend || activity instanceof Fall || gotFirsthitpoint;
 	}
 
     /**

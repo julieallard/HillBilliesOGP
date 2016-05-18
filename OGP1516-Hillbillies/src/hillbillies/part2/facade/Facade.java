@@ -246,6 +246,7 @@ public class Facade extends hillbillies.part1.facade.Facade implements hillbilli
     public void addUnit(Unit unit, World world) throws ModelException{
 
     try{
+        if (world.canHaveExtraUnits())
         world.addUnit(unit);
     
         }

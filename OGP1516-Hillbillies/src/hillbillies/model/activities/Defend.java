@@ -7,8 +7,6 @@ import hillbillies.model.Unit;
 import hillbillies.model.exceptions.IllegalTimeException;
 import ogp.framework.util.Util;
 
-import java.util.Random;
-
 /**
  * A class of Defend activities involving a defender and an attacker.
  * 
@@ -33,37 +31,24 @@ public class Defend implements IActivity {
      *
      * @param  defender
      *         The defender for this new Defend.
-     * @param  attacker
-     *         The attacker for this new Defend.
-     * @post   The defender of this new Defend is equal to the given defender.       
+     * @post   The defender of this new Defend is equal to the given defender.
      * @post   The attacker of this new Defend is equal to the given attacker.
      */
-    public Defend(Unit defender, Unit attacker) {
-        this.defender = defender;   
-        this.attacker = attacker;
+    public Defend(Unit defender) {
+        this.defender = defender;
         this.setTimeLeft(1);
-        this.random = new Random();
+
     }
 
     /**
      * Variable registering the defender of this Defend.
      */
     private final Unit defender;
-    
-    /**
-     * Variable registering the attacker of this Defend.
-     */
-    private final Unit attacker;
 
     /**
      * Variable registering the time left until finishing this Defend.
      */
     private double timeLeft;
-    
-    /**
-     * Variable registering the random generated object of this Defend.
-     */
-    private Random random;
 
     @Override
     public boolean isDictatedByStatement() {

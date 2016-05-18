@@ -129,7 +129,7 @@ public class Scheduler {
 	
 	public List<Task> getTasksWithCondition(Predicate<Task> condition) {
 		List<Task> totList = new ArrayList<>(this.TaskQueue);
-		return  totList.stream().filter(condition::test).collect(Collectors.toList());
+		return  totList.stream().filter(condition).collect(Collectors.toList());
 	}
 
 	
@@ -149,13 +149,11 @@ public class Scheduler {
 		task.getExecutor().setTask(null);
 		task.setExecutor(null);
 	}
-	
 	/**
 	 * List collecting references to Tasks belonging to this Scheduler.
-	 * 
+     *
 	 * @invar The list of Tasks is effective.
 	 * @invar Each element in the list of Tasks references a Task that is an acceptable Task for this Scheduler.
 	 */
 	private PriorityQueue<Task> TaskQueue;
-	
 }

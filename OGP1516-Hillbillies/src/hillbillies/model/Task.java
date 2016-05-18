@@ -4,6 +4,7 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.ProgramExecutor;
 import hillbillies.model.EsotERICScript.Statements.Statement;
+import hillbillies.model.exceptions.SyntaxError;
 
 import java.util.*;
 
@@ -263,12 +264,19 @@ public class Task implements Comparable {
 		return this.getPriority() > ((Task) o).getPriority() ? 1: -1;
 	}
 
-	public void advanceTime(double dt) {
-
+	public void advanceTime(double dt) throws SyntaxError {
+        ProgramExecutor executor =new ProgramExecutor(getExecutor(),this);
+        executor.setDeltat(dt);
+        executor.findPausedStatement().execute(executor);
     }
     public void forceExcecuteComplete(){
         while (!this.isExecuted()){
-            this.advanceTime(0.2);
+            try {
+                this.advanceTime(0.2);
+            } catch (SyntaxError syntaxError) {
+                syntaxError.printStackTrace();
+                throw new RuntimeException(syntaxError);
+            }
             try{Thread.sleep(500);}
             catch (InterruptedException exception){
                 System.out.println("Somehow The application was multithreading "+"\n"+

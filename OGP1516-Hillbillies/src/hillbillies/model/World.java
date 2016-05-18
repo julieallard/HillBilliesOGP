@@ -405,6 +405,8 @@ public class World {
 	/**
 	 * Check whether this world can add extra Units.
 	 */
+
+    //// TODO: 18/05/16
     public boolean canHaveExtraUnits(){
         return (TotalUnitSet.size() < 100);
     }
