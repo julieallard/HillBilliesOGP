@@ -94,7 +94,7 @@ public class Statement {
             if (value instanceof BooleanExpression) {
                 task.booleanGlobalMap.put(variableName, (Boolean) value.value(unit));
             } else if (value instanceof PositionExpression) {
-                task.positionGlabalMap.put(variableName, (int[]) value.value(unit));
+                task.positionGlobalMap.put(variableName, (int[]) value.value(unit));
             } else if (value instanceof UnitExpression) {
                 task.unitGlobalMap.put(variableName, (Unit) value.value(unit));
             }

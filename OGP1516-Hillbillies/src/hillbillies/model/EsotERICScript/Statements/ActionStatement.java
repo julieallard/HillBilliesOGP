@@ -1,5 +1,6 @@
 package hillbillies.model.EsotERICScript.Statements;
 
+
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
 import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
 import hillbillies.model.EsotERICScript.ProgramExecutor;
@@ -57,15 +58,10 @@ public class ActionStatement extends Statement {
             unit.advanceTime(executor.getDeltat());
             if (activity.isFinished()) finishExecuting();
         }
-        
         boolean singular() {
         	return false;
         }
-
-
-
     }
-    
     // work e
     public class WorkPartStatement extends ActionPartStatement {
 
@@ -79,7 +75,6 @@ public class ActionStatement extends Statement {
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit=executor.getExecutingUnit();
             unit.work(argExpr1.value(ActionStatement.this.executingUnit));
-            //TODO: keep information about the completion of this statement
         }
         
         boolean singular() {
@@ -87,7 +82,6 @@ public class ActionStatement extends Statement {
         }
         
     }
-    
     // follow e
     // TODO: bc Arthur likes to procrastinate
     public class FollowPartStatement extends ActionPartStatement {
@@ -109,27 +103,22 @@ public class ActionStatement extends Statement {
         }
         
     }
-    
-    // attack e
     public class AttackPartStatement extends ActionPartStatement {
-    	
+
         public AttackPartStatement(UnitExpression defender) {
             this.argExpr1 = defender;
         }
-        
+
         UnitExpression argExpr1;
-        
+
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
-            Unit unit=executor.getExecutingUnit();
+            Unit unit = executor.getExecutingUnit();
             unit.attack(argExpr1.value(ActionStatement.this.executingUnit));
-            //TODO: keep information about the completion of this statement
         }
-        
+
         boolean singular() {
-        	return false;
+            return false;
         }
-        
     }
-	
 }

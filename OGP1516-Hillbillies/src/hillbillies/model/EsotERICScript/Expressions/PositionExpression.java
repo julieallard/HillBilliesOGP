@@ -4,8 +4,7 @@ import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
 public class PositionExpression extends Expression {
@@ -114,7 +113,7 @@ public class PositionExpression extends Expression {
 
         @Override
         public int[] getValue() throws SyntaxError {
-            Set<int[]> emptySet = (Set<int[]>) Collections.EMPTY_SET; //EMPTY SET moet weg???
+            Set<int[]> emptySet = new HashSet<>(); //EMPTY SET moet weg???
             Collection<int[]> neighbourSet = getAllNeighbours(arg1.value(executor), emptySet);
             for (int[] loc: neighbourSet)
                 if (executor.getWorld().canHaveAsCubeLocation(loc, executor))
@@ -140,37 +139,32 @@ public class PositionExpression extends Expression {
     }
 
 
-    public class PositionReadPartExpression extends PosHerePartExpression {
+    public class PosReadPartExpression extends PosPartExpression {
 
-        public void setKeynMap(String key, Map<String, int[]> map) {
+        public PosReadPartExpression(String key) {
             this.key = key;
-            this.usedMap = map;
         }
 
         private String key;
 
-        private Map<String, int[]> usedMap;
+        @Override
+        public int[] getValue() throws SyntaxError {
+            return task.positionGlobalMap.get(key);
+        }
+    }
+
+
+    public class PosSelectedPartExpression extends PosPartExpression {
+
+        public PosSelectedPartExpression() {
+            this.arg = task.getSelected();
+        }
+
+        int[] arg;
 
         @Override
         public int[] getValue() throws SyntaxError {
-            return this.usedMap.get(key);
+            return arg;
         }
     }
-    
-    // TODO: 29/04/16 selected
-//    public class PosSelectedPartExpression extends PosPartExpression {
-//
-//        public PosSelectedPartExpression(PositionExpression position) {
-//            this.arg1 = position;
-//        }
-//        
-//        PositionExpression arg1;
-//        
-//        @Override
-//        public int[] getValue() throws SyntaxError {
-//            return arg1.value(executor);
-//        }
-//
-//    }
-    
 }

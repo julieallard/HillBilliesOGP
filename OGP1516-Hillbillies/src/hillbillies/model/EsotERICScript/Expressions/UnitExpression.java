@@ -5,7 +5,6 @@ import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
 import java.util.List;
-import java.util.Map;
 
 public class UnitExpression extends Expression {
 	
@@ -103,18 +102,15 @@ public class UnitExpression extends Expression {
 
     public class UnitReadPartExpression extends UnitPartExpression {
 
-        public void setKeynMap(String key, Map<String, Unit> map) {
+        public UnitReadPartExpression(String key) {
             this.key = key;
-            this.usedMap = map;
         }
 
         private String key;
 
-        private Map<String, Unit> usedMap;
-
         @Override
         public Unit getValue() throws SyntaxError {
-            return this.usedMap.get(key);
+            return task.unitGlobalMap.get(key);
         }
     }
     

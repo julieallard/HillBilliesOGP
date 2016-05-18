@@ -25,8 +25,6 @@ public class Task implements Comparable {
      *         The name for this new Task.
      * @param  priority
      * 		   The priority for this new Task.
-     * @param  scheduler
-     * 		   The scheduler for this new Task.
      * @effect The priority of this new Task is set to the given priority.
      *       | this.setPriority(priority)
      * @effect The given scheduler is added to this new Task.
@@ -34,21 +32,22 @@ public class Task implements Comparable {
      * @post   The name of this new Task is equal to the given name.
      * 		 | new.getName == name
      */
-	public Task(String name, int priority, Scheduler scheduler) {
+	public Task(String name, int priority) {
 		this.name = name;
 		this.setPriority(priority);
 		this.SchedulerSet = new HashSet<>();
-		this.addScheduler(scheduler);
-		this.positionGlabalMap = new HashMap<>();
+		this.positionGlobalMap = new HashMap<>();
         this.booleanGlobalMap = new HashMap<>();
 		this.unitGlobalMap = new HashMap<>();
 	}
+
+
 
 	public boolean isLegaltask(){
 		return ProgramExecutor.checkBreakLegality(this);
 	}
 
-    public Map<String, int[]> positionGlabalMap;
+    public Map<String, int[]> positionGlobalMap;
     public Map<String, Boolean> booleanGlobalMap;
     public Map<String, Unit> unitGlobalMap;
 	
@@ -151,7 +150,7 @@ public class Task implements Comparable {
 	 * @return Always true.
 	 *       | result == true
 	*/
-	public static boolean isValidPriority(int priority) {
+	private static boolean isValidPriority(int priority) {
 		return true;
 	}
 
@@ -192,7 +191,7 @@ public class Task implements Comparable {
 	 * @post   The given list of schedulers is added to this Task.
 	 */
 	public void addScheduler(List<Scheduler> schedulerList) {
-		this.SchedulerSet.addAll(schedulerList);
+        this.SchedulerSet.addAll(schedulerList);
 	}
 	
 	public void startExecution(Unit unit) {
@@ -252,9 +251,6 @@ public class Task implements Comparable {
 	 *                              from being compared to this object.
 	 */
 
-
-
-
 	@Override
 	public int compareTo(Object o) {
 		if (o == null || ! (o instanceof Task))
@@ -285,7 +281,21 @@ public class Task implements Comparable {
             }
         }
     }
+    private int[] selected;
 
+    public static Collection<Task> createTask(String name,int priority,Statement activity,List<int[]> selected){
 
+        List<Task> taskList=new ArrayList<>();
 
+        for (int[] loc: selected) {
+            Task curr=new Task(name,priority);
+            curr.selected=loc;
+            taskList.add(curr);
+        }
+        return taskList;
+    }
+
+    public int[] getSelected() {
+        return selected;
+    }
 }

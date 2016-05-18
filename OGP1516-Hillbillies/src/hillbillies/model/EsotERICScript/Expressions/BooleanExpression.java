@@ -3,8 +3,6 @@ package hillbillies.model.EsotERICScript.Expressions;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
-import java.util.Map;
-
 public class BooleanExpression extends Expression {
 	
     @Override
@@ -177,18 +175,15 @@ public class BooleanExpression extends Expression {
     // read and assign in statement
     public class BooleanReadPartExpression extends BooleanPartExpression {
 
-        public void setKeynMap(String key, Map<String, Boolean> map) {
+        public BooleanReadPartExpression(String key) {
             this.key = key;
-            this.usedMap = map;
         }
 
         private String key;
 
-        private Map<String, Boolean> usedMap;
-
         @Override
         public Boolean getValue() throws SyntaxError {
-            return this.usedMap.get(key);
+            return task.booleanGlobalMap.get(key);
         }
     }
 
