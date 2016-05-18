@@ -29,8 +29,8 @@ import java.util.Random;
  *		  |	isValidPoints(getCurrentStaminaPoints())
  * @invar	The orientation of each unit must be a valid orientation for any unit.
  *		  |	isValidOrientation(getOrientation())
- * @invar	
- * 		  |	isValidFaction(getFaction
+ * @invar	Each unit can have its faction as its faction.
+ * 		  |	canHaveAsFaction(getFaction)
  * @invar	The number of experience points of each unit must be a valid number of experience points for any unit.
  *		  |	isValidXP(getXP())
  *        
@@ -137,7 +137,7 @@ public class Unit extends MovableWorldObject {
      *		  |	this.setWorld(world)
      * @effect	A faction is assigned to this new unit.
      * 		  | this.setFaction()
-     * @effect	The location if this unit is set to the given x, y and z coordinate.
+     * @effect	The location of this unit is set to the given x, y and z coordinate.
      *		  |	this.setLocation(x, y, z)
      * @effect	The activity of this new unit is set to none.
      * 		  |	this.setActivity(new NoActivity)
@@ -188,7 +188,7 @@ public class Unit extends MovableWorldObject {
      *		  |	this.setWorld(world)
      * @effect	A faction is assigned to this new unit.
      * 		  | this.setFaction()
-     * @effect	The location if this unit is set to ta random x, y and z coordinate.
+     * @effect	The location if this unit is set to a random x, y and z coordinate.
      *		  |	this.setLocation(x, y, z)
      * @effect	The activity of this new unit is set to none.
      * 		  |	this.setActivity(new NoActivity)

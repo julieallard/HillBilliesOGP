@@ -8,41 +8,66 @@ import hillbillies.model.exceptions.IllegalLocation;
 
 import java.util.Random;
 
+/**
+ * A class of ananimate movable world objects.
+ * 		Inanimate movable world objects can be boulders or logs.
+ * 
+ * @version	2.9.05 technical beta
+ * @author	Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
+ */
 abstract class InanimateMovableWorldObject extends MovableWorldObject {
 
-
     /**
-     * Initialize this new Object with given x, y and z coordinate and given world.
+     * Initialize this new inanimate movable world object with given x, y and z coordinate and given world.
      *
-     * @param  x
-     *         The x coordinate for this new Object.
-     * @param  y
-     *         The y coordinate for this new Object.
-     * @param  z
-     *         The z coordinate for this new Object.
-     * @param  world
-     * 		   The world for this new Object.
-     * @effect The x coordinate of this new Object is set to the given x coordinate.
-     * @effect The y coordinate of this new Object is set to the given y coordinate.
-     * @effect The z coordinate of this new Object is set to the given z coordinate.
-     * @post   The world of this new Object is equal to the given world.
-     * @throws IllegalLocation
-     *         The given location is not a valid location for any Object.
+     * @param	x
+     *			The x coordinate for this new inanimate movable world object.
+     * @param	y
+     *			The y coordinate for this new inanimate movable world object.
+     * @param	z
+     *			The z coordinate for this new inanimate movable world object.
+     * @param	world
+     *			The world for this new inanimate movable world object.
+     * @effect	The location of this new inanimate movable world object is set to the given x, y and z coordinate.
+     * @effect	The world of this new inanimate movable world object is set to the given world.
+     * @post	The weight of this new inanimate movable world object is equal to a random weight.
      */
     InanimateMovableWorldObject(double x, double y, double z, World world) throws IllegalLocation {
         this.setLocation(x, y, z);
-        setWorld(world);
-        Random random = new Random();
-        this.weight = 10 + random.nextInt(41);
+        this.setWorld(world);
+        int randomWeight = random.nextInt(41) + 10;
+        this.weight = randomWeight;
     }
 
+    /* Variables */
+    
     /**
-     * Variable registering the weight of this Object.
+     * Variable registering the weight of this inanimate movable world object.
      */
     private final int weight;
-
+    
     /**
-     * Return the weight of this Object.
+     * Object holding the random generator used during the random cration of the inanimate movable world object.
+     */
+    private Random random = new Random();
+
+    /* Methods */
+    
+    /**
+     * Update this inanimate movable world object's position and activity status according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     */
+    @Override
+    public void advanceTime(double dt) {
+        this.getActivity().advanceActivityTime(dt);
+    }
+    
+    /**
+     * Return the weight of this inanimate movable world object.
      */
     @Basic
     @Raw
@@ -50,20 +75,13 @@ abstract class InanimateMovableWorldObject extends MovableWorldObject {
     public int getWeight() {
         return this.weight;
     }
-
+    
     /**
-     * No documentation needed.
-     */
-    @Override
-    public void advanceTime(double dt) {
-        this.getActivity().advanceActivityTime(dt);
-    }
-    /**
-     * Check whether the given activity is a valid activity for any Object.
+     * Check whether the given activity is a valid activity for any inanimate movable world object.
      *
-     * @param  activity
-     *         The activity to check.
-     * @return True if and only if the activity consists of not conducting any activity or falling.
+     * @param	activity
+     *			The activity to check.
+     * @return	True if and only if the activity consists of not conducting any activity or falling.
      */
     @Override
     public boolean isValidActivity(IActivity activity) {
@@ -71,9 +89,9 @@ abstract class InanimateMovableWorldObject extends MovableWorldObject {
     }
 
     /**
-     * Let the Object finish its current activity.
+     * Let the inanimate movable world object finish its current activity.
      *
-     * @post   This Object is no longer conducting an activity.
+     * @effect	This inanimate movable world object is no longer conducting an activity.
      */
     @Override
     public void activityFinished() {

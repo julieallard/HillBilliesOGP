@@ -6,41 +6,144 @@ import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.activities.IActivity;
 import hillbillies.model.exceptions.IllegalLocation;
 
+/**
+ * A class of movable world objects.
+ * 		Movable world objects can be units, boulders or logs.
+ * 
+ * @version 2.9.05 technical beta
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
+ */
 public abstract class MovableWorldObject {
 
+	/*Variables*/
+	
     /**
-     * Set the location of this Object to the given x, y and z coordinate.
-     *
-     * @param  locationX
-     * 		   The x coordinate for this Object.
-     * @param  locationY
-     * 		   The y coordinate for this Object.
-     * @param  locationZ
-     * 		   The z coordinate for this Object.
-     * @post   The x coordinate of the location of this new Object is equal to the given x coordinate.
-     * 		 | new.getLocation() == location
-     * @post   The y coordinate of the location of this new Object is equal to the given y coordinate.
-     * 		 | new.getLocation() == location
-     * @post   The z coordinate of the location of this new Object is equal to the given z coordinate.
-     * 		 | new.getLocation() == location
-     * @throws IllegalLocation
-     * 		   The given location is not a valid location for any Object.
-     *       | ! isValidLocation(getLocation())
+     * Variable registering the world of this movable world object.
      */
-    public void setLocation(double locationX, double locationY, double locationZ){
-        VLocation location = new VLocation(locationX, locationY, locationZ, this);
-        this.setLocation(location);
-    }
+    private World world;
+	
     /**
-     * Set the location of this Unit to the given location.
+     * Variable registering the location of this movable world object.
+     */
+    private VLocation location;
+	
+    /**
+     * Variable registering the activity of this movable world object.
+     */
+    private IActivity activity;
+
+    /* Methods */
+    
+    /**
+     * Update this movable world object's position and activity status according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     */
+    public abstract void advanceTime(double dt);
+    
+    /**
+     * Return the weight of this movable world object.
+     */
+    public abstract int getWeight();
+
+    /**
+     * Return the world of this movable world object.
+     */
+    @Basic
+    @Raw
+    @Immutable
+    public World getWorld() {
+        return this.world;
+    }
+
+    /**
+     * Check whether this movable world object can have the given world as its world.
+     * 
+     * @param	world
+     * 			The world to check.
+     */
+    boolean canHaveAsWorld(World world){
+        return true;
+    }
+    
+    /**
+     * Set the world of this movable world object to the given world.
+     *
+     * @param  world
+     *         The new world for this movable world object.
+     * @post   The world of this new movable world object is equal to the given world.
+     * @throws IllegalArgumentException
+     *         The given world is not a valid world for any movable world object.
+     */
+    @Raw
+    void setWorld(World world) throws IllegalArgumentException {
+        if (! canHaveAsWorld(world))
+            throw new IllegalArgumentException();
+        this.world = world;
+    }
+    
+    /**
+     * Return the location of this movable world object.
+     */
+    @Basic
+    @Raw
+    public VLocation getLocation() {
+        return this.location;
+    }
+    
+    /**
+     * Check whether the given location is a valid location for any movable world object.
      *
      * @param  location
-     * 		   The new location for this Unit.
-     * @post   The location of this new Unit is equal to the given location.
-     * 		 | new.getLocation() == location
+     * 		   The location to check.
+     * @return True if and only if this movable world object can have the given location as its location in this movable world object's world.
+     */
+
+    public boolean isValidLocation(VLocation location) {
+        return VLocation.isValidLocation(location);
+    }
+	
+    /**
+     * Set the location of this movable world object to the given x, y and z coordinate.
+     *
+     * @param	x
+     *			The x coordinate for this movable world object.
+     * @param	y
+     *			The y coordinate for this movable world object.
+     * @param	z
+     *			The z coordinate for this movable world object.
+     * @effect	The location of this movable world object is set to the location with given x, y and z coordinate.
+     */
+	@Raw
+    public void setLocation(double x, double y, double z) {
+        VLocation location = new VLocation(x, y, z, this);
+        this.setLocation(location);
+    }
+	
+    /**
+     * Set the location of this movable world object to the x, y and z coordinate supplied by the given array.
+     *
+     * @param	array
+     *			The array supplying the x, y and z coordinate for this movable world object.
+     * @effect	The location of this movable world object is set to the location with the x, y and z coordinate supplied by the given array.
+     */
+	@Raw
+    public void setLocation(double[] array) {
+        VLocation location = new VLocation(array[0], array[1], array[2], this);
+        this.setLocation(location);
+    }
+	
+    /**
+     * Set the location of this movable world object to the given location.
+     *
+     * @param  location
+     * 		   The new location for this movable world object.
+     * @post   The location of this new movable world object is equal to the given location.
      * @throws IllegalLocation
-     * 		   The given location is not a valid location for any Unit.
-     *       | ! isValidLocation(getLocation())
+     * 		   The given location is not a valid location for any movable world object.
      */
     @Raw
     public void setLocation(VLocation location) throws IllegalLocation {
@@ -51,72 +154,27 @@ public abstract class MovableWorldObject {
     }
 
     /**
-     * Register the given location and this Log in the world's world map.
+     * Register the given location and this movable world object in the world's world map.
      *
-     * @param  location
-     * 		   The location to register.
-     * @post   The given location and this Log are added in the world's world map.
+     * @param	location
+     *			The location to register.
+     * @post	The given location and this movable world object are added in the world's world map.
      */
     public void register(VLocation location) {
         this.getWorld().getWorldMap().put(location, this);
     }
 
     /**
-     * Unregister this Log and its location from the world's world map.
+     * Unregister this movable world object and its location from the world's world map.
      *
-     * @post   This Log and its location are removed from the world's world map.
+     * @post	This movable world object and its location are removed from the world's world map.
      */
     public void unregister() {
         this.getWorld().getWorldMap().remove(this.getLocation());
     }
-
-    /**
-     * Variable registering the location of this Unit.
-     */
-    private VLocation location;
-
-
-    /**
-     * Set the location of this Object to the x, y and z coordinate supplied by the given array.
-     *
-     * @param  array
-     * 		   The array supplying the x, y and z coordinate for this Object.
-     * @post   The x coordinate of the location of this new Object is equal to the x coordinate supplied by the given array.
-     * @post   The y coordinate of the location of this new Object is equal to the y coordinate supplied by the given array.
-     * @post   The z coordinate of the location of this new Object is equal to the z coordinate supplied by the given array.
-     * @throws IllegalLocation
-     * 		   The given location is not a valid location for any Object.
-     */
-
-    public void setLocation(double[] array) {
-        VLocation location = new VLocation(array[0], array[1], array[2], this);
-        this.setLocation(location);
-    }
-
-    /**
-     * Check whether the given location is a valid location for any Object.
-     *
-     * @param  location
-     * 		   The location to check.
-     * @return True if and only if this Object can have the given location as its location in this Object's world.
-     */
-
-    public boolean isValidLocation(VLocation location) {
-        return VLocation.isValidLocation(location);
-    }
-
-    public abstract void activityFinished();
     
-    public abstract int getWeight();
-
-    public abstract void advanceTime(double dt);
     /**
-     * Variable registering the activity of this Unit.
-     */
-    private IActivity activity;
-
-    /**
-     * Return the activity of this Object.
+     * Return the activity of this movable world object.
      */
     @Basic
     @Raw
@@ -125,66 +183,32 @@ public abstract class MovableWorldObject {
     }
 
     /**
-     * Return the location of this Unit.
-     */
-    @Basic
-    @Raw
-    public VLocation getLocation() {
-        return this.location;
-    }
-
-    /**
-     * Set the activity of this Object to the given activity.
+     * Check whether the given activity is a valid activity for the movable world object.
      *
-     * @param  activity
-     * 		   The new activity for this Object.
-     * @throws IllegalArgumentException
-     * 		   The given activity is not a valid activity for any Object.
-     *       | ! isValidActivity(getActivity())
-     * @post   The activity of this new Object is equal to the given activity.
-     * 		 | new.getActivity() == activity
+     * @param	activity
+     * 			The activity to check.
+     */
+    abstract boolean isValidActivity(IActivity activity);
+    
+    /**
+     * Set the activity of this movable world object to the given activity.
+     *
+     * @param	activity
+     *			The new activity for this movable world object.
+     * @post	The activity of this new movable world object is equal to the given activity.
+     * @throws	IllegalArgumentException
+     *			The given activity is not a valid activity for any movable world object.
      */
     @Raw
     public void setActivity(IActivity activity) throws IllegalArgumentException {
         if (! isValidActivity(activity))
-            throw new IllegalArgumentException("this is not a valid Activity");
+            throw new IllegalArgumentException("Invalid activity");
         this.activity = activity;
     }
-
-    abstract boolean isValidActivity(IActivity activity);
-
-    boolean canHaveAsWorld(World world){
-        return true;
-    }
-
-    /**
-     * Return the world of this Log.
-     */
-    @Basic
-    @Raw
-    @Immutable
-    public World getWorld() {
-        return this.world;
-    }
-
-    /**
-     * Variable registering the world of this Log.
-     */
-    private World world;
     
     /**
-     * Set the world of this Log to the given world.
-     *
-     * @param  world
-     *         The new world for this Log.
-     * @post   The world of this new Log is equal to the given world.
-     * @throws IllegalArgumentException
-     *         The given world is not a valid world for any Log.
+     * Let this movable world object finish its current activity.
      */
-    @Raw
-    void setWorld(World world) throws IllegalArgumentException {
-        if (! canHaveAsWorld(world))
-            throw new IllegalArgumentException();
-        this.world = world;
-    }
+    public abstract void activityFinished();
+
 }
