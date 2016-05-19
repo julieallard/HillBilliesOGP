@@ -942,19 +942,12 @@ public class Unit extends MovableWorldObject {
      *
      * @param	targetCube
      * 			The position of the cube to let this unit work at.
-     * @effect	The unit conducts work at the given target cube. The current activity is set to work.
-     * @effect	The carried object of this unit is not effective.
-     * 		  | this.setCarriedObject(null)
-     * @effect	This unit's state of carrying is set to false.
-     * 		  | this.setCarrying(false)
-     * @effect	The given object's location is set to this unit's location.
-     * 		  |	carriedObject.setLocation(locArray)
+     * @effect	This unit works at the given target cube.
+     * 		  |	this.interrupt(work)
      */
     public void work(int[] targetCube) {
         Work work = new Work(this, targetCube);
-        if (!interrupt(work))
-            return;
-        this.setActivity(work);
+        this.interrupt(work);
     }
 
     /**
@@ -997,7 +990,6 @@ public class Unit extends MovableWorldObject {
         Attack attack = new Attack(this, defender);
         if (!this.interrupt(attack))
             return;
-        this.setActivity(attack);
         defender.setActivity(new Defend(defender));
     }
 
@@ -1005,6 +997,7 @@ public class Unit extends MovableWorldObject {
      * Return the faction of this unit.
      */
     @Basic
+    @Raw
     public Faction getFaction() {
         return this.faction;
     }
@@ -1033,7 +1026,7 @@ public class Unit extends MovableWorldObject {
      */
     @Raw
     private void setFaction() throws IllegalArgumentException {
-        if (this.getWorld().getNumberOfFactions() < 5) {
+        if (this.getWorld().getNumberOfFactions() < this.getWorld().getMaxNbFactions()) {
             this.faction = new Faction(this, getWorld());
         } else if (!canHaveAsFaction(this.getWorld().getSmallestFaction())) {
             throw new IllegalArgumentException("This faction has already reached its max amount of units.");

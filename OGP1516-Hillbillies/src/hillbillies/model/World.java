@@ -91,6 +91,21 @@ public class World {
 	 */
     public int sideSize;
     
+	/**
+	 * Constant reflecting the maximum amount of active factions of a world.
+	 * 
+	 * @return	The maximum amount of active factions of all world is 5.
+	 *		  |	result == 5
+	 */
+	public static final int MAX_FACTIONS = 5;
+    
+	/**
+	 * Return the maximum amount of active factions of a world.
+	 */
+	public int getMaxNbFactions() {
+		return World.MAX_FACTIONS;
+	}
+	
     /**
      * Return the cube world of this World.
      */
