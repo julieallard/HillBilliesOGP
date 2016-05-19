@@ -12,34 +12,33 @@ import ogp.framework.util.Util;
 import java.util.*;
 
 /**
- * A class of Worlds involving a cube world and a listener of world changes.
+ * A class of worlds involving a cube world and a listener of world changes.
  * 
  * @invar  The CubeWorld of each World must be a valid CubeWorld for any World. 
  *       | isValidCubeWorld(getCubeWorld())
  * 
- * @version 0.9 alpha
+ * @version	2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
  */
 public class World {
+	
     /**
-     * Initialize this new World with given CubeWorld.
+     * Initialize this new world with given CubeWorld.
      *
      * @param  CubeWorld
      * 		   The cube world with an allocation of the geological features for this new World.
-     * @effect The cube world of this new World is set to the given cube world.
+     * @effect The cube world of this new world is set to the given cube world.
      */
-
     public World(int[][][] CubeWorld, TerrainChangeListener changeListener) throws IllegalLocation, IllegalArgumentException {
         this.setWorldMap(new WorldMap<>());
-        this.sideSize = CubeWorld.length;
-        this.borderConnect = new ConnectedToBorder(sideSize, sideSize, sideSize);
-        this.caveInlist = new ArrayList<>();
+        this.xSideSize = CubeWorld[0].length;
+        this.ySideSize = CubeWorld[1].length;
+        this.zSideSize = CubeWorld[2].length;
+        this.borderConnect = new ConnectedToBorder(xSideSize, ySideSize, zSideSize);
         this.setCubeWorld(CubeWorld);
         this.changeListener = changeListener;
-        this.FactionSet = new HashSet<>();
-        this.TotalUnitSet = new HashSet<>();
     }
     
     /**
@@ -55,7 +54,7 @@ public class World {
     /**
      * Variable registering the cubes of this World that are not supported anymore and which will cave in.
      */
-    private final ArrayList<int[]> caveInlist;
+    private final ArrayList<int[]> caveInlist = new ArrayList<>();
     
     /**
      * Variable registering the cube world with an allocation of the geological features and the size of this World.
@@ -70,26 +69,28 @@ public class World {
     
 	/**
 	 * Set collecting references to factions belonging to this world.
-	 * 
-	 * @invar The set of factions is effective.
-	 * @invar Each element in the set of factions references a faction that is an acceptable faction for this World.
-	 * @invar Each faction in the FactionSet references this world as the world to which it is attached. 
 	 */
-	public Set<Faction> FactionSet;
+	public Set<Faction> FactionSet = new HashSet<>();
 	
 	/**
 	 * Set collecting references to Units belonging to this world.
-	 * 
-	 * @invar The set of Units is effective.
-	 * @invar Each element in the set of Units references a unit that is an acceptable unit for this World.
-	 * @invar Each Unit in the TotalUnitSet references this world as the world to which it is attached. 
 	 */
-	public Set<Unit> TotalUnitSet;
+	public Set<Unit> TotalUnitSet = new HashSet<>();
 	
 	/**
-	 * Variable registering the length of the sides of this World.
+	 * Variable registering the length of x side of this world.
 	 */
-    public int sideSize;
+    public int xSideSize;
+    
+	/**
+	 * Variable registering the length of y side of this world.
+	 */
+    public int ySideSize;
+    
+	/**
+	 * Variable registering the length of z side of this world.
+	 */
+    public int zSideSize;
     
 	/**
 	 * Constant reflecting the maximum amount of active factions in a world.
@@ -139,11 +140,11 @@ public class World {
      */
     public boolean isValidCubeWorld(int[][][] CubeWorld) {
         for (int[][] YZLevel: CubeWorld) {
-            if (YZLevel.length != sideSize) {
+            if (YZLevel.length != ySideSize) {
                 return false;
             }
             for (int[] ZLine: YZLevel) {
-                if (ZLine.length != sideSize) {
+                if (ZLine.length != zSideSize) {
                     return false;
                 }
             }
