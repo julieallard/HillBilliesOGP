@@ -5,6 +5,7 @@ import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.activities.IActivity;
 import hillbillies.model.exceptions.IllegalLocation;
+import hillbillies.model.exceptions.SyntaxError;
 
 /**
  * A class of movable world objects.
@@ -42,7 +43,7 @@ public abstract class MovableWorldObject {
      * @param	dt
      * 			The amount of time to advance.
      */
-    public abstract void advanceTime(double dt);
+    public abstract void advanceTime(double dt) throws SyntaxError;
     
     /**
      * Return the weight of this movable world object.

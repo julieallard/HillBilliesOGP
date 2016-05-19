@@ -1,5 +1,7 @@
 package hillbillies.model;
 
+import hillbillies.model.EsotERICScript.Statements.ExecutionStatus;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -131,23 +133,8 @@ public class Scheduler {
 		List<Task> totList = new ArrayList<>(this.TaskQueue);
 		return  totList.stream().filter(condition).collect(Collectors.toList());
 	}
-
-	
 	public Iterator<Task> getTasksInDescendingPriority() {
         return TaskQueue.iterator();
-	}
-	
-	public void markExecution(Task task, Unit executor) {
-		if (! executor.hasTask()) {
-			task.setExecutor(executor);
-		}
-	}
-	
-	public void resetMarking(Task task) {
-//		task.getExecutingUnit().......
-//		TODO: nie affff
-		task.getExecutor().setTask(null);
-		task.setExecutor(null);
 	}
 	/**
 	 * List collecting references to Tasks belonging to this Scheduler.
@@ -156,4 +143,10 @@ public class Scheduler {
 	 * @invar Each element in the list of Tasks references a Task that is an acceptable Task for this Scheduler.
 	 */
 	private PriorityQueue<Task> TaskQueue;
+
+	public Task offerTask(){
+		Task task =this.TaskQueue.poll();
+		if (task.getStatus() != ExecutionStatus.NOTYETEXECUTED) throw new RuntimeException("A task not ready to be executed was in the TaskQueue");
+		return task;
+	}
 }

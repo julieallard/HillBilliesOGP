@@ -5,6 +5,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.activities.*;
 import hillbillies.model.exceptions.IllegalLocation;
 import hillbillies.model.exceptions.IllegalTimeException;
+import hillbillies.model.exceptions.SyntaxError;
 import hillbillies.part2.listener.DefaultTerrainChangeListener;
 import hillbillies.part2.listener.TerrainChangeListener;
 
@@ -420,25 +421,28 @@ public class Unit extends MovableWorldObject {
      * 			The amount of time to advance.
      */
     @Override
-    public void advanceTime(double dt) {
+    public void advanceTime(double dt) throws SyntaxError {
         setTimeSinceLastRest(getTimeSinceLastRest() + dt);
         if (getTimeSinceLastRest() >= 300) {
             boolean flag = this.interrupt(new Rest(this));
-            if (flag)
-            	setTimeSinceLastRest(0);
+            if (flag) setTimeSinceLastRest(0);
         }
-        if (this.getActivity().getId() == 0 && isDefaultBehaviorEnabled())
-            behaveDefault();
-        this.getActivity().advanceActivityTime(dt);
+        if(this.getActivity().getId()!=0) {
+            this.getActivity().advanceActivityTime(dt);
+            return;
+        }
+
+        if (this.hasTask()) {
+            task.advanceTime(dt);
+            return;
+        }
+        if ((! this.hasTask())&& isDefaultBehaviorEnabled()) {
+            Task task = this.getFaction().getScheduler().offerTask();
+            if (task==null) return;
+            task.advanceTime(dt);
+        }
     }
 
-    /**
-     * Let this unit conduct its default behavior.
-     */
-    private void behaveDefault() {
-        this.setActivity(new Rest(this));
-        //TODO flesh out this method
-    }
 	
     /**
      * Return the name of this unit.
@@ -1365,16 +1369,19 @@ public class Unit extends MovableWorldObject {
     	this.pausedActivity = activity;
         this.hasPausedActivity = !(activity instanceof NoActivity);
     }
-    
+    //// TODO: 19/05/16 Documentation outdated
     /**
      * Check whether this unit's current activity can be interrupted by the given new activity.
      *
      * @param	newActivity
      * 			The new activity for this unit.
-     * @effect	If the new activity is a defense and if the current activity is a movement or work, this unit's paused activity is set to its current activity.
+     * @effect	If the new activity is a defense, if the current activity is a movement or work
+     *          and if this Unit's activity can be interrupted by the new activity,
+     *         this unit's paused activity is set to its current activity.
      * 		  |	if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4))
      * 		  |		then this.setPausedActivity(this.getActivity())
-     * @effect	This unit's current activity is set to the given new activity.
+     * @effect	and if this Unit's activity can be interrupted by the new activity,
+     *          this unit's current activity is set to the given new activity.
      * 		  |	this.setActivity(newActivity)
      * @return	True if and only if this unit's current activity can be interrupted by the given new activity.
      * 		  |	result == this.getActivity().canBeInterruptedBy(newActivity)
@@ -1385,6 +1392,7 @@ public class Unit extends MovableWorldObject {
         if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4))
         	this.setPausedActivity(this.getActivity()); 
         this.setActivity(newActivity);
+        this.task.stopExecution();
         return true;
     }
     
