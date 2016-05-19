@@ -3,6 +3,7 @@ package hillbillies.model;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.ProgramExecutor;
+import hillbillies.model.EsotERICScript.Statements.ExecutionStatus;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.exceptions.SyntaxError;
 
@@ -122,8 +123,8 @@ public class Task implements Comparable {
 	 * @invar The list of schedulers is effective.
 	 * @invar Each element in the list of schedulers references a scheduler that is an acceptable scheduler for this Task.
 	 */
+
 	private Set<Scheduler> SchedulerSet;
-	
 	/**
 	 * Return the name of this Task.
 	 */
@@ -193,23 +194,23 @@ public class Task implements Comparable {
 	public void addScheduler(List<Scheduler> schedulerList) {
         this.SchedulerSet.addAll(schedulerList);
 	}
-	
+
 	public void startExecution(Unit unit) {
 		this.setExecutor(unit);
 	}
-	
+
 	public void stopExecution() {
 		this.setExecutor(null);
 	}
-	
+
 	public Unit getExecutor() {
 		return executor;
 	}
-	
+
 	public void setExecutor(Unit executor) {
 		this.executor = executor;
 	}
-	
+
 	public World world;
 
 	/**
@@ -263,7 +264,7 @@ public class Task implements Comparable {
 	public void advanceTime(double dt) throws SyntaxError {
         ProgramExecutor executor =new ProgramExecutor(getExecutor(),this);
         executor.setDeltat(dt);
-        executor.findPausedStatement().execute(executor);
+        executor.execute();
     }
     public void forceExcecuteComplete(){
         while (!this.isExecuted()){
@@ -298,4 +299,14 @@ public class Task implements Comparable {
     public int[] getSelected() {
         return selected;
     }
+
+    public ExecutionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ExecutionStatus status) {
+        this.status = status;
+    }
+
+    private ExecutionStatus status;
 }

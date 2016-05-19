@@ -5,6 +5,8 @@ import hillbillies.model.EsotERICScript.Statements.LoopStatement;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.Task;
 import hillbillies.model.Unit;
+import hillbillies.model.activities.NoActivity;
+import hillbillies.model.exceptions.SyntaxError;
 
 import java.util.*;
 public class ProgramExecutor {
@@ -19,6 +21,27 @@ public class ProgramExecutor {
     private final List<Statement> statementList = new ArrayList<>();
     private Stack<Statement> statementCallStack = new Stack<>();
     private double dt;
+
+    public void execute() throws SyntaxError {
+        Statement current;
+        Statement last=null;
+        if (task.getStatus().equals(ExecutionStatus.NOTYETEXECUTED)) current=task.getRootStatement();
+        else current=findPausedStatement();
+        while(canExecute()) {
+            current.execute(this);
+            if (getExecutingUnit().getActivity() instanceof NoActivity) {
+                getExecutingUnit().advanceTime(this.getDeltat());
+                current.setStatus(ExecutionStatus.PAUSED);
+                return;
+            }
+            last=current;
+             current= last.getNext();
+        }
+        if (last != null) {
+            last.setStatus(ExecutionStatus.PAUSED);
+        }
+    }
+
 
     public double getDeltat() {
         return dt;
@@ -101,6 +124,13 @@ public class ProgramExecutor {
         return encapstat instanceof LoopStatement || hasEncapsulatingLoop(encapstat);
     }
 
+    public static Statement findEncapsulatingLoop(Statement statement) throws SyntaxError {
+        Statement encapstat = statement.getEncapsulatingStatement();
+            if (encapstat ==null) throw new SyntaxError("No while loop found");
+            if (encapstat instanceof LoopStatement) return encapstat;
+        return findEncapsulatingLoop(encapstat);
+    }
+
     public Statement findPausedStatement() {
         Statement root = task.getRootStatement();
         Stack<Statement> statementStack = new Stack<>();
@@ -114,12 +144,10 @@ public class ProgramExecutor {
                     paused = statement;
                     break;
                 }
-
             }
         }
         return paused;
     }
-
 
     public static void resetExecutionstyle(Task task){
         Statement root = task.getRootStatement();

@@ -6,8 +6,6 @@ import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
 import hillbillies.model.EsotERICScript.ProgramExecutor;
 import hillbillies.model.Task;
 import hillbillies.model.Unit;
-import hillbillies.model.activities.IActivity;
-import hillbillies.model.activities.Movement;
 import hillbillies.model.exceptions.SyntaxError;
 
 import java.util.Collection;
@@ -16,7 +14,7 @@ import java.util.Collections;
 public class ActionStatement extends Statement {
 
 	public ActionStatement(Task task) {
-		super(task);
+		super();
 	}
 
 	public abstract class ActionPartStatement extends PartStatement {
@@ -33,7 +31,11 @@ public class ActionStatement extends Statement {
             this.activityStarted = false;
         }
 
-	}
+        @Override
+        public Statement getNext() throws SyntaxError {
+            return getEncapsulatingStatement();
+        }
+    }
 
     // moveTo e
     public class MoveToPartStatement extends ActionPartStatement {
@@ -53,10 +55,6 @@ public class ActionStatement extends Statement {
                 unit.moveTo(argExpr1.value(ActionStatement.this.executingUnit));
                 this.activityStarted=true;
             }
-            IActivity activity =unit.getActivity();
-            assert activity instanceof Movement;
-            unit.advanceTime(executor.getDeltat());
-            if (activity.isFinished()) finishExecuting();
         }
         boolean singular() {
         	return false;

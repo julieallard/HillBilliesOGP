@@ -15,5 +15,7 @@ public abstract class PartStatement {
         this.probe().forEach(Statement::reExecutePrepare);
     }
     public abstract Collection<Statement> probe();
-    
+
+    public abstract Statement getNext() throws SyntaxError;
+
 }

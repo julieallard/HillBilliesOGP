@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class LoopStatement extends Statement {
     public LoopStatement(Task task) {
-        super(task);
+        super();
     }
     // while e do s done
     class WhilePartStatement extends PartStatement {
@@ -21,12 +21,14 @@ public class LoopStatement extends Statement {
         }
         private final BooleanExpression condition;
         private final Statement body;
+
+        private boolean flag;
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
             Unit unit = executor.getExecutingUnit();
-            while (this.condition.value(unit) && executor.canExecute()) {
-                body.execute(executor);
-            }
+            body.reExecutePrepare();
+            flag=condition.value(unit);
+            if (!flag) setStatus(ExecutionStatus.COMPLETED);
         }
         @Override
         boolean singular() {
@@ -37,6 +39,13 @@ public class LoopStatement extends Statement {
             Set<Statement> probeset =new HashSet<>();
             probeset.add(body);
             return probeset;
+        }
+
+        @Override
+        public Statement getNext() throws SyntaxError {
+            if (flag) return this.body;
+            setStatus(ExecutionStatus.FINISHED);
+            return getEncapsulatingStatement();
         }
     }
 }

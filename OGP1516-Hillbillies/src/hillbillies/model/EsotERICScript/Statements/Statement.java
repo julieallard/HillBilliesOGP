@@ -22,9 +22,12 @@ public class Statement {
         this.status = status;
     }
 
-    public Statement(Task task) {
+    public Statement() {
         this.status = ExecutionStatus.NOTYETEXECUTED;
-        this.task = task;
+    }
+
+    public Statement getNext() throws SyntaxError {
+        return this.getPartStatement().getNext();
     }
 
     public boolean isBeingExcecuted() {
@@ -32,6 +35,22 @@ public class Statement {
     }
 
     private Statement encapsulatingStatement;
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public Unit getExecutingUnit() {
+        return executingUnit;
+    }
+
+    public void setExecutingUnit(Unit executingUnit) {
+        this.executingUnit = executingUnit;
+    }
 
     public Task task;
 
@@ -45,7 +64,8 @@ public class Statement {
 
     public void execute(ProgramExecutor executor) throws SyntaxError {
         this.executingUnit = executor.getExecutingUnit();
-        executor.updateCallStackWith(this);
+        if (!executor.canExecute()) return;
+        executor.pushUpdate(this);
         this.getPartStatement().execute(executor);
     }
 
@@ -98,6 +118,7 @@ public class Statement {
             } else if (value instanceof UnitExpression) {
                 task.unitGlobalMap.put(variableName, (Unit) value.value(unit));
             }
+            Statement.this.setStatus(ExecutionStatus.COMPLETED);
         }
 
         @Override
@@ -108,6 +129,12 @@ public class Statement {
         @Override
         public Collection<Statement> probe() {
             return Collections.EMPTY_SET;
+        }
+
+        @Override
+        public Statement getNext() {
+            Statement.this.setStatus(ExecutionStatus.FINISHED);
+            return Statement.this.getEncapsulatingStatement();
         }
     }
     // if e then s [ else s ] fi
@@ -131,10 +158,7 @@ public class Statement {
                 flag = condition.value(unit);
                 conditionEvaluated = true;
             }
-            if (flag)
-                ifPart.execute(executor);
-            else
-                elsePart.execute(executor);
+            Statement.this.setStatus(ExecutionStatus.COMPLETED);
         }
 
         @Override
@@ -151,6 +175,14 @@ public class Statement {
         }
 
         @Override
+        public Statement getNext() {
+            if (Statement.this.getStatus()==ExecutionStatus.COMPLETED) return Statement.this.getEncapsulatingStatement();
+            setStatus(ExecutionStatus.FINISHED);
+            if (flag){ return ifPart;}
+            else {return elsePart;}
+        }
+
+        @Override
         public void refresh() {
             super.refresh();
             this.conditionEvaluated = false;
@@ -161,7 +193,7 @@ public class Statement {
     public class BreakPartStatement extends PartStatement {
         @Override
         public void execute(ProgramExecutor executor) throws SyntaxError {
-
+            Statement.this.setStatus(ExecutionStatus.COMPLETED);
         }
 
         @Override
@@ -174,12 +206,10 @@ public class Statement {
             return Collections.EMPTY_SET;
         }
 
-        // print e
-        // TODO
-
-        // {s}
-
-        //// TODO: 15/05/16 still broken;
+        @Override
+        public Statement getNext() throws SyntaxError {
+            return ProgramExecutor.findEncapsulatingLoop(Statement.this);
+        }
 
     }
         class SequencePartStatement extends PartStatement {
@@ -190,14 +220,16 @@ public class Statement {
 
             private final List<Statement> statementList;
 
+            private Statement currentStatement;
+
             @Override
             public void execute(ProgramExecutor executor) throws SyntaxError {
-                if (statementList.size() == 0)
-                    throw new SyntaxError("The list of statements is empty.");
-                for (Statement statement : statementList)
-                    statement.execute(executor);
+                if (statementList.size() == 0){
+                    setStatus(ExecutionStatus.COMPLETED);
+                    return;}
+                currentStatement=statementList.get(0);
+                statementList.remove(0);
             }
-
             @Override
             boolean singular() {
                 return false;
@@ -207,10 +239,24 @@ public class Statement {
             public Collection<Statement> probe() {
                 return statementList;
             }
+
+            @Override
+            public Statement getNext() throws SyntaxError {
+                if (getStatus().equals(ExecutionStatus.COMPLETED)){
+                    setStatus(ExecutionStatus.FINISHED);
+                    return getEncapsulatingStatement();
+                }
+                Statement interm=currentStatement;
+                currentStatement=null;
+                return interm;
+            }
         }
 
-    public void proceed(ProgramExecutor executor) throws SyntaxError {
-        if (getStatus()!=ExecutionStatus.PAUSED) throw new SyntaxError("tried to proceed a non-paused statement");
-        this.execute(executor);
+    public Statement newAssignstatement(String key,Expression value){
+        Statement statement=new Statement();
+        statement.setPartStatement(new AssignmentPartStatement(key,value));
+        return statement;
     }
+
+
 }

@@ -10,7 +10,7 @@ import hillbillies.model.exceptions.SyntaxError;
 public final class NoStatement extends Statement {
 
     public NoStatement(Task task){
-        super(task);
+        super();
         this.setStatus(ExecutionStatus.TRIVIALEXECUTION);
     }
     @Override
