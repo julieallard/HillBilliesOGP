@@ -92,18 +92,33 @@ public class World {
     public int sideSize;
     
 	/**
-	 * Constant reflecting the maximum amount of active factions of a world.
+	 * Constant reflecting the maximum amount of active factions in a world.
 	 * 
-	 * @return	The maximum amount of active factions of all world is 5.
+	 * @return	The maximum amount of active factions of all worlds is 5.
 	 *		  |	result == 5
 	 */
 	public static final int MAX_FACTIONS = 5;
+	
+	/**
+	 * Constant reflecting the maximum amount of units in a world.
+	 * 
+	 * @return	The maximum amount of units of all worlds is 100.
+	 *		  |	result == 100
+	 */
+	public static final int MAX_UNITS = 100;
     
 	/**
-	 * Return the maximum amount of active factions of a world.
+	 * Return the maximum amount of active factions in this world.
 	 */
 	public int getMaxNbFactions() {
 		return World.MAX_FACTIONS;
+	}
+	
+	/**
+	 * Return the maximum amount of units in this world.
+	 */
+	public int getMaxNbUnits() {
+		return World.MAX_UNITS;
 	}
 	
     /**
@@ -368,7 +383,7 @@ public class World {
 	/**
 	 * Return the number of factions in this world.
 	 */
-    int getNumberOfFactions() {
+    int getNbFactions() {
 		return FactionSet.size();
 	}
 	
@@ -413,7 +428,7 @@ public class World {
 	/**
 	 * Return the number of Units of this world.
 	 */
-    int getNumberOfUnits() {
+    int getNbUnits() {
 		return TotalUnitSet.size();
 	}
 

@@ -54,6 +54,21 @@ public class Faction {
 	 */
 	private final Scheduler scheduler;
 
+	/**
+	 * Constant reflecting the maximum amount of units in a faction.
+	 * 
+	 * @return	The maximum amount of units of all factions is 50.
+	 *		  |	result == 50
+	 */
+	public static final int MAX_UNITS = 50;
+	
+	/**
+	 * Return the maximum amount of units in this faction.
+	 */
+	public int getMaxNbUnits() {
+		return Faction.MAX_UNITS;
+	}
+	
     /**
      * Return the world of this faction.
      */
@@ -73,7 +88,7 @@ public class Faction {
      */
     @Raw
 	public boolean canHaveAsWorld(World world) {
-		return (world.getNumberOfFactions() < 5);
+		return (world.getNbFactions() < world.getMaxNbFactions());
 	}
 	
     /**

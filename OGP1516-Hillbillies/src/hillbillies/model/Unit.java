@@ -711,12 +711,12 @@ public class Unit extends MovableWorldObject {
      * 
      * @param	world
      * 			The world to check.
-     * @return	True if and only if the given world contains less than 100 units.
-     * 		  | result == world.getNumberOfUnits() < 100
+     * @return	True if and only if the given world contains less than the maximum amount of units in the given world.
+     * 		  | result == world.getNumberOfUnits() < world.getMaxNbUnits()
      */
     @Override
     protected boolean canHaveAsWorld(World world) {
-        return (world.getNumberOfUnits() < 100);
+        return (world.getNbUnits() < world.getMaxNbUnits());
     }
 
     /**
@@ -942,7 +942,7 @@ public class Unit extends MovableWorldObject {
      *
      * @param	targetCube
      * 			The position of the cube to let this unit work at.
-     * @effect	This unit works at the given target cube.
+     * @effect	This unit's current activity is interrupted by its work activity at the given target cube.
      * 		  |	this.interrupt(work)
      */
     public void work(int[] targetCube) {
@@ -1007,31 +1007,33 @@ public class Unit extends MovableWorldObject {
      *
      * @param	faction
      * 			The faction to check.
-     * @return	True if and only if the given faction contains less than 50 units.
-     * 		  |	result == faction.getNumberOfUnits() < 50
+     * @return	True if and only if the given faction contains less than the maximum amount of units in the given faction.
+     * 		  |	result == faction.getNumberOfUnits() < faction.getMaxNbUnits()
      */
     boolean canHaveAsFaction(Faction faction) {
-        return (faction.getNumberOfUnits() < 50);
+        return (faction.getNumberOfUnits() < faction.getMaxNbUnits());
     }
 
     /**
      * Set the faction of this unit.
      *
-     * @effect	The faction of this new unit is equal to a newly created faction if the maximum number of active
-     * factions is not reached yet, or is equal to the faction with the smallest number of units if the
-     * maximum number of active factions has already been reached.
+     * @post	If the maximum amount of active factions is not reached yet, the faction of this new unit is equal to a newly created faction.
+     * 			Otherwise, the faction of this new unit is equal to the faction with the smallest amount of units.
+     * 		  |	if this.getWorld().getNbFactions() < this.getWorld().getMaxNbFactions()
+     * 		  |		then new.getFaction == new Faction(this, getWorld())
+     * 		  |		else new.getFaction == this.getWorld().getSmallestFaction()
      * @throws	IllegalArgumentException
-     * 			The faction with the smallest number of units is not a valid faction for this unit.
-     *		  |	! canHaveAsFaction(getFaction())
+     * 			The faction of this unit's world with the smallest number of units is not a valid faction for this unit.
+     *		  |	! canHaveAsFaction(this.getWorld().getSmallestFaction())
      */
     @Raw
     private void setFaction() throws IllegalArgumentException {
-        if (this.getWorld().getNumberOfFactions() < this.getWorld().getMaxNbFactions()) {
+        if (this.getWorld().getNbFactions() < this.getWorld().getMaxNbFactions())
             this.faction = new Faction(this, getWorld());
-        } else if (!canHaveAsFaction(this.getWorld().getSmallestFaction())) {
-            throw new IllegalArgumentException("This faction has already reached its max amount of units.");
-        } else {
-            this.faction = this.getWorld().getSmallestFaction();
+        else {
+        	if (!canHaveAsFaction(this.getWorld().getSmallestFaction()))
+        		throw new IllegalArgumentException("This smallest faction has already reached its max amount of units.");
+        	this.faction = this.getWorld().getSmallestFaction();
             this.getWorld().getSmallestFaction().addUnit(this);
         }
     }
@@ -1041,8 +1043,11 @@ public class Unit extends MovableWorldObject {
      *
      * @param	damage
      * 			The damage to deal with.
-     * @effect	If the given number of damage points is equal or higher than this unit's hitpoints, the unit dies. Otherwise, the given number of damage points
-     * 			is subtracted from this unit's hitpoints.
+     * @effect	If the given number of damage points is equal or higher than this unit's hitpoints, this unit dies.
+     * 			Otherwise, the given number of damage points is subtracted from this unit's hitpoints.
+     * 		  |	if intDamage >= this.getCurrentHitPoints()
+     * 		  |		then terminate();
+     * 		  |		else this.setCurrentHitPoints(this.getCurrentHitPoints() - intDamage)
      */
     public void dealDamage(double damage) {
         int intDamage = (int) Math.floor(damage);
@@ -1052,16 +1057,31 @@ public class Unit extends MovableWorldObject {
             this.setCurrentHitPoints(this.getCurrentHitPoints() - intDamage);
     }
 
+	/**
+	 * Return whether this unit is terminated.
+	 */
+	@Basic
+	public boolean isTerminated() {
+		return this.isTerminated;
+	} 
+    
     /**
-     * Terminate this unit, unregistering it from its world's world map and removing it from its world and faction.
+     * Let this unit die.
      *
-     * @effect	This unit is not alive anymore, this unit is unregistered, removed from its world and removed from its faction.
+     * @post	This unit is terminated.
+     * 		  |	new.isTerminated() == true
+     * @effect	This unit is unregistered.
+     * 		  |	this.unregister()
+     * @effect	This unit is removed from its faction.
+     * 		  |	this.getFaction().removeUnit(this)
+     * @effect	This unit is removed from its world.
+     * 		  |	this.getWorld().removeUnit(this)
      */
     private void terminate() {
-        this.setTerminated(true);
+        this.isTerminated = true;
         this.unregister();
-        this.getWorld().removeUnit(this);
         this.getFaction().removeUnit(this);
+        this.getWorld().removeUnit(this);
     }
 
     /**
@@ -1070,11 +1090,12 @@ public class Unit extends MovableWorldObject {
      * @return	An element supplied by a list of random String names.
      */
     private String getRandomName() {
-            String[] redneckNameArr = new String[]{"Cletus", "Billy", "Daquan", "Bill", "Uncle Bob", "Minnie", "John", "Harly", "Molly",
-                    "Tyrone", "Daisy", "Dale", "Ruby", "Bonnie", "Britney", "Earl", "Jessie", "Moe", "Major Marquis Warren", "Daisy Domergue", "Marco the Mexican"
-                    , "Chester Charles Smithers", "Gemma", "Chris Mannix", "Sweet Dave", "Billy Crash", "Rodney", "Dicky Speck", "Chicken Charlie", "Django Freeman"};
-            return redneckNameArr[random.nextInt(redneckNameArr.length)];
+    	String[] redneckNameArray = new String[]{"Cletus", "Billy", "Daquan", "Bill", "Uncle Bob", "Minnie", "John", "Harly", "Molly",
+    			"Tyrone", "Daisy", "Dale", "Ruby", "Bonnie", "Britney", "Earl", "Jessie", "Moe", "Major Marquis Warren", "Daisy Domergue", "Marco the Mexican",
+    			"Chester Charles Smithers", "Gemma", "Chris Mannix", "Sweet Dave", "Billy Crash", "Rodney", "Dicky Speck", "Chicken Charlie", "Django Freeman"};
+    	return redneckNameArray[random.nextInt(redneckNameArray.length)];
     }
+    
     /**
      * Return the experience points of this unit.
      */
@@ -1100,11 +1121,18 @@ public class Unit extends MovableWorldObject {
      *
      * @param	xp
      * 			The new number of experience points for this unit.
-     * @effect	If the given number of experience points is a valid number of experience points for any unit, the number of experience points of this new unit
+     * @post	If the given number of experience points is a valid number of experience points for any unit, the number of experience points of this new unit
      * 			is equal to the given number of experience points.
      *		  |	if (isValidXP(xp))
      *		  |		then new.getXP() == xp
-     * @effect	The lowest of the strength, agility and toughness attributes is incremented by one.
+     * @effect	The lowest of the strength, agility and toughness attributes is incremented by 1 per 10 gained experience points.
+     * 		  |	if getAgility() < getStrength()
+     * 		  |		then if getToughness() < getAgility()
+     * 		  |				then setToughness(getToughness() + 1)
+     * 		  |				else setAgility(getAgility() + 1)
+     * 		  |		else if getToughness() < getStrength()
+     * 		  |				then setToughness(getToughness() + 1)
+     * 		  |				else setStrength(getStrength() + 1)
      */
     @Raw
     private void setXP(int xp) {
@@ -1177,11 +1205,14 @@ public class Unit extends MovableWorldObject {
     }
 
     /**
-     * Let this unit conduct a movement to the given location.
+     * Let this unit move to the given cube location.
      *
      * @param	destination
-     * 			The location to let this unit move to.
-     * @effect	This unit moves to the given location and this unit's current activity is interrupted by the movement.
+     * 			The cube location to let this unit move to.
+     * @effect	If this unit's world can have the given destination cube as a cube location, this unit's current activity is interrupted by the movement to
+     * 			the given destination.
+     *		  |	if this.getWorld().canHaveAsCubeLocation(destination, this)
+     *		  |		then this.interrupt(movement)
      */
     public void moveTo(int[] destination) {
         if (!this.getWorld().canHaveAsCubeLocation(destination, this))
@@ -1199,8 +1230,7 @@ public class Unit extends MovableWorldObject {
      * 			The movement along the y axis to do.
      * @param	dz
      * 			The movement along the z axis to do.
-     * @effect	This unit moves to the adjacent cube, referred to by addition of given dx, dy and dz to the current position
-     * 			coordinates.
+     * @effect	This unit moves to the adjacent cube, referred to by addition of given dx, dy and dz to the current position coordinates.
      * @throws	IllegalLocation
      * 			The intended movement is not a movement to an adjacent cube.
      */
@@ -1219,22 +1249,13 @@ public class Unit extends MovableWorldObject {
     /**
      * Let this unit rest.
      * 
-     * @effect	This unit is resting and this unit's current activity is interrupted by the activity of resting.
+     * @effect	This unit's current activity is interrupted by resting.
+     * 		  |	this.interrupt(rest)
      */
     public void rest() {
         Rest rest = new Rest(this);
         interrupt(rest);
     }
-
-	/**
-     * Variable registering whether this unit is terminated.
-     */ /**
-	 * Return whether this unit is terminated.
-	 */
-	@Basic
-	public boolean isTerminated() {
-		return this.isTerminated;
-	} 
     
     /**
      * Return whether this unit has a task.
@@ -1253,11 +1274,11 @@ public class Unit extends MovableWorldObject {
     /**
      * Check whether the given task is a valid task for any unit.
      *  
-     * @param  task
-     *         The task to check.
-     * @return Always true. The task validity is checked upon creation.
-     *       | result == true
-    */
+     * @param	task
+     *			The task to check.
+     * @return	Always true. The task validity is checked upon creation.
+     *		  |	result == true
+     */
     public static boolean isValidTask(Task task) {
     	return true;
     }
@@ -1265,13 +1286,13 @@ public class Unit extends MovableWorldObject {
     /**
      * Set the task of this unit to the given task.
      * 
-     * @param  task
-     *         The new task for this unit.
-     * @post   The task of this new unit is equal to the given task.
-     *       | new.getTask() == task
-     * @throws IllegalArgumentException
-     *         The given task is not a valid task for any unit.
-     *       | ! isValidTask(getTask())
+     * @param	task
+     *			The new task for this unit.
+     * @post	The task of this new unit is equal to the given task.
+     *		  |	new.getTask() == task
+     * @throws	IllegalArgumentException
+     *			The given task is not a valid task for any unit.
+     *		  |	! isValidTask(getTask())
      */
     public void setTask(Task task) throws IllegalArgumentException {
     	if (!isValidTask(task))
@@ -1285,14 +1306,10 @@ public class Unit extends MovableWorldObject {
      * @return	True if and only if this unit's default behavior is enabled and if it's not conducting any activity.
      *		  |	result ==
      *		  |		this.isDefaultBehaviorEnabled()
-     *		  |		&& (this.getActivity().getId() == 0)     
+     *		  |		&& this.getActivity().getId() == 0
      */
     public boolean isIdle() {
         return this.isDefaultBehaviorEnabled() && (this.getActivity().getId() == 0);
-    }
-
-    public void setTerminated(boolean terminated) {
-        isTerminated = terminated;
     }
     
     /**
@@ -1325,13 +1342,13 @@ public class Unit extends MovableWorldObject {
     /**
      * Set the paused activity of this unit to the given activity.
      * 
-     * @param  activity
-     *         The new paused activity for this unit.
-     * @post   The paused activity of this new unit is equal to the given activity.
-     *       | new.getPausedActivity() == activity
-     * @throws IllegalArgumentException
-     *         The given activity is not a valid activity for any unit.
-     *       | ! isValidActivity(getPausedActivity())
+     * @param	activity
+     *			The new paused activity for this unit.
+     * @post	The paused activity of this new unit is equal to the given activity.
+     *		  |	new.getPausedActivity() == activity
+     * @throws	IllegalArgumentException
+     *			The given activity is not a valid activity for any unit.
+     *		  |	! isValidActivity(getPausedActivity())
      */
     private void setPausedActivity(IActivity activity) throws IllegalArgumentException {
     	if (!isValidActivity(activity))
@@ -1345,17 +1362,20 @@ public class Unit extends MovableWorldObject {
      *
      * @param	newActivity
      * 			The new activity for this unit.
-     * @effect	If the new activity is a defense and if the current activity is a movement or work, 
+     * @effect	If the new activity is a defense and if the current activity is a movement or work, this unit's paused activity is set to its current activity.
+     * 		  |	if newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4)
+     * 		  |		then this.setPausedActivity(this.getActivity())
+     * @effect	This unit's current activity is set to the given new activity.
+     * 		  |	this.setActivity(newActivity)
      * @return	True if and only if this unit's current activity can be interrupted by the given new activity.
+     * 		  |	result == this.getActivity().canBeInterruptedBy(newActivity)
      */
     private boolean interrupt(IActivity newActivity) {
-
         // TODO: 9/05/16 dis shit, tied up in the clusterfuck that is out execution engine;
         if (!this.getActivity().canBeInterruptedBy(newActivity))
             return false;
-        if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4)) {
+        if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4))
         	this.setPausedActivity(this.getActivity());
-        }
         this.setActivity(newActivity);
         return true;
     }
