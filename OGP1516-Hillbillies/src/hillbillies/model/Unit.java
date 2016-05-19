@@ -303,7 +303,7 @@ public class Unit extends MovableWorldObject {
     /**
      * Variable registering whether this unit has a paused activity.
      */
-    private boolean hasProperPausedActivity;
+    private boolean hasPausedActivity;
     
     /**
      * Variable registering the faction this unit belongs to.
@@ -955,7 +955,12 @@ public class Unit extends MovableWorldObject {
      *
      * @param	defender
      * 			The unit to attack.
-     * @effect	The unit conducts an attack against the defender and the defender conducts a defence against this unit.
+     * @effect	If this unit's faction is different from the given defender's faction, if this unit and the defender are located in the same or a neighboring
+     * 			cube and if the defender is not falling, this unit interrupts its current activity with an attack to the defender and the defender conducts
+     * 			a defence against this unit.
+     * 		  |	if (this.getFaction() != defender.getFaction() && !(hasneighboringX && hasneighboringY && hasneighboringZ) && defender.getActivity().getId() == 6)
+     * 		  |		then this.interrupt(new Attack(this, defender))
+     * 		  |			 defender.setActivity(new Defend(defender))
      * @throws	IllegalArgumentException
      * 			The attack cannot be conducted.
      */
@@ -1045,7 +1050,7 @@ public class Unit extends MovableWorldObject {
      * 			The damage to deal with.
      * @effect	If the given number of damage points is equal or higher than this unit's hitpoints, this unit dies.
      * 			Otherwise, the given number of damage points is subtracted from this unit's hitpoints.
-     * 		  |	if intDamage >= this.getCurrentHitPoints()
+     * 		  |	if Math.floor(damage) >= this.getCurrentHitPoints()
      * 		  |		then terminate();
      * 		  |		else this.setCurrentHitPoints(this.getCurrentHitPoints() - intDamage)
      */
@@ -1125,7 +1130,7 @@ public class Unit extends MovableWorldObject {
      * 			is equal to the given number of experience points.
      *		  |	if (isValidXP(xp))
      *		  |		then new.getXP() == xp
-     * @effect	The lowest of the strength, agility and toughness attributes is incremented by 1 per 10 gained experience points.
+     * @effect	The lowest of the strength, agility and toughness attributes is incremented by 1 per 10 experience points this unit has gained.
      * 		  |	if getAgility() < getStrength()
      * 		  |		then if getToughness() < getAgility()
      * 		  |				then setToughness(getToughness() + 1)
@@ -1155,6 +1160,18 @@ public class Unit extends MovableWorldObject {
             propertyPointsToAdd -= 1;
             this.setXPUsed(this.getXPUsed() + 10);
         }
+    }
+    
+    /**
+     * Add the given number of experience points.
+     *
+     * @param	xp
+     * 			The experience points to add.
+     * @effect	The number of experience points of this unit is incremented by the given number of experience points.
+     * 		  |	this.setXP(this.getXP() + xp)
+     */
+    public void addXP(int xp) {
+        this.setXP(this.getXP() + xp);
     }
 
     /**
@@ -1192,17 +1209,6 @@ public class Unit extends MovableWorldObject {
     	if (isValidXPUsed(xpused))
     		this.xpused = xpused;
     }
-    
-    /**
-     * Add the given number of experience points.
-     *
-     * @param	xp
-     * 			The number of experience points to add.
-     * @effect	The number of experience points of this unit is incremented by the given number of experience points.
-     */
-    public void addXP(int xp) {
-        this.setXP(this.getXP() + xp);
-    }
 
     /**
      * Let this unit move to the given cube location.
@@ -1211,8 +1217,8 @@ public class Unit extends MovableWorldObject {
      * 			The cube location to let this unit move to.
      * @effect	If this unit's world can have the given destination cube as a cube location, this unit's current activity is interrupted by the movement to
      * 			the given destination.
-     *		  |	if this.getWorld().canHaveAsCubeLocation(destination, this)
-     *		  |		then this.interrupt(movement)
+     *		  |	if (this.getWorld().canHaveAsCubeLocation(destination, this))
+     *		  |		then this.interrupt(new Movement(this, destination))
      */
     public void moveTo(int[] destination) {
         if (!this.getWorld().canHaveAsCubeLocation(destination, this))
@@ -1230,7 +1236,10 @@ public class Unit extends MovableWorldObject {
      * 			The movement along the y axis to do.
      * @param	dz
      * 			The movement along the z axis to do.
-     * @effect	This unit moves to the adjacent cube, referred to by addition of given dx, dy and dz to the current position coordinates.
+     * @effect	If this unit is not already moving, it moves to a position in an adjacent cube, calculated as the addition of given dx, dy and dz and
+     * 			the current position coordinates.
+     * 		  |	if (! this.getActivity().getId() == 3)
+     * 		  |		then this.moveTo(destination)
      * @throws	IllegalLocation
      * 			The intended movement is not a movement to an adjacent cube.
      */
@@ -1239,18 +1248,18 @@ public class Unit extends MovableWorldObject {
             throw new IllegalLocation("Illegal move to adjacent destination");
         if (this.getActivity().getId() == 3)
             return;
-        int[] loc = this.getLocation().getCubeLocation();
-        loc[0] = loc[0] + dx;
-        loc[1] = loc[1] + dy;
-        loc[2] = loc[2] + dz;
-        this.moveTo(loc);
+        int[] destination = this.getLocation().getCubeLocation();
+        destination[0] = destination[0] + dx;
+        destination[1] = destination[1] + dy;
+        destination[2] = destination[2] + dz;
+        this.moveTo(destination);
     }
 
     /**
      * Let this unit rest.
      * 
      * @effect	This unit's current activity is interrupted by resting.
-     * 		  |	this.interrupt(rest)
+     * 		  |	this.interrupt(new Rest(this))
      */
     public void rest() {
         Rest rest = new Rest(this);
@@ -1315,8 +1324,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether this unit has a paused activity.
      */
-    public boolean hasProperPausedActivity() {
-    	return this.hasProperPausedActivity;
+    public boolean hasPausedActivity() {
+    	return this.hasPausedActivity;
     }
     
     /**
@@ -1331,7 +1340,7 @@ public class Unit extends MovableWorldObject {
      *
      * @param	activity
      * 			The activity to check.
-     * @return	Always true. The activity validity is checked upon creation.
+     * @return	Always true.
      * 		  |	result == true
      */
     @Override
@@ -1354,7 +1363,7 @@ public class Unit extends MovableWorldObject {
     	if (!isValidActivity(activity))
     		throw new IllegalArgumentException("Invalid activity");
     	this.pausedActivity = activity;
-        this.hasProperPausedActivity = !(activity instanceof NoActivity);
+        this.hasPausedActivity = !(activity instanceof NoActivity);
     }
     
     /**
@@ -1363,7 +1372,7 @@ public class Unit extends MovableWorldObject {
      * @param	newActivity
      * 			The new activity for this unit.
      * @effect	If the new activity is a defense and if the current activity is a movement or work, this unit's paused activity is set to its current activity.
-     * 		  |	if newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4)
+     * 		  |	if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4))
      * 		  |		then this.setPausedActivity(this.getActivity())
      * @effect	This unit's current activity is set to the given new activity.
      * 		  |	this.setActivity(newActivity)
@@ -1371,24 +1380,27 @@ public class Unit extends MovableWorldObject {
      * 		  |	result == this.getActivity().canBeInterruptedBy(newActivity)
      */
     private boolean interrupt(IActivity newActivity) {
-        // TODO: 9/05/16 dis shit, tied up in the clusterfuck that is out execution engine;
         if (!this.getActivity().canBeInterruptedBy(newActivity))
             return false;
         if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4))
-        	this.setPausedActivity(this.getActivity());
+        	this.setPausedActivity(this.getActivity()); 
         this.setActivity(newActivity);
         return true;
     }
-
+    
     /**
      * Let this unit finish its current activity.
      *
-     * @effect	If this unit has a paused activity, the paused activity is resumed, this unit doesn't have a paused activity anymore, this unit's paused activity
-     * 			is not effective.
-     * 			If this unit doesn't have a paused activity, its current activity is set to none.
+     * @effect	If this unit has a paused activity, this unit's current activity is set to its paused activity and its paused activity is set to none.
+     * 		  |	if (this.hasPausedActivity())
+     * 		  |		then this.setActivity(this.getPausedActivity())
+     * 		  |			 this.setPausedActivity(new NoActivity())
+     * @effect	If this unit doesn't have a paused activity, its current activity is set to none.
+     * 		  |	if (! this.hasPausedActivity())
+     * 		  |		then this.setActivity(new NoActivity())
      */
     public void activityFinished() {
-        if (this.hasProperPausedActivity()) {
+        if (this.hasPausedActivity()) {
             this.setActivity(this.getPausedActivity());
             this.setPausedActivity(new NoActivity());
         } else
