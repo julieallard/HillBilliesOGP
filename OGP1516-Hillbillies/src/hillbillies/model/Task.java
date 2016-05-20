@@ -67,7 +67,7 @@ public class Task implements Comparable {
 	private Statement rootStatement;
 	
 	/**
-	 * Variable registering the world of this Task.
+	 * Variable registering the world of this task.
 	 */
 	public World world;
 	
@@ -107,6 +107,13 @@ public class Task implements Comparable {
 	public boolean isLegaltask() {
 		return ProgramExecutor.checkBreakLegality(this);
 	}
+	
+	/**
+	 * Return the set of schedulers of this task.
+	 */
+	public Set<Scheduler> getSchedulerSet() {
+		return this.SchedulerSet;
+	}
 
 	/**
 	 * Return the root statement of this task.
@@ -122,19 +129,34 @@ public class Task implements Comparable {
 	 * 
 	 * @param	rootStatement
 	 * 			The new root statement for this task.
+	 * @post	The root statement of this task is equal to the given root statement.
+	 * 		  |	new.getRootStatement() = rootStatement
 	 * @throws	IllegalArgumentException
-	 * 			
+	 * 			A break statement can't be a root statement.
+	 * 		  |	rootStatement.getPartStatement() instanceof Statement.BreakPartStatement
 	 */
 	public void setRootStatement(Statement rootStatement) {
 		if (rootStatement.getPartStatement() instanceof Statement.BreakPartStatement)
-			throw new IllegalArgumentException("A break statement can't be a root statement");
+			throw new IllegalArgumentException("A break statement can't be a root statement.");
 		this.rootStatement = rootStatement;
 	}
 		
+	/**
+	 * Return whether this task is being executed.
+	 * 
+	 * @return	True if and only if the execution status of this task is equal to BEINGEXECUTED.
+	 * 		  |	result == this.getStatus().equals(ExecutionStatus.BEINGEXECUTED)
+	 */
 	public boolean isBeingExecuted() {
 		return this.getStatus().equals(ExecutionStatus.BEINGEXECUTED);
 	}
-
+	
+	/**
+	 * Return whether this task is finished.
+	 * 
+	 * @return	True if and only if the execution status of this task is equal to FINISHED.
+	 * 		  |	result == this.getStatus().equals(ExecutionStatus.FINISHED)
+	 */
 	public boolean isExecuted() {
 		return this.getStatus().equals(ExecutionStatus.FINISHED);
 	}
@@ -160,11 +182,11 @@ public class Task implements Comparable {
 	/**
 	 * Check whether the given priority is a valid priority for any task.
 	 *  
-	 * @param  priority
-	 *         The priority to check.
-	 * @return Always true.
-	 *       | result == true
-	*/
+	 * @param	priority
+	 *			The priority to check.
+	 * @return	Always true.
+	 *		  |	result == true
+	 */
 	private static boolean isValidPriority(int priority) {
 		return true;
 	}
@@ -172,13 +194,13 @@ public class Task implements Comparable {
 	/**
 	 * Set the priority of this task to the given priority.
 	 * 
-	 * @param  priority
-	 *         The new priority for this task.
-	 * @post   The priority of this new task is equal to the given priority.
-	 *       | new.getPriority() == priority
-	 * @throws IllegalArgumentException
-	 *         The given priority is not a valid priority for any task.
-	 *       | ! isValidPriority(getPriority())
+	 * @param	priority
+	 *			The new priority for this task.
+	 * @post	The priority of this new task is equal to the given priority.
+	 *		  |	new.getPriority() == priority
+	 * @throws	IllegalArgumentException
+	 *			The given priority is not a valid priority for any task.
+	 *		  |	! isValidPriority(getPriority())
 	 */
 	@Raw
 	public void setPriority(int priority) throws IllegalArgumentException {
@@ -190,42 +212,68 @@ public class Task implements Comparable {
 	/**
 	 * Add the given scheduler to this task.
 	 * 
-	 * @param  scheduler
-	 * 		   The scheduler to add.
-	 * @post   The given scheduler is added to this task.
+	 * @param	scheduler
+	 *			The scheduler to add.
+	 * @post	This task's set of schedulers contains the given scheduler.
+	 * 		  |	new.SchedulerSet.contains(scheduler)
 	 */
 	public void addScheduler(Scheduler scheduler) {
 		this.SchedulerSet.add(scheduler);
 	}
 	
 	/**
-	 * Add the given scheduler to this task.
+	 * Add the schedulers supplied by the given list to this task.
 	 * 
-	 * @param  schedulerList
-	 * 		   The list of schedulers to add.
-	 * @post   The given list of schedulers is added to this task.
+	 * @param	schedulerList
+	 *			The list supplying the schedulers to add.
+	 * @post	This task's set of schedulers contains the schedulers supplied by the given list.
+	 * 		  |	new.SchedulerSet.containsAll(schedulerList)
 	 */
 	public void addScheduler(List<Scheduler> schedulerList) {
         this.SchedulerSet.addAll(schedulerList);
 	}
 
+	/**
+	 * Start the execution of this task.
+	 * 
+	 * @param	unit
+	 * 			The unit to let this task execute.
+	 * @post	The executor of this task is equal to the given unit.
+	 * 		  |	new.getExecutor == unit
+	 */
 	public void startExecution(Unit unit) {
 		this.setExecutor(unit);
 	}
 
+	/**
+	 * Stop the executrion of this task.
+	 * 
+	 * @post	The executor of this task is equal to null.
+	 * 		  |	new.getExecutor == null
+	 */
 	public void stopExecution() {
 		this.setExecutor(null);
 	}
 
+	/**
+	 * Return the unit executing this task.
+	 */
+	@Basic
+	@Raw
 	public Unit getExecutor() {
-		return executor;
+		return this.executor;
 	}
 
+	/**
+	 * Set the executor of this task to the given executor.
+	 * 
+	 * @param	executor
+	 * 			The new executor for this task.
+	 * @post	The executor of this task is equal to the given executor.
+	 */
 	public void setExecutor(Unit executor) {
 		this.executor = executor;
 	}
-
-
 
 	/**
 	 * Compares this object with the specified object for order.  Returns a
@@ -258,28 +306,40 @@ public class Task implements Comparable {
 	 * <tt>0</tt>, or <tt>1</tt> according to whether the value of
 	 * <i>expression</i> is negative, zero or positive.
 	 *
-	 * @param o the object to be compared.
-	 * @return a negative integer, zero, or a positive integer as this object
-	 * is less than, equal to, or greater than the specified object.
-	 * @throws NullPointerException if the specified object is null
-	 * @throws ClassCastException   if the specified object's type prevents it
-	 *                              from being compared to this object.
+	 * @param	object
+	 * 			The object to compare.
+	 * @return	If this task's priority is equal to the given project's priority, 0.
+	 * 			If this task's priority is higher than the given object's priority, 1.
+	 * 			If this task's priority is lower than the given object's priority, -1.
+	 * @throws	NullPointerException
+	 * 			The given object is null.
+	 * @throws	ClassCastException
+	 * 			The given object's type prevents it from being compared to this object.
 	 */
-
 	@Override
-	public int compareTo(Object o) {
-		if (o == null || ! (o instanceof Task))
-			throw new IllegalArgumentException("An invalid task was compared");
-		if (this.getPriority() == ((Task) o).getPriority())
+	public int compareTo(Object object) {
+		if (object == null || !(object instanceof Task))
+			throw new IllegalArgumentException("Invalid task");
+		if (this.getPriority() == ((Task) object).getPriority())
 			return 0;
-		return this.getPriority() > ((Task) o).getPriority() ? 1: -1;
+		return (this.getPriority() > ((Task) object).getPriority() ? 1: -1);
 	}
 
+    /**
+     * Update this task according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     * @effect	
+     * @effect	The program executor is executed.
+     * 		  |	(new ProgramExecutor(getExecutor(), this)).execute()
+     */
 	public void advanceTime(double dt) throws SyntaxError {
-        ProgramExecutor executor =new ProgramExecutor(getExecutor(),this);
+        ProgramExecutor executor = new ProgramExecutor(getExecutor(), this);
         executor.setDeltat(dt);
         executor.execute();
     }
+	
     public void forceExcecuteComplete(){
         while (!this.isExecuted()){
             try {
@@ -297,31 +357,50 @@ public class Task implements Comparable {
         }
     }
 
-
-    public static Collection<Task> createTask(String name,int priority,Statement activity,List<int[]> selected){
-
+    public static Collection<Task> createTask(String name,int priority,Statement activity,List<int[]> selected) {
         List<Task> taskList=new ArrayList<>();
-
         for (int[] loc: selected) {
-            Task curr=new Task(name,priority);
+            Task curr = new Task(name,priority);
             curr.selected=loc;
             taskList.add(curr);
         }
         return taskList;
     }
 
+    /**
+     * Return the selected cube position of this task.
+     */
     public int[] getSelected() {
-        return selected;
+        return this.selected;
     }
     
+    /**
+     * Set the selected cube position of this task to the given selected cube position.
+     * 
+     * @param	selected
+     * 			The new selected cube position for this task.
+     * @post	The selected cube position for this new task is equal to the given selected cube position.
+     * 		  |	new.getSelected() == selected
+     */
     public void setSelected(int[] selected) {
     	this.selected = selected;
     }
 
+    /**
+     * Return the execution status of this task.
+     */
     public ExecutionStatus getStatus() {
-        return status;
+        return this.status;
     }
 
+    /**
+     * Set the execution status of this task to the given execution status.
+     * 
+     * @param	status
+     * 			The new execution status for this task.
+     * @post	The execution status of this new task is equal to the given execution status.
+     * 		  |	new.getStatus() == status
+     */
     public void setStatus(ExecutionStatus status) {
         this.status = status;
     }
