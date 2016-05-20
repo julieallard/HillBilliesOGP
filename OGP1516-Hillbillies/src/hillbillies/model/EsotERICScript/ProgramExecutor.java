@@ -37,6 +37,7 @@ public class ProgramExecutor {
             last=current;
                 do {current= current.getNext();}
                 while (current.getStatus()==ExecutionStatus.COMPLETED);
+            setDeltat(getDeltat()-0.001);
         }
         if (last != null) {
             last.setStatus(ExecutionStatus.PAUSED);
