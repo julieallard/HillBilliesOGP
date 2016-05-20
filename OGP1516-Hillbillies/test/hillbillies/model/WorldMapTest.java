@@ -1,16 +1,7 @@
-package hillbillies.modeltest;
+package hillbillies.model;
 
 
-
-import hillbillies.model.*;
-import junit.framework.TestCase;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static junit.framework.Assert.assertTrue;
 
 
 public class WorldMapTest {
