@@ -70,9 +70,4 @@ public class NoActivity implements IActivity {
         return false;
     }
 
-    @Override
-    public Statement getControllingStatement() {
-        throw new IllegalArgumentException("NoActivity can't be directly dictated by statement");
-
-    }
 }

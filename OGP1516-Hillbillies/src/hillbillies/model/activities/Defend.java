@@ -8,18 +8,9 @@ import hillbillies.model.exceptions.IllegalTimeException;
 import ogp.framework.util.Util;
 
 /**
- * A class of Defend activities involving a defender and an attacker.
+ * A class of defenses involving a defender.
  * 
- * The Id's of the activities are the following:
- * 0: noActivity
- * 1: attack
- * 2: defend
- * 3: movement
- * 4: working
- * 5: resting
- * 6: falling
- * 
- * @version 0.9 alpha
+ * @version	2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
@@ -27,43 +18,48 @@ import ogp.framework.util.Util;
 public class Defend implements IActivity {
 
 	/**
-	 * Initialize this new Defend with given defender and given attacker.
+	 * Initialize this new defense with given defender and given attacker.
      *
-     * @param  defender
-     *         The defender for this new Defend.
-     * @post   The defender of this new Defend is equal to the given defender.
-     * @post   The attacker of this new Defend is equal to the given attacker.
+     * @param	defender
+     *			The defender for this new defense.
+     * @post	The defender of this new defense is equal to the given defender.
+     * @effect	The time left for this new attack is set to 1.
      */
     public Defend(Unit defender) {
         this.defender = defender;
         this.setTimeLeft(1);
-
     }
 
+    /* Variables */
+    
     /**
-     * Variable registering the defender of this Defend.
+     * Variable registering the defender of this defense.
      */
     private final Unit defender;
 
     /**
-     * Variable registering the time left until finishing this Defend.
+     * Variable registering the time left until this defense is finished.
      */
     private double timeLeft;
 
+    /* Methods */
+    
+    /**
+     * Return whether the statement of this defense has been dictated.
+     */
     @Override
     public boolean isDictatedByStatement() {
         return false;
     }
 
-    @Override
-    public Statement getControllingStatement() {
-        throw new IllegalArgumentException("Defend can't be directly dictated by statement");
-
-    }
-
     /**
-	 * No documentation required.
-	 */
+     * Update this attack according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     * @effect	If the given time is equal of higher than the time left until finishing this attack, conduct this attack.
+     * @effect	If the given time is lower than the time left until finishing this attack, the given amount of time is subtracted from the time left for this attack.
+     */
     @Override
     public void advanceActivityTime(double dt) {
         if (Util.fuzzyGreaterThanOrEqualTo(dt, this.returnSimpleTimeLeft())) {
@@ -75,7 +71,7 @@ public class Defend implements IActivity {
     }
 
     /**
-     * Return the time left until finishing this Defend.
+     * Return the time left until this defense is finished.
      */
     @Basic
     @Raw
@@ -85,7 +81,7 @@ public class Defend implements IActivity {
     }
 
     /**
-     * Check whether this Defend can be interrupted by the given activity.
+     * Check whether this defense can be interrupted by the given activity.
      * 
      * @param  activity
      * 		   The activity to check.
@@ -96,7 +92,7 @@ public class Defend implements IActivity {
     }
 
     /**
-     * Return the ID of this Defend.
+     * Return the ID of this defense.
      */
     @Override
     public int getId() {

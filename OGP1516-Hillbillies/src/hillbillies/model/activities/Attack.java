@@ -9,7 +9,7 @@ import hillbillies.model.exceptions.IllegalTimeException;
 import ogp.framework.util.Util;
 
 /**
- * A class of attack activities involving an attacker and a defender.
+ * A class of attacks involving an attacker and a defender.
  * 
  * @version	2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
@@ -42,32 +42,14 @@ public class Attack implements IActivity {
      *			The attacker for this attack.
      * @param	defender
      *			The defender for this attack.
-     * @param	controllingStatement
-     * 			The controlling statement for this attack.
      * @param	dictatedByStatement
      * 			The dictated state of the statement for this attack.
      * @post	The controlling statement of this new attack is equal to the given controlling statement.
      * @post	The dictated state of the statement of this new attack is equal to the given dictated state of the statement.
      */
-    public Attack(Unit attacker, Unit defender, Statement controllingStatement, boolean dictatedByStatement) {
+    public Attack(Unit attacker, Unit defender, boolean dictatedByStatement) {
         this(attacker, defender);
-        this.controllingStatement = controllingStatement;
         this.dictatedByStatement = dictatedByStatement;
-    }
-    
-	/**
-	 * Initialize this new attack with given controlling statement, given attacker and given defender.
-	 * 
-	 * @param	controllingStatement
-	 * 			The controlling statement for this attack.
-	 * @param	attacker
-	 * 			The attacker for this attack.
-	 * @param	defender
-	 * 			The defender for this attack.
-	 */
-    public Attack(Statement controllingStatement, Unit attacker, Unit defender) {
-        this(attacker, defender);
-        this.controllingStatement = controllingStatement;
     }
 
     /* Variables */
@@ -76,11 +58,6 @@ public class Attack implements IActivity {
      * Variable registering whether the statement of this attack has been dictated.
      */
     private boolean dictatedByStatement;
-    
-    /**
-     * Variable registering the controlling statement of this attack.
-     */
-    private Statement controllingStatement;
     
     /**
      * Variable registering the attacker of this attack.
@@ -93,7 +70,7 @@ public class Attack implements IActivity {
     private final Unit defender;
     
     /**
-     * Variable registering the time left for this attack.
+     * Variable registering the time left until this attack is finished.
      */
     private double timeLeft;
     
@@ -110,14 +87,6 @@ public class Attack implements IActivity {
     @Override
     public boolean isDictatedByStatement() {
         return dictatedByStatement;
-    }
-
-    /**
-     * Return the controlling statement of this attack.
-     */
-    @Override
-    public Statement getControllingStatement() {
-        return controllingStatement;
     }
 
     /**
@@ -139,7 +108,7 @@ public class Attack implements IActivity {
     }
     
     /**
-     * Return the time left until finishing this Attack.
+     * Return the time left until this attack is finished.
      */
     @Basic
     @Raw

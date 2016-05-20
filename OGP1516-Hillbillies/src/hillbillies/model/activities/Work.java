@@ -50,16 +50,7 @@ public class Work implements IActivity {
         this.targetLocation = targetLocation;
     }
 
-    public Work(Unit unit, int[] targetLocation,Statement controllingStatement){
-        this(unit,targetLocation);
-        this.controllingStatement = controllingStatement;
-        this.isDictatedByStatement = true;
-}
-
     private boolean isDictatedByStatement;
-
-    private Statement controllingStatement;
-
 
     private boolean canHaveAsTargetLocation(int[] targetLocation){
         if(targetLocation.length!=3) return false;
@@ -88,11 +79,6 @@ public class Work implements IActivity {
     @Override
     public boolean isDictatedByStatement() {
         return isDictatedByStatement;
-    }
-
-    @Override
-    public Statement getControllingStatement() {
-        return controllingStatement;
     }
 
     /**
@@ -209,8 +195,6 @@ public class Work implements IActivity {
             return;
         }
         unit.activityFinished();
-        if (isDictatedByStatement()) controllingStatement.finishExecuting();
-
     }
 
     /**
@@ -221,7 +205,6 @@ public class Work implements IActivity {
     private void dropWork(){
         unit.drop(unit.getCarriedObject()); 
         unit.activityFinished();
-        if (isDictatedByStatement()) controllingStatement.finishExecuting();
     }
     
     /**
@@ -238,7 +221,6 @@ public class Work implements IActivity {
         log.unregister();
         boulder.unregister();
         unit.activityFinished();
-        if (isDictatedByStatement()) controllingStatement.finishExecuting();
     }
 
     /**
@@ -256,7 +238,6 @@ public class Work implements IActivity {
             unit.carry(logList.get(0));
         }
         unit.activityFinished();
-        if (isDictatedByStatement()) controllingStatement.finishExecuting();
     }
     
     /**
@@ -267,6 +248,5 @@ public class Work implements IActivity {
     private void destroyWork() {
         unit.getWorld().destroyCube(targetLocation);
         unit.activityFinished();
-        if (isDictatedByStatement()) controllingStatement.finishExecuting();
     }
 }

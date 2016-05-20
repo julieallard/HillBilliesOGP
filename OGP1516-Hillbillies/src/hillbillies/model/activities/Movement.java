@@ -48,15 +48,7 @@ public class Movement implements IActivity {
         this.pathing = new Astar(unit);
     }
 
-    public Movement(Unit unit,int[] destination,Statement controllingStatement) {
-        this(unit,destination);
-        this.controllingStatement = controllingStatement;
-        this.isDictatedByStatement = true;
-    }
-
     private boolean isDictatedByStatement;
-
-    private Statement controllingStatement;
 
     /**
      * Variable registering the pathing of this Movement, calculated according to the A star algorithm.
@@ -83,11 +75,6 @@ public class Movement implements IActivity {
         return isDictatedByStatement;
     }
 
-    @Override
-    public Statement getControllingStatement() {
-        return this.controllingStatement;
-    }
-
     /**
 	 * No documentation required.
 	 */
@@ -97,7 +84,6 @@ public class Movement implements IActivity {
             boolean foundpath = setNextStop();
             if (! foundpath) {
                 unit.activityFinished();
-                if (isDictatedByStatement()) controllingStatement.finishExecuting();
                 unit.addXP(1);
                 return;
             }

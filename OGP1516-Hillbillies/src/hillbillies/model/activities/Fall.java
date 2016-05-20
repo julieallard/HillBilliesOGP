@@ -56,10 +56,6 @@ public class Fall implements IActivity {
         return false;
     }
 
-    @Override
-    public Statement getControllingStatement() {
-        throw new IllegalArgumentException("Fall cannot be directly dictated by statement");
-    }
 
     /**
 	 * No documentation required.
