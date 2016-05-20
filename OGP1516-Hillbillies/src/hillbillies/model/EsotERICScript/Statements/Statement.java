@@ -66,6 +66,7 @@ public class Statement {
         this.executingUnit = executor.getExecutingUnit();
         if (!executor.canExecute()) return;
         executor.pushUpdate(this);
+        this.setStatus(ExecutionStatus.BEINGEXECUTED);
         this.getPartStatement().execute(executor);
     }
 
@@ -176,8 +177,11 @@ public class Statement {
 
         @Override
         public Statement getNext() {
-            if (Statement.this.getStatus()==ExecutionStatus.COMPLETED) return Statement.this.getEncapsulatingStatement();
-            setStatus(ExecutionStatus.FINISHED);
+            if (Statement.this.getStatus()==ExecutionStatus.COMPLETED){
+
+                return Statement.this.getEncapsulatingStatement();
+            }
+            setStatus(ExecutionStatus.COMPLETED);
             if (flag){ return ifPart;}
             else {return elsePart;}
         }

@@ -29,13 +29,14 @@ public class ProgramExecutor {
         else current=findPausedStatement();
         while(canExecute()) {
             current.execute(this);
-            if (getExecutingUnit().getActivity() instanceof NoActivity) {
+            if (!(getExecutingUnit().getActivity() instanceof NoActivity)) {
                 getExecutingUnit().advanceTime(this.getDeltat());
                 current.setStatus(ExecutionStatus.PAUSED);
                 return;
             }
             last=current;
-             current= last.getNext();
+                do {current= current.getNext();}
+                while (current.getStatus()==ExecutionStatus.COMPLETED);
         }
         if (last != null) {
             last.setStatus(ExecutionStatus.PAUSED);
