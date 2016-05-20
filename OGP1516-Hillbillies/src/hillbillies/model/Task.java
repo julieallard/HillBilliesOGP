@@ -10,9 +10,9 @@ import hillbillies.model.exceptions.SyntaxError;
 import java.util.*;
 
 /**
- * A class of Tasks.
+ * A class of tasks involving a name and a priority.
  * 
- * @version 0.9 alpha
+ * @version 2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
@@ -20,17 +20,17 @@ import java.util.*;
 public class Task implements Comparable {
 
 	/**
-	 * Initialize this new Task with given name, given priority and given scheduler.
+	 * Initialize this new task with given name, given priority and given scheduler.
      *
      * @param  name
-     *         The name for this new Task.
+     *         The name for this new task.
      * @param  priority
-     * 		   The priority for this new Task.
-     * @effect The priority of this new Task is set to the given priority.
+     * 		   The priority for this new task.
+     * @effect The priority of this new task is set to the given priority.
      *       | this.setPriority(priority)
-     * @effect The given scheduler is added to this new Task.
+     * @effect The given scheduler is added to this new task.
      * 		 | this.addScheduler(scheduler)
-     * @post   The name of this new Task is equal to the given name.
+     * @post   The name of this new task is equal to the given name.
      * 		 | new.getName == name
      */
 	public Task(String name, int priority) {
@@ -54,29 +54,7 @@ public class Task implements Comparable {
     public Map<String, int[]> positionGlobalMap;
     public Map<String, Boolean> booleanGlobalMap;
     public Map<String, Unit> unitGlobalMap;
-	
-	/**
-	 * Initialize this new Task with given name, given priority and given scheduler.
-     *
-     * @param  name
-     *         The name for this new Task.
-     * @param  priority
-     * 		   The priority for this new Task.
-     * @param  schedulerList
-     * 		   The list of schedulers for this new Task.
-	 * @effect The priority of this new Task is set to the given priority.
-	 *       | this.setPriority(priority)
-     * @effect The given list of schedulers is added to this new Task.
-     * 		 | this.addScheduler(schedulerList)
-     * @post   The name of this new Task is equal to the given name.
-     * 		 | new.getName == name
-     */
-	public Task(String name, int priority, List<Scheduler> schedulerList) {
-		this.name = name;
-		this.setPriority(priority);
-		this.SchedulerSet = new HashSet<>();
-		this.addScheduler(schedulerList);
-	}
+
 
     /**
      * Give the root statement of this task
@@ -110,30 +88,30 @@ public class Task implements Comparable {
 	}
 
 	/**
-	 * Variable registering the name of this Task.
+	 * Variable registering the name of this task.
 	 */
 	private String name;
 	
 	/**
-	 * Variable registering the priority of this Task.
+	 * Variable registering the priority of this task.
 	 */
 	private int priority;
 	
 	/**
-	 * Variable registering the unit executing this Task.
+	 * Variable registering the unit executing this task.
 	 */
 	private Unit executor;
 
 	/**
-	 * List collecting references to schedulers belonging to this Task.
+	 * List collecting references to schedulers belonging to this task.
 	 * 
 	 * @invar The list of schedulers is effective.
-	 * @invar Each element in the list of schedulers references a scheduler that is an acceptable scheduler for this Task.
+	 * @invar Each element in the list of schedulers references a scheduler that is an acceptable scheduler for this task.
 	 */
 
 	private Set<Scheduler> SchedulerSet;
 	/**
-	 * Return the name of this Task.
+	 * Return the name of this task.
 	 */
 	@Basic
 	@Raw
@@ -142,7 +120,7 @@ public class Task implements Comparable {
 	}
 
 	/**
-	 * Return the priority of this Task.
+	 * Return the priority of this task.
 	 */
 	@Basic
 	@Raw
@@ -151,7 +129,7 @@ public class Task implements Comparable {
 	}
 
 	/**
-	 * Check whether the given priority is a valid priority for any Task.
+	 * Check whether the given priority is a valid priority for any task.
 	 *  
 	 * @param  priority
 	 *         The priority to check.
@@ -163,14 +141,14 @@ public class Task implements Comparable {
 	}
 
 	/**
-	 * Set the priority of this Task to the given priority.
+	 * Set the priority of this task to the given priority.
 	 * 
 	 * @param  priority
-	 *         The new priority for this Task.
-	 * @post   The priority of this new Task is equal to the given priority.
+	 *         The new priority for this task.
+	 * @post   The priority of this new task is equal to the given priority.
 	 *       | new.getPriority() == priority
 	 * @throws IllegalArgumentException
-	 *         The given priority is not a valid priority for any Task.
+	 *         The given priority is not a valid priority for any task.
 	 *       | ! isValidPriority(getPriority())
 	 */
 	@Raw
@@ -181,22 +159,22 @@ public class Task implements Comparable {
 	}
 	
 	/**
-	 * Add the given scheduler to this Task.
+	 * Add the given scheduler to this task.
 	 * 
 	 * @param  scheduler
 	 * 		   The scheduler to add.
-	 * @post   The given scheduler is added to this Task.
+	 * @post   The given scheduler is added to this task.
 	 */
 	public void addScheduler(Scheduler scheduler) {
 		this.SchedulerSet.add(scheduler);
 	}
 	
 	/**
-	 * Add the given scheduler to this Task.
+	 * Add the given scheduler to this task.
 	 * 
 	 * @param  schedulerList
 	 * 		   The list of schedulers to add.
-	 * @post   The given list of schedulers is added to this Task.
+	 * @post   The given list of schedulers is added to this task.
 	 */
 	public void addScheduler(List<Scheduler> schedulerList) {
         this.SchedulerSet.addAll(schedulerList);
