@@ -330,41 +330,13 @@ public class Task implements Comparable {
      * 
      * @param	dt
      * 			The amount of time to advance.
-     * @effect	
+     * @effect	The time of ths program executor is set to the given time.
      * @effect	The program executor is executed.
-     * 		  |	(new ProgramExecutor(getExecutor(), this)).execute()
      */
 	public void advanceTime(double dt) throws SyntaxError {
         ProgramExecutor executor = new ProgramExecutor(getExecutor(), this);
         executor.setDeltat(dt);
         executor.execute();
-    }
-	
-    public void forceExcecuteComplete(){
-        while (!this.isExecuted()){
-            try {
-                this.advanceTime(0.2);
-            } catch (SyntaxError syntaxError) {
-                syntaxError.printStackTrace();
-                throw new RuntimeException(syntaxError);
-            }
-            try{Thread.sleep(500);}
-            catch (InterruptedException exception){
-                System.out.println("Somehow The application was multithreading "+"\n"+
-                        "this really really really shouldn't happen");
-                throw new RuntimeException(exception);
-            }
-        }
-    }
-
-    public static Collection<Task> createTask(String name,int priority,Statement activity,List<int[]> selected) {
-        List<Task> taskList=new ArrayList<>();
-        for (int[] loc: selected) {
-            Task curr = new Task(name,priority);
-            curr.selected=loc;
-            taskList.add(curr);
-        }
-        return taskList;
     }
 
     /**
