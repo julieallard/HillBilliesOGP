@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * A class of work activities involving a unit and a target location.
  * 
- * @version 0.9 alpha
+ * @version	2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
@@ -24,19 +24,20 @@ public class Work implements IActivity {
     /**
 	 * Initialize this new work with given unit and given target location.
      *
-     * @param  unit
-     *         The unit for this new work.
-     * @param  targetLocation
-     * 		   The target location for this new work.
-     * @post   The unit of this new work is equal to the given unit.
-     * @post   The target location of this new work is equal to the given target location.
+     * @param	unit
+     *			The unit for this new work.
+     * @param	targetCubeLocation
+     *			The target location for this new work.
+     * @post	The unit of this new work is equal to the given unit.
+     * @post	The target location of this new work is equal to the given target location.
+     * @effect	The time left for this new work is set to 500 divided by this work's unit strength.
      */
-    public Work(Unit unit, int[] targetLocation){
-        this.timeLeft = ((double) 500)/unit.getStrength();
+    public Work(Unit unit, int[] targetCubeLocation) {
         this.unit = unit;
-        if (!this.canHaveAsTargetLocation(targetLocation))
+        if (!this.canHaveAsTargetCubeLocation(targetCubeLocation))
         	this.finishActivity();
-        this.targetLocation = targetLocation;
+        this.setTimeLeft(500/unit.getStrength());
+        this.targetCubeLocation = targetCubeLocation;
     }
 
     /* Variables */
@@ -54,12 +55,12 @@ public class Work implements IActivity {
     /**
      * Variable registering the unit of this work.
      */
-    private Unit unit;
+    private final Unit unit;
     
     /**
      * Variable registering the target location of this work.
      */
-	private final int[] targetLocation;
+	private final int[] targetCubeLocation;
 	
     /**
      * Variable registering the time left until finishing this work.
@@ -72,6 +73,8 @@ public class Work implements IActivity {
      * Return whether this work has been dictated by a statement.
      */
     @Override
+	@Basic
+	@Raw
     public boolean isDictatedByStatement() {
         return this.dictatedByStatement;
     }
@@ -163,6 +166,8 @@ public class Work implements IActivity {
      * Return whether this work is finished.
      */
     @Override
+	@Basic
+	@Raw
     public boolean isFinished() {
         return this.isFinished;
     }
@@ -173,103 +178,136 @@ public class Work implements IActivity {
     @Override
     public void finishActivity() {
         this.isFinished = true;
-        unit.activityFinished();
+        this.getUnit().activityFinished();
+    }
+    
+    /**
+     * Return the unit of this work.
+     */
+	@Basic
+	@Raw
+    private Unit getUnit() {
+    	return this.unit;
+    }
+    
+    /**
+     * Return the target cube of this work.
+     */
+	@Basic
+	@Raw
+    private int[] getTargetCubeLocation() {
+    	return this.targetCubeLocation;
+    }
+    
+    /**
+     * Check whether this work can have the target cube coordinates supplied by the given array as its target cube coordinates.
+     * 
+     * @param	targetCubeLocation
+     * 			An array supplying the target cube coordinates for this work.
+     * @return	True if and only if the given array's length is equal to three and if the target cube coordinates supplied by the given array are within the
+     * 			borders of the world of this work's unit.
+     */
+    private boolean canHaveAsTargetCubeLocation(int[] targetCubeLocation) {
+        return (targetCubeLocation.length == 3
+        		&& targetCubeLocation[0] < this.getUnit().getWorld().getxSideSize()
+        		&& targetCubeLocation[1] < this.getUnit().getWorld().getySideSize()
+        		&& targetCubeLocation[2] < this.getUnit().getWorld().getzSideSize());
     }
     
     /**
      * Let the unit of this work conduct work.
      * 
-     * @effect If the unit was carrying an object, the object is dropped and the unit gains 10 experience points.
-     * 		   If the target location is in a workshop cube and a Boulder and Log are present at the target location, 
-     * 		   the unit works out and gains 10 experience points. If a Boulder or Log is present at the target location,
-     * 		   the unit picks up the Boulder or Log and gains 10 experience points. If the target location is in a wood or rock
-     * 		   cube, the cube collapses and the unit gains 10 experience points.
+     * @effect	If this work's unit is carrying an object, it drops it.
+     * 			Otherwise, if this work's target cube location is in a workshop cube with a boulder and a log in it, the unit works out.
+     * 			Or if either a boulder or either a log is in it, the unit picks it up.
+     * 			Otherwise, if this work's target cube location is in a wood or rock cube, the cube collapses.
+     * @effect	This work's unit finishes this activity.
      */
     private void conductWork() {
-        if (unit.isCarrying()) {
+        if (this.getUnit().isCarrying()) {
             dropWork();
-            unit.addXP(10);
             return;
         }
-        if (unit.getWorld().getCubeIDAt(targetLocation) == 3) {
-            if (! unit.getWorld().getLogsAt(targetLocation).isEmpty() && ! unit.getWorld().getBouldersAt(targetLocation).isEmpty()) {
+        if (this.getUnit().getWorld().getCubeIDAt(this.getTargetCubeLocation()) == 3) {
+            if (! this.getUnit().getWorld().getLogsAt(this.getTargetCubeLocation()).isEmpty() && ! this.getUnit().getWorld().getBouldersAt(this.getTargetCubeLocation()).isEmpty()) {
                 workOutWork();
-                unit.addXP(10);
                 return;
             }
         }
-        if (! unit.getWorld().getBouldersAt(targetLocation).isEmpty() || ! unit.getWorld().getLogsAt(targetLocation).isEmpty()) {
+        if (! this.getUnit().getWorld().getBouldersAt(this.getTargetCubeLocation()).isEmpty() || ! this.getUnit().getWorld().getLogsAt(this.getTargetCubeLocation()).isEmpty()) {
             pickupWork();
-            unit.addXP(10);
             return;
         }
-        if (unit.getWorld().getCubeIDAt(targetLocation) == 2 || unit.getWorld().getCubeIDAt(targetLocation) == 1) {
+        if (this.getUnit().getWorld().getCubeIDAt(this.getTargetCubeLocation()) == 2 || this.getUnit().getWorld().getCubeIDAt(this.getTargetCubeLocation()) == 1) {
             destroyWork();
-            unit.addXP(10);
             return;
         }
-        unit.activityFinished();
-    }
-    
-    private boolean canHaveAsTargetLocation(int[] targetLocation) {
-        if (targetLocation.length != 3
-        		|| targetLocation[0] >= unit.getWorld().getxSideSize()
-        		|| targetLocation[1] >= unit.getWorld().getySideSize()
-        		|| targetLocation[2] >= unit.getWorld().getzSideSize())
-        	return false;   
-        return true;
+        this.getUnit().activityFinished();
     }
 
     /**
-     * Let the unit drop the object it is carrying.
+     * Let this work's unit drop the object it is carrying.
      * 
-     * @effect The unit drops the object it is carrying and this work is finished.
+     * @effect	This work's unit drops the object it is carrying.
+     * @effect	This work's unit finishes this activity.
+     * @effect	This work's unit gains 10 experience points.
      */
-    private void dropWork(){
-        unit.drop(unit.getCarriedObject()); 
-        unit.activityFinished();
+    private void dropWork() {
+        this.getUnit().drop(this.getUnit().getCarriedObject()); 
+        this.getUnit().activityFinished();
+        this.getUnit().addXP(10);
     }
     
     /**
-     * Let the unit work out.
+     * Let this work's unit work out.
      * 
-     * @effect The unit's weight and toughness is increased and this work is finished.
+     * @effect	The weight and toughness of this work's unit are increased by 10%.
+     * @effect	The log and boulder used for the workout are unregistered.
+     * @effect	This work's unit finishes this activity.
+     * @effect	This work's unit gains 10 experience points.
      */
     private void workOutWork() {
-        World world = unit.getWorld();
-        Log log = world.getLogsAt(targetLocation).get(0);
-        Boulder boulder = world.getBouldersAt(targetLocation).get(0);
-        this.unit.setWeight((int)Math.ceil(unit.getWeight()*1.1));
-        this.unit.setToughness(((int)Math.ceil(unit.getToughness()*1.1)));
+        World world = this.getUnit().getWorld();
+        Log log = world.getLogsAt(this.getTargetCubeLocation()).get(0);
+        Boulder boulder = world.getBouldersAt(this.getTargetCubeLocation()).get(0);
+        this.getUnit().setWeight((int) Math.ceil(this.getUnit().getWeight() * 1.1));
+        this.getUnit().setToughness(((int) Math.ceil(this.getUnit().getToughness() * 1.1)));
         log.unregister();
         boulder.unregister();
-        unit.activityFinished();
+        this.getUnit().activityFinished();
+        this.getUnit().addXP(10);
     }
 
     /**
-     * Let the unit carry the object.
+     * Let this work's unit pick up the object at the target cube.
      * 
-     * @effect The unit picks up the boulder or log and this work is finished.
+     * @effect	The unit picks up the boulder or log.
+     * @effect	This work's unit finishes this activity.
+     * @effect	This work's unit gains 10 experience points.
      */
     private void pickupWork() {
-        World world = unit.getWorld();
-        List<Boulder> boulderList = world.getBouldersAt(targetLocation);
+        World world = this.getUnit().getWorld();
+        List<Boulder> boulderList = world.getBouldersAt(this.getTargetCubeLocation());
         if (! boulderList.isEmpty()) {
-            unit.carry(boulderList.get(0));
+            this.getUnit().carry(boulderList.get(0));
         } else {
-            List<Log> logList = world.getLogsAt(targetLocation);
-            unit.carry(logList.get(0));
+            List<Log> logList = world.getLogsAt(this.getTargetCubeLocation());
+            this.getUnit().carry(logList.get(0));
         }
-        unit.activityFinished();
+        this.getUnit().activityFinished();
+        this.getUnit().addXP(10);
     }
     
     /**
-     * Let the unit destroy the cube.
+     * Let this work's unit destroy the cube.
      * 
-     * @effect	The cube the target location is in is destroyed and this work is finished.
+     * @effect	The target cube is destroyed.
+     * @effect	This work's unit finishes this activity.
+     * @effect	This work's unit gains 10 experience points.
      */
     private void destroyWork() {
-        unit.getWorld().destroyCube(targetLocation);
-        unit.activityFinished();
+        this.getUnit().getWorld().destroyCube(this.getTargetCubeLocation());
+        this.getUnit().activityFinished();
+        this.getUnit().addXP(10);
     }
 }

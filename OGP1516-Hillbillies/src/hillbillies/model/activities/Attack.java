@@ -214,9 +214,9 @@ public class Attack implements IActivity {
 		this.getAttacker().setOrientation((float) Math.atan2(this.getDefender().getLocation().getYLocation() - this.getAttacker().getLocation().getYLocation(), this.getDefender().getLocation().getXLocation() - this.getAttacker().getLocation().getXLocation()));
 		this.getDefender().setOrientation((float) Math.atan2(this.getAttacker().getLocation().getYLocation() - this.getDefender().getLocation().getYLocation(), this.getAttacker().getLocation().getXLocation() - this.getDefender().getLocation().getXLocation()));
 		if (Math.random() <= 0.25 * (this.getDefender().getAgility() / this.getAttacker().getAgility()))
-			this.dodge();		
+			this.dodgeAttack();		
 		else if (Math.random() <= 0.25 * (this.getDefender().getStrength() + this.getDefender().getAgility()) / (this.getAttacker().getStrength() + this.getAttacker().getAgility()))
-			this.block();
+			this.blockAttack();
 		else
 			this.successfulAttack();
 	    this.getAttacker().activityFinished();
@@ -229,7 +229,7 @@ public class Attack implements IActivity {
 	 * @effect	The defender's location is set to a random location in the same or neigboring cube on the same z-level.
 	 * @effect	The defender gains 20 experience points.
 	 */
-	private void dodge() {
+	private void dodgeAttack() {
 		double oldX = this.getDefender().getLocation().getXLocation();
 		double oldY = this.getDefender().getLocation().getYLocation();
 		double oldZ = this.getDefender().getLocation().getZLocation();
@@ -250,7 +250,7 @@ public class Attack implements IActivity {
 	 * 
 	 * @effect	The defender gains 20 experience points.
 	 */
-	private void block() {
+	private void blockAttack() {
 		this.getDefender().addXP(20);
 	}
 	

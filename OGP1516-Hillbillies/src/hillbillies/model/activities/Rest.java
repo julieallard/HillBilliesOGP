@@ -6,9 +6,9 @@ import hillbillies.model.Unit;
 import ogp.framework.util.Util;
 
 /**
- * A class of Rest activities involving a unit.
+ * A class of rests involving a unit.
  * 
- * @version 0.9 alpha
+ * @version	2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
@@ -16,16 +16,16 @@ import ogp.framework.util.Util;
 public class Rest implements IActivity {
 
 	/**
-	 * Initialize this new Rest with given unit.
+	 * Initialize this new rest with given unit.
      *
      * @param  unit
-     *         The unit for this new Rest.
-     * @post   The unit of this new Rest is equal to the given unit.
+     *         The unit for this new rest.
+     * @post   The unit of this new rest is equal to the given unit.
      */
 	public Rest(Unit unit) {
 		this.unit = unit;
-		this.timeLeftTillFirstPoint = ((double) 40) / this.unit.getToughness();
-		this.gotFirsthitpoint = false;
+		this.timeLeftTillFirstHP = ((double) 40) / this.unit.getToughness();
+		this.gotFirstHP = false;
 	}
 
 	/* Variables */
@@ -41,19 +41,19 @@ public class Rest implements IActivity {
     private boolean isFinished = false;
 	
     /**
-     * Variable registering the unit of this Rest.
+     * Variable registering the unit of this rest.
      */
-	public Unit unit;
+	public final Unit unit;
 	
     /**
-     * Variable registering the time left until the first hitpoint is recovered during this Rest.
+     * Variable registering the time left until the first hitpoint will be recovered during this rest.
      */
-	private double timeLeftTillFirstPoint;
+	private double timeLeftTillFirstHP;
 	
     /**
-     * Variable registering whether the first hitpoint has already been recovered during this Rest.
+     * Variable registering whether the first hitpoint has already been recovered during this rest.
      */
-	private boolean gotFirsthitpoint;
+	private boolean gotFirstHP;
 	
     /* Methods */
     
@@ -61,6 +61,8 @@ public class Rest implements IActivity {
      * Return whether this rest has been dictated by a statement.
      */
     @Override
+    @Basic
+    @Raw
     public boolean isDictatedByStatement() {
         return this.dictatedByStatement;
     }
@@ -73,45 +75,50 @@ public class Rest implements IActivity {
 		this.dictatedByStatement = flag;
 	}
 	
-	// TODO
     /**
-     * Update this defense according to the given amount of time advanced.
+     * Update this rest according to the given amount of time advanced.
      * 
      * @param	dt
      * 			The amount of time to advance.
+     * @effect	If this rest's unit has an amount of hitpoints which is lower than the highest possible value of hitpoints, it recovers hitpoints, calculated
+     * 			by dividing its toughness by 200, per 0,2 seconds of time.
+     * @effect	If this rest's unit has an amount of hitpoints equal to the highest possible value of hitpoints, it recovers stamina points, calculated
+     * 			by dividing its toughness by 100, per 0,2 seconds of time.
+     * @effect	If this rest's unit has an amount of hitpoints and stamina points equal to their highest possible value, respectively, it finishes its activity.
      */
 	@Override
 	public void advanceActivityTime(double dt) {
-		if (! gotFirsthitpoint) {
-			if (Util.fuzzyGreaterThanOrEqualTo(dt, timeLeftTillFirstPoint)) {
-				this.gotFirsthitpoint = true;
-				this.timeLeftTillFirstPoint = 0;
+		if (! gotFirstHP) {
+			if (Util.fuzzyGreaterThanOrEqualTo(dt, timeLeftTillFirstHP)) {
+				this.gotFirstHP = true;
+				this.timeLeftTillFirstHP = 0;
 			} else
-				this.timeLeftTillFirstPoint=this.timeLeftTillFirstPoint-dt;
+				this.timeLeftTillFirstHP = this.timeLeftTillFirstHP - dt;
 		}
-		if (unit.getCurrentHitPoints() < unit.getMaxPoints()) {
-			int HPGaining = (int) Math.ceil((dt / 0.2) * (unit.getToughness() / 200));
-			int HPNeeded = unit.getMaxPoints() - unit.getCurrentHitPoints();
-			double timeForGainingHPNeeded = HPNeeded * 0.2 / (unit.getToughness() / 200);
+		if (this.getUnit().getCurrentHitPoints() < this.getUnit().getMaxPoints()) {
+			int HPGaining = (int) Math.ceil((dt / 0.2) * (this.getUnit().getToughness() / 200));
+			int HPNeeded = this.getUnit().getMaxPoints() - this.getUnit().getCurrentHitPoints();
+			double timeForGainingHPNeeded = HPNeeded * 0.2 / (this.getUnit().getToughness() / 200);
 			if (timeForGainingHPNeeded < dt) {
 				double timeForGainingSP = dt - timeForGainingHPNeeded;
-				unit.setCurrentHitPoints(unit.getCurrentHitPoints() + HPNeeded);
+				this.getUnit().setCurrentHitPoints(this.getUnit().getCurrentHitPoints() + HPNeeded);
 				advanceActivityTime(timeForGainingSP);
 			} else
-				unit.setCurrentHitPoints(unit.getCurrentHitPoints() + HPGaining);
-				unit.activityFinished();
-		} else if (unit.getCurrentStaminaPoints() < unit.getMaxPoints()) {
-			// TODO: 8/04/16 check for max+let open an option for activity finished
-			int SPGaining = (int) Math.ceil((dt / 0.2) * (unit.getToughness() / 100));
-			int SPNeeded = unit.getMaxPoints() - unit.getCurrentStaminaPoints();
-			double timeForGainingSPNeeded = SPNeeded * 0.2 / (unit.getToughness() / 100);
+				this.getUnit().setCurrentHitPoints(this.getUnit().getCurrentHitPoints() + HPGaining);
+				this.getUnit().activityFinished();
+		} else if (this.getUnit().getCurrentStaminaPoints() < this.getUnit().getMaxPoints()) {
+			int SPGaining = (int) Math.ceil((dt / 0.2) * (this.getUnit().getToughness() / 100));
+			int SPNeeded = this.getUnit().getMaxPoints() - this.getUnit().getCurrentStaminaPoints();
+			double timeForGainingSPNeeded = SPNeeded * 0.2 / (this.getUnit().getToughness() / 100);
 			if (timeForGainingSPNeeded < dt) {
-				unit.setCurrentHitPoints(unit.getCurrentStaminaPoints() + SPNeeded);
-				unit.activityFinished();
+				this.getUnit().setCurrentHitPoints(this.getUnit().getCurrentStaminaPoints() + SPNeeded);
+				this.getUnit().activityFinished();
 			} else
-				unit.setCurrentHitPoints(unit.getCurrentStaminaPoints() + SPGaining);
-				unit.activityFinished();
+				this.getUnit().setCurrentHitPoints(this.getUnit().getCurrentStaminaPoints() + SPGaining);
+				this.getUnit().activityFinished();
 			}
+		else
+			this.getUnit().activityFinished();
 	}
 
     /**
@@ -123,7 +130,7 @@ public class Rest implements IActivity {
      */
 	@Override
 	public boolean canBeInterruptedBy(IActivity activity) {
-		return activity instanceof Defend || activity instanceof Fall || gotFirsthitpoint;
+		return activity instanceof Defend || activity instanceof Fall || gotFirstHP;
 	}
 
     /**
@@ -138,8 +145,10 @@ public class Rest implements IActivity {
      * Return whether this rest is finished.
      */
 	@Override
+	@Basic
+	@Raw
 	public boolean isFinished() {
-		return isFinished;
+		return this.isFinished;
 	}
 
 	/**
@@ -150,5 +159,14 @@ public class Rest implements IActivity {
 		this.isFinished = true;
 		unit.activityFinished();
 	}
+	
+    /**
+     * Return the unit of this rest.
+     */
+	@Basic
+	@Raw
+    private Unit getUnit() {
+    	return this.unit;
+    }
 
 }

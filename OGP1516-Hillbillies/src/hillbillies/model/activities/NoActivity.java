@@ -2,7 +2,6 @@ package hillbillies.model.activities;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.EsotERICScript.Statements.Statement;
 
 /**
  * A class of the states of not conducting any activity.
@@ -32,6 +31,8 @@ public class NoActivity implements IActivity {
      * Return whether this state of non conducting any activity has been dictated by a statement.
      */
     @Override
+	@Basic
+	@Raw
     public boolean isDictatedByStatement() {
         return this.dictatedByStatement;
     }
@@ -79,6 +80,8 @@ public class NoActivity implements IActivity {
      * Return whether this state of not conducting any activity is finished.
      */
     @Override
+	@Basic
+	@Raw
     public boolean isFinished() {
         return this.isFinished;
     }

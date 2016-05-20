@@ -55,6 +55,8 @@ public class Fall implements IActivity {
      * Return whether this fall has been dictated by a statement.
      */
     @Override
+	@Basic
+	@Raw
     public boolean isDictatedByStatement() {
         return this.dictatedByStatement;
     }
@@ -73,12 +75,11 @@ public class Fall implements IActivity {
      * 
      * @param	dt
      * 			The amount of time to advance.
-     * @effect	The object falls during the given amount of time and its z coordinate will proportionally be substracted by
-     *			three times the amount of time it falls. If the object reaches a position whose underlying cube is solid and the
-     *			z coordinate is below the centre of the current cube, the object is moved back, up to the centre of this cube.
-     *			If the object is a Unit, it will need to deal with a certain amount of damage points calculated as
-     *			ten points per z-level they fall.
-     *			Lastly, this Fall is finished.
+     * @effect	The object falls during the given amount of time and its z coordinate is proportionally reduced by 3 times the amount of time it falls.
+     *			If the object reaches a position whose underlying cube is solid and the z coordinate is below the centre of the current cube,
+     *			the object is moved back, up to the centre of this cube.
+     * @effect	If the object is a unit, it will deal with a damage points calculated as 10 points per z-level they fall.
+     * @effect	This fall's object finishes this activity.
      */
     @Override
     public void advanceActivityTime(double dt) {
@@ -131,6 +132,8 @@ public class Fall implements IActivity {
      * Return whether this fall is finished.
      */
     @Override
+	@Basic
+	@Raw
     public boolean isFinished() {
         return isFinished;
     }
@@ -155,6 +158,8 @@ public class Fall implements IActivity {
     /**
      * Return the damage points of this fall that have to be dealt with.
      */
+	@Basic
+	@Raw
     private double getDamageToBeDone() {
     	return this.damageToBeDone;
     }

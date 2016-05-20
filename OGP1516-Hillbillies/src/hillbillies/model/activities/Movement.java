@@ -76,6 +76,8 @@ public class Movement implements IActivity {
      * Return whether this movement has been dictated by a statement.
      */
     @Override
+	@Basic
+	@Raw
     public boolean isDictatedByStatement() {
         return this.dictatedByStatement;
     }
@@ -168,6 +170,8 @@ public class Movement implements IActivity {
      * Return whether this movement is finished.
      */
     @Override
+	@Basic
+	@Raw
     public boolean isFinished() {
         return isFinished;
     }
@@ -184,6 +188,8 @@ public class Movement implements IActivity {
     /**
      * Return the unit of this movement.
      */
+	@Basic
+	@Raw
     private Unit getUnit() {
     	return this.unit;
     }
