@@ -83,7 +83,7 @@ public class Statement {
         return encapsulatingStatement;
     }
 
-    public void setEncapsulatingStatement(Statement encapsulatingStatement) {
+    private void setEncapsulatingStatement(Statement encapsulatingStatement) {
         this.encapsulatingStatement = encapsulatingStatement;
 
     }
@@ -94,10 +94,12 @@ public class Statement {
 
     public void setPartStatement(PartStatement partStatement) {
         this.partStatement = partStatement;
+        for (Statement statement :partStatement.probe()){
+            statement.setEncapsulatingStatement(this);
+        }
     }
 
     // x := e
-    // TODO: name the variable by given string
     class AssignmentPartStatement extends PartStatement {
 
         public AssignmentPartStatement(String variableName, Expression value) {

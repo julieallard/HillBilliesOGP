@@ -27,6 +27,7 @@ public class ProgramExecutor {
         Statement last=null;
         if (task.getStatus().equals(ExecutionStatus.NOTYETEXECUTED)) current=task.getRootStatement();
         else current=findPausedStatement();
+        task.setStatus(ExecutionStatus.BEINGEXECUTED);
         while(canExecute()) {
             current.execute(this);
             if (!(getExecutingUnit().getActivity() instanceof NoActivity)) {
