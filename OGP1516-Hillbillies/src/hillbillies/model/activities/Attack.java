@@ -11,15 +11,6 @@ import ogp.framework.util.Util;
 /**
  * A class of attack activities involving an attacker and a defender.
  * 
- * The Id's of the activities are the following:
- * 0: noActivity
- * 1: attack
- * 2: defend
- * 3: movement
- * 4: working
- * 5: resting
- * 6: falling
- * 
  * @version	2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
@@ -233,13 +224,13 @@ public class Attack implements IActivity {
 		attacker.setOrientation((float) Math.atan2(defender.getLocation().getYLocation() - attacker.getLocation().getYLocation(), defender.getLocation().getXLocation() - attacker.getLocation().getXLocation()));
 		defender.setOrientation((float) Math.atan2(attacker.getLocation().getYLocation() - defender.getLocation().getYLocation(), attacker.getLocation().getXLocation() - defender.getLocation().getXLocation()));
 		if (Math.random() <= 0.25 * (defender.getAgility() / attacker.getAgility()))
-			this.dodge(attacker, defender);
-		else if (Math.random() <= 0.25 * (defender.getStrength() + defender.getAgility()) / (attacker.getStrength() + attacker.getAgility())) {
+			this.dodge(attacker, defender);		
+		else if (Math.random() <= 0.25 * (defender.getStrength() + defender.getAgility()) / (attacker.getStrength() + attacker.getAgility()))
 			this.block(defender);
-			return;
-		} else
+		else
 			this.successfulAttack(attacker, defender);
 	    attacker.activityFinished();
+	    //TODO hello
 	}
 	
 	/**
@@ -280,7 +271,7 @@ public class Attack implements IActivity {
 	}
 	
 	/**
-	 * Let the attacker successfully conduct its attack and let the given defender suffer damage.
+	 * Let the attacker successfully conduct its attack.
 	 * 
 	 * @param	attacker
 	 * 			The unit who brings damage.
