@@ -55,9 +55,9 @@ public class Attack implements IActivity {
     /* Variables */
     
     /**
-     * Variable registering whether the statement of this attack has been dictated.
+     * Variable registering whether this attack has been dictated by a statement.
      */
-    private boolean dictatedByStatement;
+    private boolean dictatedByStatement = false;
     
     /**
      * Variable registering the attacker of this attack.
@@ -82,12 +82,20 @@ public class Attack implements IActivity {
     /* Methods */
     
     /**
-     * Return whether the statement of this attack has been dictated.
+     * Return whether this attack has been dictated by a statement.
      */
     @Override
     public boolean isDictatedByStatement() {
-        return dictatedByStatement;
+        return this.dictatedByStatement;
     }
+    
+	/**
+	 * Set the state of being dictated by a statement of this attack.
+	 */
+	@Override
+	public void setDictatedByStatement(boolean flag) {
+		this.dictatedByStatement = flag;
+	}
 
     /**
      * Update this attack according to the given amount of time advanced.

@@ -17,6 +17,8 @@ public interface IActivity {
 
     boolean isDictatedByStatement();
 
+    void setDictatedByStatement(boolean flag);
+    
     void advanceActivityTime(double dt);
 
     double returnSimpleTimeLeft() throws IllegalArgumentException;

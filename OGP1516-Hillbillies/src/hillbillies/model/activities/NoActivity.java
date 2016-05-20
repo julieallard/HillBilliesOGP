@@ -5,15 +5,6 @@ import hillbillies.model.EsotERICScript.Statements.Statement;
 /**
  * A class of the states of not conducting any activity.
  * 
- * The Id's of the activities are the following:
- * 0: noActivity
- * 1: attack
- * 2: defend
- * 3: movement
- * 4: working
- * 5: resting
- * 6: falling
- * 
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
@@ -21,6 +12,31 @@ import hillbillies.model.EsotERICScript.Statements.Statement;
  */
 public class NoActivity implements IActivity {
 
+	/* Variables */
+	
+    /**
+     * Variable registering whether this state of non conducting any activity has been dictated by a statement.
+     */
+    private boolean dictatedByStatement = false;
+    
+    /* Methods */
+    
+    /**
+     * Return whether this state of non conducting any activity has been dictated by a statement.
+     */
+    @Override
+    public boolean isDictatedByStatement() {
+        return this.dictatedByStatement;
+    }
+    
+	/**
+	 * Set the state of being dictated by a statement of this noActivity.
+	 */
+	@Override
+	public void setDictatedByStatement(boolean flag) {
+		this.dictatedByStatement = flag;
+	}
+    
 	/**
 	 * No documentation required.
 	 */
@@ -59,15 +75,9 @@ public class NoActivity implements IActivity {
     @Override
     public boolean isFinished() {
         return false;
-    }
+    
     @Override
     public void finishActivity() {
-    }
-
-
-    @Override
-    public boolean isDictatedByStatement() {
-        return false;
     }
 
 }

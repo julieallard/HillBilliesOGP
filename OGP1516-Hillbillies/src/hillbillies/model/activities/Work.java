@@ -13,16 +13,7 @@ import ogp.framework.util.Util;
 import java.util.List;
 
 /**
- * A class of Work activities involving a unit and a target location.
- * 
- * The Id's of the activities are the following:
- * 0: noActivity
- * 1: attack
- * 2: defend
- * 3: movement
- * 4: working
- * 5: resting
- * 6: falling
+ * A class of work activities involving a unit and a target location.
  * 
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica
@@ -30,8 +21,6 @@ import java.util.List;
  * 			https://github.com/julieallard/HillBilliesOGP.git
  */
 public class Work implements IActivity {
-
-    private Boolean isFinished;
 
     /**
 	 * Initialize this new Work with given unit and given target location.
@@ -50,16 +39,14 @@ public class Work implements IActivity {
         this.targetLocation = targetLocation;
     }
 
-    private boolean isDictatedByStatement;
-
-    private boolean canHaveAsTargetLocation(int[] targetLocation){
-        if(targetLocation.length!=3) return false;
-        for (int loc :
-                targetLocation) {
-            if (loc>=unit.getWorld().sideSize) return false;
-        }
-        return true;
-    }
+    /* Variables */
+    
+    /**
+     * Variable registering whether this work has been dictated by a statement.
+     */
+    private boolean dictatedByStatement = false;
+    
+    private Boolean isFinished;
     
     /**
      * Variable registering the unit of this Work.
@@ -76,10 +63,23 @@ public class Work implements IActivity {
      */
 	private final int[] targetLocation;
 
+    /* Methods */
+    
+    /**
+     * Return whether this work has been dictated by a statement.
+     */
     @Override
     public boolean isDictatedByStatement() {
-        return isDictatedByStatement;
+        return this.dictatedByStatement;
     }
+    
+	/**
+	 * Set the state of being dictated by a statement of this work.
+	 */
+	@Override
+	public void setDictatedByStatement(boolean flag) {
+		this.dictatedByStatement = flag;
+	}
 
     /**
 	 * No documentation required.
@@ -195,6 +195,15 @@ public class Work implements IActivity {
             return;
         }
         unit.activityFinished();
+    }
+    
+    private boolean canHaveAsTargetLocation(int[] targetLocation) {
+        if (targetLocation.length != 3
+        		|| targetLocation[0] >= unit.getWorld().xSideSize
+        		|| targetLocation[1] >= unit.getWorld().ySideSize
+        		|| targetLocation[2] >= unit.getWorld().zSideSize)
+        	return false;   
+        return true;
     }
 
     /**

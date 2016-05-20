@@ -8,15 +8,6 @@ import hillbillies.model.VLocation;
 /**
  * A class of Fall activities involving a movable world object.
  * 
- * The Id's of the activities are the following:
- * 0: noActivity
- * 1: attack
- * 2: defend
- * 3: movement
- * 4: working
- * 5: resting
- * 6: falling
- * 
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
@@ -36,6 +27,13 @@ public class Fall implements IActivity {
         this.damagetobedone = 0;
     }
 
+    /* Variables */
+    
+    /**
+     * Variable registering whether this fall has been dictated by a statement.
+     */
+    private boolean dictatedByStatement = false;
+    
     /**
      * Variable registering the object of this Fall.
      */
@@ -51,11 +49,23 @@ public class Fall implements IActivity {
      */
     private double distancefallen;
 
+    /* Methods */
+    
+    /**
+     * Return whether this fall has been dictated by a statement.
+     */
     @Override
     public boolean isDictatedByStatement() {
-        return false;
+        return this.dictatedByStatement;
     }
-
+    
+	/**
+	 * Set the state of being dictated by a statement of this fall.
+	 */
+	@Override
+	public void setDictatedByStatement(boolean flag) {
+		this.dictatedByStatement = flag;
+	}
 
     /**
 	 * No documentation required.

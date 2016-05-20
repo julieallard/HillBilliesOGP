@@ -13,15 +13,6 @@ import java.util.Arrays;
 /**
  * A class of Movement activites involving a unit and a destination.
  * 
- * The Id's of the activities are the following:
- * 0: noActivity
- * 1: attack
- * 2: defend
- * 3: movement
- * 4: working
- * 5: resting
- * 6: falling
- * 
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
@@ -48,8 +39,13 @@ public class Movement implements IActivity {
         this.pathing = new Astar(unit);
     }
 
-    private boolean isDictatedByStatement;
-
+    /* Variables */
+    
+    /**
+     * Variable registering whether this movement has been dictated by a statement.
+     */
+    private boolean dictatedByStatement = false;
+    
     /**
      * Variable registering the pathing of this Movement, calculated according to the A star algorithm.
      */
@@ -70,10 +66,23 @@ public class Movement implements IActivity {
      */
     private Cube nextStop;
 
+    /* Methods */
+    
+    /**
+     * Return whether this movement has been dictated by a statement.
+     */
     @Override
     public boolean isDictatedByStatement() {
-        return isDictatedByStatement;
+        return this.dictatedByStatement;
     }
+    
+	/**
+	 * Set the state of being dictated by a statement of this movement.
+	 */
+	@Override
+	public void setDictatedByStatement(boolean flag) {
+		this.dictatedByStatement = flag;
+	}
 
     /**
 	 * No documentation required.

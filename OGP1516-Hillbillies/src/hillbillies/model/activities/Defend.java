@@ -33,6 +33,11 @@ public class Defend implements IActivity {
     /* Variables */
     
     /**
+     * Variable registering whether this defense has been dictated by a statement.
+     */
+    private boolean dictatedByStatement = false;
+    
+    /**
      * Variable registering the defender of this defense.
      */
     private final Unit defender;
@@ -45,12 +50,20 @@ public class Defend implements IActivity {
     /* Methods */
     
     /**
-     * Return whether the statement of this defense has been dictated.
+     * Return whether this defense has been dictated by a statement.
      */
     @Override
     public boolean isDictatedByStatement() {
-        return false;
+        return this.dictatedByStatement;
     }
+    
+	/**
+	 * Set the state of being dictated by a statement of this defense.
+	 */
+	@Override
+	public void setDictatedByStatement(boolean flag) {
+		this.dictatedByStatement = flag;
+	}
 
     /**
      * Update this attack according to the given amount of time advanced.
