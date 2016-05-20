@@ -192,7 +192,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createIsSolid(Expression position, SourceLocation sourceLocation) {
-        return null;
+        if(!(position instanceof PositionExpression)) return null;
+        return BooleanExpression.newIsSolidExpression((PositionExpression)position);
     }
 
     /**
@@ -204,7 +205,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createIsPassable(Expression position, SourceLocation sourceLocation) {
-        return null;
+        if(!(position instanceof PositionExpression)) return null;
+        return BooleanExpression.newIsPassableExpression((PositionExpression)position);
     }
 
     /**
@@ -216,7 +218,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createIsFriend(Expression unit, SourceLocation sourceLocation) {
-        return null;
+        if(!(unit instanceof UnitExpression)) return null;
+        return BooleanExpression.newIsFriendExpression((UnitExpression)unit);
     }
 
     /**
@@ -228,7 +231,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createIsEnemy(Expression unit, SourceLocation sourceLocation) {
-        return null;
+        if(!(unit instanceof UnitExpression)) return null;
+        return BooleanExpression.newIsEnemyExpression((UnitExpression)unit);
     }
 
     /**
@@ -240,7 +244,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createIsAlive(Expression unit, SourceLocation sourceLocation) {
-        return null;
+        if(!(unit instanceof UnitExpression)) return null;
+        return BooleanExpression.newIsAliveExpression((UnitExpression)unit);
     }
 
     /**
@@ -252,7 +257,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createCarriesItem(Expression unit, SourceLocation sourceLocation) {
-        return null;
+        if(!(unit instanceof UnitExpression)) return null;
+        return BooleanExpression.newIsCarryingExpression((UnitExpression)unit);
     }
 
     /**
@@ -264,7 +270,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createNot(Expression expression, SourceLocation sourceLocation) {
-        return null;
+        if(!(expression instanceof BooleanExpression)) return null;
+        return BooleanExpression.newNotExpression((BooleanExpression) expression);
     }
 
     /**
@@ -279,7 +286,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createAnd(Expression left, Expression right, SourceLocation sourceLocation) {
-        return null;
+        if((!(right instanceof BooleanExpression))||(!(left instanceof BooleanExpression))) return null;
+        return BooleanExpression.newAndExpression((BooleanExpression) left,(BooleanExpression)right);
     }
 
     /**
@@ -294,7 +302,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createOr(Expression left, Expression right, SourceLocation sourceLocation) {
-        return null;
+        if((!(right instanceof BooleanExpression))||(!(left instanceof BooleanExpression))) return null;
+        return BooleanExpression.newOrExpression((BooleanExpression) left,(BooleanExpression)right);
     }
 
     /**
@@ -305,7 +314,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createHerePosition(SourceLocation sourceLocation) {
-        return null;
+        return PositionExpression.newHereExpression();
     }
 
     /**
@@ -317,7 +326,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createLogPosition(SourceLocation sourceLocation) {
-        return null;
+        return PositionExpression.newPosLogExpression((UnitExpression)UnitExpression.newThisUnitExpression());
     }
 
     /**
@@ -329,7 +338,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createBoulderPosition(SourceLocation sourceLocation) {
-        return null;
+        return PositionExpression.newPosBoulderExpression((UnitExpression)UnitExpression.newThisUnitExpression());
     }
 
     /**
@@ -341,7 +350,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createWorkshopPosition(SourceLocation sourceLocation) {
-        return null;
+        return PositionExpression.newPosWorkshopExpression((UnitExpression)UnitExpression.newThisUnitExpression());
     }
 
     /**
@@ -353,7 +362,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createSelectedPosition(SourceLocation sourceLocation) {
-        return null;
+        return PositionExpression.newPosSelectedExpression();
     }
 
     /**
@@ -365,7 +374,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createNextToPosition(Expression position, SourceLocation sourceLocation) {
-        return null;
+        if(!(position instanceof PositionExpression)) return null;
+        return PositionExpression.newNextToExpression((PositionExpression)position);
     }
 
     /**
@@ -376,7 +386,8 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createPositionOf(Expression unit, SourceLocation sourceLocation) {
-        return null;
+        if(!(unit instanceof UnitExpression)) return null;
+        return PositionExpression.newPosOfExpression((UnitExpression) unit);
     }
 
     /**
@@ -390,7 +401,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createLiteralPosition(int x, int y, int z, SourceLocation sourceLocation) {
-        return null;
+        return PositionExpression.newPosConstantExpression(new int[]{x,y,z});
     }
 
     /**
@@ -401,7 +412,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createThis(SourceLocation sourceLocation) {
-        return null;
+        return UnitExpression.newThisUnitExpression();
     }
 
     /**
@@ -412,7 +423,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createFriend(SourceLocation sourceLocation) {
-        return null;
+        return UnitExpression.newFriendExpression();
     }
 
     /**
@@ -423,7 +434,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createEnemy(SourceLocation sourceLocation) {
-        return null;
+        return UnitExpression.newEnemyExpression();
     }
 
     /**
@@ -433,7 +444,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createAny(SourceLocation sourceLocation) {
-        return null;
+        return UnitExpression.newAnyExpression();
     }
 
     /**
@@ -443,7 +454,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createTrue(SourceLocation sourceLocation) {
-        return null;
+        return BooleanExpression.newBooleanConstantExpression(true);
     }
 
     /**
@@ -453,6 +464,6 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      */
     @Override
     public Expression createFalse(SourceLocation sourceLocation) {
-        return null;
+        return BooleanExpression.newBooleanConstantExpression(false);
     }
 }
