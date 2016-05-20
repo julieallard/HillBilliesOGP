@@ -1407,6 +1407,7 @@ public class Unit extends MovableWorldObject {
      * 		  |	if (! this.hasPausedActivity())
      * 		  |		then this.setActivity(new NoActivity())
      */
+
     public void activityFinished() {
         if (this.hasPausedActivity()) {
             this.setActivity(this.getPausedActivity());
@@ -1414,5 +1415,4 @@ public class Unit extends MovableWorldObject {
         } else
             this.setActivity(new NoActivity());
     }
-    
 }
