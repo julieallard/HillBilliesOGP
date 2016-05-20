@@ -6,9 +6,6 @@ import ogp.framework.util.ModelException;
 
 import java.util.*;
 
-/**
- * Created by arthurdecloedt on 20/05/16.
- */
 public class facade extends hillbillies.part2.facade.Facade implements hillbillies.part3.facade.IFacade {
     /**
      * Create a new instance of a Task factory.
