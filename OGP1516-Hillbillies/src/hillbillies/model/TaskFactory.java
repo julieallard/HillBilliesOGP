@@ -34,6 +34,7 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
         List<Task> taskList=new ArrayList<>();
         for (int[] loc: selectedCubes){
             Task task=new Task(name, priority);
+            task.setSelected(loc);
             task.setRootStatement(activity);
             if (!task.isLegaltask()) {
                 throw new IllegalArgumentException("IllegalTaskSupplied");
@@ -175,9 +176,11 @@ public class TaskFactory implements ITaskFactory<Expression,Statement,Task>  {
      * @param variableName   The name of the variable to read.
      * @param sourceLocation
      */
+    //Fixme: onze Readvariables zijn opgesplitst in de drie mogelijke types om typesafety te garanderen, dit verhindert ons echter
+    //Fixme: om op dit moment deze al aan te maken
     @Override
     public Expression createReadVariable(String variableName, SourceLocation sourceLocation) {
-
+        return null;
     }
 
     /**

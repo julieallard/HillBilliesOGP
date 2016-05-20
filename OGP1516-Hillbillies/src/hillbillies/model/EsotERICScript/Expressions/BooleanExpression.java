@@ -216,10 +216,9 @@ public class BooleanExpression extends Expression {
 
         return newNotExpression((BooleanExpression) newIsPassableExpression(pos));
     }
-    //TODO
     public static Expression newIsFriendExpression(UnitExpression unit){
         BooleanExpression expression=new BooleanExpression();
-        expression.setInnerExpression(expression.new BooleanIsFriendPartExpression(unit));
+        expression.setInnerExpression(expression.new BooleanIsFriendPartExpression((UnitExpression) UnitExpression.newThisUnitExpression(),unit));
         return expression;
     }
 
@@ -227,6 +226,11 @@ public class BooleanExpression extends Expression {
         BooleanExpression expression=new BooleanExpression();
         expression.setInnerExpression(expression.new BooleanIsAlivePartExpression(unit));
         return expression;
+    }
+
+    public static Expression newIsEnemyExpression(UnitExpression unit){
+        return newNotExpression((BooleanExpression)newIsFriendExpression((unit)));
+
     }
 
     public static Expression newIsCarryingExpression(UnitExpression unit){
@@ -240,5 +244,4 @@ public class BooleanExpression extends Expression {
         expression.setInnerExpression(expression.new BooleanReadPartExpression(key));
         return expression;
     }
-
 }
