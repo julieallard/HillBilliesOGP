@@ -2,6 +2,7 @@ package hillbillies.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
+import hillbillies.model.EsotERICScript.ProgramExecutor;
 import hillbillies.model.activities.*;
 import hillbillies.model.exceptions.IllegalLocation;
 import hillbillies.model.exceptions.IllegalTimeException;
@@ -1018,7 +1019,7 @@ public class Unit extends MovableWorldObject {
      * 		  |	result == faction.getNumberOfUnits() < faction.getMaxNbUnits()
      */
     boolean canHaveAsFaction(Faction faction) {
-        return (faction.getNumberOfUnits() < faction.getMaxNbUnits());
+        return (faction.getNbUnits() < faction.getMaxNbUnits());
     }
 
     /**
@@ -1291,7 +1292,7 @@ public class Unit extends MovableWorldObject {
      *		  |	result == true
      */
     public static boolean isValidTask(Task task) {
-    	return true;
+    	return ProgramExecutor.checkBreakLegality(task);
     }
     
     /**
@@ -1316,11 +1317,12 @@ public class Unit extends MovableWorldObject {
      * 
      * @return	True if and only if this unit's default behavior is enabled and if it's not conducting any activity.
      *		  |	result ==
-     *		  |		this.isDefaultBehaviorEnabled()
+     *		  |     !this.hasTask()
+     *		  |		&& this.isDefaultBehaviorEnabled()
      *		  |		&& this.getActivity().getId() == 0
      */
     public boolean isIdle() {
-        return this.isDefaultBehaviorEnabled() && (this.getActivity().getId() == 0);
+        return !this.hasTask() && this.isDefaultBehaviorEnabled() && (this.getActivity().getId() == 0);
     }
     
     /**
@@ -1393,7 +1395,6 @@ public class Unit extends MovableWorldObject {
         this.task.stopExecution();
         return true;
     }
-    
     /**
      * Let this unit finish its current activity.
      *
@@ -1405,7 +1406,6 @@ public class Unit extends MovableWorldObject {
      * 		  |	if (! this.hasPausedActivity())
      * 		  |		then this.setActivity(new NoActivity())
      */
-
     public void activityFinished() {
         if (this.hasPausedActivity()) {
             this.setActivity(this.getPausedActivity());

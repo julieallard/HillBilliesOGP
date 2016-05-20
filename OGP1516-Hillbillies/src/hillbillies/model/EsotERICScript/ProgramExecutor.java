@@ -122,8 +122,7 @@ public class ProgramExecutor {
 
     public static boolean hasEncapsulatingLoop(Statement statement) {
         Statement encapstat = statement.getEncapsulatingStatement();
-        if (encapstat == null) return false;
-        return encapstat instanceof LoopStatement || hasEncapsulatingLoop(encapstat);
+        return encapstat != null && (encapstat instanceof LoopStatement || hasEncapsulatingLoop(encapstat));
     }
 
     public static Statement findEncapsulatingLoop(Statement statement) throws SyntaxError {

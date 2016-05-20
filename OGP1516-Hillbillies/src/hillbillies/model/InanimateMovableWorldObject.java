@@ -37,8 +37,7 @@ abstract class InanimateMovableWorldObject extends MovableWorldObject {
     InanimateMovableWorldObject(double x, double y, double z, World world) throws IllegalLocation {
         this.setLocation(x, y, z);
         this.setWorld(world);
-        int randomWeight = random.nextInt(41) + 10;
-        this.weight = randomWeight;
+        this.weight = random.nextInt(41) + 10;
     }
 
     /* Variables */
