@@ -145,12 +145,10 @@ public class VLocation {
     /**
      * Check whether the given location is a valid location for its occupant in the occupant's world.
      *
-     * @param	location
-     *			The location to check.
      * @return	True if and only if the occupant of the given location can have the given location as its location in the occupant's world.
      */
-    public static boolean isValidLocation(VLocation location) {
-        return location.getOccupant().getWorld().canHaveAsCubeLocation(location.getCubeLocation(), location.getOccupant());
+    public boolean isValidLocation() {
+        return this.getOccupant().getWorld().canHaveAsCubeLocation(this.getCubeLocation(), this.getOccupant());
     }
 
 }

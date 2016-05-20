@@ -94,18 +94,6 @@ public abstract class MovableWorldObject {
     public VLocation getLocation() {
         return this.location;
     }
-    
-    /**
-     * Check whether the given location is a valid location for any movable world object.
-     *
-     * @param  location
-     * 		   The location to check.
-     * @return True if and only if this movable world object can have the given location as its location in this movable world object's world.
-     */
-
-    public boolean isValidLocation(VLocation location) {
-        return VLocation.isValidLocation(location);
-    }
 	
     /**
      * Set the location of this movable world object to the given x, y and z coordinate.
@@ -148,7 +136,7 @@ public abstract class MovableWorldObject {
      */
     @Raw
     public void setLocation(VLocation location) throws IllegalLocation {
-        if ((! isValidLocation(location)) || location.occupant == this)
+        if ((! location.isValidLocation()) || location.getOccupant() == this)
             throw new IllegalLocation();
         this.location = location;
         this.register(location);
