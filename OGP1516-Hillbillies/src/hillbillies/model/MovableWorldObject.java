@@ -1,6 +1,7 @@
 package hillbillies.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.activities.IActivity;
 import hillbillies.model.exceptions.IllegalLocation;
@@ -9,6 +10,9 @@ import hillbillies.model.exceptions.SyntaxError;
 /**
  * A class of movable world objects.
  * 		Movable world objects can be units, boulders or logs.
+ * 
+ * @invar	The activity of each  movable world object must be a valid activity for any movable world object.
+ * 		  |	isValidActivity(getActivity())
  * 
  * @version 2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
