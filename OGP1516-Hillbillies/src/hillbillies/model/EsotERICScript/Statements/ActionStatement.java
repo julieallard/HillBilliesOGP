@@ -4,7 +4,6 @@ package hillbillies.model.EsotERICScript.Statements;
 import hillbillies.model.EsotERICScript.Expressions.PositionExpression;
 import hillbillies.model.EsotERICScript.Expressions.UnitExpression;
 import hillbillies.model.EsotERICScript.ProgramExecutor;
-import hillbillies.model.Task;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
@@ -13,7 +12,7 @@ import java.util.Collections;
 
 public class ActionStatement extends Statement {
 
-	public ActionStatement(Task task) {
+	public ActionStatement() {
 		super();
 	}
 

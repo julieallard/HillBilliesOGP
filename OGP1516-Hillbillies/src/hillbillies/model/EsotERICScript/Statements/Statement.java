@@ -256,11 +256,55 @@ public class Statement {
             }
         }
 
-    public Statement newAssignstatement(String key,Expression value){
+    public static Statement newAssignstatement(String key,Expression value){
         Statement statement=new Statement();
-        statement.setPartStatement(new AssignmentPartStatement(key,value));
+        statement.setPartStatement(statement.new AssignmentPartStatement(key,value));
         return statement;
     }
 
+    public static Statement newIfStatement(BooleanExpression condition,Statement ifpart,Statement elsePart){
+        Statement statement=new Statement();
+        statement.setPartStatement(statement.new IfPartStatement(condition,ifpart,elsePart));
+        return statement;
+    }
+
+    public static Statement newBreakStatement(){
+        Statement statement=new Statement();
+        statement.setPartStatement(statement.new BreakPartStatement();
+        return statement;
+    }
+
+    public static Statement newSequenceStatement(List<Statement> statementList){
+        Statement statement=new Statement();
+        statement.setPartStatement(statement.new SequencePartStatement(statementList));
+        return statement;
+    }
+
+    public static Statement newWorkStatement(PositionExpression location) {
+        ActionStatement statement=new ActionStatement();
+        statement.setPartStatement(statement.new WorkPartStatement(location));
+        return statement;
+    }
+    public static Statement newAttackStatement(UnitExpression defender){
+        ActionStatement statement=new ActionStatement();
+        statement.setPartStatement(statement.new AttackPartStatement(defender));
+        return statement;
+    }
+
+    public static Statement newMovetoStatement(PositionExpression location) {
+        ActionStatement statement=new ActionStatement();
+        statement.setPartStatement(statement.new MoveToPartStatement(location));
+        return statement;
+    }
+    public static Statement newFollowStatement(UnitExpression leader){
+        ActionStatement statement=new ActionStatement();
+        statement.setPartStatement(statement.new FollowPartStatement(leader));
+        return statement;
+    }
+    public static Statement newWhileStatement(BooleanExpression condition, Statement body){
+        LoopStatement statement=new LoopStatement();
+        statement.setPartStatement(statement.new WhilePartStatement(condition,body));
+        return statement;
+    }
 
 }
