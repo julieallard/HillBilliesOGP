@@ -78,7 +78,7 @@ public class Task implements Comparable {
 		return rootStatement;
 	}
 	public void setRootStatement(Statement rootStatement) {
-		//Todo must not be a break statement
+		if(rootStatement.getPartStatement() instanceof Statement.BreakPartStatement) throw new IllegalArgumentException("a break statement cannot be a root statement");
 		this.rootStatement = rootStatement;
 	}
 
