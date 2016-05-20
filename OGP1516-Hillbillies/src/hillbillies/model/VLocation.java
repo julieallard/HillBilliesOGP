@@ -6,10 +6,10 @@ import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.exceptions.IllegalLocation;
 
 /**
- * A class of VLocations involving an x, y and z coordinate and an occupant.
+ * A class of vector locations involving an x, y and z coordinate and an occupant.
  * 
- * @version 0.9 alpha
- * @author  Arthur Decloedt - Bachelor in de Informatica
+ * @version	2.9.05 technical beta
+ * @author	Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
  */
@@ -18,82 +18,61 @@ public class VLocation {
     /**
      * Initialize this new VLocation with given x, y and z coordinate and given occupant.
      * 
-     * @param  XLocation
-     *         The XLocation for this new VLocation.     
-     * @param  YLocation
-     *         The YLocation for this new VLocation.
-     * @param  ZLocation
-     *         The ZLocation for this new VLocation.
-     * @post   The XLocation of this new VLocation is equal to the given
-     *         XLocation.
-     *       | new.getXLocation() == XLocation
-     * @post   The YLocation of this new VLocation is equal to the given
-     *         YLocation.
-     *       | new.getYLocation() == YLocation
-     * @post   The ZLocation of this new VLocation is equal to the given
-     *         ZLocation.
-     *       | new.getZLocation() == ZLocation
-     * @throws IllegalLocation
-     *         This new VLocation cannot have the given XLocation as its XLocation.
-     *       | ! canHaveAsXLocation(this.getXLocation())
-     * @throws IllegalLocation
-     *         This new VLocation cannot have the given YLocation as its YLocation.
-     *       | ! canHaveAsYLocation(this.getYLocation())
-     * @throws IllegalLocation
-     *         This new VLocation cannot have the given ZLocation as its ZLocation.
-     *       | ! canHaveAsZLocation(this.getZLocation())
+     * @param	x
+     *			The x coordinate for this new vector location.     
+     * @param	y
+     *			The y coordinate for this new vector location.
+     * @param	z
+     *			The z coordinate for this new vector location.
+     * @post	The occupant of this new vector location is equal to the given occupant.
+     * @post	The x coordinate of this new vector location is equal to the given x coordinate.
+     * @post	The y coordinate of this new vector location is equal to the given y coordinate.
+     * @post	The z coordinate of this new vector location is equal to the given z coordinate.
+     * @throws	IllegalLocation
+     *			This new vector location cannot have the given x, y or z coordinate as its x, y or zcoordinate.
      */
-    public VLocation(double XLocation, double YLocation, double ZLocation, MovableWorldObject occupant) throws IllegalLocation {
-        if (! canHaveAsOccupant(occupant))
-        	throw new IllegalArgumentException("IllegalOccupantAssignedToLocation");
+    public VLocation(double x, double y, double z, MovableWorldObject occupant) throws IllegalLocation {
         this.occupant = occupant;
-    	if (! canHaveAsXLocation(XLocation))
+        if (!canHaveAsCoordinates(x, y, z))
             throw new IllegalLocation();
-        this.XLocation = XLocation;
-    	if (! canHaveAsYLocation(YLocation))
-    		throw new IllegalLocation();
-        this.YLocation = YLocation;        
-        if (! canHaveAsZLocation(ZLocation))
-            throw new IllegalLocation();
-        this.ZLocation = ZLocation;
+        this.XLocation = x;
+        this.YLocation = y;
+        this.ZLocation = z;
     }
     
+    /* Variables */
+    
     /**
-     * Variable registering the occupant of this VLocation.
+     * Variable registering the occupant of this vector location.
      */
     public final MovableWorldObject occupant;
     
     /**
-     * Variable registering the x coordinate of this VLocation.
+     * Variable registering the x coordinate of this vector location.
      */
     private final double XLocation;
     
     /**
-     * Variable registering the y coordinate of this VLocation.
+     * Variable registering the y coordinate of this vector location.
      */
     private final double YLocation;
     
     /**
-     * Variable registering the z coordinate of this VLocation.
+     * Variable registering the z coordinate of this vector location.
      */
     private final double ZLocation;
+ 
+    /* Methods */
     
     /**
-     * Check whether this VLocation can have the given object as its occupant.
-     *  
-     * @param  object
-     *         The object to check.
-     * @return True if and only if the object is an instance of the class
-     * 		   MovableWorldObject or of the class CubeWorldObject.
-     *       | result == (object instanceof MovableWorldObject
-     *       		|| object instanceof CubeWorldObject)
+     * Return the occupant of this vector location.
      */
-    public boolean canHaveAsOccupant(Object object) {
-        return (object instanceof MovableWorldObject);
+    public MovableWorldObject getOccupant() {
+    	return this.occupant;
     }
- 
+    
     /**
-     * Return the x coordinate of this VLocation.
+     * Return the x coordinate of this vector location.
      */
     @Basic
     @Raw
@@ -101,23 +80,9 @@ public class VLocation {
     public double getXLocation() {
         return this.XLocation;
     }
-
-    /**
-     * Check whether this VLocation can have the given XLocation as its XLocation.
-     *
-     * @param  XLocation
-     *         The x coordinate to check.
-     * @return True if and only if the x coordinate is between 0 and 50.
-     *       | result == (Xlocation >= 0
-     *       		&& XLocation <= 50)
-     */
-    @Raw
-    public boolean canHaveAsXLocation(double XLocation) {
-        return (XLocation >= 0 && XLocation <= this.occupant.getWorld().sideSize);
-    }
     
     /**
-     * Return the y coordinate of this VLocation.
+     * Return the y coordinate of this vector location.
      */
     @Basic
     @Raw
@@ -125,23 +90,9 @@ public class VLocation {
     public double getYLocation() {
       return this.YLocation;
     }
-    
-    /**
-     * Check whether this VLocation can have the given YLocation as its YLocation.
-     *  
-     * @param  YLocation
-     *         The y coordinate to check.
-     * @return True if and only if the y coordinate is between 0 and size of the sides of this world.
-     *       | result == (Ylocation >=0
-     *       		&& YLocation <= this.occupant.getWorld().sideSize)
-     */
-    @Raw
-    public boolean canHaveAsYLocation(double YLocation) {
-        return (YLocation >= 0 && YLocation <= this.occupant.getWorld().sideSize);
-    }
 
     /**
-     * Return the z coordinate of this VLocation.
+     * Return the z coordinate of this vector location.
      */
     @Basic
     @Raw
@@ -151,21 +102,26 @@ public class VLocation {
     }
 
     /**
-     * Check whether this VLocation can have the given ZLocation as its ZLocation.
+     * Check whether this vector location can have the given x, y and z coordinates as its x, y and z coordinates.
      *
-     * @param  ZLocation
-     *         The z coordinate to check.
-     * @returnTrue if and only if the z coordinate is between 0 and 50.
-     *       | result == (Zlocation >= 0
-     *       		&& ZLocation <= 50)
+     * @param	x
+     *			The x coordinate to check.
+     * @param	y
+     * 			The y coordinate to check.
+     * @param	z
+     * 			The z coordinate to check.
+     * @return	True if and only if the x, y and z coordinates are positive and within the borders of this vector location's occupant's world.
      */
     @Raw
-    public boolean canHaveAsZLocation(double ZLocation) {
-        return (ZLocation >= 0 && ZLocation <= this.occupant.getWorld().sideSize);
+    public boolean canHaveAsCoordinates(double x, double y, double z) {
+        return (x >= 0 && y >= 0 && z >= 0
+        		&& x <= this.occupant.getWorld().xSideSize
+        		&& y <= this.occupant.getWorld().ySideSize
+        		&& z <= this.occupant.getWorld().zSideSize);
     }
 
     /**
-     * Return an array with the x, y and z coordinate of this VLocation.
+     * Return an array with the x, y and z coordinate of this vector location.
      */
     public double[] getArray() {
         double[] array = new double[3];
@@ -176,9 +132,9 @@ public class VLocation {
     }
 
     /**
-     * Return an array with the x, y and z coordinate of cube that VLocation is located in.
+     * Return an array with the x, y and z coordinate of the cube that this vector location is located in.
      */
-    public int[] getCubeLocation(){
+    public int[] getCubeLocation() {
         int[] array = new int[3];
         array[0] = (int) getXLocation();
         array[1] = (int) getYLocation();
@@ -189,15 +145,12 @@ public class VLocation {
     /**
      * Check whether the given location is a valid location for its occupant in the occupant's world.
      *
-     * @param  location
-     * 		   The location to check.
-     * @return True if and only if the occupant of the given location can have the given location as its location
-     * 		   in the occupant's world.
+     * @param	location
+     *			The location to check.
+     * @return	True if and only if the occupant of the given location can have the given location as its location in the occupant's world.
      */
     public static boolean isValidLocation(VLocation location) {
-        return location.occupant.getWorld().canHaveAsCubeLocation(location.getCubeLocation(), location.occupant);
+        return location.getOccupant().getWorld().canHaveAsCubeLocation(location.getCubeLocation(), location.getOccupant());
     }
 
 }
-
-

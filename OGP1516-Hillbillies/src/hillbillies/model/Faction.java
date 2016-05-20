@@ -8,51 +8,48 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A class of Factions involving a unit and a world.
+ * A class of factions involving a unit and a world.
  * 
- * @version 0.9 alpha
- * @author  Arthur Decloedt - Bachelor in de Informatica
+ * @version	2.9.05 technical beta
+ * @author	Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
  * 			https://github.com/julieallard/HillBilliesOGP.git
  */
 public class Faction {
 	
 	/**
-	 * Initialize this new Faction with given unit and given world.
+	 * Initialize this new faction with given unit and given world.
      *
-     * @param  unit
-     *         The unit for this new Faction.
-     * @param  world
-     * 		   The world for this new Log.
-	 * @effect The given Unit is added to this new Faction.
-     * @post   The world of this new Faction is equal to the given world.
+     * @param	unit
+     *			The unit for this new faction.
+     * @param	world
+     *			The world for this new faction.
+     * @post	The world of this new faction is equal to the given world.
+     * @effect	This faction is added to its world.
+	 * @effect	The given unit is added to this new faction.
      */
 	public Faction(Unit unit, World world) throws IllegalArgumentException {
 		this.world = world;
-		world.addFaction(this);
-        this.UnitSet = new HashSet<>();
+		this.getWorld().addFaction(this);
 		this.addUnit(unit);
-        this.scheduler = new Scheduler(this);
 	}
 	
+	/* Variables */
+	
 	/**
-	 * Variable registering the world of this Faction.
+	 * Variable registering the world of this faction.
 	 */
 	private final World world;
 	
 	/**
-	 * Set collecting references to Units belonging to this faction.
-	 * 
-	 * @invar The set of Units is effective.
-	 * @invar Each element in the set of Units references a unit that is an acceptable unit for this Faction.
-	 * @invar Each Unit in the UnitSet references this faction as the faction to which it is attached.
+	 * Set collecting references to units belonging to this faction.
 	 */
-	private Set<Unit> UnitSet;
+	private Set<Unit> UnitSet = new HashSet<>();
 	
 	/**
 	 * Variable registering the scheduler of this Faction.
 	 */
-	private final Scheduler scheduler;
+	private final Scheduler scheduler = new Scheduler(this);
 
 	/**
 	 * Constant reflecting the maximum amount of units in a faction.
@@ -62,12 +59,7 @@ public class Faction {
 	 */
 	public static final int MAX_UNITS = 50;
 	
-	/**
-	 * Return the maximum amount of units in this faction.
-	 */
-	public int getMaxNbUnits() {
-		return Faction.MAX_UNITS;
-	}
+	/* Methods */
 	
     /**
      * Return the world of this faction.
@@ -78,21 +70,35 @@ public class Faction {
 	public World getWorld() {
 		return this.world;
 	}
-	
+    
     /**
      * Check whether this faction can have the given world as its world.
      *
      * @param  world
      *         The world to check.
-     * @return True if and only if the given world contains less than 5 factions.
+     * @return True if and only if the given world contains less than the maximum amount of factions in the given world.
      */
     @Raw
 	public boolean canHaveAsWorld(World world) {
 		return (world.getNbFactions() < world.getMaxNbFactions());
 	}
 	
+	/**
+	 * Return the maximum amount of units in this faction.
+	 */
+	public int getMaxNbUnits() {
+		return Faction.MAX_UNITS;
+	}
+
+	/**
+	 * Return the number of units in this faction.
+	 */
+	public int getNbUnits() {
+		return UnitSet.size();
+	}
+	
     /**
-     * Return a set collecting all the units in this Faction.
+     * Return a set collecting all the units in this faction.
      */
 	public Set<Unit> getUnitSet() {
 		return this.UnitSet;
@@ -116,23 +122,16 @@ public class Faction {
 	/**
 	 * Remove the given unit from this faction.
 	 * 
-	 * @param  unit
-	 * 		   The unit to remove.
-	 * @effect The given unit is removed from this faction. If this faction does not longer contain units,
-	 * 		   this Faction is removed from its world.
+	 * @param	unit
+	 *			The unit to remove.
+	 * @post	The given unit is removed from this faction.
+	 * @effect	If this faction does not longer contain units, this faction is removed from its world.
 	 */
 	public void removeUnit(Unit unit) {
 		UnitSet.remove(unit);
-		if (getNumberOfUnits() == 0) {
+		if (getNbUnits() == 0) {
 			getWorld().removeFaction(unit.getFaction());
 		}
-	}
-
-	/**
-	 * Return the number of units of this faction.
-	 */
-	public int getNumberOfUnits() {
-		return UnitSet.size();
 	}
 
 	/**
