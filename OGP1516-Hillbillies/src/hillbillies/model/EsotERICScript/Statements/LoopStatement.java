@@ -1,7 +1,7 @@
 package hillbillies.model.EsotERICScript.Statements;
+
 import hillbillies.model.EsotERICScript.Expressions.BooleanExpression;
 import hillbillies.model.EsotERICScript.ProgramExecutor;
-import hillbillies.model.Task;
 import hillbillies.model.Unit;
 import hillbillies.model.exceptions.SyntaxError;
 
@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class LoopStatement extends Statement {
-    public LoopStatement(Task task) {
+    public LoopStatement() {
         super();
     }
     // while e do s done

@@ -270,7 +270,7 @@ public class Statement {
 
     public static Statement newBreakStatement(){
         Statement statement=new Statement();
-        statement.setPartStatement(statement.new BreakPartStatement();
+        statement.setPartStatement(statement.new BreakPartStatement());
         return statement;
     }
 
