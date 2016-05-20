@@ -1,7 +1,6 @@
 package hillbillies.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.activities.IActivity;
 import hillbillies.model.exceptions.IllegalLocation;

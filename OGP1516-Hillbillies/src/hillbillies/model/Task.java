@@ -37,56 +37,10 @@ public class Task implements Comparable {
 		this.name = name;
 		this.setPriority(priority);
 		this.SchedulerSet = new HashSet<>();
-		this.positionGlobalMap = new HashMap<>();
-        this.booleanGlobalMap = new HashMap<>();
-		this.unitGlobalMap = new HashMap<>();
 	}
 
-    /**
-     * check the legality of this task
-     * @return
-     */
-
-	public boolean isLegaltask(){
-		return ProgramExecutor.checkBreakLegality(this);
-	}
-
-    public Map<String, int[]> positionGlobalMap;
-    public Map<String, Boolean> booleanGlobalMap;
-    public Map<String, Unit> unitGlobalMap;
-
-
-    /**
-     * Give the root statement of this task
-     * @return
-     */
-
-	public Statement getRootStatement() {
-		return rootStatement;
-	}
-
-    /**
-     * set the root statement
-     * @param rootStatement the new root statement
-     * @throws IllegalArgumentException
-     */
-
-	public void setRootStatement(Statement rootStatement) {
-		if(rootStatement.getPartStatement() instanceof Statement.BreakPartStatement) throw new IllegalArgumentException("a break statement cannot be a root statement");
-		this.rootStatement = rootStatement;
-	}
-
-	private Statement rootStatement;
-
-		
-	public boolean isBeingExecuted() {
-		return this.getStatus().equals(ExecutionStatus.BEINGEXECUTED);
-	}
-
-	public boolean isExecuted() {
-		return this.getStatus().equals(ExecutionStatus.FINISHED);
-	}
-
+	/* Variables */
+	
 	/**
 	 * Variable registering the name of this task.
 	 */
@@ -103,13 +57,88 @@ public class Task implements Comparable {
 	private Unit executor;
 
 	/**
-	 * List collecting references to schedulers belonging to this task.
-	 * 
-	 * @invar The list of schedulers is effective.
-	 * @invar Each element in the list of schedulers references a scheduler that is an acceptable scheduler for this task.
+	 * Set collecting references to schedulers belonging to this task.
 	 */
-
 	private Set<Scheduler> SchedulerSet;
+	
+	/**
+	 * Variable registering the root statement of this task.
+	 */
+	private Statement rootStatement;
+	
+	/**
+	 * Variable registering the world of this Task.
+	 */
+	public World world;
+	
+	/**
+	 * Variable registering a cube location selected by the user when making this task.
+	 */
+    private int[] selected;
+    
+    /**
+     * Variable registering the execution status of this task.
+     */
+    private ExecutionStatus status;
+
+    /**
+     * Hashmap registering position values with string keys used in the assign and read statements.
+     */
+    public Map<String, int[]> positionGlobalMap = new HashMap<>();
+    
+    /**
+     * Hashmap registering boolean values with string keys used in the assign and read statements.
+     */
+    public Map<String, Boolean> booleanGlobalMap = new HashMap<>();
+    
+    /**
+     * Hashmap registering unit values with string keys used in the assign and read statements.
+     */
+    public Map<String, Unit> unitGlobalMap = new HashMap<>();
+
+    /* Methods */
+    
+    /**
+     * Check whether this task can accept a break statement.
+     * 
+     * @return	True if and only if this task satisfies break legality.
+     * 		  |	result == ProgramExecutor.checkBreakLegality(this)
+     */
+	public boolean isLegaltask() {
+		return ProgramExecutor.checkBreakLegality(this);
+	}
+
+	/**
+	 * Return the root statement of this task.
+	 */
+	@Basic
+	@Raw
+	public Statement getRootStatement() {
+		return this.rootStatement;
+	}
+
+	/**
+	 * Set the root statement of this task to the given root statement.
+	 * 
+	 * @param	rootStatement
+	 * 			The new root statement for this task.
+	 * @throws	IllegalArgumentException
+	 * 			
+	 */
+	public void setRootStatement(Statement rootStatement) {
+		if (rootStatement.getPartStatement() instanceof Statement.BreakPartStatement)
+			throw new IllegalArgumentException("A break statement can't be a root statement");
+		this.rootStatement = rootStatement;
+	}
+		
+	public boolean isBeingExecuted() {
+		return this.getStatus().equals(ExecutionStatus.BEINGEXECUTED);
+	}
+
+	public boolean isExecuted() {
+		return this.getStatus().equals(ExecutionStatus.FINISHED);
+	}
+
 	/**
 	 * Return the name of this task.
 	 */
@@ -196,7 +225,7 @@ public class Task implements Comparable {
 		this.executor = executor;
 	}
 
-	public World world;
+
 
 	/**
 	 * Compares this object with the specified object for order.  Returns a
@@ -267,7 +296,7 @@ public class Task implements Comparable {
             }
         }
     }
-    private int[] selected;
+
 
     public static Collection<Task> createTask(String name,int priority,Statement activity,List<int[]> selected){
 
@@ -284,6 +313,10 @@ public class Task implements Comparable {
     public int[] getSelected() {
         return selected;
     }
+    
+    public void setSelected(int[] selected) {
+    	this.selected = selected;
+    }
 
     public ExecutionStatus getStatus() {
         return status;
@@ -293,5 +326,4 @@ public class Task implements Comparable {
         this.status = status;
     }
 
-    private ExecutionStatus status;
 }
