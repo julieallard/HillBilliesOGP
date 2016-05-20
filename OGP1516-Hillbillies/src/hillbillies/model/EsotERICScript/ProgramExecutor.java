@@ -150,7 +150,7 @@ public class ProgramExecutor {
         return paused;
     }
 
-    public static void resetExecutionstyle(Task task){
+    public static void resetExecutionStatus(Task task){
         Statement root = task.getRootStatement();
         Stack<Statement> statementStack = new Stack<>();
         statementStack.push(root);
