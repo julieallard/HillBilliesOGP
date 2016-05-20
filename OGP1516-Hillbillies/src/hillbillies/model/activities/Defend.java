@@ -9,6 +9,9 @@ import ogp.framework.util.Util;
 /**
  * A class of defenses involving a defender.
  * 
+ * @invar	The time left until each defense is finished must be a valid time left for any defense.
+ *		  | isValidTimeLeft(getTimeLeft())
+ * 
  * @version	2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  

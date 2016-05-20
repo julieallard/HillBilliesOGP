@@ -10,6 +10,9 @@ import ogp.framework.util.Util;
 /**
  * A class of attacks involving an attacker and a defender.
  * 
+ * @invar	The time left until each attack is finished must be a valid time left for any attack.
+ *		  | isValidTimeLeft(getTimeLeft())
+ * 
  * @version	2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  

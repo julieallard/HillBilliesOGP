@@ -35,6 +35,14 @@ import java.util.Random;
  * 		  |	canHaveAsFaction(getFaction)
  * @invar	The number of experience points of each unit must be a valid number of experience points for any unit.
  *		  |	isValidXP(getXP())
+ * @invar	The number of used experience points of each unit must be a valid number of used experience points for any unit.
+ *		  |	isValidXPUsed(getXPUsed())
+ * @invar	The time since the last rest of each unit must be a valid time since the last rest for any unit.
+ * 		  |	isValidTimeSinceLastRest(getTimeSinceLastRest())
+ * @invar	The task of each unit must be a valid task for any unit.
+ * 		  |	isValidTask(getTask())
+ * @invar	The activity of each unit must be a valid activity for any unit.
+ * 		  |	isValidActivity(getActivity())
  *        
  * @version 2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica

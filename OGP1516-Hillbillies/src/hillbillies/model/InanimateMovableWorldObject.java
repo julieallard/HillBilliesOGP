@@ -12,6 +12,9 @@ import java.util.Random;
  * A class of ananimate movable world objects.
  * 		Inanimate movable world objects can be boulders or logs.
  * 
+ * @invar	The activity of each inanimate movable world object must be a valid activity for any inanimate movable world object.
+ * 		  |	isValidActivity(getActivity())
+ * 
  * @version	2.9.05 technical beta
  * @author	Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  

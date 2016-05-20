@@ -14,6 +14,9 @@ import java.util.List;
 /**
  * A class of work activities involving a unit and a target location.
  * 
+ * @invar	The time left until each work is finished must be a valid time left for any work.
+ *		  | isValidTimeLeft(getTimeLeft())
+ * 
  * @version	2.9.05 technical beta
  * @author  Arthur Decloedt - Bachelor in de Informatica
  * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
