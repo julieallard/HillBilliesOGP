@@ -90,7 +90,7 @@ public class World {
 	 * @return	The maximum amount of active factions of all worlds is 5.
 	 *		  |	result == 5
 	 */
-	public static final int MAX_FACTIONS = 5;
+    static final int MAX_FACTIONS = 5;
 	
 	/**
 	 * Constant reflecting the maximum amount of units in a world.
@@ -98,19 +98,19 @@ public class World {
 	 * @return	The maximum amount of units of all worlds is 100.
 	 *		  |	result == 100
 	 */
-	public static final int MAX_UNITS = 100;
+	 static final int MAX_UNITS = 100;
     
 	/**
 	 * Return the maximum amount of active factions in this world.
 	 */
-	public int getMaxNbFactions() {
+	 int getMaxNbFactions() {
 		return World.MAX_FACTIONS;
 	}
 	
 	/**
 	 * Return the maximum amount of units in this world.
 	 */
-	public int getMaxNbUnits() {
+	 int getMaxNbUnits() {
 		return World.MAX_UNITS;
 	}
 	
@@ -119,7 +119,7 @@ public class World {
      */
     @Basic
     @Raw
-    public CubeWorldObject[][][] getCubeWorld() {
+     CubeWorldObject[][][] getCubeWorld() {
         return this.CubeWorld;
     }
 
@@ -130,7 +130,7 @@ public class World {
      * 		   The cube world to check.
      * @return True if and only if the cube world is cubical, in other words if all sub arrays have the same length.
      */
-    public boolean isValidCubeWorld(int[][][] CubeWorld) {
+     boolean isValidCubeWorld(int[][][] CubeWorld) {
         for (int[][] YZLevel: CubeWorld) {
             if (YZLevel.length != getySideSize()) {
                 return false;
@@ -154,7 +154,7 @@ public class World {
      * 		   The given cube world is not a valid cube world for any World.
      */
     @Raw
-    public void setCubeWorld(int[][][] CubeWorld) throws IllegalLocation, IllegalArgumentException {
+     void setCubeWorld(int[][][] CubeWorld) throws IllegalLocation, IllegalArgumentException {
         if (! isValidCubeWorld(CubeWorld))
             throw new IllegalLocation();
         CubeWorldObject[][][] CubeWorldFinal = new CubeWorldObject[getxSideSize()][getySideSize()][getzSideSize()];
@@ -241,7 +241,7 @@ public class World {
      *         The world map to check.
      * @return Always true.
     */
-    public static boolean isValidWorldMap(WorldMap<VLocation, MovableWorldObject> WorldMap) {
+     static boolean isValidWorldMap(WorldMap<VLocation, MovableWorldObject> WorldMap) {
     	return true;
     }
     
@@ -255,7 +255,7 @@ public class World {
      *         The given world map is not a valid world map for any world.
      */
     @Raw
-    public void setWorldMap(WorldMap<VLocation, MovableWorldObject> WorldMap) throws IllegalArgumentException {
+     void setWorldMap(WorldMap<VLocation, MovableWorldObject> WorldMap) throws IllegalArgumentException {
     	if (! isValidWorldMap(WorldMap))
     		throw new IllegalArgumentException();
     	this.WorldMap = WorldMap;
@@ -449,7 +449,6 @@ public class World {
      * No documentation required.
      */
     public void advanceTime(double dt) throws SyntaxError {
-        double dt1 = dt;
         if(! isValidTimeDuration(dt)) throw new IllegalTimeException("thrown by advanceTime from World time duration was not valid");
         caveIn();
         //World validity check
@@ -553,7 +552,7 @@ public class World {
         return xSideSize;
     }
 
-    public void setxSideSize(int xSideSize) {
+    void setxSideSize(int xSideSize) {
         this.xSideSize = xSideSize;
     }
 
@@ -564,7 +563,7 @@ public class World {
         return ySideSize;
     }
 
-    public void setySideSize(int ySideSize) {
+    void setySideSize(int ySideSize) {
         this.ySideSize = ySideSize;
     }
 
@@ -575,7 +574,7 @@ public class World {
         return zSideSize;
     }
 
-    public void setzSideSize(int zSideSize) {
+    void setzSideSize(int zSideSize) {
         this.zSideSize = zSideSize;
     }
 }
