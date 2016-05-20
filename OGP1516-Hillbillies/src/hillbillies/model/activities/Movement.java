@@ -83,7 +83,10 @@ public class Movement implements IActivity {
     }
     
 	/**
-	 * Set the state of being dictated by a statement of this movement.
+	 * Set the state of being dictated by a statement of this movement according to the given flag.
+	 * 
+	 * @param	flag
+	 * 			The new state of being dictated by a statement for this movement.
 	 */
 	@Override
 	public void setDictatedByStatement(boolean flag) {

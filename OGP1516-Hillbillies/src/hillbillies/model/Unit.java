@@ -749,6 +749,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the number of hitpoints of this unit.
      */
+    @Basic
+    @Raw
     public int getCurrentHitPoints() {
         return this.hitpoints;
     }
@@ -771,6 +773,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the number of stamina points of this unit.
      */
+    @Basic
+    @Raw
     public int getCurrentStaminaPoints() {
         return this.staminapoints;
     }
@@ -794,6 +798,7 @@ public class Unit extends MovableWorldObject {
      * Return the orientation of this unit.
      */
     @Basic
+    @Raw
     public float getOrientation() {
         return this.orientation;
     }
@@ -834,6 +839,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether the unit is carrying an object.
      */
+    @Basic
+    @Raw
     public boolean isCarrying() {
         return this.isCarrying;
     }
@@ -863,6 +870,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the object carried by this unit.
      */
+    @Basic
+    @Raw
     public InanimateMovableWorldObject getCarriedObject() {
         return this.carriedObject;
     }
@@ -924,6 +933,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether the unit is sprinting.
      */
+    @Basic
+    @Raw
     public boolean isSprinting() {
         return this.isSprinting;
     }
@@ -1068,7 +1079,8 @@ public class Unit extends MovableWorldObject {
 	/**
 	 * Return whether this unit is terminated.
 	 */
-	@Basic
+    @Basic
+    @Raw
 	public boolean isTerminated() {
 		return this.isTerminated;
 	} 
@@ -1108,6 +1120,7 @@ public class Unit extends MovableWorldObject {
      * Return the experience points of this unit.
      */
     @Basic
+    @Raw
     public int getXP() {
         return this.xp;
     }
@@ -1180,6 +1193,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the number of experience points of this unit that have already been used to increase its strength, agility or toughness.
      */
+    @Basic
+    @Raw
     private int getXPUsed() {
     	return this.xpused;
     }
@@ -1272,13 +1287,17 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether this unit has a task.
      */
+    @Basic
+    @Raw
     public boolean hasTask() {
-    	return hasTask;
+    	return this.hasTask;
     }
     
     /**
      * Return the task assigned to this unit.
      */
+    @Basic
+    @Raw
     public Task getTask() {
     	return this.task;
     }
@@ -1328,6 +1347,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return whether this unit has a paused activity.
      */
+    @Basic
+    @Raw
     public boolean hasPausedActivity() {
     	return this.hasPausedActivity;
     }
@@ -1335,6 +1356,8 @@ public class Unit extends MovableWorldObject {
     /**
      * Return the paused activity of this unit.
      */
+    @Basic
+    @Raw
     public IActivity getPausedActivity() {
     	return this.pausedActivity;
     }
@@ -1369,19 +1392,18 @@ public class Unit extends MovableWorldObject {
     	this.pausedActivity = activity;
         this.hasPausedActivity = !(activity instanceof NoActivity);
     }
-    //// TODO: 19/05/16 Documentation outdated
+
     /**
      * Check whether this unit's current activity can be interrupted by the given new activity.
      *
      * @param	newActivity
      * 			The new activity for this unit.
-     * @effect	If the new activity is a defense, if the current activity is a movement or work
-     *          and if this Unit's activity can be interrupted by the new activity,
-     *         this unit's paused activity is set to its current activity.
-     * 		  |	if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4))
+     * @effect	If the new activity is a defense, if the current activity is a movement or work and if this unit's activity can be interrupted by the new activity,
+     *          this unit's paused activity is set to its current activity.
+     * 		  |	if (newActivity.getId() == 2 && (this.getActivity().getId() == 3 || this.getActivity().getId() == 4)
+     * 		  |		&& this.getActivity().canBeInterruptedBy(newActivity))
      * 		  |		then this.setPausedActivity(this.getActivity())
-     * @effect	and if this Unit's activity can be interrupted by the new activity,
-     *          this unit's current activity is set to the given new activity.
+     * @effect	If this unit's activity can be interrupted by the new activity, this unit's current activity is set to the given new activity.
      * 		  |	this.setActivity(newActivity)
      * @return	True if and only if this unit's current activity can be interrupted by the given new activity.
      * 		  |	result == this.getActivity().canBeInterruptedBy(newActivity)
@@ -1395,6 +1417,7 @@ public class Unit extends MovableWorldObject {
         this.task.stopExecution();
         return true;
     }
+    
     /**
      * Let this unit finish its current activity.
      *

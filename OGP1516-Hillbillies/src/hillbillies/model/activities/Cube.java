@@ -7,21 +7,52 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A class of cubes involving a position.
+ * 
+ * @version	2.9.05 technical beta
+ * @author  Arthur Decloedt - Bachelor in de Informatica
+ * 			Julie Allard - Bachelor Handelsingenieur in de beleidsinformatica  
+ * 			https://github.com/julieallard/HillBilliesOGP.git
+ */
 @Value
 public class Cube {
 
+	/**
+	 * Initialize this new cube with given location.
+	 * 
+	 * @param	cube
+	 * 			The location for this new cube.
+	 * @throws	IllegalLocation
+	 * 			The given cube location does not consist of 3 coordinates.
+	 */
     public Cube(int[] cube) throws IllegalLocation {
         if (cube.length != 3)
-        	throw new IllegalLocation("Astar tried to create an illegal cube");
+        	throw new IllegalLocation("Astar tried to create an illegal cube.");
         this.locArray = cube;
     }
+    
+    /**
+     * Variable registering the location of this cube.
+     */
+    public final int[] locArray;
+    
+    /**
+     * Check whether this cube equals the given other cube.
+     * 
+     * @param	otherCube
+     * 			The cube to compare.
+     * @return	True if and only if the given cube equals this cube.
+     * @throws	IllegalLocation
+     * 			The location of the given cube doesn't consist of 3 coordinates.
+     */
     @Override
-    public boolean equals(Object cube1) {
-        if (cube1 == null || ! (cube1 instanceof Cube))
+    public boolean equals(Object otherCube) {
+        if (otherCube == null || ! (otherCube instanceof Cube))
         	return false;
-        if (cube1 == this)
+        if (otherCube == this)
         	return true;
-        Cube cube = (Cube) cube1;
+        Cube cube = (Cube) otherCube;
         if (cube.locArray.length != 3)
         	throw new IllegalLocation("Astar tried to compare an illegal cube");
         for (int i = 0; i < 3; i++) {
@@ -31,8 +62,9 @@ public class Cube {
         return true;
     }
 
-    public final int[] locArray;
-
+    /**
+     * Return the hash code of this cube's location.
+     */
     @Override
     public int hashCode() {
         return Arrays.hashCode(locArray);
@@ -60,4 +92,5 @@ public class Cube {
         }
         return set;
     }
+    
 }

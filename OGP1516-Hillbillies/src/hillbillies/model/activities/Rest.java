@@ -68,7 +68,10 @@ public class Rest implements IActivity {
     }
     
 	/**
-	 * Set the state of being dictated by a statement of this rest.
+	 * Set the state of being dictated by a statement of this rest according to the given flag.
+	 * 
+	 * @param	flag
+	 * 			The new state of being dictated by a statement for this rest.
 	 */
 	@Override
 	public void setDictatedByStatement(boolean flag) {

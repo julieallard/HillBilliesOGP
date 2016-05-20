@@ -62,7 +62,10 @@ public class Defend implements IActivity {
     }
     
 	/**
-	 * Set the state of being dictated by a statement of this defense.
+	 * Set the state of being dictated by a statement of this defense according to the given flag.
+	 * 
+	 * @param	flag
+	 * 			The new state of being dictated by a statement for this defense.
 	 */
 	@Override
 	public void setDictatedByStatement(boolean flag) {

@@ -62,7 +62,10 @@ public class Fall implements IActivity {
     }
     
 	/**
-	 * Set the state of being dictated by a statement of this fall.
+	 * Set the state of being dictated by a statement of this fall according to the given flag.
+	 * 
+	 * @param	flag
+	 * 			The new state of being dictated by a statement for this fall.
 	 */
 	@Override
 	public void setDictatedByStatement(boolean flag) {

@@ -38,7 +38,10 @@ public class NoActivity implements IActivity {
     }
     
 	/**
-	 * Set the state of being dictated by a statement of this noActivity.
+	 * Set the state of being dictated by a statement of this noActivity according to the given flag.
+	 * 
+	 * @param	flag
+	 * 			The new state of being dictated by a statement for this NoActivity.
 	 */
 	@Override
 	public void setDictatedByStatement(boolean flag) {
