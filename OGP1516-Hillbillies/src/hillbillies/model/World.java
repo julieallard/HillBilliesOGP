@@ -25,8 +25,6 @@ import java.util.*;
  */
 public class World {
 
-    private double dt;
-
     /**
      * Initialize this new world with given CubeWorld.
      *
@@ -451,7 +449,7 @@ public class World {
      * No documentation required.
      */
     public void advanceTime(double dt) throws SyntaxError {
-        this.dt = dt;
+        double dt1 = dt;
         if(! isValidTimeDuration(dt)) throw new IllegalTimeException("thrown by advanceTime from World time duration was not valid");
         caveIn();
         //World validity check

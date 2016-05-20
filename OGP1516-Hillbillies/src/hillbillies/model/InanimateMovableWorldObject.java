@@ -37,6 +37,10 @@ abstract class InanimateMovableWorldObject extends MovableWorldObject {
     InanimateMovableWorldObject(double x, double y, double z, World world) throws IllegalLocation {
         this.setLocation(x, y, z);
         this.setWorld(world);
+        /*
+      Object holding the random generator used during the random cration of the inanimate movable world object.
+     */
+        Random random = new Random();
         this.weight = random.nextInt(41) + 10;
     }
 
@@ -47,11 +51,6 @@ abstract class InanimateMovableWorldObject extends MovableWorldObject {
      */
     private final int weight;
     
-    /**
-     * Object holding the random generator used during the random cration of the inanimate movable world object.
-     */
-    private Random random = new Random();
-
     /* Methods */
     
     /**
