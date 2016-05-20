@@ -82,7 +82,7 @@ public class Task implements Comparable {
 	public boolean isBeingExecuted() {
 		return this.getStatus().equals(ExecutionStatus.BEINGEXECUTED);
 	}
-    
+
 	public boolean isExecuted() {
 		return this.getStatus().equals(ExecutionStatus.FINISHED);
 	}

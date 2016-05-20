@@ -12,10 +12,18 @@ public class PositionExpression extends Expression {
     @Override
     public int[] value(Unit executor) throws SyntaxError {
         this.executor = executor;
-        return this.innerExpression.getValue();
+        return this.getInnerExpression().getValue();
     }
 
-    public PosPartExpression innerExpression;
+    private PosPartExpression innerExpression;
+
+    public PosPartExpression getInnerExpression() {
+        return innerExpression;
+    }
+
+    public void setInnerExpression(PosPartExpression innerExpression) {
+        this.innerExpression = innerExpression;
+    }
 
     public abstract class PosPartExpression extends PartExpression {
 
@@ -138,7 +146,6 @@ public class PositionExpression extends Expression {
 
     }
 
-
     public class PosReadPartExpression extends PosPartExpression {
 
         public PosReadPartExpression(String key) {
@@ -153,7 +160,6 @@ public class PositionExpression extends Expression {
         }
     }
 
-
     public class PosSelectedPartExpression extends PosPartExpression {
 
         public PosSelectedPartExpression() {
@@ -164,5 +170,64 @@ public class PositionExpression extends Expression {
         public int[] getValue() throws SyntaxError {
             return arg;
         }
+    }
+
+
+    public static Expression newHereExpression(){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosHerePartExpression());
+        return expression;
+    }
+
+    public static Expression newPosLogExpression(UnitExpression unit){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosLogPartExpression(unit));
+        return expression;
+    }
+
+    public static Expression newPosBoulderExpression(UnitExpression unit){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosBoulderPartExpression(unit));
+        return expression;
+    }
+
+    public static Expression newPosWorkshopExpression(UnitExpression unit){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosWorkshopPartExpression(unit));
+        return expression;
+    }
+
+    public static Expression newPosConstantExpression(int[] location){
+        PositionExpression expression=new PositionExpression();
+        try {
+            expression.setInnerExpression(expression.new PosConstantPartExpression(location));
+        } catch (SyntaxError syntaxError) {
+            throw new IllegalArgumentException(syntaxError);
+        }
+        return expression;
+    }
+
+    public static Expression newNextToExpression(PositionExpression pos){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new NextToPosPartExpression(pos));
+        return expression;
+    }
+
+    public static Expression newPosOfExpression(UnitExpression unit){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosLocationOfPartExpression(unit));
+        return expression;
+    }
+
+    public static Expression newPosReadExpression(String key){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosReadPartExpression(key));
+        return expression;
+    }
+
+    public static Expression newPosSelectedExpression(){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosSelectedPartExpression());
+        return expression;
     }
 }
