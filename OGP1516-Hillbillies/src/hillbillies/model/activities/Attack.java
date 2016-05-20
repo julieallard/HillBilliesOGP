@@ -2,7 +2,6 @@ package hillbillies.model.activities;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
-import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.Unit;
 import hillbillies.model.VLocation;
 import hillbillies.model.exceptions.IllegalTimeException;

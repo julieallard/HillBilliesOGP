@@ -1,6 +1,5 @@
 package hillbillies.model.activities;
 
-import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.MovableWorldObject;
 import hillbillies.model.Unit;
 import hillbillies.model.VLocation;

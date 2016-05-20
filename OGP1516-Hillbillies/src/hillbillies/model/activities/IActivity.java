@@ -1,7 +1,5 @@
 package hillbillies.model.activities;
 
-import hillbillies.model.EsotERICScript.Statements.Statement;
-
 /**
  * The Id's of the activities are the following:
  * 0: noActivity
