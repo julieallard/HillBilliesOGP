@@ -42,7 +42,10 @@ public class Task implements Comparable {
 		this.unitGlobalMap = new HashMap<>();
 	}
 
-
+    /**
+     * check the legality of this task
+     * @return
+     */
 
 	public boolean isLegaltask(){
 		return ProgramExecutor.checkBreakLegality(this);
@@ -74,32 +77,36 @@ public class Task implements Comparable {
 		this.SchedulerSet = new HashSet<>();
 		this.addScheduler(schedulerList);
 	}
+
+    /**
+     * Give the root statement of this task
+     * @return
+     */
+
 	public Statement getRootStatement() {
 		return rootStatement;
 	}
+
+    /**
+     * set the root statement
+     * @param rootStatement the new root statement
+     * @throws IllegalArgumentException
+     */
+
 	public void setRootStatement(Statement rootStatement) {
 		if(rootStatement.getPartStatement() instanceof Statement.BreakPartStatement) throw new IllegalArgumentException("a break statement cannot be a root statement");
 		this.rootStatement = rootStatement;
 	}
 
 	private Statement rootStatement;
-	private boolean isBeingExecuted;
-	private boolean isExecuted;
+
 		
 	public boolean isBeingExecuted() {
-		return isBeingExecuted;
+		return this.getStatus().equals(ExecutionStatus.BEINGEXECUTED);
 	}
-
-	public void setBeingExecuted(boolean beingExecuted) {
-		isBeingExecuted = beingExecuted;
-	}
-
+    
 	public boolean isExecuted() {
-		return isExecuted;
-	}
-
-	public void setExecuted(boolean executed) {
-		isExecuted = executed;
+		return this.getStatus().equals(ExecutionStatus.FINISHED);
 	}
 
 	/**
