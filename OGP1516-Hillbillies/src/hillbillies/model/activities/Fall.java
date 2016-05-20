@@ -1,11 +1,13 @@
 package hillbillies.model.activities;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.MovableWorldObject;
 import hillbillies.model.Unit;
 import hillbillies.model.VLocation;
 
 /**
- * A class of Fall activities involving a movable world object.
+ * A class of falls involving a movable world object.
  * 
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica
@@ -15,16 +17,15 @@ import hillbillies.model.VLocation;
 public class Fall implements IActivity {
 
 	/**
-	 * Initialize this new Fall with given movable world object.
+	 * Initialize this new fall with given movable world object.
      *
      * @param  object
-     *         The movable world object for this new Fall.
-     * @post   The object of this new Fall is equal to the given object.
+     *         The movable world object for this new fall.
+     * @post   The object of this new fall is equal to the given object.
      */
     public Fall(MovableWorldObject object) {
         this.object = object;
-        this.damagetobedone = 0;
-    }
+        }
 
     /* Variables */
     
@@ -34,19 +35,19 @@ public class Fall implements IActivity {
     private boolean dictatedByStatement = false;
     
     /**
-     * Variable registering the object of this Fall.
+     * Variable registering whether this fall is finished.
      */
-    private MovableWorldObject object;
+    private boolean isFinished = false;
     
     /**
-     * Variable registering the damage points of this Fall that have to be dealt with.
+     * Variable registering the object of this fall.
      */
-    private double damagetobedone;
+    private final MovableWorldObject object;
     
     /**
-     * Variable registering the distance fallen of this Fall.
+     * Variable registering the damage points of this fall that have to be dealt with.
      */
-    private double distancefallen;
+    private double damageToBeDone = 0;
 
     /* Methods */
     
@@ -66,27 +67,52 @@ public class Fall implements IActivity {
 		this.dictatedByStatement = flag;
 	}
 
+	// TODO
     /**
-	 * No documentation required.
-	 */
-    @Override
-    public void advanceActivityTime(double dt) {
-        advanceFallLocation(dt);
-    }
-
-    /**
-     * Return the time left until finishing this Fall.
+     * Update this fall according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     * @effect	The object falls during the given amount of time and its z coordinate will proportionally be substracted by
+     *			three times the amount of time it falls. If the object reaches a position whose underlying cube is solid and the
+     *			z coordinate is below the centre of the current cube, the object is moved back, up to the centre of this cube.
+     *			If the object is a Unit, it will need to deal with a certain amount of damage points calculated as
+     *			ten points per z-level they fall.
+     *			Lastly, this Fall is finished.
      */
     @Override
-    public double returnSimpleTimeLeft() throws IllegalArgumentException {
-        return 0;
+    public void advanceActivityTime(double dt) {
+        VLocation oldLoc = this.getObject().getLocation();
+        double newZ = oldLoc.getCubeLocation()[2] - 3*dt;
+        if (this.getObject().getWorld().willBreakFall(oldLoc.getCubeLocation()) && newZ <= oldLoc.getCubeLocation()[2] + 0.5) {
+            this.getObject().setLocation(oldLoc.getXLocation(), oldLoc.getYLocation(), oldLoc.getCubeLocation()[2] + 0.5);
+            this.setDamageToBeDone(this.getDamageToBeDone() + 10 * (oldLoc.getZLocation() - this.getObject().getLocation().getZLocation()));
+            if (this.getObject() instanceof Unit) {
+                ((Unit) getObject()).dealDamage(this.getDamageToBeDone());
+            this.getObject().activityFinished();
+            return;
+            }
+        }
+        VLocation newPossibleLoc = new VLocation(oldLoc.getXLocation(), oldLoc.getYLocation(), oldLoc.getZLocation() - 3*dt, this.getObject());
+        if (! this.getObject().getWorld().willBreakFall(newPossibleLoc.getCubeLocation())) {
+            this.getObject().setLocation(newPossibleLoc);
+            this.setDamageToBeDone(3*dt*10);
+            return;
+        } else if (newPossibleLoc.getZLocation() - Math.floor(newPossibleLoc.getZLocation()) <= 0.5)
+            this.getObject().setLocation(newPossibleLoc.getXLocation(), newPossibleLoc.getYLocation(), Math.floor(newPossibleLoc.getZLocation()) + 0.5);
+        this.setDamageToBeDone(this.getDamageToBeDone() + 10 * (oldLoc.getZLocation() - this.getObject().getLocation().getZLocation()));
+        if (this.getObject() instanceof Unit) {
+            ((Unit) getObject()).dealDamage(this.getDamageToBeDone());
+        }
+        this.getObject().activityFinished();
     }
 
     /**
-     * Check whether this Fall can be interrupted by the given activity.
+     * Check whether this fall can be interrupted by the given activity.
      * 
-     * @param  activity
-     * 		   The activity to check.
+     * @param	activity
+     *			The activity to check.
+     * @return	Always false.
      */
     @Override
     public boolean canBeInterruptedBy(IActivity activity) {
@@ -94,64 +120,50 @@ public class Fall implements IActivity {
     }
 
     /**
-     * Return the ID of this Fall.
+     * Return the ID of this fall.
      */
     @Override
     public int getId() {
         return 6;
     }
 
-    private Boolean isFinished;
-
+    /**
+     * Return whether this fall is finished.
+     */
     @Override
     public boolean isFinished() {
         return isFinished;
     }
 
+    /**
+     * Finish this defense.
+     */
     @Override
     public void finishActivity() {
         this.isFinished = true;
-        if (this.object instanceof Unit) object.activityFinished();
+        if (this.getObject() instanceof Unit)
+        	getObject().activityFinished();
     }
-
+    
     /**
-     * Let the object continue this Fall for the given amount of time.
-     * 
-     * @param  dt
-     * 		   The amount of time to let the object fall.
-     * @effect The object falls during the given amount of time and its z coordinate will proportionally be substracted by
-     * 		   three times the amount of time it falls. If the object reaches a position whose underlying cube is solid and the
-     * 		   z coordinate is below the centre of the current cube, the object is moved back, up to the centre of this cube.
-     * 		   If the object is a Unit, it will need to deal with a certain amount of damage points calculated as
-     * 		   ten points per z-level they fall.
-     * 		   Lastly, this Fall is finished.
+     * Return the object of this fall.
      */
-    private void advanceFallLocation(double dt) {
-        VLocation oldLoc = this.object.getLocation();
-        double newZ = oldLoc.getCubeLocation()[2] - 3*dt;
-        if (this.object.getWorld().willBreakFall(oldLoc.getCubeLocation()) && newZ <= oldLoc.getCubeLocation()[2] + 0.5) {
-            this.object.setLocation(oldLoc.getXLocation(), oldLoc.getYLocation(), oldLoc.getCubeLocation()[2] + 0.5);
-            this.damagetobedone += 10 * (oldLoc.getZLocation() - this.object.getLocation().getZLocation());
-            if (this.object instanceof Unit) {
-                ((Unit) object).dealDamage(this.damagetobedone);
-            this.object.activityFinished();
-            return;
-            }
-        }
-        VLocation newPossibleLoc = new VLocation(oldLoc.getXLocation(), oldLoc.getYLocation(), oldLoc.getZLocation() - 3*dt, this.object);
-        if (! this.object.getWorld().willBreakFall(newPossibleLoc.getCubeLocation())) {
-            this.object.setLocation(newPossibleLoc);
-            this.damagetobedone = 3*dt*10;
-            return;
-        } else if (newPossibleLoc.getZLocation() - Math.floor(newPossibleLoc.getZLocation()) <= 0.5)
-            this.object.setLocation(newPossibleLoc.getXLocation(), newPossibleLoc.getYLocation(), Math.floor(newPossibleLoc.getZLocation()) + 0.5);
-        this.damagetobedone += 10 * (oldLoc.getZLocation() - this.object.getLocation().getZLocation());
-        if (this.object instanceof Unit) {
-            ((Unit) object).dealDamage(this.damagetobedone);
-        }
-        this.object.activityFinished();
+    private MovableWorldObject getObject() {
+    	return this.object;
     }
-
-
+    
+    /**
+     * Return the damage points of this fall that have to be dealt with.
+     */
+    private double getDamageToBeDone() {
+    	return this.damageToBeDone;
+    }
+    
+    /**
+     * Set the damage points of this fall that have to be dealt with to the given damage points.
+     */
+    private void setDamageToBeDone(double damage) {
+    	this.damageToBeDone = damage;
+    }
 
 }

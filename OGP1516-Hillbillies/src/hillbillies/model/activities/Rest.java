@@ -1,5 +1,7 @@
 package hillbillies.model.activities;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.Unit;
 import ogp.framework.util.Util;
 
@@ -32,6 +34,11 @@ public class Rest implements IActivity {
      * Variable registering whether this rest has been dictated by a statement.
      */
     private boolean dictatedByStatement = false;
+    
+    /**
+     * Variable registering whether this rest is finished.
+     */
+    private boolean isFinished = false;
 	
     /**
      * Variable registering the unit of this Rest.
@@ -66,9 +73,13 @@ public class Rest implements IActivity {
 		this.dictatedByStatement = flag;
 	}
 	
-	/**
-	 * No documentation required.
-	 */
+	// TODO
+    /**
+     * Update this defense according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     */
 	@Override
 	public void advanceActivityTime(double dt) {
 		if (! gotFirsthitpoint) {
@@ -104,18 +115,11 @@ public class Rest implements IActivity {
 	}
 
     /**
-     * Return the time left until finishing this Rest.
-     */
-	@Override
-	public double returnSimpleTimeLeft() throws IllegalArgumentException {
-		throw new IllegalArgumentException("A resting activity does not have a SimpleTimeLeft attribute.");
-	}
-
-    /**
-     * Check whether this Rest can be interrupted by the given activity.
+     * Check whether this rest can be interrupted by the given activity.
      * 
-     * @param  activity
-     * 		   The activity to check.
+     * @param	activity
+     *			The activity to check.
+     * @return	True if and only if the given activity is a defense or a fall or if this rest's unit already gained its first hitpoint.
      */
 	@Override
 	public boolean canBeInterruptedBy(IActivity activity) {
@@ -123,20 +127,24 @@ public class Rest implements IActivity {
 	}
 
     /**
-     * Return the ID of this Rest.
+     * Return the ID of this rest.
      */
 	@Override
 	public int getId() {
 		return 5;
 	}
 
-	private Boolean isFinished;
-
+    /**
+     * Return whether this rest is finished.
+     */
 	@Override
 	public boolean isFinished() {
 		return isFinished;
 	}
 
+	/**
+	 * Finish this rest.
+	 */
 	@Override
 	public void finishActivity() {
 		this.isFinished = true;

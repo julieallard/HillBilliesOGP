@@ -37,6 +37,11 @@ public class Defend implements IActivity {
     private boolean dictatedByStatement = false;
     
     /**
+     * Variable registering whether this defense is finished.
+     */
+    private boolean isFinished = false;
+    
+    /**
      * Variable registering the defender of this defense.
      */
     private final Unit defender;
@@ -65,19 +70,19 @@ public class Defend implements IActivity {
 	}
 
     /**
-     * Update this attack according to the given amount of time advanced.
+     * Update this defense according to the given amount of time advanced.
      * 
      * @param	dt
      * 			The amount of time to advance.
-     * @effect	If the given time is equal of higher than the time left until finishing this attack, conduct this attack.
-     * @effect	If the given time is lower than the time left until finishing this attack, the given amount of time is subtracted from the time left for this attack.
+     * @effect	If the given time is equal or higher than the time left until finishing this defense, conduct this defense.
+     * @effect	If the given time is lower than the time left until finishing this defense, the time left for this defense is reduced by the given amount of time.
      */
     @Override
     public void advanceActivityTime(double dt) {
-        if (Util.fuzzyGreaterThanOrEqualTo(dt, this.returnSimpleTimeLeft())) {
+        if (Util.fuzzyGreaterThanOrEqualTo(dt, this.getTimeLeft())) {
             this.conductDefense();
         } else {
-        	double time = returnSimpleTimeLeft() - dt;
+        	double time = getTimeLeft() - dt;
             this.setTimeLeft(time);
         }
     }
@@ -87,16 +92,43 @@ public class Defend implements IActivity {
      */
     @Basic
     @Raw
-    @Override
-    public double returnSimpleTimeLeft() {
+    public double getTimeLeft() {
     	return this.timeLeft;
+    }
+    
+    /**
+     * Check whether the given time left is a valid time left for any defense.
+     *
+     * @param	timeLeft
+     *			The time left to check.
+     * @return	True if and only if the given time left is positive and equal or lower than 1.
+     */
+    public static boolean isValidTimeLeft(double timeLeft) {
+    	return (Util.fuzzyGreaterThanOrEqualTo(timeLeft, 0) && Util.fuzzyLessThanOrEqualTo(timeLeft, 1));
+    }
+
+    /**
+     * Set the time left for this defense to the given time left.
+     *
+     * @param	timeLeft
+     *			The new time left for this defense.
+     * @post	The time left of this new defense is equal to the given time left.
+     * @throws	IllegalTimeException
+     *			The given time left is not a valid time left for any defense.
+     */
+    @Raw
+    private void setTimeLeft(double timeLeft) throws IllegalTimeException {
+      if (! isValidTimeLeft(timeLeft))
+        throw new IllegalTimeException("Invalid time left");
+      this.timeLeft = timeLeft;
     }
 
     /**
      * Check whether this defense can be interrupted by the given activity.
      * 
-     * @param  activity
-     * 		   The activity to check.
+     * @param	activity
+     *			The activity to check.
+     * @return	Always false.
      */
     @Override
     public boolean canBeInterruptedBy(IActivity activity) {
@@ -111,52 +143,36 @@ public class Defend implements IActivity {
         return 2;
     }
 
-    private Boolean isFinished;
-
+    /**
+     * Return whether this defense is finished.
+     */
     @Override
     public boolean isFinished() {
-        return isFinished;
+        return this.isFinished;
     }
 
+    /**
+     * Finish this defense.
+     */
     @Override
     public void finishActivity() {
 
     }
 
     /**
-     * Check whether the given time left is a valid time left for any Defense.
-     *
-     * @param  timeLeft
-     *         The time left to check.
-     * @return True if and only if the time left is greater or equal to 0 and less or equal to 1.
+     * Return the defender of this attack.
      */
-    public static boolean isValidTimeLeft(double timeLeft) {
-        return (Util.fuzzyGreaterThanOrEqualTo(timeLeft, 0) && Util.fuzzyLessThanOrEqualTo(timeLeft, 1));
+    private Unit getDefender() {
+    	return this.defender;
     }
-
+    
     /**
-     * Set the time left for this Defense to the given timeLeft.
-     *
-     * @param  timeLeft
-     *         The new time left for this Defense.
-     * @post   The time left fot this new Defense is equal to the given time left.
-     * @throws IllegalTimeException
-     *         The given time left is not a valid time left for any Defense.
-     */
-    @Raw
-    public void setTimeLeft(double timeLeft) throws IllegalTimeException {
-        if (! isValidTimeLeft(timeLeft))
-            throw new IllegalTimeException("thrown by advanceTime from Defend timeleft duration was not valid");
-        this.timeLeft = timeLeft;
-    }
-
-    /**
-     * Let the defender and the attacker of this Attack conduct the Attack.
+     * Let the defender of this defense conduct the defense.
      * 
-     * @effect This Attack is finished.
+     * @effect	This defence is finished.
      */
     private void conductDefense() {
-        defender.activityFinished();
+        this.getDefender().activityFinished();
     }
     
 }

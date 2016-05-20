@@ -23,19 +23,20 @@ import java.util.List;
 public class Work implements IActivity {
 
     /**
-	 * Initialize this new Work with given unit and given target location.
+	 * Initialize this new work with given unit and given target location.
      *
      * @param  unit
-     *         The unit for this new Work.
+     *         The unit for this new work.
      * @param  targetLocation
-     * 		   The target location for this Work.
-     * @post   The unit of this new Work is equal to the given unit.
-     * @post   The target location of this new Work is equal to the given target location.
+     * 		   The target location for this new work.
+     * @post   The unit of this new work is equal to the given unit.
+     * @post   The target location of this new work is equal to the given target location.
      */
     public Work(Unit unit, int[] targetLocation){
         this.timeLeft = ((double) 500)/unit.getStrength();
         this.unit = unit;
-        if (!this.canHaveAsTargetLocation(targetLocation)) this.finishActivity();
+        if (!this.canHaveAsTargetLocation(targetLocation))
+        	this.finishActivity();
         this.targetLocation = targetLocation;
     }
 
@@ -46,22 +47,25 @@ public class Work implements IActivity {
      */
     private boolean dictatedByStatement = false;
     
-    private Boolean isFinished;
+    /**
+     * Variable registering whether this work is finished.
+     */
+    private boolean isFinished = false;
     
     /**
-     * Variable registering the unit of this Work.
+     * Variable registering the unit of this work.
      */
     private Unit unit;
     
     /**
-     * Variable registering the time left until finishing this Work.
-     */
-    private double timeLeft;
-    
-    /**
-     * Variable registering the target location of this Work.
+     * Variable registering the target location of this work.
      */
 	private final int[] targetLocation;
+	
+    /**
+     * Variable registering the time left until finishing this work.
+     */
+    private double timeLeft;
 
     /* Methods */
     
@@ -82,34 +86,66 @@ public class Work implements IActivity {
 	}
 
     /**
-	 * No documentation required.
-	 */
+     * Update this work according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     * @effect	If the given time is equal or higher than the time left until finishing this work, conduct this work.
+     * @effect	If the given time is lower than the time left until finishing this work, the time left for this work is reduced by the given amount of time.
+     */
 	@Override
 	public void advanceActivityTime(double dt) {
-        if (Util.fuzzyGreaterThanOrEqualTo(dt, this.returnSimpleTimeLeft())) {
+        if (Util.fuzzyGreaterThanOrEqualTo(dt, this.getTimeLeft())) {
             this.timeLeft = 0;
             conductWork();
         } else {
-            double time = returnSimpleTimeLeft() - dt;
+            double time = getTimeLeft() - dt;
             this.setTimeLeft(time);
         }
 	}
 
     /**
-     * Return the time left for this Work.
+     * Return the time left until this work is finished.
      */
     @Basic
     @Raw
-    @Override
-	public double returnSimpleTimeLeft() throws IllegalArgumentException {
-		return this.timeLeft;
-	}
+    public double getTimeLeft() {
+    	return this.timeLeft;
+    }
 
     /**
-     * Check whether this Work can be interrupted by the given activity.
+     * Check whether the given time left is a valid time left for any work.
+     *
+     * @param	timeLeft
+     *			The time left to check.
+     * @return	True if and only if the given time left is higher than zero.
+     */
+    private static boolean isValidTimeLeft(double timeLeft) {
+        return timeLeft > 0;
+    }	
+	
+    /**
+     * Set the time left for this work to the given time left.
+     *
+     * @param	timeLeft
+     *			The new time left for this work.
+     * @post	The time left of this new work is equal to the given time left.
+     * @throws	IllegalTimeException
+     *			The given time left is not a valid time left for any work.
+     */
+    @Raw
+    private void setTimeLeft(double timeLeft) throws IllegalTimeException {
+      if (! isValidTimeLeft(timeLeft))
+        throw new IllegalTimeException("Invalid time left");
+      this.timeLeft = timeLeft;
+    }
+
+    /**
+     * Check whether this work can be interrupted by the given activity.
      * 
-     * @param  activity
-     * 		   The activity to check.
+     * @param	activity
+     *			The activity to check.
+     * @return	Always true.
      */
 	@Override
 	public boolean canBeInterruptedBy(IActivity activity) {
@@ -117,53 +153,32 @@ public class Work implements IActivity {
 	}
 
     /**
-     * Return the ID of this Work.
+     * Return the ID of this work.
      */
 	@Override
 	public int getId() {
 		return 4;
 	}
 
+    /**
+     * Return whether this work is finished.
+     */
     @Override
     public boolean isFinished() {
         return this.isFinished;
     }
 
+    /**
+     * Finish this work.
+     */
     @Override
     public void finishActivity() {
         this.isFinished = true;
         unit.activityFinished();
     }
-
-    /**
-     * Check whether the given time left is a valid time left for any Work.
-     *
-     * @param  timeLeft
-     *         The time left to check.
-     * @return True if and only if the time left is greater than zero.
-     */
-    private static boolean isValidTimeLeft(double timeLeft) {
-        return timeLeft > 0;
-    }	
-	
-    /**
-     * Set the time left for this Work to the given time left.
-     *
-     * @param  timeLeft
-     *         The new time left for this Work.
-     * @post   The time left fot this new Work is equal to the given time left.
-     * @throws IllegalTimeException
-     *         The given time left is not a valid time left for any Work.
-     */
-    @Raw
-    public void setTimeLeft(double timeLeft) throws IllegalTimeException {
-        if (! isValidTimeLeft(timeLeft))
-            throw new IllegalTimeException("thrown by advanceTime from Work timeleft duration was not valid");
-        this.timeLeft = timeLeft;
-    }    
     
     /**
-     * Let the unit of this Work conduct Work.
+     * Let the unit of this work conduct work.
      * 
      * @effect If the unit was carrying an object, the object is dropped and the unit gains 10 experience points.
      * 		   If the target location is in a workshop cube and a Boulder and Log are present at the target location, 
@@ -209,7 +224,7 @@ public class Work implements IActivity {
     /**
      * Let the unit drop the object it is carrying.
      * 
-     * @effect The unit drops the object it is carrying and this Work is finished.
+     * @effect The unit drops the object it is carrying and this work is finished.
      */
     private void dropWork(){
         unit.drop(unit.getCarriedObject()); 
@@ -219,7 +234,7 @@ public class Work implements IActivity {
     /**
      * Let the unit work out.
      * 
-     * @effect The unit's weight and toughness is increased and this Work is finished.
+     * @effect The unit's weight and toughness is increased and this work is finished.
      */
     private void workOutWork() {
         World world = unit.getWorld();
@@ -235,7 +250,7 @@ public class Work implements IActivity {
     /**
      * Let the unit carry the object.
      * 
-     * @effect The unit picks up the boulder or log and this Work is finished.
+     * @effect The unit picks up the boulder or log and this work is finished.
      */
     private void pickupWork() {
         World world = unit.getWorld();
@@ -252,7 +267,7 @@ public class Work implements IActivity {
     /**
      * Let the unit destroy the cube.
      * 
-     * @effect The cube the target location is in is destroyed and this Work is finished.
+     * @effect	The cube the target location is in is destroyed and this work is finished.
      */
     private void destroyWork() {
         unit.getWorld().destroyCube(targetLocation);

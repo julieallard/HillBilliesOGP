@@ -1,5 +1,7 @@
 package hillbillies.model.activities;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.EsotERICScript.Statements.Statement;
 
 /**
@@ -19,6 +21,11 @@ public class NoActivity implements IActivity {
      */
     private boolean dictatedByStatement = false;
     
+    /**
+     * Variable registering whether this state of not conducting any activity is finished.
+     */
+    private boolean isFinished = false;
+    
     /* Methods */
     
     /**
@@ -37,27 +44,23 @@ public class NoActivity implements IActivity {
 		this.dictatedByStatement = flag;
 	}
     
-	/**
-	 * No documentation required.
-	 */
+    /**
+     * Update this state of not conducting any activity according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     */
     @Override
     public void advanceActivityTime(double dt) {
 
     }
 
     /**
-     * Return the time left until finishing the state of not conducting any activity.
-     */
-    @Override
-    public double returnSimpleTimeLeft() throws IllegalArgumentException {
-        return 0;
-    }
-
-    /**
-     * Check whether the state of not conducting any activity can be interrupted by the given activity.
+     * Check whether this state of not conducting any activity can be interrupted by the given activity.
      * 
-     * @param  activity
-     * 		   The activity to check.
+     * @param	activity
+     *			The activity to check.
+     * @return	Always true.
      */
     @Override
     public boolean canBeInterruptedBy(IActivity activity) {
@@ -72,12 +75,20 @@ public class NoActivity implements IActivity {
         return 0;
     }
 
+    /**
+     * Return whether this state of not conducting any activity is finished.
+     */
     @Override
     public boolean isFinished() {
-        return false;
-    
+        return this.isFinished;
+    }
+
+    /**
+     * Finish this state of not conducting any activity.
+     */
     @Override
     public void finishActivity() {
+
     }
 
 }

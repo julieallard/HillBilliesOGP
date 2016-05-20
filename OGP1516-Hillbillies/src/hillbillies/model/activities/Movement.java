@@ -10,7 +10,7 @@ import ogp.framework.util.Util;
 import java.util.Arrays;
 
 /**
- * A class of Movement activites involving a unit and a destination.
+ * A class of movements involving a unit and a destination.
  * 
  * @version 0.9 alpha
  * @author  Arthur Decloedt - Bachelor in de Informatica
@@ -20,21 +20,21 @@ import java.util.Arrays;
 public class Movement implements IActivity {
 
 	/**
-	 * Initialize this new Movement with given unit and given destination.
+	 * Initialize this new movement with given unit and given destination.
      *
      * @param  unit
-     *         The unit for this new Movement.
+     *         The unit for this new movement.
      * @param  destination
-     * 		   The destination for this Movement.
-     * @post   The unit of this new Movement is equal to the given unit.
-     * @effect The destination of this new Movement is equal to the cube with given destination.
+     * 		   The destination for this movement.
+     * @post   The unit of this new movement is equal to the given unit.
+     * @effect The destination of this new movement is equal to the cube with given destination.
      */
     public Movement(Unit unit, int[] destination) throws IllegalLocation {
         this.unit = unit;
         if (! canHaveAsDestination(destination))
             throw new IllegalLocation();
-        Cube destincube = new Cube(destination);
-        this.destination = destincube;
+        Cube destCube = new Cube(destination);
+        this.destinationCube = destCube;
         this.pathing = new Astar(unit);
     }
 
@@ -46,22 +46,27 @@ public class Movement implements IActivity {
     private boolean dictatedByStatement = false;
     
     /**
-     * Variable registering the pathing of this Movement, calculated according to the A star algorithm.
+     * Variable registering whether this movement is finished.
      */
-    private final Astar pathing;
+    private boolean isFinished = false;
     
     /**
-     * Variable registering the unit of this Movement.
+     * Variable registering the unit of this movement.
      */
     private final Unit unit;
     
     /**
-     * Variable registering the destination cube of this Movement.
+     * Variable registering the destination cube of this movement.
      */
-    private final Cube destination;
+    private final Cube destinationCube;
     
     /**
-     * Variable registering the cube where the next stop of this Movement will be.
+     * Variable registering the pathing of this movement, calculated according to the A star algorithm.
+     */
+    private final Astar pathing;
+    
+    /**
+     * Variable registering the cube where the next stop of this movement will be.
      */
     private Cube nextStop;
 
@@ -83,16 +88,21 @@ public class Movement implements IActivity {
 		this.dictatedByStatement = flag;
 	}
 
+	// TODO 
     /**
-	 * No documentation required.
-	 */
+     * Update this movement according to the given amount of time advanced.
+     * 
+     * @param	dt
+     * 			The amount of time to advance.
+     * @effect
+     */
     @Override
     public void advanceActivityTime(double dt) {
         if (nextStop == null) {
             boolean foundpath = setNextStop();
             if (! foundpath) {
-                unit.activityFinished();
-                unit.addXP(1);
+                this.getUnit().activityFinished();
+                this.getUnit().addXP(1);
                 return;
             }
         }
@@ -100,12 +110,12 @@ public class Movement implements IActivity {
         nextStopFine[0] = nextStopFine[0] + 0.5;
         nextStopFine[1] = nextStopFine[1] + 0.5;
         nextStopFine[2] = nextStopFine[2] + 0.5;
-        double[] currLockFine = unit.getLocation().getArray();
+        double[] currLockFine = this.getUnit().getLocation().getArray();
         double[] speed = normalizeSpeed(currLockFine, nextStopFine);
-        if (unit.isSprinting()) {
+        if (this.getUnit().isSprinting()) {
             double sprintTimeLeft=getTimeLeftSprinting();
             if (Util.fuzzyGreaterThanOrEqualTo(dt,sprintTimeLeft)) dt=sprintTimeLeft;
-            unit.setSprinting(false);
+            this.getUnit().setSprinting(false);
         }
         double timeleft;
         if (speed[0] != 0) {
@@ -117,7 +127,7 @@ public class Movement implements IActivity {
         } else
         	throw new RuntimeException("the next stop is equal to this stop (Movement)");
         if (Util.fuzzyGreaterThanOrEqualTo(dt,timeleft)) {
-            unit.setLocation(nextStopFine);
+            this.getUnit().setLocation(nextStopFine);
             this.nextStop = null;
             dt = timeleft;
         } else {
@@ -125,37 +135,21 @@ public class Movement implements IActivity {
             newloc[0] = currLockFine[0] + speed[0] * dt;
             newloc[1] = currLockFine[1] + speed[1] * dt;
             newloc[2] = currLockFine[2] + speed[2] * dt;
-            this.unit.setLocation(newloc);
+            this.getUnit().setLocation(newloc);
         }
-        if (unit.isSprinting()) {
+        if (this.getUnit().isSprinting()) {
             int usedStamPoints = (int) Math.ceil(dt * 10);
-            int newStamPoints = unit.getCurrentStaminaPoints() - usedStamPoints;
-            unit.setCurrentStaminaPoints(newStamPoints);
+            int newStamPoints = this.getUnit().getCurrentStaminaPoints() - usedStamPoints;
+            this.getUnit().setCurrentStaminaPoints(newStamPoints);
         }
     }
-    
-    /**
-     * Return the time left for sprinting.
-     */
-    public double getTimeLeftSprinting() {
-        if (unit.getCurrentStaminaPoints() == 0)
-        	return 0;
-        return 10 * (double) unit.getCurrentStaminaPoints();
-    }
 
     /**
-     * Return the time left until finishing this Movement.
-     */
-    @Override
-    public double returnSimpleTimeLeft() throws IllegalArgumentException {
-        throw new IllegalArgumentException("A movement does not have a SimpleTimeLeft attribute.");
-    }
-
-    /**
-     * Check whether this Movement can be interrupted by the given activity.
+     * Check whether this movement can be interrupted by the given activity.
      * 
-     * @param  activity
-     * 		   The activity to check.
+     * @param	activity
+     *			The activity to check.
+     * @return	Always true.
      */
     @Override
     public boolean canBeInterruptedBy(IActivity activity) {
@@ -163,43 +157,75 @@ public class Movement implements IActivity {
     }
 
     /**
-     * Return the ID of this Movement.
+     * Return the ID of this movement.
      */
     @Override
     public int getId() {
         return 3;
     }
 
+    /**
+     * Return whether this movement is finished.
+     */
+    @Override
+    public boolean isFinished() {
+        return isFinished;
+    }
 
     /**
-     * Return the destination of this Movement.
+     * Finish this movement.
+     */
+    @Override
+    public void finishActivity() {
+        this.isFinished = true;
+        this.getUnit().activityFinished();
+    }
+
+    /**
+     * Return the unit of this movement.
+     */
+    private Unit getUnit() {
+    	return this.unit;
+    }
+    
+    /**
+     * Return the time left until the sprint is finished.
+     */
+    public double getTimeLeftSprinting() {
+        if (this.getUnit().getCurrentStaminaPoints() == 0)
+        	return 0;
+        return 10 * (double) this.getUnit().getCurrentStaminaPoints();
+    }
+    
+    /**
+     * Return the destination of this movement.
      */
     @Basic
     @Raw
     @Immutable
     public int[] getDestination() {
-        return this.destination.locArray;
+        return this.destinationCube.locArray;
     }
 
     /**
-     * Check whether this Movement can have the given destination as its destination.
+     * Check whether this movement can have the given destination as its destination.
      *
      * @param  destination
      * 		   The destination to check.
-     * @return True if and only if the destination is a three dimensional array and if the Unit can have the given
+     * @return True if and only if the destination is a three dimensional array and if the unit can have the given
      * 		   destination as a cube location.
      */
     @Raw
     public boolean canHaveAsDestination(int[] destination) {
-        return destination.length == 3 && this.unit.getWorld().canHaveAsCubeLocation(destination, unit);
+        return destination.length == 3 && this.getUnit().getWorld().canHaveAsCubeLocation(destination, this.getUnit());
     }
 
     /**
-     * Return whether a next destination cube was found as this Movement still needs to be continued until the next stop
-     * will be this Movement's destination or not.
+     * Return whether a next destination cube was found as this movement still needs to be continued until the next stop
+     * will be this movement's destination or not.
      */
     public boolean setNextStop() {
-        Cube[] path = pathing.FindPath(new Cube(unit.getLocation().getCubeLocation()), destination);
+        Cube[] path = pathing.FindPath(new Cube(this.getUnit().getLocation().getCubeLocation()), destinationCube);
         if (Arrays.equals(path, new Cube[]{new Cube(new int[]{-1, -1, -1})})) {
             return false;
         }
@@ -208,30 +234,30 @@ public class Movement implements IActivity {
     }
 
     /**
-     * Return the speed of this Movement.
+     * Return the speed of this movement.
      */
     public double getSpeed() {
-        double basespeed = 0.75 * ((double) unit.getStrength() + unit.getAgility()) / ((double) unit.getWeight());
+        double basespeed = 0.75 * ((double) this.getUnit().getStrength() + this.getUnit().getAgility()) / ((double) this.getUnit().getWeight());
         double realSpeed;
-        double zDiff = (unit.getLocation().getZLocation() - (((double) nextStop.locArray[2]) + 0.5));
+        double zDiff = (this.getUnit().getLocation().getZLocation() - (((double) nextStop.locArray[2]) + 0.5));
         if (zDiff > 0)
             realSpeed = basespeed * 1.2;
         else if (zDiff < 0) 
             realSpeed = basespeed * 0.5;
         else
             realSpeed = basespeed;
-        if (unit.isSprinting())
+        if (this.getUnit().isSprinting())
             realSpeed = realSpeed * 2;
         return realSpeed;
     }
 
     /**
-     * Return an array supplying the normalized speed of this Movement.
+     * Return an array supplying the normalized speed of this movement.
      * 
      * @param  startArray
-     * 		   The array supplying the start x, y and z coordinate for this Movement.
+     * 		   The array supplying the start x, y and z coordinate for this movement.
      * @param  destArray
-     * 		   The array supplying the destination x, y and z coordinate for this Movement.
+     * 		   The array supplying the destination x, y and z coordinate for this movement.
      */
     private static double[] normalizeSpeed(double[] startArray, double[] destArray) {
         double dx = destArray[0] - startArray[0];
@@ -243,17 +269,5 @@ public class Movement implements IActivity {
         double newZ = dy / norm;
         return new double[]{newX, newY, newZ};
     }
-
-    private Boolean isFinished;
-
-    @Override
-    public boolean isFinished() {
-        return isFinished;
-    }
-
-    @Override
-    public void finishActivity() {
-        this.isFinished = true;
-        unit.activityFinished();
-    }
+    
 }
