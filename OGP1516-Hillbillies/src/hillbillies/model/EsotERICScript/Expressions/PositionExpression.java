@@ -146,7 +146,6 @@ public class PositionExpression extends Expression {
 
     }
 
-
     public class PosReadPartExpression extends PosPartExpression {
 
         public PosReadPartExpression(String key) {
@@ -205,7 +204,30 @@ public class PositionExpression extends Expression {
         } catch (SyntaxError syntaxError) {
             throw new IllegalArgumentException(syntaxError);
         }
-
+        return expression;
     }
 
+    public static Expression newNextToExpression(PositionExpression pos){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new NextToPosPartExpression(pos));
+        return expression;
+    }
+
+    public static Expression newPosOfExpression(UnitExpression unit){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosLocationOfPartExpression(unit));
+        return expression;
+    }
+
+    public static Expression newPosReadExpression(String key){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosReadPartExpression(key));
+        return expression;
+    }
+
+    public static Expression newPosSelectedExpression(){
+        PositionExpression expression=new PositionExpression();
+        expression.setInnerExpression(expression.new PosSelectedPartExpression());
+        return expression;
+    }
 }

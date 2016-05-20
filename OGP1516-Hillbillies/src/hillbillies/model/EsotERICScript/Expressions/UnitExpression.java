@@ -11,10 +11,18 @@ public class UnitExpression extends Expression {
     @Override
     public Unit value(Unit executor) throws SyntaxError {
         this.executor = executor;
-        return this.innerExpression.getValue();
+        return this.getInnerExpression().getValue();
     }
     
-    public UnitPartExpression innerExpression;
+    private UnitPartExpression innerExpression;
+
+    public UnitPartExpression getInnerExpression() {
+        return innerExpression;
+    }
+
+    public void setInnerExpression(UnitPartExpression innerExpression) {
+        this.innerExpression = innerExpression;
+    }
 
     public abstract class UnitPartExpression extends PartExpression {
     	
@@ -113,5 +121,28 @@ public class UnitExpression extends Expression {
             return task.unitGlobalMap.get(key);
         }
     }
-    
+
+    public static Expression newThisUnitExpression(){
+        UnitExpression expression = new UnitExpression();
+        expression.setInnerExpression(expression.new UnitThisPartExpression());
+        return expression;
+    }
+
+    public static Expression newFriendExpression(UnitExpression ){
+        UnitExpression expression = new UnitExpression();
+        expression.setInnerExpression(expression.new UnitFriendPartExpression() );
+        return expression;
+    }
+    public static Expression new (){
+        UnitExpression expression = new UnitExpression();
+        expression.setInnerExpression(expression.new );
+        return expression;
+    }
+    public static Expression new (){
+        UnitExpression expression = new UnitExpression();
+        expression.setInnerExpression(expression.new );
+        return expression;
+    }
+
+
 }

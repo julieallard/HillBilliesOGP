@@ -8,10 +8,18 @@ public class BooleanExpression extends Expression {
     @Override
     public Boolean value(Unit executor) throws SyntaxError {
         this.executor = executor;
-        return this.innerExpression.getValue();
+        return this.getInnerExpression().getValue();
     }
     
-    public BooleanPartExpression innerExpression;
+    private BooleanPartExpression innerExpression;
+
+    public BooleanPartExpression getInnerExpression() {
+        return innerExpression;
+    }
+
+    public void setInnerExpression(BooleanPartExpression innerExpression) {
+        this.innerExpression = innerExpression;
+    }
 
     public abstract class BooleanPartExpression extends PartExpression {
     	
@@ -36,23 +44,7 @@ public class BooleanExpression extends Expression {
         }
     
     }
-    
-     // "(" e ")"    
-    public class BooleanGivenPartExpression extends BooleanPartExpression {
-        	
-        public BooleanGivenPartExpression(BooleanExpression arg) {
-            this.arg1 = arg;
-        }
-            
-        private BooleanExpression arg1;
-        
-        @Override
-        public Boolean getValue() throws SyntaxError {
-            return arg1.value(executor);
-        }    
-        
-    }
-    
+
     // ! e
     public class BooleanNotPartExpression extends BooleanPartExpression {
     	
@@ -187,4 +179,66 @@ public class BooleanExpression extends Expression {
         }
     }
 
+    public static Expression newBooleanConstantExpression(boolean flag) {
+        BooleanExpression expression=new BooleanExpression();
+        expression.setInnerExpression(expression.new BooleanConstantPartExpression(flag));
+        return expression;
+
     }
+
+    public static Expression newNotExpression(BooleanExpression arg) {
+        BooleanExpression expression=new BooleanExpression();
+
+        expression.setInnerExpression(expression.new BooleanNotPartExpression(arg));
+        return expression;
+    }
+
+    public static Expression newAndExpression(BooleanExpression arg1,BooleanExpression arg2) {
+        BooleanExpression expression = new BooleanExpression();
+
+        expression.setInnerExpression(expression.new BooleanAndPartExpression(arg1, arg2));
+        return expression;
+    }
+
+    public static Expression newOrExpression(BooleanExpression arg1,BooleanExpression arg2) {
+        BooleanExpression expression=new BooleanExpression();
+        expression.setInnerExpression(expression.new BooleanOrPartExpression(arg1, arg2));
+        return expression;
+    }
+
+    public static Expression newIsPassableExpression(PositionExpression pos) {
+        BooleanExpression expression=new BooleanExpression();
+        expression.setInnerExpression(expression.new BooleanIsPassablePartExpression(pos));
+        return expression;
+    }
+
+    public static Expression newIsSolidExpression(PositionExpression pos) {
+
+        return newNotExpression((BooleanExpression) newIsPassableExpression(pos));
+    }
+    //TODO
+    public static Expression newIsFriendExpression(UnitExpression unit){
+        BooleanExpression expression=new BooleanExpression();
+        expression.setInnerExpression(expression.new BooleanIsFriendPartExpression(unit));
+        return expression;
+    }
+
+    public static Expression newIsAliveExpression(UnitExpression unit){
+        BooleanExpression expression=new BooleanExpression();
+        expression.setInnerExpression(expression.new BooleanIsAlivePartExpression(unit));
+        return expression;
+    }
+
+    public static Expression newIsCarryingExpression(UnitExpression unit){
+        BooleanExpression expression=new BooleanExpression();
+        expression.setInnerExpression(expression.new BooleanIscarryingPartExpression(unit));
+        return expression;
+    }
+
+    public static Expression newReadExpression(String key){
+        BooleanExpression expression=new BooleanExpression();
+        expression.setInnerExpression(expression.new BooleanReadPartExpression(key));
+        return expression;
+    }
+
+}
