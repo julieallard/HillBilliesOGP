@@ -128,21 +128,26 @@ public class UnitExpression extends Expression {
         return expression;
     }
 
-    public static Expression newFriendExpression(UnitExpression ){
+    public static Expression newFriendExpression( ){
         UnitExpression expression = new UnitExpression();
-        expression.setInnerExpression(expression.new UnitFriendPartExpression() );
-        return expression;
-    }
-    public static Expression new (){
-        UnitExpression expression = new UnitExpression();
-        expression.setInnerExpression(expression.new );
-        return expression;
-    }
-    public static Expression new (){
-        UnitExpression expression = new UnitExpression();
-        expression.setInnerExpression(expression.new );
+        expression.setInnerExpression(expression.new UnitFriendPartExpression((UnitExpression)newThisUnitExpression()));
         return expression;
     }
 
+    public static Expression newEnemyExpression(){
+        UnitExpression expression = new UnitExpression();
+        expression.setInnerExpression(expression.new UnitEnemyPartExpression((UnitExpression)newThisUnitExpression() ) );
+        return expression;
+    }
+    public static Expression newAnyExpression(){
+        UnitExpression expression = new UnitExpression();
+        expression.setInnerExpression(expression.new UnitAnyPartExpression((UnitExpression)newThisUnitExpression() ));
+        return expression;
+    }
 
+    public static Expression newReadUnitExpression(String key){
+        UnitExpression expression = new UnitExpression();
+        expression.setInnerExpression(expression.new UnitReadPartExpression(key));
+        return expression;
+    }
 }
