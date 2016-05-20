@@ -3,7 +3,6 @@ package hillbillies.model.activities;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.Boulder;
-import hillbillies.model.EsotERICScript.Statements.Statement;
 import hillbillies.model.Log;
 import hillbillies.model.Unit;
 import hillbillies.model.World;
@@ -214,9 +213,9 @@ public class Work implements IActivity {
     
     private boolean canHaveAsTargetLocation(int[] targetLocation) {
         if (targetLocation.length != 3
-        		|| targetLocation[0] >= unit.getWorld().xSideSize
-        		|| targetLocation[1] >= unit.getWorld().ySideSize
-        		|| targetLocation[2] >= unit.getWorld().zSideSize)
+        		|| targetLocation[0] >= unit.getWorld().getxSideSize()
+        		|| targetLocation[1] >= unit.getWorld().getySideSize()
+        		|| targetLocation[2] >= unit.getWorld().getzSideSize())
         	return false;   
         return true;
     }

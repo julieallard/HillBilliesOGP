@@ -213,9 +213,9 @@ public class Unit extends MovableWorldObject {
         int randomLocY;
         int randomLocZ;
         while (true) {
-            randomLocX = random.nextInt(world.sideSize);
-            randomLocY = random.nextInt(world.sideSize);
-            randomLocZ = random.nextInt(world.sideSize);
+            randomLocX = random.nextInt(world.getxSideSize());
+            randomLocY = random.nextInt(world.getySideSize());
+            randomLocZ = random.nextInt(world.getzSideSize());
             int[] randomLoc = new int[]{randomLocX, randomLocY, randomLocZ};
             if (world.canHaveAsCubeLocation(randomLoc, this))
                 break;
@@ -225,7 +225,6 @@ public class Unit extends MovableWorldObject {
     }
 
     /* Variables */
-    
     /**
      * Variable registering the name of this unit.
      */
@@ -235,7 +234,6 @@ public class Unit extends MovableWorldObject {
      * Variable registering the weight of this unit.
      */
     public int weight;
-
     /**
      * Variable registering the agility of this unit.
      */

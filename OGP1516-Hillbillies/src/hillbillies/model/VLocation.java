@@ -115,9 +115,9 @@ public class VLocation {
     @Raw
     public boolean canHaveAsCoordinates(double x, double y, double z) {
         return (x >= 0 && y >= 0 && z >= 0
-        		&& x <= this.occupant.getWorld().xSideSize
-        		&& y <= this.occupant.getWorld().ySideSize
-        		&& z <= this.occupant.getWorld().zSideSize);
+        		&& x <= this.occupant.getWorld().getxSideSize()
+        		&& y <= this.occupant.getWorld().getySideSize()
+        		&& z <= this.occupant.getWorld().getzSideSize());
     }
 
     /**

@@ -5,6 +5,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 import hillbillies.model.CubeObjects.*;
 import hillbillies.model.exceptions.IllegalLocation;
 import hillbillies.model.exceptions.IllegalTimeException;
+import hillbillies.model.exceptions.SyntaxError;
 import hillbillies.part2.listener.TerrainChangeListener;
 import hillbillies.util.ConnectedToBorder;
 import ogp.framework.util.Util;
@@ -23,7 +24,9 @@ import java.util.*;
  * 			https://github.com/julieallard/HillBilliesOGP.git
  */
 public class World {
-	
+
+    private double dt;
+
     /**
      * Initialize this new world with given CubeWorld.
      *
@@ -33,10 +36,10 @@ public class World {
      */
     public World(int[][][] CubeWorld, TerrainChangeListener changeListener) throws IllegalLocation, IllegalArgumentException {
         this.setWorldMap(new WorldMap<>());
-        this.xSideSize = CubeWorld[0].length;
-        this.ySideSize = CubeWorld[1].length;
-        this.zSideSize = CubeWorld[2].length;
-        this.borderConnect = new ConnectedToBorder(xSideSize, ySideSize, zSideSize);
+        this.setxSideSize(CubeWorld[0].length);
+        this.setySideSize(CubeWorld[1].length);
+        this.setzSideSize(CubeWorld[2].length);
+        this.borderConnect = new ConnectedToBorder(getxSideSize(), getySideSize(), getzSideSize());
         this.setCubeWorld(CubeWorld);
         this.changeListener = changeListener;
     }
@@ -77,20 +80,11 @@ public class World {
 	 */
 	public Set<Unit> TotalUnitSet = new HashSet<>();
 	
-	/**
-	 * Variable registering the length of x side of this world.
-	 */
-    public int xSideSize;
+	private int xSideSize;
     
-	/**
-	 * Variable registering the length of y side of this world.
-	 */
-    public int ySideSize;
+	private int ySideSize;
     
-	/**
-	 * Variable registering the length of z side of this world.
-	 */
-    public int zSideSize;
+	private int zSideSize;
     
 	/**
 	 * Constant reflecting the maximum amount of active factions in a world.
@@ -140,11 +134,11 @@ public class World {
      */
     public boolean isValidCubeWorld(int[][][] CubeWorld) {
         for (int[][] YZLevel: CubeWorld) {
-            if (YZLevel.length != ySideSize) {
+            if (YZLevel.length != getySideSize()) {
                 return false;
             }
             for (int[] ZLine: YZLevel) {
-                if (ZLine.length != zSideSize) {
+                if (ZLine.length != getzSideSize()) {
                     return false;
                 }
             }
@@ -165,10 +159,10 @@ public class World {
     public void setCubeWorld(int[][][] CubeWorld) throws IllegalLocation, IllegalArgumentException {
         if (! isValidCubeWorld(CubeWorld))
             throw new IllegalLocation();
-        CubeWorldObject[][][] CubeWorldFinal = new CubeWorldObject[sideSize][sideSize][sideSize];
-        for (int x = 0; x < sideSize; x++) {
-            for (int y = 0; y < sideSize; y++) {
-                for (int z = 0; z < sideSize; z++) {
+        CubeWorldObject[][][] CubeWorldFinal = new CubeWorldObject[getxSideSize()][getySideSize()][getzSideSize()];
+        for (int x = 0; x < getxSideSize(); x++) {
+            for (int y = 0; y < getySideSize(); y++) {
+                for (int z = 0; z < getzSideSize(); z++) {
                     switch (CubeWorld[x][y][z]) {
                         case 0:		CubeWorldFinal[x][y][z] = new Air();
                                     caveInlist.addAll(borderConnect.changeSolidToPassable(x,y,z));
@@ -325,18 +319,18 @@ public class World {
         	return false;
         int xLoc = cubeLoc[0];
         int yLoc = cubeLoc[1];
-        if (xLoc == 0 || xLoc == sideSize - 1)
+        if (xLoc == 0 || xLoc == getxSideSize() - 1)
         	return true;
-        if (yLoc == 0 || yLoc == sideSize - 1)
+        if (yLoc == 0 || yLoc == getySideSize() - 1)
         	return true;
-        if (zLoc == sideSize - 1)
+        if (zLoc == getzSideSize() - 1)
         	return true;
         for (int x = xLoc-1; x < xLoc+2; x++) {
             for (int y = yLoc-1; y < yLoc+2; y++) {
                 for (int z = zLoc-1; z < zLoc+2; z++) {
                     if (x < 0 || y < 0 || z < 0)
                         return true;
-                    if (x == sideSize || y == sideSize || z == sideSize)
+                    if (x == getxSideSize() || y == getySideSize() || z == getzSideSize())
                     	return true;
                     if (CubeWorld[x][y][z].willSupport())
                     	return true;
@@ -437,7 +431,6 @@ public class World {
 	 * Check whether this world can add extra Units.
 	 */
 
-    //// TODO: 18/05/16
     public boolean canHaveExtraUnits(){
         return (TotalUnitSet.size() < 100);
     }
@@ -457,7 +450,8 @@ public class World {
     /**
      * No documentation required.
      */
-    public void advanceTime(double dt) {
+    public void advanceTime(double dt) throws SyntaxError {
+        this.dt = dt;
         if(! isValidTimeDuration(dt)) throw new IllegalTimeException("thrown by advanceTime from World time duration was not valid");
         caveIn();
         //World validity check
@@ -553,5 +547,37 @@ public class World {
         changeListener.notifyTerrainChanged(x, y, z);
         CubeWorld[x][y][z] = cubeObject;
     }
-    
+
+    /**
+     * Variable registering the length of x side of this world.
+     */
+    public int getxSideSize() {
+        return xSideSize;
+    }
+
+    public void setxSideSize(int xSideSize) {
+        this.xSideSize = xSideSize;
+    }
+
+    /**
+     * Variable registering the length of y side of this world.
+     */
+    public int getySideSize() {
+        return ySideSize;
+    }
+
+    public void setySideSize(int ySideSize) {
+        this.ySideSize = ySideSize;
+    }
+
+    /**
+     * Variable registering the length of z side of this world.
+     */
+    public int getzSideSize() {
+        return zSideSize;
+    }
+
+    public void setzSideSize(int zSideSize) {
+        this.zSideSize = zSideSize;
+    }
 }

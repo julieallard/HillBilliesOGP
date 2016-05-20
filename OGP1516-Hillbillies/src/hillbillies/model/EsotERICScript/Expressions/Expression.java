@@ -73,7 +73,7 @@ public abstract class Expression {
     }
 
     protected boolean withinConfines(World world, int[] loc) {
-        return (loc [0] < world.sideSize && loc[1] < world.sideSize && loc[2] < world.sideSize && loc[0] > 0 && loc[1] > 0 && loc[2] > 0);
+        return (loc [0] < world.getxSideSize() && loc[1] < world.getySideSize() && loc[2] < world.getzSideSize() && loc[0] > 0 && loc[1] > 0 && loc[2] > 0);
     }
 
     protected Collection<int[]> getAllNeighbours(int[] centralCube, Set<int[]> inspected) {
