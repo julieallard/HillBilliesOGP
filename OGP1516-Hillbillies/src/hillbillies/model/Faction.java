@@ -43,6 +43,10 @@ public class Faction {
 	
 	/**
 	 * Set collecting references to units belonging to this faction.
+ 	 * 
+ 	 * @invar	The set of units is effective.
+ 	 * @invar	Each element in the set of units references a unit that is an acceptable unit for this faction.
+ 	 * @invar	Each unit in the UnitSet references this faction as the faction to which it is attached.
 	 */
 	private Set<Unit> UnitSet = new HashSet<>();
 	

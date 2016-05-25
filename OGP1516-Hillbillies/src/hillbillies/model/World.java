@@ -70,11 +70,19 @@ public class World {
     
 	/**
 	 * Set collecting references to factions belonging to this world.
+ 	 * 
+ 	 * @invar	The set of factions is effective.
+ 	 * @invar	Each element in the set of factions references a faction that is an acceptable faction for this world.
+ 	 * @invar	Each faction in the FactionSet references this world as the world to which it is attached.
 	 */
 	public Set<Faction> FactionSet = new HashSet<>();
 	
 	/**
-	 * Set collecting references to Units belonging to this world.
+	 * Set collecting references to units belonging to this world.
+ 	 * 
+ 	 * @invar	The set of units is effective.
+ 	 * @invar	Each element in the set of units references a unit that is an acceptable unit for this world.
+ 	 * @invar	Each unit in the UnitSet references this world as the world to which it is attached.
 	 */
 	public Set<Unit> TotalUnitSet = new HashSet<>();
 	
