@@ -15,6 +15,7 @@ import java.util.Random;
 /**
  * A class of hillbilly units involving a name, an x, y and z coordinate, a weight, agility, strength, toughness, a facility to enable the default behaviour and a world.
  * 
+ * 
  * @invar	The name of each unit must be a valid name for any unit.
  *		  | isValidName(getName())
  * @invar	The weight of each unit must be a valid weight for any unit.
